@@ -3,9 +3,8 @@
  * Created by PhpStorm.
  * User: cnagendra
  * Date: 3/2/2018
- * Time: 2:54 PM
+ * Time: 4:11 PM
  */
-
 $servername = "athena";
 $username = "wilddb_user";
 $password = "wilddb_db";
@@ -17,20 +16,15 @@ try {
     $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     //Create bidder table
-    $sql = "CREATE TABLE BIDDER 
-(
-    ID INT NOT NULL PRIMARY KEY,
-	BIDOPSID INT, 
-    FIRST_NAME VARCHAR(30) NOT NULL,
-	LAST_NAME VARCHAR(30),
-    EMAIL VARCHAR(40) NOT NULL,
-	PASSWORD VARCHAR(255) NOT NULL,
-	PHONE INT 
-);";
+    $sql = "INSERT INTO EMPLOYEE 
+    (ID, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, PHONE )
+    VALUES
+    (1, 'JANE', 'SUMMERS', 'JANE@EMAIL.COM', '11221', 9167547785),
+    (2, 'KATE', 'SUMMERS', 'KATE@EMAIL.COM', '55442', 9167547785);";
 
     // use exec() because no results are returned
     $connection->exec($sql);
-    echo "Table Bidder created successfully";
+    echo "Employee table insert successful";
 }
 catch(PDOException $e)
 {
