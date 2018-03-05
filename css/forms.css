@@ -1,0 +1,81 @@
+/* Forms */
+.required-field {
+	color: #cc0033;
+	font-size: 12px;
+	font-weight: normal;
+}
+form {
+	margin-bottom: 30px;
+	font-size: 14px;
+}
+label {
+	font-weight: 600;
+}
+#options-radios-group .list-group-item label {
+	width: 100%;
+}
+.form-group label + .checkbox {
+	margin-top: 0;
+}
+.form-group .form-group {
+	padding-left: 20px;
+}
+.form textarea {
+	resize: none;
+}
+input[type="radio"],
+input[type="checkbox"] {
+	margin: 7px 0 0;
+}
+.well form .checkbox,
+.well form .radio {
+	margin-bottom: 3px;
+	margin-top: -5px;
+}
+.well form .checkbox-indent,
+.well form .radio-indent {
+	margin-left: 20px;
+}
+
+.help-block {
+	margin: -10px 0 5px 0;
+}
+.tooltip-span a {
+	border-bottom: 1px dashed;
+	cursor: help;
+	font-weight: normal;
+	font-size: 85%;
+	margin-top: -3px;
+	margin-left: 15px;
+	text-decoration: none;
+}
+.tooltip-span a:hover {
+	text-decoration: none;
+}
+.error-block {
+	font-weight: 600;
+	color: #cc0033;
+}
+
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+/* forms */
+.form-control.small {
+	width: 25%;
+}
+.form-control.medium {
+	width: 50%;
+}
+}
+
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+}
+
+/* Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+}
+
+
+
+

@@ -1,0 +1,300 @@
+/* Google Web Fonts */
+@import "https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700";
+/* typography */
+body {
+	word-wrap: break-word;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+	margin: 30px 0 15px 0;
+}
+h1,
+.h1 {
+	margin: 10px 0;
+	/*font-weight: 300;*/
+}
+strong {
+	font-weight: 600;
+}
+li, a, p {
+	font-weight:400;
+}
+a,
+.btn-link {
+	/*text-decoration: underline;*/
+}
+.btn {
+	/*margin: 10px 20px 0 0;*/
+}
+ol li ol {
+	list-style-type: lower-alpha;
+}
+ol li ol li ol {
+	list-style-type: lower-roman;
+}
+ol li ol li ol li ol {
+	list-style-type: decimal;
+}
+ol li ol li ol li ol li ol {
+	list-style-type: lower-alpha;
+}
+/* Tables */
+.table-responsive {
+	border: none;
+}
+.table {
+	font-size: 14px;
+}
+caption {
+	text-align: left;
+	font-weight: 600;
+	font-size:18px;
+	color:#000;
+}
+.table thead tr {
+	background: #00659e;
+	color: #ffffff;
+}
+.table > thead > tr > th {
+	border-bottom: none;
+}
+.table th {
+	font-weight: 400;
+}
+.table-striped > tbody > tr:nth-child(even) > td,
+.table-striped > tbody > tr:nth-child(even) > th {
+	background-color: #e8e8e8;
+}
+.table-striped > tbody > tr:nth-child(odd) > td,
+.table-striped > tbody > tr:nth-child(odd) > th {
+	background-color: #ffffff;
+}
+.table-striped > thead > tr > th,
+.table-striped > tbody > tr > th,
+.table-striped > tfoot > tr > th,
+.table-striped > thead > tr > td,
+.table-striped > tbody > tr > td,
+.table-striped > tfoot > tr > td {
+	border-top: none;
+}
+.table tfoot tr {
+	font-weight: 600;
+}
+.table ul {
+	padding-left: 20px;
+}
+.table ul.list-unstyled {
+	padding-left: 0;
+}
+/* Matrix Table */
+.matrix-table {
+	font-size: 14px;
+}
+
+/* Matrix Table */
+
+.matrix-column-header {
+	display: none;
+}
+
+/* accordion/collapse */
+
+.panel-group .panel + .panel {
+	margin-top: 0;
+	border-top: none;
+}
+.panel-group .panel {
+	border-left: none;
+	border-right: none;
+}
+.panel-group .panel-title {
+	padding-left: 30px;
+	position: relative;
+	font-size: 20px;
+}
+.panel-group .panel-title a {
+	color: #00659e;
+	text-decoration: none;
+	font-weight:400;	
+}
+.panel-group .panel-title a:hover {
+	text-decoration: none;
+}
+.panel-group .panel-title a .fa {
+	position: absolute;
+	left: 0;
+	top: 2px;
+}
+.panel-group .panel-default > .panel-heading {
+	background: none;
+}
+.panel-group .panel-heading {
+	padding: 10px 0;
+}
+.panel-group .panel-heading + .panel-collapse .panel-body {
+	border-top: none;
+}
+.panel-group .panel-body {
+	padding: 15px 0;
+}
+.panel-group .panel-body h3 {
+	font-size: 20px;
+}
+
+/* Tabs */
+.tab-content {
+	padding: 15px 0 0 0;
+	margin: 0 0 10px 0;
+}
+
+
+
+@media screen {
+/* Bootstrap Tabs */
+.nav-tabs > li {
+	float: none;
+}
+.content .nav-tabs li {
+	margin: 0;
+	padding: 0;
+}
+.nav-tabs > li > a {
+	font-weight: 600;
+	border-radius: 0;
+	margin-right: 0;
+	margin-bottom: 0;
+	text-decoration: none;
+	background: #f5f5f5;
+	border-top: 1px solid #bababa;
+	border-right: 1px solid #bababa;
+	border-left: 1px solid #bababa;
+}
+.nav-tabs > li > a:hover {
+	border-top: 1px solid #bababa;
+	border-right: 1px solid #bababa;
+	border-left: 1px solid #bababa;
+}
+.nav-tabs > li:first-child > a {
+	border-top: 1px solid #bababa;
+}
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
+	border-radius: 0;
+	background: #006BA2;
+	color: #ffffff;
+	border: 1px solid #bababa;
+}
+.tab-content {
+	border: 1px solid #bababa;
+	border-top: none;
+	padding: 15px;
+}
+}
+
+
+
+
+
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+/* table */
+.table-responsive {
+	overflow-x: hidden;
+}
+	
+/* Matrix Table */
+.matrix-table {
+	display: table;
+	width: 100%;
+	border-bottom: 1px solid #bababa;
+	border-right: 1px solid #bababa;
+}
+.matrix-row {
+	display: table-row;
+}
+.matrix-column {
+	display: table-cell;
+	border-top: 1px solid #bababa;
+	border-left: 1px solid #bababa;
+	padding: 5px 10px;
+}
+.matrix-column-header {
+	border: none;
+}
+.matrix-row-header {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+/* Bootstrap Tabs */
+.nav-tabs > li {
+	float: left;
+}
+.content .nav-tabs li {
+	margin-bottom: 0;
+	margin-bottom: -1px;
+}
+.nav-tabs > li > a {
+	font-weight: 600;
+	border-radius: 0;
+	margin-right: 0;
+	margin-bottom: 0;
+	text-decoration: none;
+	background: #f5f5f5;
+	border-bottom: 1px solid #bababa;
+	border-left: none;
+}
+.nav-tabs > li > a:hover {
+	border-bottom: 1px solid #bababa;
+	border-left: none;
+}
+.nav-tabs > li:first-child > a {
+	border-left: 1px solid #bababa;
+}
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
+	border-radius: 0;
+	border-left: none;
+	background: #ffffff;
+	color: inherit;
+	border-bottom: 1px solid #ffffff;
+}
+.nav-tabs > li.active:first-child > a,
+.nav-tabs > li.active:first-child > a:hover,
+.nav-tabs > li.active:first-child > a:focus {
+	border-left: 1px solid #bababa;
+}
+
+}
+
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+}
+
+/* Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+}
+
+/* Print Override */
+@media print {
+a[href]:after {
+	content: none;
+}
+}
+
+.dataTables_empty {
+	font-weight:bold;	
+}
+
+

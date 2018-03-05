@@ -1,0 +1,65 @@
+/* Force table to not be like tables anymore */
+.bid-opportunities hr {
+	border-top-width: 3px;
+}
+.bid-opportunities tbody th {
+	width: 110px;
+}
+/* bootstrap overrides */
+.bid-opportunities .table {
+	position: relative;
+}
+.bid-opportunities .table > tbody > tr:first-child > th,
+.bid-opportunities .table > tbody > tr:first-child > td {
+	border: none;
+}
+.bid-opportunities .table .btn-sm.pull-right {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+.panel form {
+	margin-bottom: 0;
+}
+.well form {
+	margin-bottom: 30px;
+}
+.well h2 {
+	margin-top: 0;
+}
+div.bucket a.btn.btn-link {
+	color:#00659e;
+}
+div.bucket a.btn.btn-link:visited {
+	color:#715192;
+}
+.alert-inactive{
+	display:none;
+}
+
+.alert-active{
+	display:block;
+}
+
+
+
+
+
+/*************************************************/
+/* media queries                                 */
+/*************************************************/
+
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+.bid-opportunities tbody th {
+	width: 170px;
+}
+}
+
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+}
+
+/* Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+}
