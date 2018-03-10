@@ -1,17 +1,13 @@
 <?php
 /**
- * Class: Bidder
- * By:   Dane Jew
- * Date: 3/5/2018
- *
+ * Class: Employee
  * Description: This is the database wrapper for retrieving the
- *              bidder record from the database.
+ *              EMPLOYEE record from the database.
  */
-class Bidder
+class Employee
 {
   private $conn;
   public $id;
-  public $bidopsid;
   public $first_name;
   public $last_name;
   public $email;
@@ -29,13 +25,13 @@ class Bidder
   }
 
   // select one by ID
-  function selectByBidderID($bidderID)
+  function selectByID($eid)
   {
-    $query = "SELECT id, bidopsid, first_name, last_name, email, password, phone, middleinitial, address, username FROM BIDDER WHERE ID = ? ;";
+    $query = "SELECT id, first_name, last_name, email, password, phone, middleinitial, address, username FROM EMPLOYEE WHERE ID = ? ;";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
-    $stmt->bindParam(1, $bidderID);
+    $stmt->bindParam(1, $eid);
 
     // execute query
     $stmt->execute();
@@ -45,7 +41,6 @@ class Bidder
 
     // set values to object properties
     $this->id = $row['id'];
-    $this->bidopsid = $row['bidopsid'];
     $this->first_name = $row['first_name'];
     $this->last_name = $row['last_name'];
     $this->email = $row['email'];
@@ -59,7 +54,7 @@ class Bidder
   // select All in the table
   function selectAll()
   {
-    $query = "SELECT id, bidopsid, first_name, last_name, email, password, phone, middleinitial, address, username FROM BIDDER;";
+    $query = "SELECT id, first_name, last_name, email, password, phone, middleinitial, address, username FROM EMPLOYEE;";
     $stmt = $this->conn->prepare( $query );
 
     // execute query
@@ -70,12 +65,11 @@ class Bidder
 
   function update()
   {
-    $query = "UPDATE BIDDER set bidopsid = :bidopsid, first_name = :first_name, last_name = :last_name, email =:email, password = :password, phone = :phone, middleinitial = :middleinitial, address = :address, username = :username WHERE id = :id;";
+    $query = "UPDATE EMPLOYEE set first_name = :first_name, last_name = :last_name, email =:email, password = :password, phone = :phone, middleinitial = :middleinitial, address = :address, username = :username WHERE id = :id;";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
     $stmt->bindParam(':id', $this->id);
-    $stmt->bindParam(':bidopsid', $this->bidopsid);
     $stmt->bindParam(':first_name', $this->first_name);
     $stmt->bindParam(':last_name', $this->last_name);
     $stmt->bindParam(':email', $this->email);
@@ -93,13 +87,12 @@ class Bidder
 
   function create()
   {
-    $query = "INSERT INTO BIDDER (id, bidopsid, first_name, last_name, email, password, phone, middleinitial, address, username) " .
-             "VALUES(:id, :bidopsid, :first_name, :last_name, :email, :password, :phone, :middleinitial, :address, :username);";
+    $query = "INSERT INTO EMPLOYEE (id, first_name, last_name, email, password, phone, middleinitial, address, username) " .
+             "VALUES(:id, :first_name, :last_name, :email, :password, :phone, :middleinitial, :address, :username);";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
     $stmt->bindParam(':id', $this->id);
-    $stmt->bindParam(':bidopsid', $this->bidopsid);
     $stmt->bindParam(':first_name', $this->first_name);
     $stmt->bindParam(':last_name', $this->last_name);
     $stmt->bindParam(':email', $this->email);
@@ -117,7 +110,7 @@ class Bidder
 
   function delete()
   {
-    $query = "DELETE FROM BIDDER WHERE id = :id;";
+    $query = "DELETE FROM EMPLOYEE WHERE id = :id;";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters

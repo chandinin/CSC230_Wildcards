@@ -1,0 +1,91 @@
+#header #controls { background: none; }
+
+#leftLogin, #rightLogin {
+	float: left;
+	width: 386px;				
+}
+
+#leftLogin {
+	margin-right: 10px;
+	padding-left: 102px;
+	padding-right: 10px;
+	border-right: 1px solid #dddddd;
+}
+
+#rightLogin .mainButton {
+	margin: 8px 0; 		
+}
+
+#rightLogin hr {
+	margin: 12px 0 12px 10px;	
+}
+
+#leftLogin img {
+	margin-bottom: 10px;
+}
+			
+#leftLogin h2 {
+	font-size: 1.2em;
+	margin-bottom: 0px;
+	font-weight: 600;
+}
+
+#register, #login {
+	margin: 0 20px 12px 20px;
+	background: #fff;
+	padding: 0 10px 10px 10px;
+}
+
+#login {
+	margin-top: 0px;	
+}
+
+.browserError {
+	margin: 0 10px 20px 10px;
+	background: #fff;	
+	border: 2px solid #f00;
+	padding: 10px 20px;
+}
+
+.browserError, .browserError h2, .browserError a { 
+	color: #f00;	
+}
+
+#newUser {
+	background: url("../../images/ept/login/login_lock_icon_green.png") no-repeat;
+	padding-left: 24px;
+	margin-bottom: 20px;
+	color: #76992A;	
+}
+
+/***** Modify Default CSS *****/
+#container2 {
+	width:1000px;
+}
+
+#container1 {
+	right:0px;	
+	background:#fff;
+}
+
+#column1 {
+	width:0px;
+	left:0px;
+}
+
+#column2 {
+	width:1000px;
+	left:0px;		
+}
+
+#masthead a, #masthead > img {
+	left: 102px;
+}
+
+#header #controls div {
+	padding-right: 102px;	
+}
+
+#column2 {
+	min-height: 500px;
+}
