@@ -2,13 +2,42 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="143ccf83-bc51-4c5e-a3ee-f556d890400c" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/runConfigurations/BidderCRUD_php.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/Bidder.html" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/BidderCRUD.php" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/OpportunityTable.php" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/test22.php" />
-      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/EmployeeInsert_php.xml" afterPath="" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/BidderInsert.php" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/BidderTable.php" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/EmployeeInsert.php" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/EmployeeTable.php" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/bidops_template.html" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/calpers.ico" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/css/bid-opps.css" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/css/bootstrap-theme.css" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/css/bootstrap-theme.css.map" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/css/bootstrap-theme.min.css" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/css/bootstrap-theme.min.css.map" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/css/bootstrap.css" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/css/bootstrap.css.map" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/css/bootstrap.min.css" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/css/bootstrap.min.css.map" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/css/calpers-theme.css" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/css/font-awesome.min.css" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/css/forms.css" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/css/jquery.bxslider.css" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/css/print.css" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/css/style.css" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/fonts/glyphicons-halflings-regular.eot" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/fonts/glyphicons-halflings-regular.svg" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/fonts/glyphicons-halflings-regular.ttf" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/fonts/glyphicons-halflings-regular.woff" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/fonts/glyphicons-halflings-regular.woff2" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/js/back-to-top.js" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/js/bootstrap.js" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/js/bootstrap.min.js" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/js/bxslider.js" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/js/iframe-custom.js" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/js/iframe-height.js" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/js/jquery.min.js" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/js/jquery.validate.js" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/js/npm.js" afterPath="" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -18,127 +47,13 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="525">
-      <file leaf-file-name="BidderTable.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/BidderTable.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="145">
-              <caret line="5" column="16" lean-forward="true" selection-start-line="5" selection-start-column="16" selection-end-line="5" selection-end-column="16" />
-              <folding>
-                <marker date="1520024762148" expanded="true" signature="442:653" ph="CREATE TABLE... BIDDER" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="OpportunityTable.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/OpportunityTable.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="87">
-              <caret line="8" column="23" lean-forward="true" selection-start-line="8" selection-start-column="23" selection-end-line="8" selection-end-column="23" />
-              <folding>
-                <marker date="1520026613474" expanded="true" signature="453:722" ph="CREATE TABLE... BIDDER" />
-                <marker date="1520026613474" expanded="true" signature="788:900" ph="CREATE TABLE... OPPORTUNITY" />
-                <marker date="1520026613474" expanded="true" signature="788:914" ph="INSERT INTO OPPORTUNITY... " />
-                <marker date="1520026613474" expanded="true" signature="788:918" ph="INSERT INTO OPPORTUNITY... " />
-                <marker date="1520026613474" expanded="true" signature="788:945" ph="INSERT INTO OPPORTUNITY... " />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BidderCRUD.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/BidderCRUD.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="667">
-              <caret line="37" column="5" lean-forward="true" selection-start-line="37" selection-start-column="5" selection-end-line="37" selection-end-column="5" />
-              <folding>
-                <marker date="1520047640038" expanded="true" signature="1087:1127" ph="SELECT id, f... MyGuests" />
-                <marker date="1520047640038" expanded="true" signature="1087:1144" ph="SELECT FIRST... BIDDER" />
-                <marker date="1520047640038" expanded="true" signature="1087:1164" ph="SELECT FIRST... BIDDER" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Bidder.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Bidder.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="638">
-              <caret line="22" column="14" lean-forward="true" selection-start-line="22" selection-start-column="14" selection-end-line="22" selection-end-column="14" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Bidder.html" pinned="false" current-in-tab="false">
-        <entry file="http://athena.ecs.csus.edu/~wildcard/Bidder.html">
-          <provider selected="true" editor-type-id="httpFileEditor">
-            <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="jquery-1.11.1.min.js" pinned="false" current-in-tab="false">
-        <entry file="http://code.jquery.com/jquery-1.11.1.min.js">
-          <provider selected="true" editor-type-id="httpFileEditor">
-            <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="test22.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test22.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="145">
-              <caret line="10" column="2" lean-forward="true" selection-start-line="10" selection-start-column="2" selection-end-line="10" selection-end-column="2" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BidderInsert.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/BidderInsert.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="406">
-              <caret line="19" column="12" lean-forward="false" selection-start-line="19" selection-start-column="12" selection-end-line="19" selection-end-column="23" />
-              <folding>
-                <marker date="1520025186290" expanded="true" signature="442:688" ph="INSERT INTO BIDDER... " />
-                <marker date="1520025186290" expanded="true" signature="448:528" ph="CREATE TABLE... BIDDER" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="EmployeeTable.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/EmployeeTable.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="464">
-              <caret line="21" column="6" lean-forward="false" selection-start-line="21" selection-start-column="4" selection-end-line="21" selection-end-column="6" />
-              <folding>
-                <marker date="1520025044751" expanded="true" signature="442:639" ph="CREATE TABLE... EMPLOYEE" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="EmployeeInsert.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/EmployeeInsert.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="185">
-              <caret line="10" column="19" lean-forward="true" selection-start-line="10" selection-start-column="19" selection-end-line="10" selection-end-column="19" />
-              <folding>
-                <marker date="1520025245188" expanded="true" signature="441:663" ph="INSERT INTO EMPLOYEE... " />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="525" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
         <option value="JavaScript File" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -162,6 +77,7 @@
         <option value="$PROJECT_DIR$/Bidder.html" />
         <option value="$PROJECT_DIR$/test22.php" />
         <option value="$PROJECT_DIR$/BidderCRUD.php" />
+        <option value="$PROJECT_DIR$/login/Bidderlogin.html" />
       </list>
     </option>
   </component>
@@ -180,8 +96,8 @@
     </include_path>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-2914" />
-    <option name="y" value="558" />
+    <option name="x" value="-12" />
+    <option name="y" value="-12" />
     <option name="width" value="2584" />
     <option name="height" value="1554" />
   </component>
@@ -200,8 +116,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -240,11 +156,12 @@
     <configuration name="Bidder.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://athena.ecs.csus.edu/~wildcard/Bidder.html" />
     <configuration name="Bidder.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://athena.ecs.csus.edu/~wildcard/Bidder.html" />
     <configuration name="test22.php" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://athena.ecs.csus.edu/~wildcard/test22.php" />
-    <list size="4">
+    <list size="5">
       <item index="0" class="java.lang.String" itemvalue="JavaScript Debug.BidderTable.php (2)" />
       <item index="1" class="java.lang.String" itemvalue="JavaScript Debug.BidderCRUD.php" />
-      <item index="2" class="java.lang.String" itemvalue="JavaScript Debug.Bidder.html" />
-      <item index="3" class="java.lang.String" itemvalue="JavaScript Debug.test22.php" />
+      <item index="2" class="java.lang.String" itemvalue="JavaScript Debug.BidderTable.php" />
+      <item index="3" class="java.lang.String" itemvalue="JavaScript Debug.Bidder.html" />
+      <item index="4" class="java.lang.String" itemvalue="JavaScript Debug.test22.php" />
     </list>
     <recent_temporary>
       <list size="4">
@@ -270,17 +187,18 @@
       <updated>1520020310565</updated>
       <workItem from="1520020311901" duration="6434000" />
       <workItem from="1520042692932" duration="4967000" />
+      <workItem from="1520712908977" duration="1319000" />
+      <workItem from="1520716466855" duration="1272000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="11401000" />
+    <option name="totallyTimeSpent" value="13992000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-3372" y="0" width="3384" height="1844" extended-state="6" />
-    <editor active="true" />
+    <frame x="-12" y="-12" width="2584" height="1554" extended-state="6" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.10234375" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -310,174 +228,69 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/BidderCRUD.php</url>
-          <line>56</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/BidderCRUD.php</url>
-          <line>40</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/BidderCRUD.php</url>
-          <line>43</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/BidderCRUD.php</url>
-          <line>46</line>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/BidderCRUD.php</url>
-          <line>55</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/BidderCRUD.php</url>
-          <line>32</line>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/BidderCRUD.php</url>
-          <line>33</line>
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/BidderCRUD.php</url>
-          <line>34</line>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/BidderCRUD.php</url>
-          <line>35</line>
-          <option name="timeStamp" value="10" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/BidderCRUD.php</url>
-          <line>64</line>
-          <option name="timeStamp" value="11" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/Bidder.html</url>
-          <line>29</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="13" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/Bidder.html</url>
-          <line>23</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="14" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/Bidder.html</url>
-          <line>39</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="15" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/Bidder.html</url>
-          <line>30</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="16" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/Bidder.html</url>
-          <line>26</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="17" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/Bidder.html</url>
-          <line>21</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="18" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/Bidder.html</url>
-          <line>17</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="19" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>http://athena.ecs.csus.edu/~wildcard/Bidder.html</url>
           <line>21</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="20" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>http://athena.ecs.csus.edu/~wildcard/Bidder.html</url>
           <line>19</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="21" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>http://athena.ecs.csus.edu/~wildcard/Bidder.html</url>
           <line>18</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="22" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>http://athena.ecs.csus.edu/~wildcard/Bidder.html</url>
           <line>20</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="23" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>http://athena.ecs.csus.edu/~wildcard/Bidder.html</url>
           <line>22</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="24" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>http://athena.ecs.csus.edu/~wildcard/Bidder.html</url>
           <line>24</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="25" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>http://athena.ecs.csus.edu/~wildcard/Bidder.html</url>
           <line>29</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="26" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>http://athena.ecs.csus.edu/~wildcard/Bidder.html</url>
           <line>30</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="27" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>http://athena.ecs.csus.edu/~wildcard/Bidder.html</url>
           <line>31</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="28" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>http://athena.ecs.csus.edu/~wildcard/Bidder.html</url>
           <line>32</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="29" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>http://athena.ecs.csus.edu/~wildcard/Bidder.html</url>
           <line>34</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="30" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>http://athena.ecs.csus.edu/~wildcard/Bidder.html</url>
           <line>33</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="31" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>http://athena.ecs.csus.edu/~wildcard/Bidder.html</url>
           <line>39</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="32" />
         </line-breakpoint>
       </breakpoints>
@@ -486,91 +299,7 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/BidderTable.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="58">
-          <caret line="7" column="0" lean-forward="true" selection-start-line="7" selection-start-column="0" selection-end-line="39" selection-end-column="2" />
-          <folding>
-            <marker date="1520024762148" expanded="true" signature="442:653" ph="CREATE TABLE... BIDDER" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BidderInsert.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="406">
-          <caret line="19" column="12" lean-forward="false" selection-start-line="19" selection-start-column="12" selection-end-line="19" selection-end-column="23" />
-          <folding>
-            <marker date="1520025186290" expanded="true" signature="442:688" ph="INSERT INTO BIDDER... " />
-            <marker date="1520025186290" expanded="true" signature="448:528" ph="CREATE TABLE... BIDDER" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/EmployeeTable.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="464">
-          <caret line="21" column="6" lean-forward="false" selection-start-line="21" selection-start-column="4" selection-end-line="21" selection-end-column="6" />
-          <folding>
-            <marker date="1520025044751" expanded="true" signature="442:639" ph="CREATE TABLE... EMPLOYEE" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/EmployeeInsert.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="957">
-          <caret line="33" column="2" lean-forward="true" selection-start-line="33" selection-start-column="2" selection-end-line="33" selection-end-column="2" />
-          <folding>
-            <marker date="1520025245188" expanded="true" signature="441:663" ph="INSERT INTO EMPLOYEE... " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/OpportunityTable.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="899">
-          <caret line="36" column="49" lean-forward="true" selection-start-line="36" selection-start-column="49" selection-end-line="36" selection-end-column="49" />
-          <folding>
-            <marker date="1520026613474" expanded="true" signature="453:722" ph="CREATE TABLE... BIDDER" />
-            <marker date="1520026613474" expanded="true" signature="788:900" ph="CREATE TABLE... OPPORTUNITY" />
-            <marker date="1520026613474" expanded="true" signature="788:914" ph="INSERT INTO OPPORTUNITY... " />
-            <marker date="1520026613474" expanded="true" signature="788:918" ph="INSERT INTO OPPORTUNITY... " />
-            <marker date="1520026613474" expanded="true" signature="788:945" ph="INSERT INTO OPPORTUNITY... " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test.txt" />
-    <entry file="file://$PROJECT_DIR$/test.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="783">
-          <caret line="27" column="2" lean-forward="true" selection-start-line="27" selection-start-column="2" selection-end-line="27" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/EmployeeTable.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="464">
-          <caret line="21" column="6" lean-forward="false" selection-start-line="21" selection-start-column="4" selection-end-line="21" selection-end-column="6" />
-          <folding>
-            <marker date="1520025044751" expanded="true" signature="442:639" ph="CREATE TABLE... EMPLOYEE" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BidderInsert.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="406">
-          <caret line="19" column="12" lean-forward="false" selection-start-line="19" selection-start-column="12" selection-end-line="19" selection-end-column="23" />
-          <folding>
-            <marker date="1520025186290" expanded="true" signature="442:688" ph="INSERT INTO BIDDER... " />
-            <marker date="1520025186290" expanded="true" signature="448:528" ph="CREATE TABLE... BIDDER" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Bidder.js">
+    <entry file="file://$PROJECT_DIR$/login/username1.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -578,54 +307,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/OpportunityTable.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="87">
-          <caret line="8" column="23" lean-forward="true" selection-start-line="8" selection-start-column="23" selection-end-line="8" selection-end-column="23" />
-          <folding>
-            <marker date="1520026613474" expanded="true" signature="453:722" ph="CREATE TABLE... BIDDER" />
-            <marker date="1520026613474" expanded="true" signature="788:900" ph="CREATE TABLE... OPPORTUNITY" />
-            <marker date="1520026613474" expanded="true" signature="788:914" ph="INSERT INTO OPPORTUNITY... " />
-            <marker date="1520026613474" expanded="true" signature="788:918" ph="INSERT INTO OPPORTUNITY... " />
-            <marker date="1520026613474" expanded="true" signature="788:945" ph="INSERT INTO OPPORTUNITY... " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BidderTable.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="145">
-          <caret line="5" column="16" lean-forward="true" selection-start-line="5" selection-start-column="16" selection-end-line="5" selection-end-column="16" />
-          <folding>
-            <marker date="1520024762148" expanded="true" signature="442:653" ph="CREATE TABLE... BIDDER" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/EmployeeInsert.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="185">
-          <caret line="10" column="19" lean-forward="true" selection-start-line="10" selection-start-column="19" selection-end-line="10" selection-end-column="19" />
-          <folding>
-            <marker date="1520025245188" expanded="true" signature="441:663" ph="INSERT INTO EMPLOYEE... " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test22.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="145">
-          <caret line="10" column="2" lean-forward="true" selection-start-line="10" selection-start-column="2" selection-end-line="10" selection-end-column="2" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Bidder.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="638">
-          <caret line="22" column="14" lean-forward="true" selection-start-line="22" selection-start-column="14" selection-end-line="22" selection-end-column="14" />
-          <folding />
-        </state>
+    <entry file="file://$PROJECT_DIR$/BidderTable.php" />
+    <entry file="file://$PROJECT_DIR$/OpportunityTable.php" />
+    <entry file="file://$PROJECT_DIR$/Bidder.html" />
+    <entry file="http://athena.ecs.csus.edu/~wildcard/Bidder.html">
+      <provider selected="true" editor-type-id="httpFileEditor">
+        <state />
       </provider>
     </entry>
     <entry file="http://code.jquery.com/jquery-1.11.1.min.js">
@@ -633,20 +320,51 @@
         <state />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/test22.php" />
+    <entry file="file://$PROJECT_DIR$/BidderInsert.php" />
+    <entry file="file://$PROJECT_DIR$/EmployeeTable.php" />
+    <entry file="file://$PROJECT_DIR$/EmployeeInsert.php" />
+    <entry file="file://$PROJECT_DIR$/BidderCRUD.php" />
+    <entry file="file://$PROJECT_DIR$/BidderTable.php" />
+    <entry file="file://$PROJECT_DIR$/BidderInsert.php" />
+    <entry file="file://$PROJECT_DIR$/EmployeeTable.php" />
+    <entry file="file://$PROJECT_DIR$/EmployeeInsert.php" />
+    <entry file="file://$PROJECT_DIR$/OpportunityTable.php" />
+    <entry file="file://$PROJECT_DIR$/test.txt" />
+    <entry file="file://$PROJECT_DIR$/test.php" />
+    <entry file="file://$PROJECT_DIR$/EmployeeTable.php" />
+    <entry file="file://$PROJECT_DIR$/BidderInsert.php" />
+    <entry file="file://$PROJECT_DIR$/Bidder.js" />
+    <entry file="file://$PROJECT_DIR$/OpportunityTable.php" />
+    <entry file="file://$PROJECT_DIR$/BidderTable.php" />
+    <entry file="file://$PROJECT_DIR$/EmployeeInsert.php" />
+    <entry file="file://$PROJECT_DIR$/test22.php" />
+    <entry file="file://$PROJECT_DIR$/Bidder.html" />
+    <entry file="file://$PROJECT_DIR$/BidderCRUD.php" />
     <entry file="http://athena.ecs.csus.edu/~wildcard/Bidder.html">
       <provider selected="true" editor-type-id="httpFileEditor">
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/BidderCRUD.php">
+    <entry file="http://code.jquery.com/jquery-1.11.1.min.js">
+      <provider selected="true" editor-type-id="httpFileEditor">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/login/login.html" />
+    <entry file="file://$PROJECT_DIR$/login/username1.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="667">
-          <caret line="37" column="5" lean-forward="true" selection-start-line="37" selection-start-column="5" selection-end-line="37" selection-end-column="5" />
-          <folding>
-            <marker date="1520047640038" expanded="true" signature="1087:1127" ph="SELECT id, f... MyGuests" />
-            <marker date="1520047640038" expanded="true" signature="1087:1144" ph="SELECT FIRST... BIDDER" />
-            <marker date="1520047640038" expanded="true" signature="1087:1164" ph="SELECT FIRST... BIDDER" />
-          </folding>
+        <state relative-caret-position="261">
+          <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/login/Bidderlogin.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="383">
+          <caret line="458" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="487" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
