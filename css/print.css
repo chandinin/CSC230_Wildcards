@@ -1,0 +1,55 @@
+/* CSS Document */
+body {
+    padding-bottom: 0;
+}
+.navbar.navbar-default.navbar-static-top.navbar-global {
+    display: block;
+    position: relative;
+    margin-bottom:75px;
+}
+.navbar-header.display-flex {
+    display: block;
+}
+.logo svg {
+    height: 65px;
+}
+g.calpersFill {
+    fill: #0070aa;
+}
+.home .section-1  {
+    border-bottom: none;
+}
+.navbar.navbar-inverse.navbar-static-top.navbar-tab,
+.print-hidden,
+.carousel,
+.subscribe-social,
+.rsn,
+.muted,
+.footer,
+.tab .section-3,
+.bx-wrapper,
+.addthis_sharing_toolbox {
+    display: none!important;
+}
+.logo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 46px;
+}
+
+body,
+.breadcrumb {
+    word-wrap: break-word;
+}
+
+table {
+    border-collapse:collapse;
+
+}
+td, th {
+    border: 1px solid #cccccc;
+    padding: 2px 5px;
+}
+
+
