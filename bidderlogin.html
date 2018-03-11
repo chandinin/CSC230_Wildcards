@@ -31,265 +31,12 @@
 
     <script type="text/javascript" src="web/js/ept/gatag.js"></script>
 
-    <script>
-        var $j = jQuery.noConflict();
-        var isEpt = true;
-
-        function elementSupportsAttribute(element, attribute) {
-            var test = document.createElement(element);
-            if (attribute in test) {
-                return true;
-            } else {
-                return false;
-            }
-        };
-
-        function menuBlur() {
-            $j('#nav  li').removeClass('hover');
-            $j('#nav  a').removeClass('hover');
-            $j('ul.hover').removeClass('hover');
-            $j('ul.hide').addClass('active');
-            $j('ul.hide').removeClass('hide');
-        }
-
-        function menuSetup() {
-            $j('#nav > li').hover(
-                function () {
-                    var current = $j(this);
-
-                    $j.doTimeout('menublur');
-
-                    if (!current.hasClass('active')) {
-                        $j.doTimeout('menuhover', 250,
-                            function () {
-                                $j('#nav > li').removeClass('hover');
-                                $j('#nav > li > a').removeClass('hover');
-                                current.children('a').addClass('hover');
-
-                                $j('ul.active').addClass('hide');
-                                $j('ul.active').removeClass('active');
-
-                                current.addClass('hover');
-                                current.find('ul').addClass('hover');
-                            });
-                    }
-                    else {
-                        menuBlur();
-                    }
-                },
-                function () {
-                    $j.doTimeout('menuhover');
-                    $j.doTimeout('menublur', 250, menuBlur);
-                }
-            );
-
-            $j('#nav a').focus(
-                function () {
-                    var current = $j(this);
-
-                    if (!current.hasClass('active') && !current.parent().parent().hasClass('active')) {
-                        $j('ul.active').addClass('hide');
-                        $j('ul.active').removeClass('active');
-
-                        current.addClass('hover');
-                        current.parent().addClass('hover');
-                        if (current.parent().parent().attr('id') != 'nav') {
-                            current.parent().parent().addClass('hover');
-                            current.parent().parent().parent().find('a').addClass('hover');
-                            current.parent().parent().parent().addClass('hover');
-                        }
-                    }
-                    else if (current.parent().parent().hasClass('active')) {
-                        current.addClass('hover');
-                        current.parent().addClass('hover');
-                    }
-                });
-
-            $j('#nav a').blur(
-                function () {
-                    menuBlur();
-                });
-
-        }
-
-        function setupTextareaPlaceholder() {
-            if (!elementSupportsAttribute('textarea', 'placeholder')) {
-
-                $j('[placeholder]').focus(function () {
-                    var input = $j(this);
-                    if (input.val() == input.attr('placeholder')) {
-                        input.val('');
-                        input.removeClass('placeholder');
-                    }
-                }).blur(function () {
-                    var input = $j(this);
-                    if (input.val() == '' || input.val() == input.attr('placeholder')) {
-                        input.addClass('placeholder');
-                        input.val(input.attr('placeholder'));
-                    }
-                }).blur().parents('form').submit(function () {
-                    $j(this).find('[placeholder]').each(function () {
-                        var input = $j(this);
-                        if (input.val() == input.attr('placeholder')) {
-                            input.val('');
-                        }
-                    })
-                });
-            }
-        }
-
-        Event.observe(window, "load", function () {
-            init('#globalNav');
-            menuSetup();
-            addGAToDownloadLinks();
-
-            if ($j('#nav > li.active').length == 0) {
-                $j('#topNav').css("min-height", '38px');
-            }
-            else //if ( $j('#topNav ul.active').height() > 38 )
-            {
-                $j('#topNav').css("min-height", '72px');
-
-            }
-
-            $j('.inputButton').mousedown(function () {
-                if ($j(this).attr('type') == 'submit' || $j(this).attr('type') == 'button') {
-                    if ($j(this).hasClass('button')) {
-                        $j(this).removeClass('button');
-                        $j(this).addClass('activeButton');
-                    }
-                    else if ($j(this).hasClass('mainButton')) {
-                        $j(this).removeClass('mainButton');
-                        $j(this).addClass('activeMainButton');
-                    }
-                    else if ($j(this).hasClass('doSomething')) {
-                        $j(this).removeClass('doSomething');
-                        $j(this).addClass('activeDoSomething');
-                    }
-                    else {
-                        $j(this).addClass('activeButton');
-                    }
-                }
-            });
-
-            $j('.evenRows').each(function () {
-                var grids = $j(this).find('.grid');
-                var working = new Array();
-
-                grids.sort(function (a, b) {
-                    return $j(a).offset().top - $j(b).offset().top
-                });
-
-                currentTop = -1;
-
-                while (grids.length > 0) {
-                    var offset = $j(grids[0]).offset();
-                    var top = offset.top;
-
-                    if (currentTop == -1 || top == currentTop) {
-                        currentTop = $j(grids[0]).offset().top;
-                        working.push(grids.splice(0, 1));
-                    }
-
-                    if (top != currentTop || grids.length == 0) {
-                        working.sort(function (a, b) {
-                            return $j(b).height() - $j(a).height()
-                        });
-                        height = $j(working[0]).height();
-                        $j.each(working, function (value, obj) {
-                            $j(obj).height(height);
-                        });
-                        grids.sort(function (a, b) {
-                            return $j(a).offset().top - $j(b).offset().top
-                        });
-                        working = new Array();
-                        currentTop = -1;
-                    }
-                }
-            });
-
-            $j('.inputButton').mouseup(function () {
-                if ($j(this).hasClass('activeButton')) {
-                    $j(this).removeClass('activeButton');
-                    $j(this).addClass('button');
-                }
-                else if ($j(this).hasClass('activeMainButton')) {
-                    $j(this).removeClass('activeMainButton');
-                    $j(this).addClass('mainButton');
-                }
-                else if ($j(this).hasClass('activeDoSomething')) {
-                    $j(this).removeClass('activeDoSomething');
-                    $j(this).addClass('doSomething');
-                }
-            });
-
-            if ($j('.tabbedContainer > ul > li > a.active').length == 0) {
-                $j('.tabbedContainer > ul > li:first > a').addClass('active');
-                $j('.tabbedContainer > ul > li:first > a').parent().next().find('a').addClass('leftShadow');
-                $j($j('.tabbedContainer > ul > li:first > a').attr('href')).show();
-            }
-            else if ($j('.tabbedContainer > ul > li > a.active').length == 1) {
-                $j($j('.tabbedContainer > ul > li> a.active').attr('href')).show();
-            }
-
-            $j('.tabbedContainer > ul').append('<div class="clear"></div>');
-
-            $j('.tabbedContainer > ul > li > a').click(function () {
-                var containerId = $j(this).parent().parent().parent().attr('id');
-                var targetId = $j(this).attr("href");
-
-                $j('#' + containerId + ' > ul > li > a').removeClass('active').removeClass('rightShadow').removeClass('leftShadow');
-                $j(this).addClass('active');
-                $j(this).parent().prev().find('a').addClass('rightShadow');
-                $j(this).parent().next().find('a').addClass('leftShadow');
-                $j('#' + containerId + ' > div.content').hide();
-                $j('#' + containerId + ' > div' + targetId + '.content').show();
-            });
-
-            setupTextareaPlaceholder();
-
-
-            $j(" .error").focus();
-        });
-
-        var urlContext = 'web';
-    </script>
-
-    <script>
-
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-25763786-11']);
-        _gaq.push(['_setDomainName', 'calpers.ca.gov']);
-        _gaq.push(['_trackPageview']);
-
-        (function () {
-            var ga = document.createElement('script');
-            ga.type = 'text/javascript';
-            ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(ga, s);
-        })();
-    </script>
 
     <script type="text/javascript" src="web/js/ept/quicktip.js"></script>
 
     <!-- From PSR -->
     <script src="web/js/calendar-popup.js"></script>
     <script src="web/js/application.js"></script>
-    <script>
-        Psr.Request = Class.create({
-            initialize: function (url, options) {
-                if (options.method && options.method.toUpperCase() == 'POST') {
-                    options.parameters = options.parameters || {};
-                    options.parameters.psrFormToken = 'V9cqNPeZtg51nFHEP1EeS9XFG';
-                }
-                new Ajax.Request(url, options);
-            }
-        });
-
-
-    </script>
     <script src="web/js/cognoslaunch.js"></script>
     <script type="text/javascript" src="web/js/forms.js"></script>
 
@@ -317,6 +64,7 @@
 
     <link rel="stylesheet" type="text/css" href="web/css/ept/login.css"/>
     <script type="text/javascript" src="web/js/ept/jquery.cookie.js"></script>
+    <script type="text/javascript" src="bidderlogin.js"></script>
 
     <script>
         Event.observe(window, 'load', function (event) {
@@ -358,7 +106,7 @@
         </div>
 
         <div id="masthead">
-            <a href="web/ept/public/systemaccess/login/bidderlogin.html" title="Return to the Login Page">
+            <a href="bidderlogin.html" title="Return to the Login Page">
                 <img alt="myCalPERS" src="web/images/header_logo.png">
             </a>
         </div>
@@ -382,9 +130,8 @@
                     <a name="content"></a>
 
 
-                    <form id="usernameForm" name="usernameForm" action="web/bidderlogin.html" method="post"
-                          autocomplete="off">
-                        <input type="hidden" name="psr.arch.state.StateManagerImpl.ENCODED_CONVERSATIONS_KEY" value=""/>
+                    <form id="loginForm" name="loginForm" onSubmit="return LoginAction()" autocomplete="off">
+                        <input type="hidden" name = "psr.arch.state.StateManagerImpl.ENCODED_CONVERSATIONS_KEY" value=""/>
 
 
                         <div id="leftLogin">
@@ -411,6 +158,7 @@
                                 </div>
                             </noscript>
 
+
                             <div class="container10">
                                 <div class="grid10 grid gridbr ">
                                     <div id="newUser"><h1>Log In</h1></div>
@@ -418,15 +166,16 @@
                                     <label for="username" id="usernameLbl">Username <span
                                             class="required">(required)</span></label>
                                     <input id="username" name="username" type="text" value="" size="24" maxlength="35"/>
-									<p></p>
-									 <label for="password" id="passwordLbl">Password <span
+                                    <p></p>
+                                    <label for="password" id="passwordLbl">Password <span
                                             class="required">(required)</span></label>
-											<input id="password" name="password" type="text" value="" size="24" maxlength="35"/>
+                                    <input id="password" name="password" type="text" value="" size="24" maxlength="35"/>
                                 </div>
                             </div>
                             <div class="grid10 grid gridbr ">
                                 <input name="action.actionProcessLogin" align="left" type="submit"
                                        class="mainButton" value="Continue"/>
+
                                 <div class="clear"></div>
                             </div>
                             <div class="clear"></div>

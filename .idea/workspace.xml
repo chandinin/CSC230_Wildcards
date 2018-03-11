@@ -2,42 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="143ccf83-bc51-4c5e-a3ee-f556d890400c" name="Default" comment="">
+      <change beforePath="" afterPath="$PROJECT_DIR$/bidderlogin.js" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/BidderInsert.php" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/BidderTable.php" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/EmployeeInsert.php" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/EmployeeTable.php" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/bidops_template.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/calpers.ico" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/css/bid-opps.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/css/bootstrap-theme.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/css/bootstrap-theme.css.map" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/css/bootstrap-theme.min.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/css/bootstrap-theme.min.css.map" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/css/bootstrap.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/css/bootstrap.css.map" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/css/bootstrap.min.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/css/bootstrap.min.css.map" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/css/calpers-theme.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/css/font-awesome.min.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/css/forms.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/css/jquery.bxslider.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/css/print.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/css/style.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/fonts/glyphicons-halflings-regular.eot" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/fonts/glyphicons-halflings-regular.svg" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/fonts/glyphicons-halflings-regular.ttf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/fonts/glyphicons-halflings-regular.woff" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/fonts/glyphicons-halflings-regular.woff2" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/js/back-to-top.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/js/bootstrap.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/js/bootstrap.min.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/js/bxslider.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/js/iframe-custom.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/js/iframe-height.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/js/jquery.min.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/js/jquery.validate.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/js/npm.js" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/bidderlogin.html" afterPath="$PROJECT_DIR$/bidderlogin.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -47,7 +14,28 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="525" />
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="525">
+      <file leaf-file-name="bidderlogin.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bidderlogin.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="911">
+              <caret line="176" column="76" lean-forward="false" selection-start-line="176" selection-start-column="76" selection-end-line="176" selection-end-column="76" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="bidderlogin.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/bidderlogin.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="406">
+              <caret line="14" column="9" lean-forward="false" selection-start-line="14" selection-start-column="9" selection-end-line="14" selection-end-column="9" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -60,6 +48,9 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>url</find>
+      <find>registration-form</find>
+      <find>usernameForm</find>
+      <find>action</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -78,6 +69,10 @@
         <option value="$PROJECT_DIR$/test22.php" />
         <option value="$PROJECT_DIR$/BidderCRUD.php" />
         <option value="$PROJECT_DIR$/login/Bidderlogin.html" />
+        <option value="$PROJECT_DIR$/bidderlogin1.js" />
+        <option value="$PROJECT_DIR$/some.html" />
+        <option value="$PROJECT_DIR$/bidderlogin.html" />
+        <option value="$PROJECT_DIR$/bidderlogin.js" />
       </list>
     </option>
   </component>
@@ -135,7 +130,7 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/bidderlogin.html" />
     <property name="settings.editor.selected.configurable" value="reference.webide.settings.project.settings.php" />
   </component>
   <component name="RunDashboard">
@@ -150,18 +145,20 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JavaScript Debug.Bidder.html">
+  <component name="RunManager" selected="JavaScript Debug.bidderlogin.html">
     <configuration name="BidderTable.php (2)" type="JavascriptDebugType" factoryName="JavaScript Debug" nameIsGenerated="true" uri="http://athena.ecs.csus.edu/~wildcard/BidderTable.php" />
     <configuration name="BidderTable.php" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://athena.ecs.csus.edu/~wildcard/BidderTable.php" />
     <configuration name="Bidder.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://athena.ecs.csus.edu/~wildcard/Bidder.html" />
     <configuration name="Bidder.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://athena.ecs.csus.edu/~wildcard/Bidder.html" />
+    <configuration name="bidderlogin.html" type="JavascriptDebugType" factoryName="JavaScript Debug" nameIsGenerated="true" uri="http://athena.ecs.csus.edu/~nagendrc/bidderlogin.html" />
     <configuration name="test22.php" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://athena.ecs.csus.edu/~wildcard/test22.php" />
-    <list size="5">
+    <list size="6">
       <item index="0" class="java.lang.String" itemvalue="JavaScript Debug.BidderTable.php (2)" />
       <item index="1" class="java.lang.String" itemvalue="JavaScript Debug.BidderCRUD.php" />
-      <item index="2" class="java.lang.String" itemvalue="JavaScript Debug.BidderTable.php" />
-      <item index="3" class="java.lang.String" itemvalue="JavaScript Debug.Bidder.html" />
-      <item index="4" class="java.lang.String" itemvalue="JavaScript Debug.test22.php" />
+      <item index="2" class="java.lang.String" itemvalue="JavaScript Debug.bidderlogin.html" />
+      <item index="3" class="java.lang.String" itemvalue="JavaScript Debug.BidderTable.php" />
+      <item index="4" class="java.lang.String" itemvalue="JavaScript Debug.Bidder.html" />
+      <item index="5" class="java.lang.String" itemvalue="JavaScript Debug.test22.php" />
     </list>
     <recent_temporary>
       <list size="4">
@@ -188,17 +185,18 @@
       <workItem from="1520020311901" duration="6434000" />
       <workItem from="1520042692932" duration="4967000" />
       <workItem from="1520712908977" duration="1319000" />
-      <workItem from="1520716466855" duration="1272000" />
+      <workItem from="1520716466855" duration="20753000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="13992000" />
+    <option name="totallyTimeSpent" value="33473000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-12" y="-12" width="2584" height="1554" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.10234375" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23164062" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -294,7 +292,7 @@
           <option name="timeStamp" value="32" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="33" />
+      <option name="time" value="36" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -364,6 +362,38 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="383">
           <caret line="458" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="487" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bidderlogin1.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="290">
+          <caret line="10" column="1" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="10" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/some.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="321">
+          <caret line="233" column="0" lean-forward="false" selection-start-line="233" selection-start-column="0" selection-end-line="245" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bidderlogin.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="911">
+          <caret line="176" column="76" lean-forward="false" selection-start-line="176" selection-start-column="76" selection-end-line="176" selection-end-column="76" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bidderlogin.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="406">
+          <caret line="14" column="9" lean-forward="false" selection-start-line="14" selection-start-column="9" selection-end-line="14" selection-end-column="9" />
           <folding />
         </state>
       </provider>
