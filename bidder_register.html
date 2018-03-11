@@ -165,9 +165,6 @@
 
 									<!-- ==========================CONTENT STARTS HERE ========================== -->
 									<div id="main" role="main">
-
-
-
 										<div class="custom-app">
 
 
@@ -223,6 +220,7 @@
 											</form>
 											<script>     
 												// Attach a submit handler to our registration form
+												// Uses http://malsup.github.com/jquery.form.js for this, not vanilla jquery
 												
 												$("#registration-form").ajaxForm({
 											        url : $(this).attr("action"),
