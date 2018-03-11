@@ -1,0 +1,201 @@
+ul.menu {
+	list-style: none;  
+    padding: 0;  
+    margin: 0;   
+    font-size: 1.2em;  
+}
+
+ul.menu li {  	    
+    margin: 0;  	      
+    position: relative; /*--Declare X and Y axis base for sub navigation--*/  
+}  
+
+ul.menu > li {
+	float: left; 
+	padding: 0 0 0 0; 
+	background: url("../../images/ept/menu/nav_edge.gif") repeat-y scroll right top transparent;
+	border-right: 1px solid #555555;
+}
+		
+ul.menu > li > a {  
+	color: #fff;
+	float: left;  
+	padding: 10px 15px;  	    
+   	display: block;  
+    text-decoration: none;   
+}
+
+ul.menu > li > a > .menuSubIndicator {
+	position: absolute; 
+	right: 5px;
+	bottom: 4px;
+	width: 8px;
+	height: 4px;
+	background: url("../../images/ept/menu/arrow.png") no-repeat;	
+}
+
+ul.menu > li > a.active > .menuSubIndicator {
+	background: url("../../images/ept/menu/arrow_active.png") no-repeat;
+}
+
+ul.menu > li > a:hover { 
+	xbackground: url("../../images/ept/menu/nav_bg_hover.gif") repeat-x;
+}
+
+ul.menu > li > a.active, ul.menu > li > a.active:hover {
+	background: none;
+	xbackground-color: #fafaff;
+	background: url("../../images/ept/menu/nav_bg_active.jpg") repeat-x;
+	color: #000;
+}  
+	
+ul.menu li ul a, ul.menu li ul li span {		
+	padding: 5px 10px; 
+	display: block;
+	text-decoration: none;	
+}
+
+ul.menu li ul li span {	
+	color: #264565;
+	padding-top: 10px;
+	margin-top: 10px;
+	font-weight: 600;
+	border-top: 1px solid #dfe3e4;	
+	font-size: 0.833em;	
+}
+
+ul.menu li ul a {	/* 2nd Level Items */
+	color: #264565;
+	font-weight: 400;
+	font-size: 0.833em;
+}
+
+ul.menu li ul a:hover {	/* 2nd Level Items */ 	
+	color: #fff;		
+	font-weight: 600;
+	background-color: #6a8236;
+}
+
+ul.menu li ul {  
+    list-style: none;  
+    position: absolute; /*--Important - Keeps subnav from affecting main navigation flow--*/  
+    left: -1px; top: 36px;  
+    background: #fafaff;  
+    margin: 0; 
+    padding: 10px 0;  
+    display: none;  
+    float: left;  
+    width: 200px;  
+    border-style: solid;
+    border-color: #111;
+    border-width: 0 1px 1px 1px;    
+    -moz-border-radius: 0 0 3px 3px;
+    -webkit-border-radius: 0 0 3px 3px;   
+    border-radius: 0 0 3px 3px;
+    background-color: #fff; 
+    box-shadow: 3px 3px 3px #888;
+}
+
+
+
+/* BE SURE TO INCLUDE THE CSS RESET FOUND IN THE DEMO PAGE'S CSS */
+/*------------------------------------*\
+	NAV
+\*------------------------------------*/
+#nav {
+     list-style:none;
+     display: inline-flex;
+     margin: 0;            
+     width:100%;
+     padding-left: 0;
+     position: relative;
+     background: rgb(23, 48, 79);
+     background-image: linear-gradient(rgb(42, 77, 115) 0%, rgb(23, 48, 79) 66%);
+}
+
+#nav > li {
+	border-left: 1px solid transparent;
+	border-right: 1px solid #66778e;	
+}
+
+#nav a {
+	font-size: 1.167em;
+	display:block;
+	padding:11px 22px;
+	color:#eeeeee;	
+	text-decoration:none;	
+}
+
+#nav > li > a {	
+    padding: 10px 22px;
+    background: rgb(23, 48, 79);
+    background-image: linear-gradient(rgb(42, 77, 115) 0%, rgb(23, 48, 79) 66%);
+}
+
+#nav > li > a.active, #nav > li > a.hover {
+	color: #333;	
+	background:#eee;	
+}
+
+/*--- DROPDOWN ---*/
+#nav ul{
+    background:#eee url("../../images/ept/menu/subnav_bg.jpg") bottom repeat-x; 
+    list-style:none;
+    position:absolute;           
+    left:-9999px;
+    padding-left: 0px;
+    border-left: 1px solid #cdcdcd;
+    border-right: 1px solid #cdcdcd;
+    min-height: 2.55rem;
+    white-space: nowrap;
+}
+#page.double #nav ul{ width: 986px; }
+#page.single #nav ul{ width: 986px; }
+
+#nav ul li{	
+	display: inline-block;
+}
+#nav ul a{	
+	white-space:nowrap; /* Stop text wrapping and creating multi-line dropdown items */
+    background: #eee;
+}
+
+#delete li:hover ul, #nav li.active ul, #nav li.hover ul { /* Display the dropdown on hover */	
+	left: 0; /* Bring back on-screen when needed */
+}
+
+#delete li:hover ul ul.hide, #nav li.active ul.hide {
+	left:-9999px;	
+}
+
+#delete > li:hover, #nav > li.active, #nav > li.hover {
+	border-top: 1px solid #cdcdcd;
+	border-left: 1px solid #cdcdcd;
+	border-right: 1px solid #cdcdcd;
+}
+
+#nav > li.noSubmenu {
+	border: 1px solid #cdcdcd;	
+}
+
+#delete li:hover a{ /* These create persistent hover states, meaning the top-most link stays 'hovered' even when your cursor has moved down the list. */
+	background: #eee;
+	color: #333;	
+	text-decoration:underline;	
+}
+
+#nav li > ul a {
+	color: #25415c;  
+    border-bottom: 2px solid #EEEEEE;
+}
+#delete li:hover ul a{ /* The persistent hover state does however create a global style for links even before they're hovered. Here we undo these effects. */
+	background: transparent;	
+	text-decoration:none;
+}
+#nav li:hover ul li a:hover, #nav li ul li.hover a.hover  { /* Here we define the most explicit hover states--what happens when you hover each individual link. */
+	color: #333;
+	border-bottom: 2px solid #25415C;
+}
+#nav li ul li a.active {	
+	border-bottom: 2px solid #25415C;
+}
