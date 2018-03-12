@@ -5,19 +5,33 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Credentials: true");
 header('Content-Type: application/json');
 
-include_once 'config/Database.php';
+include_once '../config/Database.php';
 
 // get database connection
 $database = new Database();
 $conn = $database->Connect();
 
-
+$UserName = "";
+$PASSWORD = "";
+$Method   = "";
 // Credentials to check from POST
-$UserName = $_POST["UserName"];
-$PASSWORD = $_POST["PASSWORD"];
+
+$data = json_decode(file_get_contents("php://input"));
+if(json_last_error() === JSON_ERROR_NONE)
+{
+    $UserName = $data->UserName;
+    $PASSWORD = $data->PASSWORD;
+    $Method = "JSON";
+}
+else
+{
+    $UserName = $_POST["UserName"];
+    $PASSWORD = $_POST["PASSWORD"];
+    $Method = "Form";
+}
 
 // Query database for our user with ID
-$query = "SELECT PASSWORD FROM BIDDER  WHERE UserName = ?;";
+$query = "SELECT PASSWORD FROM EMPLOYEE  WHERE UserName = ?;";
 
 // prepare query statement
 $stmt = $conn->prepare($query);
@@ -33,7 +47,10 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
 
 $resp = array(
-    "authenticated" =>  $row["PASSWORD"] == $PASSWORD
+    "authenticated" =>  $row["PASSWORD"] == $PASSWORD,
+    "method" => $Method,
+    "UserName" => $UserName
+
 );
 
 
