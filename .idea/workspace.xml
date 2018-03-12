@@ -2,6 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="143ccf83-bc51-4c5e-a3ee-f556d890400c" name="Default" comment="">
+      <change beforePath="" afterPath="$PROJECT_DIR$/employeelogin.html" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/employeelogin.js" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/bidderlogin.html" afterPath="$PROJECT_DIR$/bidderlogin.html" />
       <change beforePath="$PROJECT_DIR$/bidderlogin.js" afterPath="$PROJECT_DIR$/bidderlogin.js" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -16,8 +20,8 @@
       <file leaf-file-name="bidderlogin.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/bidderlogin.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="911">
-              <caret line="176" column="76" lean-forward="false" selection-start-line="176" selection-start-column="76" selection-end-line="176" selection-end-column="76" />
+            <state relative-caret-position="1105">
+              <caret line="171" column="71" lean-forward="false" selection-start-line="171" selection-start-column="63" selection-end-line="171" selection-end-column="71" />
               <folding />
             </state>
           </provider>
@@ -26,8 +30,28 @@
       <file leaf-file-name="bidderlogin.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/bidderlogin.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="493">
-              <caret line="17" column="49" lean-forward="false" selection-start-line="17" selection-start-column="49" selection-end-line="17" selection-end-column="49" />
+            <state relative-caret-position="551">
+              <caret line="19" column="38" lean-forward="false" selection-start-line="19" selection-start-column="38" selection-end-line="19" selection-end-column="38" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="employeelogin.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/employeelogin.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="725">
+              <caret line="25" column="87" lean-forward="true" selection-start-line="25" selection-start-column="87" selection-end-line="25" selection-end-column="87" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="employeelogin.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/employeelogin.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="609">
+              <caret line="21" column="1" lean-forward="true" selection-start-line="21" selection-start-column="1" selection-end-line="21" selection-end-column="1" />
               <folding />
             </state>
           </provider>
@@ -38,8 +62,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="JavaScript File" />
         <option value="HTML File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -49,6 +73,8 @@
       <find>registration-form</find>
       <find>usernameForm</find>
       <find>action</find>
+      <find>loginForm</find>
+      <find>form</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -69,6 +95,8 @@
         <option value="$PROJECT_DIR$/login/Bidderlogin.html" />
         <option value="$PROJECT_DIR$/bidderlogin1.js" />
         <option value="$PROJECT_DIR$/some.html" />
+        <option value="$PROJECT_DIR$/employeelogin.html" />
+        <option value="$PROJECT_DIR$/employeelogin.js" />
         <option value="$PROJECT_DIR$/bidderlogin.html" />
         <option value="$PROJECT_DIR$/bidderlogin.js" />
       </list>
@@ -109,8 +137,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -122,6 +148,8 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -183,12 +211,13 @@
       <workItem from="1520020311901" duration="6434000" />
       <workItem from="1520042692932" duration="4967000" />
       <workItem from="1520712908977" duration="1319000" />
-      <workItem from="1520716466855" duration="21420000" />
+      <workItem from="1520716466855" duration="22106000" />
+      <workItem from="1520812146266" duration="10177000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="34140000" />
+    <option name="totallyTimeSpent" value="45003000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-12" y="-12" width="2584" height="1554" extended-state="6" />
@@ -295,14 +324,39 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/login/username1.html">
+    <entry file="file://$PROJECT_DIR$/bidderlogin.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state relative-caret-position="4553">
+          <caret line="157" column="18" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="239" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/bidderlogin.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="609">
+          <caret line="21" column="1" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="21" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/employeelogin.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="232">
+          <caret line="8" column="139" lean-forward="false" selection-start-line="8" selection-start-column="139" selection-end-line="8" selection-end-column="139" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/employeelogin.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3161">
+          <caret line="109" column="42" lean-forward="true" selection-start-line="109" selection-start-column="42" selection-end-line="109" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/login/username1.html" />
     <entry file="file://$PROJECT_DIR$/BidderTable.php" />
     <entry file="file://$PROJECT_DIR$/OpportunityTable.php" />
     <entry file="file://$PROJECT_DIR$/Bidder.html" />
@@ -348,50 +402,46 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/login/login.html" />
-    <entry file="file://$PROJECT_DIR$/login/username1.html">
+    <entry file="file://$PROJECT_DIR$/login/username1.html" />
+    <entry file="file://$PROJECT_DIR$/login/Bidderlogin.html" />
+    <entry file="file://$PROJECT_DIR$/bidderlogin1.js" />
+    <entry file="file://$PROJECT_DIR$/some.html" />
+    <entry file="file://$PROJECT_DIR$/employeelogin.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="261">
-          <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+        <state relative-caret-position="609">
+          <caret line="21" column="1" lean-forward="true" selection-start-line="21" selection-start-column="1" selection-end-line="21" selection-end-column="1" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/login/Bidderlogin.html">
+    <entry file="file://$PROJECT_DIR$/employeelogin.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="383">
-          <caret line="458" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="487" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bidderlogin1.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="290">
-          <caret line="10" column="1" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="10" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/some.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="321">
-          <caret line="233" column="0" lean-forward="false" selection-start-line="233" selection-start-column="0" selection-end-line="245" selection-end-column="17" />
+        <state relative-caret-position="725">
+          <caret line="25" column="87" lean-forward="true" selection-start-line="25" selection-start-column="87" selection-end-line="25" selection-end-column="87" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/bidderlogin.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="911">
-          <caret line="176" column="76" lean-forward="false" selection-start-line="176" selection-start-column="76" selection-end-line="176" selection-end-column="76" />
+        <state relative-caret-position="1105">
+          <caret line="171" column="71" lean-forward="false" selection-start-line="171" selection-start-column="63" selection-end-line="171" selection-end-column="71" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external/lib.dom.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="427">
+          <caret line="15047" column="17" lean-forward="false" selection-start-line="15047" selection-start-column="17" selection-end-line="15047" selection-end-column="17" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/bidderlogin.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="17" column="49" lean-forward="false" selection-start-line="17" selection-start-column="49" selection-end-line="17" selection-end-column="49" />
+        <state relative-caret-position="551">
+          <caret line="19" column="38" lean-forward="false" selection-start-line="19" selection-start-column="38" selection-end-line="19" selection-end-column="38" />
           <folding />
         </state>
       </provider>

@@ -64,28 +64,8 @@
 
     <link rel="stylesheet" type="text/css" href="web/css/ept/login.css"/>
     <script type="text/javascript" src="web/js/ept/jquery.cookie.js"></script>
-    <script type="text/javascript" src="bidderlogin.js"></script>
+    <script type="text/javascript" src="employeelogin.js"></script>
 
-    <script>
-        Event.observe(window, 'load', function (event) {
-
-            if ($j("#rightLogin").height() < $j("#leftLogin").height()) {
-                $j("#rightLogin").height($j("#leftLogin").height());
-            } else {
-                $j("#leftLogin").height($j("#rightLogin").height());
-            }
-
-            var TEST_COOKIE = 'test_cookie';
-            $j.cookie(TEST_COOKIE, true);
-
-            if ($j.cookie(TEST_COOKIE)) {
-                $j.cookie(TEST_COOKIE, null);  // delete the cookie			      
-            }
-            else {
-                $j("#rightLogin").prepend("<div class='browserError'><h2>Cookies Required</h2>You must have cookies and JavaScript enabled on your browser to use our online services. Refer to our <a href='#'>Site Requirements</a> information to continue</div>");
-            }
-        });
-    </script>
 
 </head>
 <body>
@@ -106,7 +86,7 @@
         </div>
 
         <div id="masthead">
-            <a href="bidderlogin.html" title="Return to the Login Page">
+            <a href="employeelogin.html" title="Return to the Employee Login Page">
                 <img alt="myCalPERS" src="web/images/header_logo.png">
             </a>
         </div>
@@ -130,7 +110,7 @@
                     <a name="content"></a>
 
 
-                    <form id="loginForm" name="loginForm" onSubmit="return LoginAction(this)" autocomplete="off">
+                    <form id="employeeLoginForm" name="employeeLoginForm" onSubmit="return LoginAction()" autocomplete="off">
                         <input type="hidden" name = "psr.arch.state.StateManagerImpl.ENCODED_CONVERSATIONS_KEY" value=""/>
 
 
