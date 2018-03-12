@@ -2,10 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="143ccf83-bc51-4c5e-a3ee-f556d890400c" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/employeelogin.html" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/employeelogin.js" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/bidderlogin.html" afterPath="$PROJECT_DIR$/bidderlogin.html" />
       <change beforePath="$PROJECT_DIR$/bidderlogin.js" afterPath="$PROJECT_DIR$/bidderlogin.js" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -30,8 +26,8 @@
       <file leaf-file-name="bidderlogin.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/bidderlogin.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="551">
-              <caret line="19" column="38" lean-forward="false" selection-start-line="19" selection-start-column="38" selection-end-line="19" selection-end-column="38" />
+            <state relative-caret-position="1044">
+              <caret line="36" column="8" lean-forward="true" selection-start-line="36" selection-start-column="8" selection-end-line="36" selection-end-column="8" />
               <folding />
             </state>
           </provider>
@@ -212,12 +208,12 @@
       <workItem from="1520042692932" duration="4967000" />
       <workItem from="1520712908977" duration="1319000" />
       <workItem from="1520716466855" duration="22106000" />
-      <workItem from="1520812146266" duration="10177000" />
+      <workItem from="1520812146266" duration="11805000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="45003000" />
+    <option name="totallyTimeSpent" value="46631000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-12" y="-12" width="2584" height="1554" extended-state="6" />
@@ -440,8 +436,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/bidderlogin.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="551">
-          <caret line="19" column="38" lean-forward="false" selection-start-line="19" selection-start-column="38" selection-end-line="19" selection-end-column="38" />
+        <state relative-caret-position="1044">
+          <caret line="36" column="8" lean-forward="true" selection-start-line="36" selection-start-column="8" selection-end-line="36" selection-end-column="8" />
           <folding />
         </state>
       </provider>
