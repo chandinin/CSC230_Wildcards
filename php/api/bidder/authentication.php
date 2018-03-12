@@ -55,7 +55,7 @@ $resp = array(
 
 
 print_r(json_encode($resp));
-
+http_response_code(200);
 $conn->close();
 ?>
 
