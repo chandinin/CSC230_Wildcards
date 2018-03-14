@@ -11,47 +11,47 @@
 
     <script></script>
 
-    <script type="text/javascript" src="js/ept/tealeaf/TealeafSDKConfig.js"></script>
-    <script type="text/javascript" src="js/tealeaf/TealeafSDK.js"></script>
+    <script type="text/javascript" src="web/js/ept/tealeaf/TealeafSDKConfig.js"></script>
+    <script type="text/javascript" src="web/js/tealeaf/TealeafSDK.js"></script>
 
     <!-- From PSR -->
-    <script type="text/javascript" src="js/prototype.js"></script>
+    <script type="text/javascript" src="web/js/prototype.js"></script>
 
     <!-- JS Includes -->
-    <script type="text/javascript" src="js/ept/jquery-1.6.4.min.js"></script>
-    <script type="text/javascript" src="js/ept/jquery-ui-1.8.16.custom.min.js"></script>
+    <script type="text/javascript" src="web/js/ept/jquery-1.6.4.min.js"></script>
+    <script type="text/javascript" src="web/js/ept/jquery-ui-1.8.16.custom.min.js"></script>
 
-    <script type="text/javascript" src="js/ept/hoverIntent.js"></script>
-    <script type="text/javascript" src="js/ept/menu.js"></script>
-    <script type="text/javascript" src="js/ept/jquery.ui.modal-dialog.js"></script>
-    <script type="text/javascript" src="js/ept/jquery.ba-dotimeout.min.js"></script>
-    <script type="text/javascript" src="js/ept/jquery.plugins.js"></script>
-    <script type="text/javascript" src="js/ept/jquery.cookies.min.js"></script>
-    <script type="text/javascript" src="js/ept/mock.js"></script>
+    <script type="text/javascript" src="web/js/ept/hoverIntent.js"></script>
+    <script type="text/javascript" src="web/js/ept/menu.js"></script>
+    <script type="text/javascript" src="web/js/ept/jquery.ui.modal-dialog.js"></script>
+    <script type="text/javascript" src="web/js/ept/jquery.ba-dotimeout.min.js"></script>
+    <script type="text/javascript" src="web/js/ept/jquery.plugins.js"></script>
+    <script type="text/javascript" src="web/js/ept/jquery.cookies.min.js"></script>
+    <script type="text/javascript" src="web/js/ept/mock.js"></script>
 
-    <script type="text/javascript" src="js/ept/gatag.js"></script>
+    <script type="text/javascript" src="web/js/ept/gatag.js"></script>
 
 
-    <script type="text/javascript" src="js/ept/quicktip.js"></script>
+    <script type="text/javascript" src="web/js/ept/quicktip.js"></script>
 
     <!-- From PSR -->
-    <script src="js/calendar-popup.js"></script>
-    <script src="js/application.js"></script>
-    <script src="js/cognoslaunch.js"></script>
-    <script type="text/javascript" src="js/forms.js"></script>
+    <script src="web/js/calendar-popup.js"></script>
+    <script src="web/js/application.js"></script>
+    <script src="web/js/cognoslaunch.js"></script>
+    <script type="text/javascript" src="web/js/forms.js"></script>
 
-    <script type="text/javascript" src="js/ept/ept.js"></script>
+    <script type="text/javascript" src="web/js/ept/ept.js"></script>
 
 
     <!-- CSS Includes -->
-    <link rel="stylesheet" type="text/css" href="css/ept/menu2.css"/>
-    <link rel="stylesheet" type="text/css" href="css/ept/style.css"/>
-    <link rel="stylesheet" type="text/css" href="css/ept/dialog.css"/>
-    <link rel="stylesheet" type="text/css" href="css/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="web/css/ept/menu2.css"/>
+    <link rel="stylesheet" type="text/css" href="web/css/ept/style.css"/>
+    <link rel="stylesheet" type="text/css" href="web/css/ept/dialog.css"/>
+    <link rel="stylesheet" type="text/css" href="web/css/font-awesome/css/font-awesome.min.css"/>
 
     <style>
         .roundedCorners, input[type='button'], input[type='submit'], a.doSomething, .mainButton, .button, .tabbedContainer > ul > li a {
-            behavior: url(css/ept/pie/PIE.htc);
+            behavior: url(web/css/ept/pie/PIE.htc);
         }
     </style>
 
@@ -62,30 +62,10 @@
 
     <!-- Page Specific JS/CSS -->
 
-    <link rel="stylesheet" type="text/css" href="css/ept/login.css"/>
-    <script type="text/javascript" src="js/ept/jquery.cookie.js"></script>
-    <script type="text/javascript" src="bidderlogin.js"></script>
+    <link rel="stylesheet" type="text/css" href="web/css/ept/login.css"/>
+    <script type="text/javascript" src="web/js/ept/jquery.cookie.js"></script>
+    <script type="text/javascript" src="employeelogin.js"></script>
 
-    <script>
-        Event.observe(window, 'load', function (event) {
-
-            if ($j("#rightLogin").height() < $j("#leftLogin").height()) {
-                $j("#rightLogin").height($j("#leftLogin").height());
-            } else {
-                $j("#leftLogin").height($j("#rightLogin").height());
-            }
-
-            var TEST_COOKIE = 'test_cookie';
-            $j.cookie(TEST_COOKIE, true);
-
-            if ($j.cookie(TEST_COOKIE)) {
-                $j.cookie(TEST_COOKIE, null);  // delete the cookie			      
-            }
-            else {
-                $j("#rightLogin").prepend("<div class='browserError'><h2>Cookies Required</h2>You must have cookies and JavaScript enabled on your browser to use our online services. Refer to our <a href='#'>Site Requirements</a> information to continue</div>");
-            }
-        });
-    </script>
 
 </head>
 <body>
@@ -106,8 +86,8 @@
         </div>
 
         <div id="masthead">
-            <a href="bidderlogin.html" title="Return to the Login Page">
-                <img alt="myCalPERS" src="images/header_logo.png">
+            <a href="employeelogin.html" title="Return to the Employee Login Page">
+                <img alt="myCalPERS" src="web/images/header_logo.png">
             </a>
         </div>
 
@@ -130,7 +110,7 @@
                     <a name="content"></a>
 
 
-                    <form id="loginForm" name="loginForm" onSubmit="return LoginAction(this)" autocomplete="off">
+                    <form id="employeeLoginForm" name="employeeLoginForm" onSubmit="return LoginAction(this)" autocomplete="off">
                         <input type="hidden" name = "psr.arch.state.StateManagerImpl.ENCODED_CONVERSATIONS_KEY" value=""/>
 
 
@@ -142,7 +122,7 @@
 
                                 <br/>
 
-                                <img src="images/login1.jpg" alt=""/>
+                                <img src="web/images/login1.jpg" alt=""/>
                             </div>
                             <div class="clear"></div>
                         </div>
