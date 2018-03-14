@@ -2,6 +2,7 @@
     <head>
 
 		<!-- Basic Styles -->
+<!--        <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.0/css/mdb.min.css" rel="stylesheet">-->
 	    	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
             <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
 				
@@ -18,7 +19,6 @@
 	<!--<link rel="stylesheet" type="text/css" media="print" href="css/bootstrap-datetimepicker.css">-->
 	    <link href="https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
 	    <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
-		<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.0/css/mdb.min.css" rel="stylesheet">
 
 		<!-- Latest compiled and minified JavaScript -->
 	    <script src="https://code.jquery.com/jquery-1.11.2.min.js"
@@ -165,15 +165,12 @@
 			<div class="custom-app">
 				<div class="container content">
                     <div class="row" id="chooseAction">
-                        <ul class="nav nav-tabs nav-justified indigo" role="tablist">
+                        <ul class="nav nav-tabs nav-justified" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#panel1" role="tab">Opportunities</a>
+                                <a class="nav-link active" data-toggle="tab" href="#panel1" role="tab">Manage Opportunities</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#panel2" role="tab">View Proposals</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#panel3" role="tab">Evaluate Submission</a>
+                                <a class="nav-link" data-toggle="tab" href="#panel2" role="tab">Manage Accounts</a>
                             </li>
                         </ul>
                        <!--
@@ -181,13 +178,11 @@
                         -->
                     </div>
                     <div class="tab-content card">
-
-                    <div class="row tab-pane fade" id="panel1" role="tabpanel">
+                        <div class="row tab-pane fade" id="panel1" role="tabpanel">
 						<span id="oppButtons">
                             <button id="showNewOpp" type="button" class="btn btn-primary">Create New Opportunity</button>
                             <button id="showEditOpp" type="button" class="btn btn-primary">Edit Opportunity</button>
                         </span>
-
                         <div class="col-md-8 clearfix bid-opportunities" id="newOpp">
                             <div class="page-header">
                                 <h1>Create New Opportunity</h1>
@@ -369,7 +364,14 @@
                             </div>
                         </div>
                     </div>
+                        <div class="row tab-pane fade in" id="panel2" role="tabpanel">
+                            <div class="col-md-8" id="manageAcct">
+						<span id="mgrButtons">
+                            <button id="showNewAcct" type="button" class="btn btn-primary">Create New Employee Account</button>
+                            <button id="showEditAcct" type="button" class="btn btn-primary">Edit Employee Account</button>
+                        </span>
 
+                        </div>
                     </div>
 
 				</div>

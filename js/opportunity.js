@@ -7,7 +7,7 @@ $(document).ready(
         $('#showNewOpp').click(function (){
             $('#newOpp').show();
             $('#oppButtons').hide();
-            $('#docListTable').tablesorter();
+         //   $('#docListTable').tablesorter();
         });
 
 
@@ -44,7 +44,7 @@ function uploadAllDocs() {
         var formData=new FormData();
         formData.append('file',file,file.name);
         var xhr = new XMLHttpRequest();
-        xhr.open('POST','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/update.php')
+        xhr.open('POST',l'http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/update.php')
         xhr.onload = function() {
             if(xhr.status == 200) {
                 alert('File uploaded');
