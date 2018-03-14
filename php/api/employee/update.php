@@ -31,99 +31,102 @@ if(json_last_error() === JSON_ERROR_NONE)
   if($employee->update())
   {  
     echo '{';
-       echo ' message : "Update suceeded. "';
+    echo ' message : "Update suceeded.  Record (EmployeeID='.$employeeID.')"';
     echo '}';
   }
   else
   {
     echo '{';
-       echo ' message : "Update failed."';
+    echo ' message : "Update failed.  Record (EmployeeID='.$employeeID.')"';
     echo '}';
   }
 }
 // get employeeID from POST
-else if(isSet($_POST["employeeID"]))
+else 
 {
-  $employeeID = $_POST["employeeID"];
-
-  //Search
-  $employee->selectByID($employeeID);
-
-  if(isSet($_POST["first_name"]))
+  $_POST_LowerCase = array_change_key_case($_POST, CASE_LOWER);
+  if(isSet($_POST_LowerCase["employeeid"]))
   {
-    $first_name = $_POST["first_name"];
-    $first_name = htmlspecialchars(strip_tags($first_name));
-    $employee->first_name =$first_name;
-  }
+    $employeeID = $_POST_LowerCase["employeeid"];
 
-  if(isSet($_POST["last_name"]))
-  {
-    $last_name = $_POST["last_name"];
-    $last_name = htmlspecialchars(strip_tags($last_name));
-    $employee->last_name = $last_name;
-  }
+    //Search
+    $employee->selectByID($employeeID);
 
-  if(isSet($_POST["email"]))
-  {
-    $email = $_POST["email"];
-    $email = htmlspecialchars(strip_tags($email));
-    $employee->email = $email;
-  }
+    if(isSet($_POST_LowerCase["first_name"]))
+    {
+      $first_name = $_POST_LowerCase["first_name"];
+      $first_name = htmlspecialchars(strip_tags($first_name));
+      $employee->first_name =$first_name;
+    }
 
-  if(isSet($_POST["password"]))
-  {
-    $password = $_POST["password"];
-    $password = htmlspecialchars(strip_tags($password));
-    $employee->password = $password;
-  }
+    if(isSet($_POST_LowerCase["last_name"]))
+    {
+      $last_name = $_POST_LowerCase["last_name"];
+      $last_name = htmlspecialchars(strip_tags($last_name));
+      $employee->last_name = $last_name;
+    }
 
-  if(isSet($_POST["phone"]))
-  {
-    $phone = $_POST["phone"];
-    $phone = htmlspecialchars(strip_tags($phone));
-    $employee->phone = $phone;
-  }
+    if(isSet($_POST_LowerCase["email"]))
+    {
+      $email = $_POST_LowerCase["email"];
+      $email = htmlspecialchars(strip_tags($email));
+      $employee->email = $email;
+    }
 
-  if(isSet($_POST["middle_init"]))
-  {
-    $middle_init = $_POST["middle_init"];
-    $middle_init = htmlspecialchars(strip_tags($middle_init));
-    $employee->middle_init = $middle_init;
-  }
+    if(isSet($_POST_LowerCase["password"]))
+    {
+      $password = $_POST_LowerCase["password"];
+      $password = htmlspecialchars(strip_tags($password));
+      $employee->password = $password;
+    }
 
-  if(isSet($_POST["address"]))
-  {
-    $address = $_POST["address"];
-    $address = htmlspecialchars(strip_tags($address));
-    $employee->address = $address;
-  }
+    if(isSet($_POST_LowerCase["phone"]))
+    {
+      $phone = $_POST_LowerCase["phone"];
+      $phone = htmlspecialchars(strip_tags($phone));
+      $employee->phone = $phone;
+    }
 
-  if(isSet($_POST["user_name"]))
-  {
-    $user_name = $_POST["user_name"];
-    $user_name = htmlspecialchars(strip_tags($user_name));
-    $employee->user_name = $user_name;
-  }
+    if(isSet($_POST_LowerCase["middle_init"]))
+    {
+      $middle_init = $_POST_LowerCase["middle_init"];
+      $middle_init = htmlspecialchars(strip_tags($middle_init));
+      $employee->middle_init = $middle_init;
+    }
 
-  if($employee->update())
-  {  
-    echo '{';
-       echo ' message : "Update suceeded. "';
-    echo '}';
+    if(isSet($_POST_LowerCase["address"]))
+    {
+      $address = $_POST_LowerCase["address"];
+      $address = htmlspecialchars(strip_tags($address));
+      $employee->address = $address;
+    }
+
+    if(isSet($_POST_LowerCase["user_name"]))
+    {
+      $user_name = $_POST_LowerCase["user_name"];
+      $user_name = htmlspecialchars(strip_tags($user_name));
+      $employee->user_name = $user_name;
+    }
+
+    if($employee->update())
+    {  
+      echo '{';
+      echo ' message : "Update suceeded.  Record (EmployeeID='.$employeeID.')"';
+      echo '}';
+    }
+    else
+    {
+      echo '{';
+      echo ' message : "Update failed.  Record (EmployeeID='.$employeeID.')"';
+      echo '}';
+    }
   }
   else
   {
     echo '{';
-       echo ' message : "Update failed."';
+    echo ' message : "Update Failed.  Parameter EmployeeID is missing."';
     echo '}';
   }
 }
-else
-{
-  echo '{';
-     echo ' message : "employee not found."';
-  echo '}';
-}
-
 ?>
 

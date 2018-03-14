@@ -11,6 +11,7 @@ class Opportunity
   public $ClosingDate;
   public $ScoringCategoryBlob;
   public $LeadEvaluatorID;
+  public $Name;
   public $LowestBid;
   public $Description;
 
@@ -25,7 +26,7 @@ class Opportunity
   // select one by ID
   function selectByID($id)
   {
-    $query = "SELECT OpportunityID, ClosingDate, ScoringCategoryBlob, LeadEvaluatorID, LowestBid, Description FROM Opportunity WHERE OpportunityID = ? ;";
+    $query = "SELECT OpportunityID, ClosingDate, ScoringCategoryBlob, LeadEvaluatorID, Name, LowestBid, Description FROM Opportunity WHERE OpportunityID = ? ;";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
@@ -42,6 +43,7 @@ class Opportunity
     $this->ClosingDate = $row['ClosingDate'];
     $this->ScoringCategoryBlob = $row['ScoringCategoryBlob'];
     $this->LeadEvaluatorID = $row['LeadEvaluatorID'];
+    $this->Name = $row['Name'];
     $this->LowestBid = $row['LowestBid'];
     $this->Description = $row['Description'];
   }
@@ -49,7 +51,7 @@ class Opportunity
   // select All in the table
   function selectAll()
   {
-    $query = "SELECT OpportunityID, ClosingDate, ScoringCategoryBlob, LeadEvaluatorID, LowestBid, Description FROM Opportunity;";
+    $query = "SELECT OpportunityID, ClosingDate, ScoringCategoryBlob, LeadEvaluatorID, Name, LowestBid, Description FROM Opportunity;";
     $stmt = $this->conn->prepare( $query );
 
     // execute query
@@ -60,7 +62,7 @@ class Opportunity
 
   function update()
   {
-    $query = "UPDATE Opportunity set ClosingDate = :ClosingDate, ScoringCategoryBlob = :ScoringCategoryBlob, LeadEvaluatorID = :LeadEvaluatorID, LowestBid = :LowestBid, Description = :Description WHERE OpportunityID = :OpportunityID;";
+    $query = "UPDATE Opportunity set ClosingDate = :ClosingDate, ScoringCategoryBlob = :ScoringCategoryBlob, LeadEvaluatorID = :LeadEvaluatorID, Name = :Name, LowestBid = :LowestBid, Description = :Description WHERE OpportunityID = :OpportunityID;";
 
     $stmt = $this->conn->prepare( $query );
 
@@ -69,6 +71,7 @@ class Opportunity
     $stmt->bindParam(':ClosingDate', $this->ClosingDate);
     $stmt->bindParam(':ScoringCategoryBlob', $this->ScoringCategoryBlob);
     $stmt->bindParam(':LeadEvaluatorID', $this->LeadEvaluatorID);
+    $stmt->bindParam(':Name', $this->Name);
     $stmt->bindParam(':LowestBid', $this->LowestBid);
     $stmt->bindParam(':Description', $this->Description);
 
@@ -80,8 +83,8 @@ class Opportunity
 
   function create()
   {
-    $query = "INSERT INTO Opportunity (OpportunityID, ClosingDate, ScoringCategoryBlob, LeadEvaluatorID, LowestBid, Description) " .
-             "VALUES(:OpportunityID, :ClosingDate, :ScoringCategoryBlob, :LeadEvaluatorID, :LowestBid, :Description);";
+    $query = "INSERT INTO Opportunity (OpportunityID, ClosingDate, ScoringCategoryBlob, LeadEvaluatorID, Name, LowestBid, Description) " .
+             "VALUES(:OpportunityID, :ClosingDate, :ScoringCategoryBlob, :LeadEvaluatorID, :Name, :LowestBid, :Description);";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
@@ -89,6 +92,7 @@ class Opportunity
     $stmt->bindParam(':ClosingDate', $this->ClosingDate);
     $stmt->bindParam(':ScoringCategoryBlob', $this->ScoringCategoryBlob);
     $stmt->bindParam(':LeadEvaluatorID', $this->LeadEvaluatorID);
+    $stmt->bindParam(':Name', $this->Name);
     $stmt->bindParam(':LowestBid', $this->LowestBid);
     $stmt->bindParam(':Description', $this->Description);
 

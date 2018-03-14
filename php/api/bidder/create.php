@@ -45,84 +45,94 @@ if(json_last_error() === JSON_ERROR_NONE)
 else
 // get bidderID from POST
 {
-  $bidderID = $_POST["bidderID"];
-
-  //Search
-  $bidder->id = $bidderID;
-
-  if(isSet($_POST["bidopsid"]))
+  $_POST_LowerCase = array_change_key_case($_POST, CASE_LOWER);
+  if(isSet($_POST_LowerCase["bidderid"]))
   {
-    $bidopsid = $_POST["bidopsid"];
-    $bidder->bidopsid = $bidopsid;
-  }
+    $bidderID = $_POST_LowerCase["bidderid"];
 
-  if(isSet($_POST["first_name"]))
-  {
-    $first_name = $_POST["first_name"];
-    $first_name = htmlspecialchars(strip_tags($first_name));
-    $bidder->first_name =$first_name;
-  }
+    //Search
+    $bidder->id = $bidderID;
 
-  if(isSet($_POST["last_name"]))
-  {
-    $last_name = $_POST["last_name"];
-    $last_name = htmlspecialchars(strip_tags($last_name));
-    $bidder->last_name = $last_name;
-  }
+    if(isSet($_POST_LowerCase["bidopsid"]))
+    {
+        $bidopsid = $_POST_LowerCase["bidopsid"];
+        $bidder->bidopsid = $bidopsid;
+    }
 
-  if(isSet($_POST["email"]))
-  {
-    $email = $_POST["email"];
-    $email = htmlspecialchars(strip_tags($email));
-    $bidder->email = $email;
-  }
+    if(isSet($_POST_LowerCase["first_name"]))
+    {
+      $first_name = $_POST_LowerCase["first_name"];
+      $first_name = htmlspecialchars(strip_tags($first_name));
+      $bidder->first_name =$first_name;
+    }
 
-  if(isSet($_POST["password"]))
-  {
-    $password = $_POST["password"];
-    $password = htmlspecialchars(strip_tags($password));
-    $bidder->password = $password;
-  }
+    if(isSet($_POST_LowerCase["last_name"]))
+    {
+      $last_name = $_POST_LowerCase["last_name"];
+      $last_name = htmlspecialchars(strip_tags($last_name));
+      $bidder->last_name = $last_name;
+    }
 
-  if(isSet($_POST["phone"]))
-  {
-    $phone = $_POST["phone"];
-    $phone = htmlspecialchars(strip_tags($phone));
-    $bidder->phone = $phone;
-  }
+    if(isSet($_POST_LowerCase["email"]))
+    {
+      $email = $_POST_LowerCase["email"];
+      $email = htmlspecialchars(strip_tags($email));
+      $bidder->email = $email;
+    }
 
-  if(isSet($_POST["middle_init"]))
-  {
-    $middle_init = $_POST["middle_init"];
-    $middle_init = htmlspecialchars(strip_tags($middle_init));
-    $bidder->middle_init = $middle_init;
-  }
+    if(isSet($_POST_LowerCase["password"]))
+    {
+      $password = $_POST_LowerCase["password"];
+      $password = htmlspecialchars(strip_tags($password));
+      $bidder->password = $password;
+    }
 
-  if(isSet($_POST["address"]))
-  {
-    $address = $_POST["address"];
-    $address = htmlspecialchars(strip_tags($address));
-    $bidder->address = $address;
-  }
+    if(isSet($_POST_LowerCase["phone"]))
+    {
+      $phone = $_POST_LowerCase["phone"];
+      $phone = htmlspecialchars(strip_tags($phone));
+      $bidder->phone = $phone;
+    }
 
-  if(isSet($_POST["user_name"]))
-  {
-    $user_name = $_POST["user_name"];
-    $user_name = htmlspecialchars(strip_tags($user_name));
-    $bidder->user_name = $user_name;
-  }
+    if(isSet($_POST_LowerCase["middle_init"]))
+    {
+      $middle_init = $_POST_LowerCase["middle_init"];
+      $middle_init = htmlspecialchars(strip_tags($middle_init));
+      $bidder->middle_init = $middle_init;
+    }
 
-  if($bidder->create())
-  {  
-    echo '{';
+    if(isSet($_POST_LowerCase["address"]))
+    {
+      $address = $_POST_LowerCase["address"];
+      $address = htmlspecialchars(strip_tags($address));
+      $bidder->address = $address;
+    }
+
+    if(isSet($_POST_LowerCase["user_name"]))
+    {
+      $user_name = $_POST_LowerCase["user_name"];
+      $user_name = htmlspecialchars(strip_tags($user_name));
+      $bidder->user_name = $user_name;
+    }
+
+    if($bidder->create())
+    {  
+       echo '{';
        echo ' message : "Create suceeded. "';
-    echo '}';
+       echo '}';
+    }
+    else
+    {
+       echo '{';
+       echo ' message : "Create failed."';
+       echo '}';
+    }
   }
   else
-  {
+  { 
     echo '{';
-       echo ' message : "Create failed."';
-    echo '}';
+    echo ' message : "Create failed."';
+    echo '}'; 
   }
 }
 ?>

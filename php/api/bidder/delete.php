@@ -15,9 +15,10 @@ $db = $database->Connect();
 $bidder = new Bidder($db);
 
 // get bidderID from POST
-if(isSet($_POST["bidderID"]))
+$_POST_LowerCase = array_change_key_case($_POST, CASE_LOWER);
+if(isSet($_POST_LowerCase["bidderid"]))
 {
-  $bidderID = $_POST["bidderID"];
+  $bidderID = $_POST_LowerCase["bidderid"];
 
   //Search
   $bidder->selectByBidderID($bidderID);
@@ -26,15 +27,21 @@ if(isSet($_POST["bidderID"]))
   if($bidder->delete())
   {  
     echo '{';
-       echo ' message : "Delete suceeded. "';
+    echo ' message : "Delete suceeded.  (Record [bidderID='.$bidderID.'] )"';
     echo '}';
   }
   else
   {
     echo '{';
-       echo ' message : "Delete failed."';
+    echo ' message : "Delete failed.  (Record [bidderID='.$bidderID.'] )"';
     echo '}';
   }
+}
+else
+{
+  echo '{';
+  echo ' message : "Parameter Missing.  bidderID is required."';
+  echo '}';
 }
 ?>
 

@@ -28,6 +28,7 @@ if(isSet($_POST_LowerCase["opportunityid"]))
     "ClosingDate" =>  $opportunity->ClosingDate,
     "ScoringCategoryBlob" =>  $opportunity->ScoringCategoryBlob,
     "LeadEvaluatorID" =>  $opportunity->LeadEvaluatorID,
+    "Name" =>  $opportunity->Name,
     "LowestBid" =>  $opportunity->LowestBid,
     "Description" =>  $opportunity->Description
   );
@@ -54,6 +55,7 @@ else
           "ClosingDate" => $row['ClosingDate'],
           "ScoringCategoryBlob" => $row['ScoringCategoryBlob'],
           "LeadEvaluatorID" => $row['LeadEvaluatorID'],
+          "Name" => $row['Name'],
           "LowestBid" => $row['LowestBid'],
           "Description" => $row['Description']
       );

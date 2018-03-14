@@ -15,9 +15,10 @@ $db = $database->Connect();
 $opportunity = new Opportunity($db);
 
 // get opportunityID from POST
-if(isSet($_POST["opportunityID"]))
+$_POST_LowerCase = array_change_key_case($_POST, CASE_LOWER);
+if(isSet($_POST_LowerCase["opportunityid"]))
 {
-  $opportunityID = $_POST["opportunityID"];
+  $opportunityID = $_POST_LowerCase["opportunityid"];
 
   //Search
   $opportunity->selectByID($opportunityID);
@@ -26,15 +27,21 @@ if(isSet($_POST["opportunityID"]))
   if($opportunity->delete())
   {  
     echo '{';
-       echo ' message : "Delete suceeded. "';
+    echo ' message : "Delete suceeded. (OpportunityID = '.$opportunityID.') "';
     echo '}';
   }
   else
   {
     echo '{';
-       echo ' message : "Delete failed."';
+    echo ' message : "Delete failed. (OpportunityID = '.$opportunityID.') "';
     echo '}';
   }
+}
+else
+{
+  echo '{';
+  echo ' message : "Delete failed.  Parameter missing (OpportunityID)."';
+  echo '}';
 }
 ?>
 
