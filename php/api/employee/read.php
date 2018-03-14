@@ -15,10 +15,9 @@ $db = $database->Connect();
 $employee = new Employee($db);
 
 // get employeeID from POST
-$_POST_LowerCase = array_change_key_case($_POST, CASE_LOWER);
-if(isSet($_POST_LowerCase["employeeid"]))
+if(isSet($_POST["employeeID"]))
 {
-  $employeeID = $_POST_LowerCase["employeeid"];
+  $employeeID = $_POST["employeeID"];
 
   //Search
   $employee->selectByID($employeeID);
@@ -28,7 +27,7 @@ if(isSet($_POST_LowerCase["employeeid"]))
     "first_name" =>  $employee->first_name,
     "last_name" =>  $employee->last_name,
     "email" =>  $employee->email,
-    //"password" =>  $employee->password,
+    "password" =>  $employee->password,
     "phone" =>  $employee->phone,
     "middle_init" => $employee->middle_init,
     "address" => $employee->address,

@@ -16,8 +16,6 @@ $bidder = new Bidder($db);
 
 //Check to see if input is in JSON
 $data = json_decode(file_get_contents("php://input"));
-
-echo $data;
 if(json_last_error() === JSON_ERROR_NONE)
 {
   $bidder->id = $data->id;
@@ -40,7 +38,7 @@ if(json_last_error() === JSON_ERROR_NONE)
   else
   {
     echo '{';
-       echo ' message : "Create json failed."';
+       echo ' message : "Create failed."';
     echo '}';
   }
 }
@@ -117,24 +115,23 @@ else
       $bidder->user_name = $user_name;
     }
 
-
     if($bidder->create())
     {  
        echo '{';
-       echo ' message : "Create form  suceeded. "';
+       echo ' message : "Create suceeded. "';
        echo '}';
     }
     else
     {
        echo '{';
-       echo ' message : "Create form  failed."';
+       echo ' message : "Create failed."';
        echo '}';
     }
   }
   else
   { 
     echo '{';
-    echo ' message : "Create  form failed."';
+    echo ' message : "Create failed."';
     echo '}'; 
   }
 }
