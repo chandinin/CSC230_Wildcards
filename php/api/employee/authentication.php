@@ -5,6 +5,10 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Credentials: true");
 header('Content-Type: application/json');
 
+ini_set("log_errors", 1);
+ini_set("error_log", "/tmp/php-error.log");
+error_log( "Hello, errors!" );
+
 include_once '../config/Database.php';
 
 // get database connection
@@ -55,7 +59,7 @@ $resp = array(
 
 
 print_r(json_encode($resp));
+//$conn->close();
 http_response_code(200);
-$conn->close();
 ?>
 
