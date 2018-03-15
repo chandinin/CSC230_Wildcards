@@ -13,7 +13,6 @@ function LoginAction(form) {
 
         //Convert HTML form value to json
         var myJSON = JSON.stringify(params);
-
         var xhttp = new XMLHttpRequest();
 
         xhttp.open("POST", "http://athena.ecs.csus.edu/~mackeys/php/api/bidder/authentication.php", true);
