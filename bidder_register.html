@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html><head>
 
-		<!-- Basic Styles -->
+		<!-- Basic Styles Steven was here-->
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
 			<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
 				<!-- Latest compiled and minified CSS -->
@@ -176,7 +176,6 @@
 
 
 											<div class="breadcrumb visible-xs"> <a href="/page/about/doing-business-with-calpers"><i class="fa fa-chevron-left"></i>&nbsp; More in Doing Business With CalPERS</a> </div>
-											<!-- TODO: Use the actual creation portal -->
 											<form role="form"
 												action="php/api/bidder/create.php"
 												method="post"
@@ -187,7 +186,7 @@
 															<div class="page-header">
 																<h1>Register for an account</h1>
 															</div>
-
+															<!-- TODO: Work with Dane on updating what the backend needs -->
 															<h2>Your Information</h2>
 															<div class="row">
 																<div class="col-md-5">
@@ -211,7 +210,7 @@
 															</div>
 															<div class="form-group" id="phonenumber" >
 																<label>Phone Number<span class="required-field">(required)</span></label>
-																<input type="text" class="form-control" name="phonenumber" value="7602232153">
+																<input type="number" class="form-control" name="phonenumber" value="7602232153">
 															</div>
 															<div class="form-group" id="Address" >
 																<label>Address<span class="required-field">(required)</span></label>
@@ -219,11 +218,12 @@
 															</div>
 															<div class="form-group" id="bidopsid" >
 																<label>bidopsid<span class="required-field">(required)</span></label>
-																<input type="text" class="form-control" name="bidopsid" value="TESTINFO">
+																<input type="number" class="form-control" name="bidopsid" value="9001">
 															</div>
+
 															<div class="form-group" id="bidderid" >
 																<label>bidderid<span class="required-field">(required)</span></label>
-																<input type="text" class="form-control" name="bidderid" value="-1">
+																<input type="text" class="form-control" name="bidderid" value="9001">
 															</div>
 															<div class="form-group" id="username" >
 																<label>Username<span class="required-field">(required)</span></label>
@@ -253,6 +253,7 @@
 												        dataType: 'json',
 												        method: 'POST',
 												        // TODO: Figure out why error is always called...
+												        // TODO: Actually display a failure mode
 												        error: function (response) {
 												        	alert("The server says: " + JSON.stringify(response));
 												        	window.location.href = 'bidder_register_success.html';
