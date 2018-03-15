@@ -19,6 +19,7 @@
 	<!--<link rel="stylesheet" type="text/css" media="print" href="css/bootstrap-datetimepicker.css">-->
 	    <link href="https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
 	    <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+        <link rel="stylesheet" type="text/css" href="css/tablesorter-style.css">
 
 		<!-- Latest compiled and minified JavaScript -->
 	    <script src="https://code.jquery.com/jquery-1.11.2.min.js"
@@ -34,7 +35,7 @@
     	<script src="js/iframe-custom.js"></script>
     	<script src="js/back-to-top.js"></script>
     	<script src="js/widgets.js"></script>
-        <script src="js/jquery.tablesorter.min.js"></script>
+        <script src="js/jquery.tablesorter.js"></script>
         <!--
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script>
         -->
@@ -188,8 +189,6 @@
                                 <h1>Create New Opportunity</h1>
                             </div>
 
-                            <h3>Define</h3>
-
                             <form id="newOppForm">
 
 								<div class="form-group">
@@ -254,12 +253,14 @@
 
 						<div class="page-header">
 							<h4>Choose existing documents to attach to this opportunity.</h4>
-						        <table id="docListTable" class="table table-responsive">
+						        <table id="docListTable" class="tablesorter">
 							        <thead>
+                                    <tr>
 									    <th scope="col">Include</th>
 								    	<th scope="col">Name</th>
 								    	<th scope="col">ID</th>
 								    	<th scope="col">Description</th>
+                                    </tr>
 					    		    </thead>
 					    		    <tbody>
 					    				<tr>
@@ -274,6 +275,18 @@
 											<td>Doc-8894</td>
 											<td>W-9 Form</td>
 					    				</tr>
+                                        <tr>
+                                            <td><input name="oppDoc" type="checkbox" value="1"> </td>
+                                            <td>Proposal Cover Letter</td>
+                                            <td>Doc-8258</td>
+                                            <td>Letter Vendor to include</td>
+                                        </tr>
+                                        <tr>
+                                            <td><input name="oppDoc" type="checkbox" value="2"> </td>
+                                            <td>W-9</td>
+                                            <td>Doc-8894</td>
+                                            <td>W-9 Form</td>
+                                        </tr>
 					    		    </tbody>
 								</table>
                         </div>
@@ -338,7 +351,7 @@
                             <div class="">
                                 <h4>Choose existing documents to attach to this opportunity.</h4>
                                 <form>
-                                    <table id="docListTable" class="table table-responsive">
+                                    <table id="" class="table table-responsive">
                                         <thead>
                                         <th scope="col">Include</th>
                                         <th scope="col">Name</th>
