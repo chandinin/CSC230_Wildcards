@@ -127,7 +127,11 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li class=""><a href="home_page.html"><span class="glyphicon glyphicon-home hidden-xs"
-                                                            aria-hidden="true"> </span> Home</a>
+                                                                   aria-hidden="true"> </span> Home</a>
+                    <li class=""><a href="employee_login.html" id="staff" aria-expanded="false">Bidops Login</a>
+                    </li>
+                    <li class=""><a href="bidder_login.html" id="bidders" aria-expanded="false">Bidders Login</a>
+                    </li>
 
                 </ul>
             </div>
@@ -135,42 +139,18 @@
     </div>
 
     <form id="loginForm" name="loginForm" onSubmit="return BidderLoginAction(this)" autocomplete="off">
-        <div id="leftLogin">
-            <div class="grid ">
-                <h2>Welcome to CalPERS</h2>
-            </div>
-        </div>
         <div id="rightLogin">
-            <div class="container1">
-                <div class="grid1 grid gridbr ">
-                    <div id="newUser"><h1>Bidder Log In</h1></div>
-                    <br/>
-                    <label for="username" id="usernameLbl">Username <span
-                            class="required">(required)</span></label>
-                    <input id="username" name="username" type="text" value="" size="24" maxlength="35"/>
-                    <p></p>
-                    <label for="password" id="passwordLbl">Password <span
-                            class="required">(required)</span></label>
-                    <input id="password" name="password" type="password" value="" size="24" maxlength="35"/>
-                </div>
-            </div>
             <div class="grid10 grid gridbr ">
-                <input name="action.actionProcessLogin" align="left" type="submit"
-                       class="mainButton" value="Continue"/>
-
-                <div class="clear"></div>
             </div>
-            <div class="clear"></div>
             <hr/>
             <div class="grid ">
-
-                <h2 class="question" style="display: inline">New to CalPERS?</h2>
-                <span class="question">
-						<a href="http://athena.ecs.csus.edu/~mackeys/bidder_register.html">Register now.</a>
+                <h2 class="text-center" style="display: inline">Welcome to CalPERS!</h2>
+                <span class="text-center">
 					</span>
                 <br/><br/>
-                For your security, we recommend that you log out when you're done,
-                and close all of your browser windows.
+                <br/><br/>
+                <br/><br/>
+                <br/><br/>
             </div>
         </div>
     </form>
