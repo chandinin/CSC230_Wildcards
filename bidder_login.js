@@ -21,10 +21,11 @@ function BidderLoginAction(form) {
         xhttp.onload = function () {
             var response = JSON.parse(xhttp.responseText);
             var status = JSON.parse(xhttp.status);
-            if (status == 200 && responseText.authenticated == true) {
+            if (status == 200 && response.authenticated == true) {
                 //IF the authentication successful go to the landing page, NOTE: Need to change to the correct URL
-                // window.location.replace("bidder_register.html")
-                alert("Login Successful!!")
+                window.location.href = 'bidder_register.html';
+               // window.location.replace("bidder_register.html")
+                //alert("Login Successful!!")
             }
             else{
                 alert("Incorrect username or password ")

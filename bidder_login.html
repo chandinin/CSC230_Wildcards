@@ -8,34 +8,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <title>Bidder - Log In</title>
 
-    <script type="text/javascript" src="js/ept/tealeaf/TealeafSDKConfig.js"></script>
-    <script type="text/javascript" src="js/tealeaf/TealeafSDK.js"></script>
-
-    <!-- From PSR -->
-    <script type="text/javascript" src="js/prototype.js"></script>
-
-    <!-- JS Includes -->
-    <script type="text/javascript" src="js/ept/jquery-1.6.4.min.js"></script>
-    <script type="text/javascript" src="js/ept/jquery-ui-1.8.16.custom.min.js"></script>
-
-    <script type="text/javascript" src="js/ept/hoverIntent.js"></script>
-    <script type="text/javascript" src="js/ept/menu.js"></script>
-    <script type="text/javascript" src="js/ept/jquery.ui.modal-dialog.js"></script>
-    <script type="text/javascript" src="js/ept/jquery.ba-dotimeout.min.js"></script>
-    <script type="text/javascript" src="js/ept/jquery.plugins.js"></script>
-    <script type="text/javascript" src="js/ept/jquery.cookies.min.js"></script>
-    <script type="text/javascript" src="js/ept/mock.js"></script>
-
-    <script type="text/javascript" src="js/ept/gatag.js"></script>
-    <script type="text/javascript" src="js/ept/quicktip.js"></script>
-
-    <!-- From PSR -->
-    <script src="js/calendar-popup.js"></script>
-    <script src="js/application.js"></script>
-    <script src="js/cognoslaunch.js"></script>
-    <script type="text/javascript" src="js/forms.js"></script>
-    <script type="text/javascript" src="js/ept/ept.js"></script>
-
     <!-- CSS Includes -->
     <link rel="stylesheet" type="text/css" href="css/ept/menu2.css"/>
     <link rel="stylesheet" type="text/css" href="css/ept/style.css"/>
@@ -47,7 +19,6 @@
 
     <!-- Latest compiled and minified JavaScript -->
     <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="css/jquery.bxslider.css?ver=1.9">
     <link rel="stylesheet" type="text/css" href="css/style.css?ver=1.22">
 
     <!--[if lt IE 9]>
@@ -57,8 +28,6 @@
 
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery.bxslider.min.js?ver=1.8"></script>
-    <script src="js/bxslider.js"></script>
     <script src="js/accordion-glyphicon.js"></script>
     <script src="js/external-target-blank.js"></script>
     <script src="js/iframe-height.js?ver=1.11"></script>
@@ -83,7 +52,7 @@
                aria-label="Skip to main content">Skip to main content</a>
             <div class="row">
                 <div class="col-lg-3 col-md-3 col-sm-12 logoContainer">
-                    <div class="navbar-header display-flex"><a class="navbar-brand" href="/page/home">
+                    <div class="navbar-header display-flex"><a class="navbar-brand" href="bidder_login.html">
                         <div class="logoMain logo">
                             <svg version="1.1" id="CalPERS_Logo" role="img" aria-label="CalPERS Logo" aria-labelledby="title" aria-describedby="desc" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 436.9 108.6" xml:space="preserve" focusable="false">
 																<title id="title">CalPERS Logo</title>
@@ -129,10 +98,6 @@
                 <div class="col-lg-9 col-md-9 col-sm-12 hidden-xs print-hidden">
                     <div class="navbar-collapse collapse flexEndCenter">
 
-
-                        <!-- comment out to hide search form -->
-
-                        <!-- end comment out to hide search form -->
                     </div>
                 </div>
             </div>
@@ -157,69 +122,25 @@
     <div class="navbar navbar-inverse navbar-static-top navbar-tab">
         <div class="container">
             <div class="navbar-header">
-                <button class="navbar-toggle pull-left" type="button" data-toggle="collapse"
-                        data-target=".navbar-collapse" aria-label="Menu"><i class="fa fa-reorder"></i></button>
-                <!-- comment out to hide search form -->
-                <button class="navbar-toggle pull-right" type="button" data-toggle="collapse"
-                        data-target=".search-collapse" aria-label="Search"><i class="fa fa-search"
-                                                                              title="Search icon"></i></button>
                 <!-- end comment out to hide search form -->
             </div>
-            <!-- comment out to hide search form -->
-            <div class="search-collapse collapse">
-
-                <form class="navbar-form navbar-right" role="search" action="/page/search-results" method="post">
-                    <div class="form-group search">
-
-                        <input type="search" class="form-control" aria-label="Search" placeholder="Search" name="q"
-                               value="">
-                        <button type="submit" class="search-submit" aria-label="Submit search"><span
-                                class="glyphicon glyphicon-search" title="Search icon" aria-hidden="true"></span>
-                        </button>
-                    </div>
-                </form>
-
-            </div>
-            <!-- end comment out to hide search form -->
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li class=""><a href="/page/home"><span class="glyphicon glyphicon-home hidden-xs"
-                                                            aria-hidden="true">&nbsp; </span>Home</a>
-                    </li>
-                    <div class="visible-xs">
-                        <!-- Subnav for Active Members -->
-                        <div class="navbar navbar-default navbar-category">
-                            <div class="container">
-                                <div class="navbar-collapse collapse">
+                    <li class=""><a href="bidder_login.html"><span class="glyphicon glyphicon-home hidden-xs"
+                                                            aria-hidden="true"> </span> Home</a>
 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    </li>
                 </ul>
             </div>
         </div>
     </div>
 
     <form id="loginForm" name="loginForm" onSubmit="return BidderLoginAction(this)" autocomplete="off">
-        <input type="hidden" name="psr.arch.state.StateManagerImpl.ENCODED_CONVERSATIONS_KEY" value=""/>
         <div id="leftLogin">
             <div class="grid ">
                 <h2>Welcome to CalPERS</h2>
-
-                <p></p>
-
-                <br/>
-
-                <img src="images/login1.jpg" alt=""/>
             </div>
-            <div class="clear"></div>
         </div>
-
-
         <div id="rightLogin">
-
             <div class="container1">
                 <div class="grid1 grid gridbr ">
                     <div id="newUser"><h1>Bidder Log In</h1></div>
@@ -252,14 +173,8 @@
                 and close all of your browser windows.
             </div>
         </div>
-
-        <div class="clear"></div>
-
-        <input type="hidden" name="psrFormToken" value="V9cqNPeZtg51nFHEP1EeS9XFG"/></form>
-
-
+    </form>
 </div>
-<div id="column10">
 
 </div>
 </div>
@@ -275,18 +190,9 @@
     <span><a href="https://www.calpers.ca.gov/page/conditions-of-use" title="Opens in a new window" target="_blank">Conditions of Use</a></span>
     |
     <span><a href="https://www.calpers.ca.gov/page/accessibility" title="Opens in a new window" target="_blank">Accessibility</a></span>
-    |
-
-
-    <span><a href="https://www.calpers.ca.gov/page/contact" title="Opens in a new window"
-             target="_blank">Contact Us</a></span>
 
     <br/>
 
-
-    <script>
-        Psr.PreventDoubleSubmit.start();
-    </script>
 </div><!--  end footer -->
 
 
