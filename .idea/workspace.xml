@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="143ccf83-bc51-4c5e-a3ee-f556d890400c" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/bidder_login.html" afterPath="$PROJECT_DIR$/bidder_login.html" />
-      <change beforePath="$PROJECT_DIR$/bidder_login.js" afterPath="$PROJECT_DIR$/bidder_login.js" />
+      <change beforePath="$PROJECT_DIR$/bidder_landing.html" afterPath="$PROJECT_DIR$/bidder_landing.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -14,11 +13,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="bidder_login.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="bidder_login.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/bidder_login.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="725">
-              <caret line="25" column="66" lean-forward="true" selection-start-line="25" selection-start-column="66" selection-end-line="25" selection-end-column="66" />
+            <state relative-caret-position="406">
+              <caret line="14" column="0" lean-forward="true" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="bidder_landing.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/bidder_landing.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="438">
+              <caret line="151" column="20" lean-forward="false" selection-start-line="151" selection-start-column="20" selection-end-line="151" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -129,6 +138,7 @@
         <option value="$PROJECT_DIR$/bidder_register.html" />
         <option value="$PROJECT_DIR$/bidder_login.html" />
         <option value="$PROJECT_DIR$/bidder_login.js" />
+        <option value="$PROJECT_DIR$/bidder_landing.html" />
       </list>
     </option>
   </component>
@@ -201,7 +211,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JavaScript Debug.bidder_login.html">
+  <component name="RunManager" selected="JavaScript Debug.bidder_landing.html">
     <configuration name="Opportunity.html" type="JavascriptDebugType" factoryName="JavaScript Debug" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/Opportunity.html" />
     <configuration name="bidder_landing.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/bidder_landing.html" />
     <configuration name="bidder_login.html" type="JavascriptDebugType" factoryName="JavaScript Debug" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/bidder_login.html" />
@@ -227,8 +237,8 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="JavaScript Debug.home_page.html" />
-        <item index="1" class="java.lang.String" itemvalue="JavaScript Debug.bidder_landing.html" />
+        <item index="0" class="java.lang.String" itemvalue="JavaScript Debug.bidder_landing.html" />
+        <item index="1" class="java.lang.String" itemvalue="JavaScript Debug.home_page.html" />
         <item index="2" class="java.lang.String" itemvalue="JavaScript Debug.example.html" />
         <item index="3" class="java.lang.String" itemvalue="JavaScript Debug.mytemplate.html" />
         <item index="4" class="java.lang.String" itemvalue="JavaScript Debug.bidder_register_success.html" />
@@ -254,12 +264,12 @@
       <workItem from="1520716466855" duration="1272000" />
       <workItem from="1521088173114" duration="11823000" />
       <workItem from="1521101249861" duration="4460000" />
-      <workItem from="1521132104627" duration="6275000" />
+      <workItem from="1521132104627" duration="7005000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="36550000" />
+    <option name="totallyTimeSpent" value="37280000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-12" y="-12" width="2584" height="1554" extended-state="6" />
@@ -515,14 +525,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bidder_landing.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="928">
-          <caret line="32" column="59" lean-forward="true" selection-start-line="32" selection-start-column="59" selection-end-line="32" selection-end-column="59" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/bidder_register.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="728">
@@ -569,8 +571,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/bidder_login.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="725">
-          <caret line="25" column="66" lean-forward="true" selection-start-line="25" selection-start-column="66" selection-end-line="25" selection-end-column="66" />
+        <state relative-caret-position="406">
+          <caret line="14" column="0" lean-forward="true" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bidder_landing.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="438">
+          <caret line="151" column="20" lean-forward="false" selection-start-line="151" selection-start-column="20" selection-end-line="151" selection-end-column="20" />
           <folding />
         </state>
       </provider>
