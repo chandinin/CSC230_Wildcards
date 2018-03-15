@@ -7,7 +7,7 @@ $(document).ready(
         $('#showNewOpp').click(function (){
             $('#newOpp').show();
             $('#oppButtons').hide();
-         //   $('#docListTable').tablesorter();
+            $('#docListTable').tablesorter();
         });
 
 
@@ -101,6 +101,7 @@ function saveOpportunity() {
     var desc = $('#formDescriptionInput').val();
     var close = $('#formdatetimepicker2').data("DateTimePicker").viewDate().toString();
     var lead = parseInt($('#selectLead').val());
+    var senddate = convertDate(close);
     var jsonRecord =
 			{"OpportunityID":opId,
                 "Name":name,
@@ -114,24 +115,31 @@ function saveOpportunity() {
     xhr.onload = function() {
         if (xhr.status == 200) {
             alert(xhr.responseText);
-            uploadAllDocs();
+           // uploadAllDocs();
         } else {
         	alert("Error saving opportunity");
         }
     };
     var jsonString = JSON.stringify(jsonRecord);
     xhr.send(jsonString);
-    console.log("Wrote Json: " + jsonRecord);
+    console.log("Wrote Json: " + jsonString);
 }
 
 function submitDocList() {
 
 }
 
+
 function getDocList() {
 
 }
 
+function convertDate(dateString) {
+    var thedate = new Date(dateString);
+    var newdate = thedate.getFullYear() + "-" + (thedate.getMonth()+1) + "-" + thedate.getDay() +
+                    " " + thedate.getHours() + ":" + thedate.getMinutes() + ":" + thedate.getSeconds();
+    return newdate;
+}
 
 
 
