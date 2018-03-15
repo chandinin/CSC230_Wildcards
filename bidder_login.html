@@ -134,7 +134,7 @@
         </div>
     </div>
 
-    <form id="loginForm" name="loginForm" onSubmit="return BidderLoginAction(this)" autocomplete="off">
+    <form action="#" method="post" id="bidderlogin_formid" name="bidderlogin_formname" class="bidderlogin_formclass" autocomplete="off">
         <div id="leftLogin">
             <div class="grid ">
                 <h2>Welcome to CalPERS</h2>
@@ -155,9 +155,7 @@
                 </div>
             </div>
             <div class="grid10 grid gridbr ">
-                <input name="action.actionProcessLogin" align="left" type="submit"
-                       class="mainButton" value="Continue"/>
-
+                <input type="button" name="submit_id" id="btn_id" value="Continue" class="mainButton" onclick="BidderLoginAction()"/>
                 <div class="clear"></div>
             </div>
             <div class="clear"></div>
