@@ -26,10 +26,12 @@ h1,
 strong {
 	font-weight: 600;
 }
+/*
 li, a, p {
 	color: red;
 	font-weight:400;
 }
+*/
 a,
 .btn-link {
 	/*text-decoration: underline;*/
