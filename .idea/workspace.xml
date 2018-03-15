@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="143ccf83-bc51-4c5e-a3ee-f556d890400c" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/bidder_landing.html" afterPath="$PROJECT_DIR$/bidder_landing.html" />
-    </list>
+    <list default="true" id="143ccf83-bc51-4c5e-a3ee-f556d890400c" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -26,8 +24,8 @@
       <file leaf-file-name="bidder_landing.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/bidder_landing.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="438">
-              <caret line="151" column="20" lean-forward="false" selection-start-line="151" selection-start-column="20" selection-end-line="151" selection-end-column="20" />
+            <state relative-caret-position="351">
+              <caret line="70" column="48" lean-forward="false" selection-start-line="70" selection-start-column="48" selection-end-line="70" selection-end-column="48" />
               <folding />
             </state>
           </provider>
@@ -156,7 +154,7 @@
       <path value="C:\Users\cnagendra\Documents\Chandini\grad school\Spring 2018\Software System Engineering\Project\CSC230_Wildcards" />
     </include_path>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
     <option name="width" value="1479" />
@@ -264,15 +262,15 @@
       <workItem from="1520716466855" duration="1272000" />
       <workItem from="1521088173114" duration="11823000" />
       <workItem from="1521101249861" duration="4460000" />
-      <workItem from="1521132104627" duration="7005000" />
+      <workItem from="1521132104627" duration="7549000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="37280000" />
+    <option name="totallyTimeSpent" value="37824000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-12" y="-12" width="2584" height="1554" extended-state="6" />
+    <frame x="-12" y="-12" width="2584" height="1554" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21523437" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -579,8 +577,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/bidder_landing.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="438">
-          <caret line="151" column="20" lean-forward="false" selection-start-line="151" selection-start-column="20" selection-end-line="151" selection-end-column="20" />
+        <state relative-caret-position="351">
+          <caret line="70" column="48" lean-forward="false" selection-start-line="70" selection-start-column="48" selection-end-line="70" selection-end-column="48" />
           <folding />
         </state>
       </provider>
