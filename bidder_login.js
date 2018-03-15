@@ -1,4 +1,4 @@
-function LoginAction(form) {
+function BidderLoginAction(form) {
     //Check to see if user left username or password field blank
     if (form.username.value == "") {
         alert("Please enter user name")
@@ -9,22 +9,21 @@ function LoginAction(form) {
     else{
         //read username and password from the HTML form
         var params = {"UserName":form.username.value,
-            "PASSWORD":form.password.value};
+                    "PASSWORD":form.password.value};
 
         //Convert HTML form value to json
         var myJSON = JSON.stringify(params);
-
         var xhttp = new XMLHttpRequest();
 
-        xhttp.open("POST", "http://athena.ecs.csus.edu/~mackeys/php/api/employee/authentication.php", true);
+        xhttp.open("POST", "http://athena.ecs.csus.edu/~mackeys/php/api/bidder/authentication.php", false);
         //Async call
 
-        xhttp.onload  = function () {
+        xhttp.onload = function () {
             var response = JSON.parse(xhttp.responseText);
             var status = JSON.parse(xhttp.status);
-            if (status == 200 && response.authenticated == true) {
+            if (status == 200 && responseText.authenticated == true) {
                 //IF the authentication successful go to the landing page, NOTE: Need to change to the correct URL
-                //window.location.replace("http://athena.ecs.csus.edu/~mackeys/bidder_register.html")
+                // window.location.replace("bidder_register.html")
                 alert("Login Successful!!")
             }
             else{

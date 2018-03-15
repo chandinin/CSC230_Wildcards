@@ -6,7 +6,7 @@
 <head>
     <meta http-equiv="content-type" content="text/xhtml; charset=utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <title>Bidder - Log In</title>
+    <title>CalPERS - Log In</title>
 
     <script type="text/javascript" src="js/ept/tealeaf/TealeafSDKConfig.js"></script>
     <script type="text/javascript" src="js/tealeaf/TealeafSDK.js"></script>
@@ -71,7 +71,7 @@
     <!-- Page Specific JS/CSS -->
     <link rel="stylesheet" type="text/css" href="css/ept/login.css"/>
     <script type="text/javascript" src="js/ept/jquery.cookie.js"></script>
-    <script type="text/javascript" src="bidder_login.js"></script>
+    <script type="text/javascript" src="employee_login.js"></script>
 </head>
 <body>
 
@@ -183,8 +183,8 @@
             <!-- end comment out to hide search form -->
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li class=""><a href="/page/home"><span class="glyphicon glyphicon-home hidden-xs"
-                                                            aria-hidden="true">&nbsp; </span>Home</a>
+                    <li class=""><a href="employee_login.html"><span class="glyphicon glyphicon-home hidden-xs"
+                                                                     aria-hidden="true"> </span>Home</a>
                     </li>
                     <div class="visible-xs">
                         <!-- Subnav for Active Members -->
@@ -202,7 +202,7 @@
         </div>
     </div>
 
-    <form id="loginForm" name="loginForm" onSubmit="return BidderLoginAction(this)" autocomplete="off">
+    <form id="loginForm" name="loginForm" onSubmit="return EmployeeLoginAction(this)" autocomplete="off">
         <input type="hidden" name="psr.arch.state.StateManagerImpl.ENCODED_CONVERSATIONS_KEY" value=""/>
         <div id="leftLogin">
             <div class="grid ">
@@ -216,13 +216,10 @@
             </div>
             <div class="clear"></div>
         </div>
-
-
         <div id="rightLogin">
-
             <div class="container1">
                 <div class="grid1 grid gridbr ">
-                    <div id="newUser"><h1>Bidder Log In</h1></div>
+                    <div id="newUser"><h1>Employee Log In</h1></div>
                     <br/>
                     <label for="username" id="usernameLbl">Username <span
                             class="required">(required)</span></label>
@@ -243,10 +240,6 @@
             <hr/>
             <div class="grid ">
 
-                <h2 class="question" style="display: inline">New to CalPERS?</h2>
-                <span class="question">
-						<a href="http://athena.ecs.csus.edu/~mackeys/bidder_register.html">Register now.</a>
-					</span>
                 <br/><br/>
                 For your security, we recommend that you log out when you're done,
                 and close all of your browser windows.
@@ -267,8 +260,6 @@
 </div>
 <div class="clear"></div>
 <div id="footer"><!-- start footer -->
-
-
     <span>Copyright 2018 CalPERS</span> |
     <span><a href="https://www.calpers.ca.gov/page/privacy-policy" title="Opens in a new window" target="_blank">Privacy Policy</a></span>
     |
