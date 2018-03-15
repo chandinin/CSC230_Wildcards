@@ -134,7 +134,8 @@
         </div>
     </div>
 
-    <form id="loginForm" name="loginForm" onSubmit="return EmployeeLoginAction(this)" autocomplete="off">
+    <!--<form id="loginForm" name="loginForm" onSubmit="return EmployeeLoginAction(this)" autocomplete="off">-->
+    <form action="#" method="post" id="employeelogin_formid" name="employeelogin_formname" class="employeelogin_formclass" autocomplete="off">
         <div id="leftLogin">
             <div class="grid ">
                 <h2>Welcome to CalPERS</h2>
@@ -156,8 +157,7 @@
                 </div>
             </div>
             <div class="grid10 grid gridbr ">
-                <input name="action.actionProcessLogin" align="left" type="submit"
-                       class="mainButton" value="Continue"/>
+                <input type="button" name="submit_id" id="btn_id" value="Continue" class="mainButton" onclick="EmployeeLoginAction()"/>
                 <div class="clear"></div>
             </div>
             <hr/>
