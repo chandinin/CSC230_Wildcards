@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html><head>
 
-		<!-- Basic Styles -->
+		<!-- Basic Styles Steven was here-->
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
 			<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
 				<!-- Latest compiled and minified CSS -->
@@ -48,7 +48,7 @@
 
 										<div class="row">
 											<div class="col-lg-3 col-md-3 col-sm-12 logoContainer">
-												<div class="navbar-header display-flex"><a class="navbar-brand" href="/page/home">
+												<div class="navbar-header display-flex"><a class="navbar-brand" href="home_page.html">
 														<div class="logoMain logo">
 															<svg version="1.1" id="CalPERS_Logo" role="img" aria-label="CalPERS Logo" aria-labelledby="title" aria-describedby="desc" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 436.9 108.6" xml:space="preserve" focusable="false">
 																<title id="title">CalPERS Logo</title>
@@ -131,15 +131,15 @@
 											<!-- end comment out to hide search form -->
 											<div class="navbar-collapse collapse">
 												<ul class="nav navbar-nav">
-													<li class=""><a href="/page/home"><span class="glyphicon glyphicon-home hidden-xs" aria-hidden="true">&nbsp; </span>Home</a>
+													<li class=""><a href="home_page.html"><span class="glyphicon glyphicon-home hidden-xs" aria-hidden="true">&nbsp; </span>Home</a>
 													</li>
-								
+
 													<li class=""><a href="/page/active-members" id="members" aria-expanded="false">Bidder
 															FAQ</a>
-														
+
 													</li>
 													<li class=""><a href="/page/retirees" id="retirees" aria-expanded="false">Retirees</a>
-														
+
 													</li>
 													<li class=""><a href="/page/employers" id="employers" aria-expanded="false">Employers</a>
 														<div class="visible-xs">
@@ -153,7 +153,7 @@
 															</div>                    </div>
 													</li>
 												</ul>
-												<a href="https://my.calpers.ca.gov/" class="btn btn-primary pull-right hidden-xs" target="_blank">CalPERS Staff
+												<a href="employee_login.html" class="btn btn-primary pull-right hidden-xs" target="_blank">CalPERS Staff
 													Log In</a>
 											</div>
 										</div>
@@ -176,7 +176,6 @@
 
 
 											<div class="breadcrumb visible-xs"> <a href="/page/about/doing-business-with-calpers"><i class="fa fa-chevron-left"></i>&nbsp; More in Doing Business With CalPERS</a> </div>
-											<!-- TODO: Use the actual creation portal -->
 											<form role="form"
 												action="php/api/bidder/create.php"
 												method="post"
@@ -187,55 +186,56 @@
 															<div class="page-header">
 																<h1>Register for an account</h1>
 															</div>
-
+															<!-- TODO: Work with Dane on updating what the backend needs -->
 															<h2>Your Information</h2>
 															<div class="row">
 																<div class="col-md-5">
 																	<div class="form-group" id="first_name" >
 																		<label>First Name <span class="required-field">(required)</span></label>
-																		<input type="text" class="form-control" name="first_name" maxlength="20" value="TESTINFO">
+																		<input type="text" class="form-control" name="first_name" maxlength="20" >
 																	</div>
 																</div>
 																<div class="col-md-2">
 																	<div class="form-group" id="middle_init">
 																		<label>Middle Initial <span class="required-field"></span></label>
-																		<input type="text" class="form-control" name="middle_init" maxlength="1" value="T">
+																		<input type="text" class="form-control" name="middle_init" maxlength="1" value=" ">
 																	</div>
 																</div>
 																<div class="col-md-5">
 																	<div class="form-group" id="last_name" >
 																		<label>Last Name <span class="required-field">(required)</span></label>
-																		<input type="text" class="form-control" name="last_name" maxlength="30" value="TESTINFO">
+																		<input type="text" class="form-control" name="last_name" maxlength="30" value=" ">
 																	</div>
 																</div>
 															</div>
 															<div class="form-group" id="phonenumber" >
 																<label>Phone Number<span class="required-field">(required)</span></label>
-																<input type="text" class="form-control" name="phonenumber" value="7602232153">
+																<input type="number" class="form-control" name="phonenumber" value="">
 															</div>
 															<div class="form-group" id="Address" >
 																<label>Address<span class="required-field">(required)</span></label>
-																<input type="text" class="form-control" name="Address" value="TESTINFO">
+																<input type="text" class="form-control" name="Address" value="">
 															</div>
 															<div class="form-group" id="bidopsid" >
 																<label>bidopsid<span class="required-field">(required)</span></label>
-																<input type="text" class="form-control" name="bidopsid" value="TESTINFO">
+																<input type="number" class="form-control" name="bidopsid" value="">
 															</div>
+
 															<div class="form-group" id="bidderid" >
 																<label>bidderid<span class="required-field">(required)</span></label>
-																<input type="text" class="form-control" name="bidderid" value="-1">
+																<input type="text" class="form-control" name="bidderid" value="">
 															</div>
 															<div class="form-group" id="username" >
 																<label>Username<span class="required-field">(required)</span></label>
-																<input type="username" class="form-control" name="user_name" value="TESTINFO">
+																<input type="username" class="form-control" name="user_name" value="">
 															</div>
 															<div class="form-group" id="email" >
 																<label>Email Address <span class="required-field">(required)</span></label>
-																<input type="email" class="form-control" name="email" value="TESTINFO@ads">
+																<input type="email" class="form-control" name="email" value="">
 															</div>
 															<div class="form-group" id="password" >
 																<label>Password <span class="required-field">(required)</span></label>
-																<input type="password" class="form-control" name="password" value="TESTINFO">
+																<input type="password" class="form-control" name="password" value="">
 															</div>
 															<p>
 																<button type="submit" class="btn btn-primary">Register for Account</button>
@@ -253,6 +253,7 @@
 												        dataType: 'json',
 												        method: 'POST',
 												        // TODO: Figure out why error is always called...
+												        // TODO: Actually display a failure mode
 												        error: function (response) {
 												        	alert("The server says: " + JSON.stringify(response));
 												        	window.location.href = 'bidder_register_success.html';
