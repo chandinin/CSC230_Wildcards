@@ -38,23 +38,26 @@ function initNewOppForm() {
 }
 
 function uploadAllDocs() {
-    /*
-        var file=$('#uploadFileName')[0].files[0];
+    /* Upload scoring criteria*/
+
+        var file = $('#criteriaFile')[0].files[0];
+        var opid = $('#formIdInput').val();
         console.log(file.name);
         var formData=new FormData();
-        formData.append('file',file,file.name);
+        formData.append('filename',file,file.name);
+        formData.append('OpportunityID', opid);
         var xhr = new XMLHttpRequest();
-        xhr.open('POST',l'http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/update.php')
+        xhr.open('POST','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/uploadScoringCriteria.php');
         xhr.onload = function() {
             if(xhr.status == 200) {
-                alert('File uploaded');
+                alert('Scoring File uploaded');
             } else {
-                alert('Error uploading file');
+                alert('Error uploading scoring file');
             }
         };
         xhr.send(formData);
-       */
 
+        /*upload other documents
         var numfiles =  $('#uploadMFileName')[0].files.length;
         var file;
         var formData=new FormData();
@@ -73,6 +76,8 @@ function uploadAllDocs() {
             }
         };
         xhr.send(formData);
+
+        */
 }
 
 function getLeadEvals() {
@@ -115,7 +120,7 @@ function saveOpportunity() {
     xhr.onload = function() {
         if (xhr.status == 200) {
             alert(xhr.responseText);
-           // uploadAllDocs();
+            uploadAllDocs();
         } else {
         	alert("Error saving opportunity");
         }
