@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="143ccf83-bc51-4c5e-a3ee-f556d890400c" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/php/Tables/ProposalStatus.php" />
       <change beforePath="$PROJECT_DIR$/.idea/php.xml" afterPath="$PROJECT_DIR$/.idea/php.xml" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/sql/ProposalStatus.sql" afterPath="$PROJECT_DIR$/sql/ProposalStatus.sql" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -16,12 +16,12 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name="ProposalStatus.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/php/Tables/ProposalStatus.php">
+        <entry file="file://$PROJECT_DIR$/php/tables/ProposalStatus.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="493">
-              <caret line="22" column="60" lean-forward="true" selection-start-line="22" selection-start-column="60" selection-end-line="22" selection-end-column="60" />
+            <state relative-caret-position="290">
+              <caret line="15" column="42" lean-forward="true" selection-start-line="15" selection-start-column="42" selection-end-line="15" selection-end-column="42" />
               <folding>
-                <marker date="1521358428673" expanded="true" signature="443:692" ph="CREATE TABLE... ProposalStatus" />
+                <marker date="1521359002754" expanded="true" signature="443:692" ph="CREATE TABLE... ProposalStatus" />
               </folding>
             </state>
           </provider>
@@ -103,6 +103,7 @@
         <option value="$PROJECT_DIR$/bidder_register.html" />
         <option value="$PROJECT_DIR$/bidder_login.html" />
         <option value="$PROJECT_DIR$/php/Tables/ProposalStatus.php" />
+        <option value="$PROJECT_DIR$/php/tables/ProposalStatus.php" />
       </list>
     </option>
   </component>
@@ -117,7 +118,7 @@
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" interpreter_name="Remote PHP 5.6">
     <include_path>
-      <path value="C:\Users\cnagendra\Documents\Chandini\grad school\Spring 2018\Software System Engineering\Project\CSC230_Wildcards" />
+      <path value="" />
       <path value="C:\Users\cnagendra\Documents\Chandini\grad school\Spring 2018\Software System Engineering\CSC230_Wildcards\php\Tables" />
     </include_path>
   </component>
@@ -238,12 +239,12 @@
       <workItem from="1521143157222" duration="1162000" />
       <workItem from="1521146325127" duration="405000" />
       <workItem from="1521149854732" duration="644000" />
-      <workItem from="1521357483289" duration="1090000" />
+      <workItem from="1521357483289" duration="1524000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="44347000" />
+    <option name="totallyTimeSpent" value="44781000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-12" y="-12" width="2584" height="1554" extended-state="6" />
@@ -528,12 +529,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/php/Tables/ProposalStatus.php">
+    <entry file="file://$PROJECT_DIR$/php/tables/ProposalStatus.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="22" column="60" lean-forward="true" selection-start-line="22" selection-start-column="60" selection-end-line="22" selection-end-column="60" />
+        <state relative-caret-position="290">
+          <caret line="15" column="42" lean-forward="true" selection-start-line="15" selection-start-column="42" selection-end-line="15" selection-end-column="42" />
           <folding>
-            <marker date="1521358428673" expanded="true" signature="443:692" ph="CREATE TABLE... ProposalStatus" />
+            <marker date="1521359002754" expanded="true" signature="443:692" ph="CREATE TABLE... ProposalStatus" />
           </folding>
         </state>
       </provider>
