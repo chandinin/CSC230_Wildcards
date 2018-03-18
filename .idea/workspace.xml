@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="143ccf83-bc51-4c5e-a3ee-f556d890400c" name="Default" comment="" />
+    <list default="true" id="143ccf83-bc51-4c5e-a3ee-f556d890400c" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -11,14 +13,12 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="ProposalStatus.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/php/tables/ProposalStatus.php">
+      <file leaf-file-name="bidder_landing.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/bidder_landing.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="841">
-              <caret line="34" column="2" lean-forward="true" selection-start-line="34" selection-start-column="2" selection-end-line="34" selection-end-column="2" />
-              <folding>
-                <marker date="1521359002754" expanded="true" signature="443:692" ph="CREATE TABLE... ProposalStatus" />
-              </folding>
+            <state relative-caret-position="580">
+              <caret line="159" column="36" lean-forward="true" selection-start-line="159" selection-start-column="36" selection-end-line="159" selection-end-column="36" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -156,7 +156,6 @@
             <path>
               <item name="CSC230_Wildcards" type="b2602c69:ProjectViewProjectNode" />
               <item name="CSC230_Wildcards" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="php" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="tables" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
           </expand>
@@ -170,7 +169,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/php/Tables" />
-    <property name="settings.editor.selected.configurable" value="reference.webide.settings.project.settings.php" />
+    <property name="settings.editor.selected.configurable" value="database.main" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -184,7 +183,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="PHP Script.ProposalStatus.php">
+  <component name="RunManager" selected="JavaScript Debug.bidder_landing.html">
     <configuration name="Opportunity.html" type="JavascriptDebugType" factoryName="JavaScript Debug" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/Opportunity.html" />
     <configuration name="bidder_landing.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/bidder_landing.html" />
     <configuration name="bidder_login.html" type="JavascriptDebugType" factoryName="JavaScript Debug" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/bidder_login.html" />
@@ -210,8 +209,8 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="PHP Script.ProposalStatus.php" />
-        <item index="1" class="java.lang.String" itemvalue="JavaScript Debug.bidder_landing.html" />
+        <item index="0" class="java.lang.String" itemvalue="JavaScript Debug.bidder_landing.html" />
+        <item index="1" class="java.lang.String" itemvalue="PHP Script.ProposalStatus.php" />
         <item index="2" class="java.lang.String" itemvalue="JavaScript Debug.home_page.html" />
         <item index="3" class="java.lang.String" itemvalue="JavaScript Debug.example.html" />
         <item index="4" class="java.lang.String" itemvalue="JavaScript Debug.mytemplate.html" />
@@ -241,12 +240,12 @@
       <workItem from="1521143157222" duration="1162000" />
       <workItem from="1521146325127" duration="405000" />
       <workItem from="1521149854732" duration="644000" />
-      <workItem from="1521357483289" duration="1799000" />
+      <workItem from="1521357483289" duration="3018000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="45056000" />
+    <option name="totallyTimeSpent" value="46275000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-12" y="-12" width="2584" height="1554" extended-state="6" />
@@ -440,13 +439,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bidder_landing.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="29">
-          <caret line="140" column="58" lean-forward="false" selection-start-line="140" selection-start-column="58" selection-end-line="140" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/employee_login.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="409">
@@ -535,9 +527,15 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="841">
           <caret line="34" column="2" lean-forward="true" selection-start-line="34" selection-start-column="2" selection-end-line="34" selection-end-column="2" />
-          <folding>
-            <marker date="1521359002754" expanded="true" signature="443:692" ph="CREATE TABLE... ProposalStatus" />
-          </folding>
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bidder_landing.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="580">
+          <caret line="159" column="36" lean-forward="true" selection-start-line="159" selection-start-column="36" selection-end-line="159" selection-end-column="36" />
+          <folding />
         </state>
       </provider>
     </entry>
