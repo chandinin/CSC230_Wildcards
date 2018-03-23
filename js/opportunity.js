@@ -4,10 +4,15 @@ $(document).ready(
         $('#formdatetimepicker2').datetimepicker();
         $('#editOpp').hide();
         $('#newOpp').hide();
+        $('#oppList').show();
         $('#showNewOpp').click(function (){
             $('#newOpp').show();
             $('#oppButtons').hide();
             $('#docListTable').tablesorter();
+        });
+
+        $('#manageOpp').click(function() {
+            getOppList();
         });
 
 
@@ -30,8 +35,29 @@ $(document).ready(
         });
     });
 
+function showOpp() {
+    alert("this is the opp");
+}
+function getOppList() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php',true);
+    xhr.onload = function() {
+        if (xhr.status == 200) {
+            var jsonArray = JSON.parse(xhr.responseText);
+            var size = jsonArray.opportunity.length;
+            for(var i=0;i<size;i++) {
+                var opp = jsonArray.opportunity[i];
+                var row = "<tr><td>" + opp.OpportunityID + "</td><td>" + "<a href='javascript:showOpp()'>" + opp.Name +
+                    "</a></td><td>" + opp.ClosingDate + "</td><td>" + opp.Description + "</td></tr>";
+                $('#oppListTable').append(row);
+            }
+        } else {
+            alert("Error response");
+        }
+    };
+    xhr.send();
 
-
+}
 
 function initNewOppForm() {
     getLeadEvals()	;
@@ -44,10 +70,12 @@ function uploadAllDocs() {
         var opid = $('#formIdInput').val();
         console.log(file.name);
         var formData=new FormData();
-        formData.append('filename',file,file.name);
+        formData.append('ScoringCategoryBlob',file,file.name);
         formData.append('OpportunityID', opid);
+        formData.append('filename', file.name);
         var xhr = new XMLHttpRequest();
         xhr.open('POST','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/uploadScoringCriteria.php');
+        //xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.onload = function() {
             if(xhr.status == 200) {
                 alert('Scoring File uploaded');
