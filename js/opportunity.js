@@ -14,12 +14,14 @@ $(document).ready(
         $('#manageOpp').click(function() {
             getOppList();
             $('#oppListTable').tablesorter();
+            $("#oppsMenu option[id='opplist']").attr("selected", "selected");
         });
 
 
         $('clearFile').click(function() {
 
         });
+
         $('#saveNewOpp').click(function() {
             saveOpportunity();
         });
