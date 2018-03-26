@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="143ccf83-bc51-4c5e-a3ee-f556d890400c" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/Opportunity_new.html" afterPath="$PROJECT_DIR$/Opportunity_new.html" />
+      <change beforePath="$PROJECT_DIR$/css/style.css" afterPath="$PROJECT_DIR$/css/style.css" />
+      <change beforePath="$PROJECT_DIR$/js/opportunity.js" afterPath="$PROJECT_DIR$/js/opportunity.js" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -13,15 +17,25 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Opportunity_new.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Opportunity_new.html">
+      <file leaf-file-name="SampleNest.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/SampleNest.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="205" column="45" lean-forward="false" selection-start-line="205" selection-start-column="45" selection-end-line="205" selection-end-column="45" />
+            <state relative-caret-position="459">
+              <caret line="105" column="0" lean-forward="false" selection-start-line="105" selection-start-column="0" selection-end-line="105" selection-end-column="0" />
               <folding>
-                <element signature="n#div#1;n#body#0;n#html#0;n#!!top" expanded="false" />
-                <element signature="n#div#1;n#div#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#2;n#body#0;n#html#0;n#!!top" expanded="false" />
+                <element signature="n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
+                <element signature="n#div#2;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="bootstrap-datepicker.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/css/bootstrap-datepicker.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="615">
+              <caret line="509" column="63" lean-forward="false" selection-start-line="509" selection-start-column="63" selection-end-line="509" selection-end-column="63" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -29,18 +43,66 @@
       <file leaf-file-name="opportunity.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/opportunity.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="595">
-              <caret line="35" column="10" lean-forward="false" selection-start-line="35" selection-start-column="10" selection-end-line="35" selection-end-column="10" />
+            <state relative-caret-position="510">
+              <caret line="147" column="74" lean-forward="false" selection-start-line="147" selection-start-column="74" selection-end-line="147" selection-end-column="74" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="calpers-theme.css" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/css/calpers-theme.css">
+      <file leaf-file-name="bootstrap-datepicker.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/bootstrap-datepicker.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2652">
-              <caret line="156" column="1" lean-forward="false" selection-start-line="156" selection-start-column="1" selection-end-line="156" selection-end-column="1" />
+            <state relative-caret-position="683">
+              <caret line="2029" column="4" lean-forward="false" selection-start-line="2029" selection-start-column="4" selection-end-line="2029" selection-end-column="4" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Opportunity.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Opportunity.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="357">
+              <caret line="29" column="43" lean-forward="false" selection-start-line="29" selection-start-column="43" selection-end-line="29" selection-end-column="43" />
+              <folding>
+                <element signature="n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
+                <element signature="n#div#1;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
+                <element signature="n#div#1;n#body#0;n#html#0;n#!!top" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="opportunity2.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/opportunity2.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="442">
+              <caret line="155" column="46" lean-forward="false" selection-start-line="155" selection-start-column="46" selection-end-line="155" selection-end-column="46" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Opportunity_new.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Opportunity_new.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="469">
+              <caret line="245" column="0" lean-forward="false" selection-start-line="245" selection-start-column="0" selection-end-line="245" selection-end-column="0" />
+              <folding>
+                <element signature="n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
+                <element signature="n#div#1;n#body#0;n#html#0;n#!!top" expanded="false" />
+                <element signature="n#div#1;n#div#2;n#body#0;n#html#0;n#!!top" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="style.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/css/style.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="85">
+              <caret line="5" column="1" lean-forward="false" selection-start-line="5" selection-start-column="1" selection-end-line="5" selection-end-column="1" />
               <folding />
             </state>
           </provider>
@@ -51,8 +113,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="JavaScript File" />
         <option value="HTML File" />
+        <option value="JavaScript File" />
         <option value="CSS File" />
       </list>
     </option>
@@ -128,7 +190,13 @@
         <option value="$PROJECT_DIR$/js/opportunity.js" />
         <option value="$PROJECT_DIR$/Opportunity_tab.html" />
         <option value="$PROJECT_DIR$/css/calpers-theme.css" />
+        <option value="$PROJECT_DIR$/js/compile.min.css" />
+        <option value="$PROJECT_DIR$/css/style.css" />
+        <option value="$PROJECT_DIR$/js/bootstrap-datepicker.js" />
+        <option value="$PROJECT_DIR$/css/bootstrap-datepicker.css" />
         <option value="$PROJECT_DIR$/Opportunity_new.html" />
+        <option value="$PROJECT_DIR$/js/opportunity2.js" />
+        <option value="$PROJECT_DIR$/SampleNest.html" />
       </list>
     </option>
   </component>
@@ -147,8 +215,9 @@
     </include_path>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="450" />
-    <option name="width" value="1174" />
+    <option name="x" value="326" />
+    <option name="y" value="-14" />
+    <option name="width" value="1131" />
     <option name="height" value="890" />
   </component>
   <component name="ProjectView">
@@ -201,12 +270,15 @@
     <property name="list.type.of.created.stylesheet" value="CSS" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\GitHub\zz-dev\CSC230_Wildcards\images" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\GitHub\zz-dev\CSC230_Wildcards\js" />
       <recent name="C:\GitHub\zz-dev\CSC230_Wildcards\css" />
       <recent name="C:\GitHub\zz-dev\CSC230_Wildcards" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\GitHub\zz-dev\CSC230_Wildcards\css" />
+      <recent name="C:\GitHub\zz-dev\CSC230_Wildcards\js" />
+      <recent name="C:\GitHub\zz-dev\CSC230_Wildcards\images" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -280,18 +352,18 @@
       <workItem from="1521183871172" duration="2145000" />
       <workItem from="1521521063662" duration="3107000" />
       <workItem from="1521694488818" duration="11797000" />
-      <workItem from="1521952699501" duration="275000" />
+      <workItem from="1521952699501" duration="17959000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="59952000" />
+    <option name="totallyTimeSpent" value="77636000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.215" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.131875" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -393,14 +465,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/BidderInsert.php" />
-    <entry file="file://$PROJECT_DIR$/EmployeeTable.php" />
-    <entry file="file://$PROJECT_DIR$/EmployeeInsert.php" />
-    <entry file="file://$PROJECT_DIR$/BidderCRUD.php" />
-    <entry file="file://$PROJECT_DIR$/BidderTable.php" />
-    <entry file="file://$PROJECT_DIR$/BidderInsert.php" />
-    <entry file="file://$PROJECT_DIR$/EmployeeTable.php" />
-    <entry file="file://$PROJECT_DIR$/EmployeeInsert.php" />
     <entry file="file://$PROJECT_DIR$/OpportunityTable.php" />
     <entry file="file://$PROJECT_DIR$/test.txt" />
     <entry file="file://$PROJECT_DIR$/test.php" />
@@ -530,13 +594,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1921">
           <caret line="4943" column="1" lean-forward="false" selection-start-line="4943" selection-start-column="1" selection-end-line="4943" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/css/style.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-11106">
-          <caret line="497" column="4" lean-forward="false" selection-start-line="497" selection-start-column="4" selection-end-line="497" selection-end-column="4" />
           <folding />
         </state>
       </provider>
@@ -562,14 +619,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/opportunity.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="595">
-          <caret line="35" column="10" lean-forward="false" selection-start-line="35" selection-start-column="10" selection-end-line="35" selection-end-column="10" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/css/calpers-theme.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2652">
@@ -578,10 +627,72 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Opportunity.html">
+    <entry file="file://$PROJECT_DIR$/Opportunity_tab.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
-          <caret line="72" column="106" lean-forward="false" selection-start-line="72" selection-start-column="106" selection-end-line="72" selection-end-column="106" />
+          <caret line="189" column="26" lean-forward="false" selection-start-line="189" selection-start-column="26" selection-end-line="189" selection-end-column="26" />
+          <folding>
+            <element signature="n#style#0;n#a#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="e#9952#9958#0" expanded="false" />
+            <element signature="n#style#0;n#a#0;n#div#0;n#div#0;n#body#0;n#html#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="e#32213#32219#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/MDB Free/css/style.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/css/compile.min.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="496359" lean-forward="true" selection-start-line="0" selection-start-column="496359" selection-end-line="0" selection-end-column="496359" />
+          <folding>
+            <element signature="e#61695#61895#2" expanded="false" />
+            <element signature="e#62103#62252#2" expanded="false" />
+            <element signature="e#62754#62900#2" expanded="false" />
+            <element signature="e#63201#63367#1" expanded="false" />
+            <element signature="e#74087#74330#2" expanded="false" />
+            <element signature="e#75197#75446#2" expanded="false" />
+            <element signature="e#101743#101933#2" expanded="false" />
+            <element signature="e#101979#102169#2" expanded="false" />
+            <element signature="e#321586#321829#2" expanded="false" />
+            <element signature="e#323321#323570#2" expanded="false" />
+            <element signature="e#419904#420391#2" expanded="false" />
+            <element signature="e#420457#421244#2" expanded="false" />
+            <element signature="e#421309#422056#2" expanded="false" />
+            <element signature="e#422121#422836#2" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/css/style.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="1" lean-forward="false" selection-start-line="5" selection-start-column="1" selection-end-line="5" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/MDB Free/js/mdb.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!doc" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Opportunity.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="29" column="43" lean-forward="false" selection-start-line="29" selection-start-column="43" selection-end-line="29" selection-end-column="43" />
           <folding>
             <element signature="n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
             <element signature="n#div#1;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
@@ -590,26 +701,67 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Opportunity_tab.html">
+    <entry file="file://$PROJECT_DIR$/js/bootstrap-datetimepicker.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="189" column="26" lean-forward="false" selection-start-line="189" selection-start-column="26" selection-end-line="189" selection-end-column="26" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="n#style#0;n#a#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="e#9952#9958#0" expanded="true" />
-            <element signature="n#style#0;n#a#0;n#div#0;n#div#0;n#body#0;n#html#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="e#32213#32219#0" expanded="true" />
+            <element signature="n#!!doc" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/bootstrap-datepicker.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="683">
+          <caret line="2029" column="4" lean-forward="false" selection-start-line="2029" selection-start-column="4" selection-end-line="2029" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/css/bootstrap-datepicker.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="615">
+          <caret line="509" column="63" lean-forward="false" selection-start-line="509" selection-start-column="63" selection-end-line="509" selection-end-column="63" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Opportunity_new.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="205" column="45" lean-forward="false" selection-start-line="205" selection-start-column="45" selection-end-line="205" selection-end-column="45" />
+        <state relative-caret-position="469">
+          <caret line="245" column="0" lean-forward="false" selection-start-line="245" selection-start-column="0" selection-end-line="245" selection-end-column="0" />
           <folding>
+            <element signature="n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
             <element signature="n#div#1;n#body#0;n#html#0;n#!!top" expanded="false" />
-            <element signature="n#div#1;n#div#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#2;n#body#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#div#1;n#div#2;n#body#0;n#html#0;n#!!top" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/opportunity.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="147" column="74" lean-forward="false" selection-start-line="147" selection-start-column="74" selection-end-line="147" selection-end-column="74" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/opportunity2.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="155" column="46" lean-forward="false" selection-start-line="155" selection-start-column="46" selection-end-line="155" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SampleNest.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="105" column="0" lean-forward="false" selection-start-line="105" selection-start-column="0" selection-end-line="105" selection-end-column="0" />
+          <folding>
+            <element signature="n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#div#2;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
           </folding>
         </state>
       </provider>

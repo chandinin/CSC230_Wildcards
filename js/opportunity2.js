@@ -1,57 +1,65 @@
 $(document).ready(
     function () {
         initNewOppForm();
-        $('#formdatetimepicker2').datetimepicker();
-        $('#editOpp').hide();
-        $('#newOpp').hide();
-        $('#oppList').show();
-        $('#showNewOpp').click(function (){
-            $('#newOpp').show();
-            $('#oppButtons').hide();
-            $('#docListTable').tablesorter();
-        });
-
         $('#manageOpp').click(function() {
             getOppList();
             $('#oppListTable').tablesorter();
             $("#oppsMenu option[id='opplist']").attr("selected", "selected");
         });
 
-
-        $('clearFile').click(function() {
-
-        });
+        $('.datepicker').datepicker();
 
         $('#saveNewOpp').click(function() {
             saveOpportunity();
         });
+    });
 
-        $('#exitNewOpp').click(function() {
-            $('#newOpp').hide();
-            $('#oppButtons').show();
-        });
+function saveJunk() {
 
-      //  $('#showEditOpp').hide();  //hiding for 1st pass through
-        $('#showEditOpp').click(function() {
-            $('#editOpp').show();
-            $('#oppButtons').hide();
-        });
+    $('#editOpp').hide();
+    $('#newOpp').hide();
+    $('#oppList').show();
+    $('#showNewOpp').click(function (){
+        $('#newOpp').show();
+        $('#oppButtons').hide();
+        $('#docListTable').tablesorter();
+    });
 
-            $("div.bhoechie-tab-menu>div.list-group>a").click(function(e) {
-                e.preventDefault();
-                $(this).siblings('a.active').removeClass("active");
-                $(this).addClass("active");
-                var index = $(this).index();
-                $("div.bhoechie-tab>div.bhoechie-tab-content").removeClass("active");
-                $("div.bhoechie-tab>div.bhoechie-tab-content").eq(index).addClass("active");
-            });
+
+
+    $('clearFile').click(function() {
 
     });
+
+
+    $('#exitNewOpp').click(function() {
+        $('#newOpp').hide();
+        $('#oppButtons').show();
+    });
+
+    //  $('#showEditOpp').hide();  //hiding for 1st pass through
+    $('#showEditOpp').click(function() {
+        $('#editOpp').show();
+        $('#oppButtons').hide();
+    });
+
+    $("div.bhoechie-tab-menu>div.list-group>a").click(function(e) {
+        e.preventDefault();
+        $(this).siblings('a.active').removeClass("active");
+        $(this).addClass("active");
+        var index = $(this).index();
+        $("div.bhoechie-tab>div.bhoechie-tab-content").removeClass("active");
+        $("div.bhoechie-tab>div.bhoechie-tab-content").eq(index).addClass("active");
+    });
+
+}
 
 function showOpp() {
     alert("this is the opp");
 }
 function getOppList() {
+
+    $('#oppListTable').empty();
     var xhr = new XMLHttpRequest();
     xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php',true);
     xhr.onload = function() {
@@ -145,7 +153,7 @@ function saveOpportunity() {
     var opId = $('#formIdInput').val();
     var name = $('#formNameInput').val();
     var desc = $('#formDescriptionInput').val();
-    var close = $('#formdatetimepicker2').data("DateTimePicker").viewDate().toString();
+    var close = $('#close_date').val() + " " + $('#close_time').val();
     var lead = parseInt($('#selectLead').val());
     var senddate = convertDate(close);
     var jsonRecord =

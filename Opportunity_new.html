@@ -165,51 +165,27 @@
 		<div id="main" role="main">
 			<div class="custom-app">
 				<div class="container content">
-                    <div class="row" id="chooseAction">
                         <ul class="nav nav-tabs nav-justified" role="tablist">
                             <li class="nav-item">
-                                <a id="manageOpp" class="nav-link active" data-toggle="tab" href="#panelOpp" role="tab">Manage Opportunities</a>
+                                <a id="manageOpp" class="nav-link active" data-toggle="tab" href="#panelOpp" role="tab">Opportunities</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#panel2" role="tab">Manage Accounts</a>
+                                <a class="nav-link" data-toggle="tab" href="#panelAcct" role="tab">Accounts</a>
                             </li>
+							<li class="nav-item">
+								<a class="nav-link" data-toggle="tab" href="#panelBid" role="tab">Bidders</a>
+							</li>
                         </ul>
-                       <!--
 
-                        -->
-                    </div>
                     <div class="tab-content card">
                         <div class="row tab-pane fade" id="panelOpp" role="tabpanel">
 					<!--	<span id="oppButtons" class="col-md-8">
                             <button id="showNewOpp" type="button" class="btn btn-primary">Create New Opportunity</button>
-                        </span>
--->
-							<!-- Nav tabs -->
-							<!-- Tab panels -->
-							<div class="tab-content">
-								<!--Panel 1-->
-								<div class="tab-pane fade in show active" id="panel5" role="tabpanel">
-									<!-- Nav tabs -->
+                        </span>-->
+
 									<div class="row ">
-										<div class="col-md-2 " >
-											<ul class="nav  md-pills pills-primary flex-column" role="tablist">
-												<li class="nav-item">
-													<a class="nav-link active legend-as-label" data-toggle="tab" href="#panel21" role="tab">List
 
-													</a>
-												</li>
-												<li class="nav-item">
-													<a class="nav-link legend-as-label" data-toggle="tab" href="#panel22" role="tab">Details
-													</a>
-												</li>
-											</ul>
-										</div>
 										<div class="col-md-9">
-											<!-- tab panels -->
-											<div class="tab-content vertical">
-												<!--panel 1-->
-												<div class="tab-pane fade in show active" id="panel21" role="tabpanel">
-
                                                     <h3>List Opportunities</h3>
 													<div class="col-md-12" id="opplist">
 														<table class="tablesorter">
@@ -229,12 +205,85 @@
 													</div>
 
 												</div>
+									</div>
 												<!--/.Panel 1-->
 
+							<div class="row tab-pane fade" id="panelAcct" role="tabpanel">
+								<h3>Accounts</h3>
+                            </div>
+							<div class="row tab-pane fade" id="panelBid" role="tabpanel">
+								<h3>Bidders</h3>
+							</div>
 												<!--Panel 2-->
-												<div class="tab-pane fade" id="panel22" role="tabpanel">
+												<div class="tab-pane fade in show" id="panel22" role="tabpanel">
 
-													<h5 class="my-2 h5">Panel 2</h5>
+													<h3>Detail</h3>
+													<form id="newOppForm">
+
+														<div class="form-group">
+															<label for="formId">Opportunity Id</label>
+															<input type="text" class="form-control" id="formIdInput" placeholder="Opportunity Id" required>
+														</div>
+
+														<div class="form-group">
+															<label for="formName">Name</label>
+															<input type="text" class="form-control" id="formNameInput" placeholder="Opportunity Name" required>
+														</div>
+
+														<div class="form-group">
+															<label for="formDescription">Description</label>
+															<textarea class="form-control" id="formDescriptionInput" rows="4" placeholder="Describe the opportunity." required></textarea>
+														</div>
+
+														<div class="row">
+																<div class="form-group"><label for="closing_time">Closing Time</label>
+																	<div class='input-group date' id='formdatetimepicker2'>
+																		<input type='text' class="form-control" name="closing_time" required/>
+																		<span class="input-group-addon">
+												                        <span class="glyphicon glyphicon-calendar"></span>
+																		</span>
+																	</div>
+
+															</div>
+															<div class="">
+																<div class="form-group">
+																	<label class="my-1 mr-2" for="selectLead">Lead Evaluator</label>
+																	<select class="custom-select my-1 mr-sm-2" id="selectLead" name="lead" required>
+																		<option>Choose...</option>
+																	</select>
+																</div>
+															</div>
+
+
+															<div class="">
+																<div class="form-group">
+																	<div class="custom-file">
+																		<label class="custom-file-label" for="criteriaFile">Scoring Criteria</label>
+																		<input id="criteriaFile" type="file" name="criteriaFile">
+																	</div>
+																</div>
+															</div>
+														</div>
+
+
+														<div class="page-header">
+															<h4>Upload  multiple new documents</h4>
+															<div class="">
+																<div class="form-group">
+																	<div class="custom-file">
+																		<label class="custom-file-label" for="uploadMFileName">New Document Upload</label>
+																		<input id="uploadMFileName" type="file" name="uploadMFileName" multiple>
+																	</div>
+																</div>
+															</div>
+														</div>
+
+														<div class="form-group">
+															<button id="saveNewOpp" type="button" class="btn btn-primary">Save</button>
+															<button id="clearNewOpp" type="button" class="btn btn-primary">Clear Form</button>
+															<button id="exitNewOpp" type="button" class="btn btn-primary">Exit</button>
+														</div>
+													</form>
 
 												</div>
 												<!--/.Panel 2-->
@@ -259,74 +308,7 @@
                                 <h1>Create New Opportunity</h1>
                             </div>
 
-                            <form id="newOppForm">
 
-								<div class="form-group">
-									<label for="formId">Opportunity Id</label>
-									<input type="text" class="form-control" id="formIdInput" placeholder="Opportunity Id" required>
-								</div>
-
-                                <div class="form-group">
-                                    <label for="formName">Name</label>
-                                    <input type="text" class="form-control" id="formNameInput" placeholder="Opportunity Name" required>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="formDescription">Description</label>
-                                    <textarea class="form-control" id="formDescriptionInput" rows="4" placeholder="Describe the opportunity." required></textarea>
-                                </div>
-
-                                <div class="row">
-                                    <div class='col-sm-6'>
-                                        <div class="form-group"><label for="closing_time">Closing Time</label>
-                                            <div class='input-group date' id='formdatetimepicker2'>
-                                                <input type='text' class="form-control" name="closing_time" required/>
-                                                <span class="input-group-addon">
-												    <span class="glyphicon glyphicon-calendar"></span>
-												</span>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="my-1 mr-2" for="selectLead">Lead Evaluator</label>
-                                            <select class="custom-select my-1 mr-sm-2" id="selectLead" name="lead" required>
-                                                <option>Choose...</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <div class="custom-file">
-                                                <label class="custom-file-label" for="criteriaFile">Scoring Criteria</label>
-                                                <input id="criteriaFile" type="file" name="criteriaFile">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div class="page-header">
-                                    <h4>Upload  multiple new documents</h4>
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <div class="custom-file">
-                                                <label class="custom-file-label" for="uploadMFileName">New Document Upload</label>
-                                                <input id="uploadMFileName" type="file" name="uploadMFileName" multiple>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <button id="saveNewOpp" type="button" class="btn btn-primary">Save</button>
-                                    <button id="clearNewOpp" type="button" class="btn btn-primary">Clear Form</button>
-                                    <button id="exitNewOpp" type="button" class="btn btn-primary">Exit</button>
-                                </div>
-							</form>
 						</div>
 
 

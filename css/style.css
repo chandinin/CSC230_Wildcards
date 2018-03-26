@@ -1,6 +1,9 @@
 /* calpers theme css */
 @import url("calpers-theme.css");
 
+.pills-primary .nav-link.active {
+    background-color: #4285f4!important;
+}
 /* override bootstrap styles */
 
 .panel, .panel-group .panel, .well, .thumbnail, .navbar, .alert {
