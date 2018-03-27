@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Author</title>
 
     <!--
 -->
@@ -30,10 +30,10 @@
     <div class="tab-pane fade in" id="panel1" role="tabpanel">
         <!-- Nav tabs -->
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <ul class="nav  md-pills pills-primary flex-column" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" id="manageOpp" data-toggle="tab" href="#panel21" role="tab">List
+                        <a class="nav-link" id="manageOpp" data-toggle="tab" href="#panel21" role="tab">List
                             <i class="fa fa-download ml-2"></i>
                         </a>
                     </li>
@@ -45,37 +45,30 @@
                 </ul>
             </div>
             <div class="col-md-9">
-                <!-- Tab panels -->
+                <!-- Opportunity Tab panels -->
                 <div class="tab-content vertical">
-                    <!--Panel 1-->
+                    <!--List Panel 1-->
                     <div class="tab-pane fade in" id="panel21" role="tabpanel">
 
                         <h5 class="my-2 h5">Current Opportunities</h5>
                         <div class="row ">
                             <div class="col-md-9">
-                                <div class="col-md-12" id="opplist">
-                                    <table class="tablesorter">
+                                    <table class="table table-bordered table-striped">
                                         <thead>
-                                        <th>id</th>
-                                        <th>name</th>
-                                        <th>closing</th>
-                                        <th>description</th>
+                                        <th>Opportunity Id</th>
+                                        <th>Opportunity Name</th>
+                                        <th>Closing Date/Time</th>
+                                        <th>Opportunity Description</th>
                                         </thead>
                                         <tbody id="oppListTable">
-
-
                                         </tbody>
-
                                     </table>
-
-                                </div>
-
                             </div>
                         </div>
                     </div>
-                    <!--/.Panel 1-->
+                    <!--/.List Panel 1-->
 
-                    <!--Panel 2-->
+                    <!--Create Panel 2-->
                     <div class="tab-pane fade" id="panel22" role="tabpanel">
                         <h5 id="createOpp" class="my-2 h5">Create Opportunity</h5>
                         <h5 id="editOpp" class="my-2 h5" hidden>Edit Opportunity</h5>
@@ -148,14 +141,8 @@
                     </div>
 
                     </div>
-                    <!--/.Panel 2-->
-                    <!--Panel 3-->
-                    <div class="tab-pane fade" id="panel23" role="tabpanel">
+                    <!--/.Create Panel 2-->
 
-                        <h5 class="my-2 h5">Panel 3</h5>
-
-                    </div>
-                    <!--/.Panel 3-->
                 </div>
             </div>
         </div>
@@ -188,6 +175,7 @@
 <script src="js/MDB Free/js/jquery-3.2.1.min.js"></script>
 <script src="js/MDB Free/js/bootstrap.js"></script>
 <script src="js/MDB Free/js/popper.min.js"></script>
+<script src="js/widgets.js"></script>
 <script src="js/jquery.tablesorter.js"></script>
 <script src="js/opportunity2.js"></script>
 <script src="js/bootstrap-datepicker.js"></script>

@@ -66,6 +66,7 @@ caption {
 .table thead tr {
 	background: #00659e;
 	color: #ffffff;
+	font-size:16px !important;
 }
 .table > thead > tr > th {
 	border-bottom: none;

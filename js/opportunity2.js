@@ -3,7 +3,8 @@ $(document).ready(
         initNewOppForm();
         $('#manageOpp').click(function() {
             getOppList();
-            $('#oppListTable').tablesorter();
+
+            $('.table').tablesorter();
             $("#oppsMenu option[id='opplist']").attr("selected", "selected");
         });
 
@@ -71,6 +72,7 @@ function getOppList() {
                 var row = "<tr><td>" + opp.OpportunityID + "</td><td>" + "<a href='javascript:showOpp()'>" + opp.Name +
                     "</a></td><td>" + opp.ClosingDate + "</td><td>" + opp.Description + "</td></tr>";
                 $('#oppListTable').append(row);
+                $("#oppListTable").trigger("update");
             }
         } else {
             alert("Error response");

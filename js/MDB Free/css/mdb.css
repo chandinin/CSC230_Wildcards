@@ -6375,7 +6375,7 @@ footer.page-footer {
   .list-group a:hover {
     -webkit-transition: 0.5s;
     transition: 0.5s; }
-
+/*
 table th {
   font-size: 0.9rem;
   font-weight: 400; }
@@ -6420,3 +6420,5 @@ table.table-sm th,
 table.table-sm td {
   padding-top: 0.6rem;
   padding-bottom: 0.6rem; }
+
+  */
