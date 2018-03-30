@@ -1,6 +1,7 @@
 $(document).ready(
     function () {
         initNewOppForm();
+        $('#newOpp').hide();
         $('#manageOpp').click(function() {
             getOppList();
 
@@ -13,18 +14,27 @@ $(document).ready(
         $('#saveNewOpp').click(function() {
             saveOpportunity();
         });
+        $('#showNewOpp').click(function (){
+            $('#newOpp').show();
+            $('#oppList').hide();
+        });
+
+        $('#editOpp').hide();
+        $('#oppList').show();
+        $('#exitNewOpp').click(function() {
+            $('#newOpp').hide();
+            $('#newOppForm')[0].reset();
+            $("#oppList").show();
+        });
+
+        $('#clearNewOpp').click(function() {
+            $('#newOppForm')[0].reset();
+        })
     });
 
 function saveJunk() {
 
-    $('#editOpp').hide();
-    $('#newOpp').hide();
-    $('#oppList').show();
-    $('#showNewOpp').click(function (){
-        $('#newOpp').show();
-        $('#oppButtons').hide();
-        $('#docListTable').tablesorter();
-    });
+
 
 
 
@@ -58,6 +68,8 @@ function saveJunk() {
 function showOpp() {
     alert("this is the opp");
 }
+
+
 function getOppList() {
 
     $('#oppListTable').empty();
@@ -65,7 +77,8 @@ function getOppList() {
     xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php',true);
     xhr.onload = function() {
         if (xhr.status == 200) {
-            var jsonArray = JSON.parse(xhr.responseText);
+            var jsonArray = fakedata;
+           // var jsonArray = JSON.parse(xhr.responseText);
             var size = jsonArray.opportunity.length;
             for(var i=0;i<size;i++) {
                 var opp = jsonArray.opportunity[i];
@@ -83,7 +96,8 @@ function getOppList() {
 }
 
 function initNewOppForm() {
-    getLeadEvals()	;
+    getLeadEvals();
+    getOppList();
 }
 
 function uploadAllDocs() {
@@ -196,6 +210,191 @@ function convertDate(dateString) {
                     " " + thedate.getHours() + ":" + thedate.getMinutes() + ":" + thedate.getSeconds();
     return newdate;
 }
+
+var fakedata ={
+    "opportunity": [{
+        "OpportunityID": "",
+        "ClosingDate": "0000-00-00 00:00:00",
+        "ScoringCategoryBlob": null,
+        "LeadEvaluatorID": null,
+        "Name": "",
+        "LowestBid": "10000",
+        "Description": ""
+    },
+        {
+            "OpportunityID": "1",
+            "ClosingDate": "2019-01-01 12:00:00",
+            "ScoringCategoryBlob": null,
+            "LeadEvaluatorID": "3",
+            "Name": null,
+            "LowestBid": "10000",
+            "Description": null
+        },
+        {
+            "OpportunityID": "1111",
+            "ClosingDate": "0000-00-00 00:00:00",
+            "ScoringCategoryBlob": null,
+            "LeadEvaluatorID": "1",
+            "Name": "1111 Name Here",
+            "LowestBid": "10000",
+            "Description": "1111 Description is here"
+        },
+        {
+            "OpportunityID": "2",
+            "ClosingDate": "2019-02-14 12:00:00",
+            "ScoringCategoryBlob": null,
+            "LeadEvaluatorID": "2",
+            "Name": null,
+            "LowestBid": "3000",
+            "Description": null
+        },
+        {
+            "OpportunityID": "2018-12",
+            "ClosingDate": "0000-00-00 00:00:00",
+            "ScoringCategoryBlob": null,
+            "LeadEvaluatorID": "3",
+            "Name": "name",
+            "LowestBid": "10000",
+            "Description": "desc"
+        },
+        {
+            "OpportunityID": "2018-5544",
+            "ClosingDate": "0000-00-00 00:00:00",
+            "ScoringCategoryBlob": null,
+            "LeadEvaluatorID": "1",
+            "Name": "Chance to win big",
+            "LowestBid": "10000",
+            "Description": "This is a really big chance"
+        },
+        {
+            "OpportunityID": "2018-5555",
+            "ClosingDate": "0000-00-00 00:00:00",
+            "ScoringCategoryBlob": null,
+            "LeadEvaluatorID": "1",
+            "Name": "Chance to win big",
+            "LowestBid": "10000",
+            "Description": "This is a really big chance"
+        },
+        {
+            "OpportunityID": "2018-909",
+            "ClosingDate": "0000-00-00 00:00:00",
+            "ScoringCategoryBlob": null,
+            "LeadEvaluatorID": "3",
+            "Name": "Great Opportunity",
+            "LowestBid": "10000",
+            "Description": "Great Description"
+        },
+        {
+            "OpportunityID": "211-0056",
+            "ClosingDate": "0000-00-00 00:00:00",
+            "ScoringCategoryBlob": null,
+            "LeadEvaluatorID": "3",
+            "Name": "This is my opportunity",
+            "LowestBid": "10000",
+            "Description": "Describe"
+        },
+        {
+            "OpportunityID": "2222",
+            "ClosingDate": "0000-00-00 00:00:00",
+            "ScoringCategoryBlob": null,
+            "LeadEvaluatorID": "2",
+            "Name": "2222 Opportunity",
+            "LowestBid": "10000",
+            "Description": "2222 Description"
+        },
+        {
+            "OpportunityID": "2243-9987",
+            "ClosingDate": "0000-00-00 00:00:00",
+            "ScoringCategoryBlob": null,
+            "LeadEvaluatorID": "1",
+            "Name": "Name is here",
+            "LowestBid": "10000",
+            "Description": "Description is here"
+        },
+        {
+            "OpportunityID": "2294-888",
+            "ClosingDate": "0000-00-00 00:00:00",
+            "ScoringCategoryBlob": null,
+            "LeadEvaluatorID": "1",
+            "Name": "Opname2",
+            "LowestBid": "10000",
+            "Description": "opdesc2"
+        },
+        {
+            "OpportunityID": "25",
+            "ClosingDate": null,
+            "ScoringCategoryBlob": null,
+            "LeadEvaluatorID": null,
+            "Name": null,
+            "LowestBid": null,
+            "Description": null
+        },
+        {
+            "OpportunityID": "26",
+            "ClosingDate": "2019-02-14 12:00:00",
+            "ScoringCategoryBlob": null,
+            "LeadEvaluatorID": "2",
+            "Name": "Opp_25",
+            "LowestBid": "23014",
+            "Description": "FOOBAR************"
+        },
+        {
+            "OpportunityID": "34234",
+            "ClosingDate": "0000-00-00 00:00:00",
+            "ScoringCategoryBlob": null,
+            "LeadEvaluatorID": "2",
+            "Name": "name",
+            "LowestBid": "10000",
+            "Description": "desc"
+        },
+        {
+            "OpportunityID": "4444 ",
+            "ClosingDate": "0000-00-00 00:00:00",
+            "ScoringCategoryBlob": null,
+            "LeadEvaluatorID": "1",
+            "Name": "4444 Oppname",
+            "LowestBid": "10000",
+            "Description": "4444 Desc"
+        },
+        {
+            "OpportunityID": "54321",
+            "ClosingDate": "0000-00-00 00:00:00",
+            "ScoringCategoryBlob": null,
+            "LeadEvaluatorID": "2",
+            "Name": "name",
+            "LowestBid": "10000",
+            "Description": "desc"
+        },
+        {
+            "OpportunityID": "777777",
+            "ClosingDate": "2018-12-01 15:00:00",
+            "ScoringCategoryBlob": null,
+            "LeadEvaluatorID": "1",
+            "Name": "777Opp",
+            "LowestBid": "10000",
+            "Description": "777Desc"
+        },
+        {
+            "OpportunityID": "99999",
+            "ClosingDate": "0000-00-00 00:00:00",
+            "ScoringCategoryBlob": null,
+            "LeadEvaluatorID": "2",
+            "Name": "9999 Opportunity",
+            "LowestBid": "10000",
+            "Description": "9999 Description"
+        },
+        {
+            "OpportunityID": "tst-zz",
+            "ClosingDate": "0000-00-00 00:00:00",
+            "ScoringCategoryBlob": null,
+            "LeadEvaluatorID": "3",
+            "Name": "This is a great one",
+            "LowestBid": "10000",
+            "Description": "Buy now or dont"
+        }]
+};
+
+
 
 
 
