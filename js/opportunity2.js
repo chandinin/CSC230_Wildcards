@@ -29,18 +29,22 @@ $(document).ready(
 
         $('#clearNewOpp').click(function() {
             $('#newOppForm')[0].reset();
-        })
+        });
+
+        $('#oppListTable tr').click(function() {
+                showOpp();
+        });
+
     });
 
 function saveJunk() {
-
-
-
-
-
     $('clearFile').click(function() {
+});
 
-    });
+    function editOpp() {
+        $('#newOpp').hide();
+        $('#editOpp').show();
+    };
 
 
     $('#exitNewOpp').click(function() {
@@ -72,7 +76,7 @@ function showOpp() {
 
 function getOppList() {
 
-    $('#oppListTable').empty();
+    $('#oppListTableBody').empty();
     var xhr = new XMLHttpRequest();
     xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php',true);
     xhr.onload = function() {
@@ -84,8 +88,8 @@ function getOppList() {
                 var opp = jsonArray.opportunity[i];
                 var row = "<tr><td>" + opp.OpportunityID + "</td><td>" + "<a href='javascript:showOpp()'>" + opp.Name +
                     "</a></td><td>" + opp.ClosingDate + "</td><td>" + opp.Description + "</td></tr>";
-                $('#oppListTable').append(row);
-                $("#oppListTable").trigger("update");
+                $('#oppListTableBody').append(row);
+                $("#oppListTableBody").trigger("update");
             }
         } else {
             alert("Error response");

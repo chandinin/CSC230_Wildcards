@@ -44,14 +44,15 @@
                         <h3 class="my-2 h3">Current Opportunities</h3>
                         <div class="row ">
                             <div class="col-md-9">
-                                    <table class="table table-bordered table-striped">
+                                    <table id="oppListTable" class="table table-bordered table-striped table-hover">
                                         <thead>
                                         <th>Opportunity Id</th>
                                         <th>Opportunity Name</th>
                                         <th>Closing Date/Time</th>
                                         <th>Opportunity Description</th>
+                                        <th>Status</th>
                                         </thead>
-                                        <tbody id="oppListTable">
+                                        <tbody id="oppListTableBody">
                                         </tbody>
                                     </table>
                             </div>
@@ -59,7 +60,12 @@
                 </div>
                     <!--/.List Panel 1-->
 
-                    <h5 id="editOpp" class="my-2 h5" hidden>Edit Opportunity</h5>
+
+
+
+
+
+
                     <!--Create Panel 2-->
                     <div id="newOpp">
                         <h3 id="createOpp" class="my-2 h3">Create Opportunity</h3>
@@ -130,6 +136,86 @@
                         </form>
                     </div>
                     <!--/.Create Panel 2-->
+
+                    <!-- Edit Panel 3 -->
+                <div class="col-md-8 clearfix bid-opportunities" id="editOpp">
+                    <h5 id="editOpp" class="my-2 h5" hidden>Edit Opportunity</h5>
+                    <table id="opDescTable" class="table table-responsive">
+                        <tbody>
+                        <tr>
+                            <th scope="row">Number</th>
+                            <td>2016-8258</td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row">Final Filing Date</th>
+                            <td>01/26/2017 at 3:00 p.m. (Pacific Time)</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Name</th>
+                            <td>Health Open Enrollment Communication Dissemination</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Type</th>
+                            <td>Request for Proposal</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Description</th>
+                            <td>The California Public Employees Retirement System (CalPERS) is soliciting qualified firms for up to a five (5) years service agreement providing production and fulfillment of the Open Enrollment (OE) Communication Dissemination materials.  CalPERS is required to provide members an Open Enrollment period to exercise an informed choice for their health benefit plan.  </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+
+                    <div class="page-header">
+                        <h4>Upload a new document to attach to this opportunity.</h4>
+                        <form>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <div class="custom-file">
+                                        <label class="custom-file-label" for="uploadFileName">Scoring Criteria</label>
+                                        <input id="uploadFileName" type="file" name="uploadFileName">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <button id="uploadFile" type="button" class="btn btn-primary">Upload</button>
+                                    <button id="clearFile" type="button" class="btn btn-primary">Clear</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="">
+                        <h4>Choose existing documents to attach to this opportunity.</h4>
+                        <form>
+                            <table id="" class="table table-responsive">
+                                <thead>
+                                <th scope="col">Include</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">ID</th>
+                                <th scope="col">Description</th>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td><input name="oppDoc" type="checkbox" value="1"> </td>
+                                    <td>Proposal Cover Letter</td>
+                                    <td>Doc-8258</td>
+                                    <td>Letter Vendor to include</td>
+                                </tr>
+                                <tr>
+                                    <td><input name="oppDoc" type="checkbox" value="2"> </td>
+                                    <td>W-9</td>
+                                    <td>Doc-8894</td>
+                                    <td>W-9 Form</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+                <!-- Edit Panel 3 -->
 
                 </div>
             </div>

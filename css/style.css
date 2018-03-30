@@ -3048,3 +3048,21 @@ span.video-duration {
 .navbar.navbar-default.navbar-category .nav.navbar-nav li:last-child a:after {
     width: 0;
 }
+table#oppListTable{
+    border-collapse: collapse;
+}
+/*
+#oppListTableBody tr:hover {
+    background-color: red;
+}
+#oppListTableBody td:hover {
+    cursor: pointer;
+    background-color: red;
+
+}
+*/
+.table-hover > tbody > tr:hover > td,
+.table-hover > tbody > tr:hover > th {
+    background-color: #9fadc4;
+    cursor:pointer;
+}
