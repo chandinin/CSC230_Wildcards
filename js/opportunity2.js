@@ -1,7 +1,11 @@
 $(document).ready(
     function () {
         initNewOppForm();
+        $('#editOppPanel').hide();
         $('#newOppPanel').hide();
+        $('.datepicker').datepicker();
+        $('#listOppPanel').show();
+
         $('#manageOpp').click(function() {
             getOppList();
 
@@ -9,22 +13,19 @@ $(document).ready(
             $("#oppsMenu option[id='opplist']").attr("selected", "selected");
         });
 
-        $('.datepicker').datepicker();
 
         $('#saveNewOpp').click(function() {
             saveOpportunity();
         });
         $('#showNewOpp').click(function (){
             $('#newOppPanel').show();
-            $('#oppListPanel').hide();
+            $('#listOppPanel').hide();
         });
 
-        $('#editOppPanel').hide();
-        $('#oppListPanel').show();
         $('#exitNewOpp').click(function() {
             $('#newOppPanel').hide();
             $('#newOppForm')[0].reset();
-            $("#oppListPanel").show();
+            $("#listOppPanel").show();
         });
 
         $('#clearNewOpp').click(function() {
@@ -36,15 +37,14 @@ $(document).ready(
         });
 
         $('#oppTab').click(function() {
-            ('#oppListButton').click();
+            showOppList();
         });
-        $('#oppListButton').click(function(){
-            $('#newOppPanel').hide();
-            $('#oppListPanel').show();
+        $('.oppListButton').click(function(){
+            showOppList();
         });
 
         $('#editOppButton').click(function() {
-            editOpp();
+            showEditOpp();
         });
 
         $('#exitNewOpp').click(function() {
@@ -53,12 +53,21 @@ $(document).ready(
 
     });
 
-function editOpp() {
-    $('#oppListPanel').hide();
+function showEditOpp() {
+    $('#listOppPanel').hide();
+    $('#newOppPanel').hide();
     $('#editOppPanel').show();
 };
 
+function showNewOpp() {
 
+};
+
+function showOppList() {
+    $('#newOppPanel').hide();
+    $('#editOppPanel').hide();
+    $('#listOppPanel').show();
+};
 
 function saveJunk() {
     $('clearFile').click(function() {
@@ -82,10 +91,10 @@ function getOppList() {
             var size = jsonArray.opportunity.length;
             for(var i=0;i<size;i++) {
                 var opp = jsonArray.opportunity[i];
-                var row = "<tr><td>" + opp.OpportunityID + "</td><td>"  + opp.Name +
+                var row = "<tr><td></td></td><td>" + opp.OpportunityID + "</td><td>"  + opp.Name +
                     "</td><td>" + opp.ClosingDate + "</td><td>" + opp.Description + "</td><td>" +
                     "Status</td><td>" +
-                    "<button onclick='editOpp()' id='editOppButton' value='" + opp.OpportunityID + "' type='button' class='btn btn-primary btn-lg'>" +
+                    "<button onclick='showEditOpp()' id='editOppButton' value='" + opp.OpportunityID + "' type='button' class='btn btn-primary btn-lg'>" +
                     "<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>View</button></td></tr>";
                 $('#oppListTableBody').append(row);
                 $("#oppListTableBody").trigger("update");
