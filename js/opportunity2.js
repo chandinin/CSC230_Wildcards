@@ -1,7 +1,7 @@
 $(document).ready(
     function () {
         initNewOppForm();
-        $('#newOpp').hide();
+        $('#newOppPanel').hide();
         $('#manageOpp').click(function() {
             getOppList();
 
@@ -15,16 +15,16 @@ $(document).ready(
             saveOpportunity();
         });
         $('#showNewOpp').click(function (){
-            $('#newOpp').show();
-            $('#oppList').hide();
+            $('#newOppPanel').show();
+            $('#oppListPanel').hide();
         });
 
-        $('#editOpp').hide();
-        $('#oppList').show();
+        $('#editOppPanel').hide();
+        $('#oppListPanel').show();
         $('#exitNewOpp').click(function() {
-            $('#newOpp').hide();
+            $('#newOppPanel').hide();
             $('#newOppForm')[0].reset();
-            $("#oppList").show();
+            $("#oppListPanel").show();
         });
 
         $('#clearNewOpp').click(function() {
@@ -35,38 +35,34 @@ $(document).ready(
                 showOpp();
         });
 
+        $('#oppTab').click(function() {
+            ('#oppListButton').click();
+        });
+        $('#oppListButton').click(function(){
+            $('#newOppPanel').hide();
+            $('#oppListPanel').show();
+        });
+
+        $('#editOppButton').click(function() {
+            editOpp();
+        });
+
+        $('#exitNewOpp').click(function() {
+            $('#newOppPanel').hide();
+        });
+
     });
+
+function editOpp() {
+    $('#oppListPanel').hide();
+    $('#editOppPanel').show();
+};
+
+
 
 function saveJunk() {
     $('clearFile').click(function() {
 });
-
-    function editOpp() {
-        $('#newOpp').hide();
-        $('#editOpp').show();
-    };
-
-
-    $('#exitNewOpp').click(function() {
-        $('#newOpp').hide();
-        $('#oppButtons').show();
-    });
-
-    //  $('#showEditOpp').hide();  //hiding for 1st pass through
-    $('#showEditOpp').click(function() {
-        $('#editOpp').show();
-        $('#oppButtons').hide();
-    });
-
-    $("div.bhoechie-tab-menu>div.list-group>a").click(function(e) {
-        e.preventDefault();
-        $(this).siblings('a.active').removeClass("active");
-        $(this).addClass("active");
-        var index = $(this).index();
-        $("div.bhoechie-tab>div.bhoechie-tab-content").removeClass("active");
-        $("div.bhoechie-tab>div.bhoechie-tab-content").eq(index).addClass("active");
-    });
-
 }
 
 function showOpp() {
@@ -86,10 +82,14 @@ function getOppList() {
             var size = jsonArray.opportunity.length;
             for(var i=0;i<size;i++) {
                 var opp = jsonArray.opportunity[i];
-                var row = "<tr><td>" + opp.OpportunityID + "</td><td>" + "<a href='javascript:showOpp()'>" + opp.Name +
-                    "</a></td><td>" + opp.ClosingDate + "</td><td>" + opp.Description + "</td></tr>";
+                var row = "<tr><td>" + opp.OpportunityID + "</td><td>"  + opp.Name +
+                    "</td><td>" + opp.ClosingDate + "</td><td>" + opp.Description + "</td><td>" +
+                    "Status</td><td>" +
+                    "<button onclick='editOpp()' id='editOppButton' value='" + opp.OpportunityID + "' type='button' class='btn btn-primary btn-lg'>" +
+                    "<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>View</button></td></tr>";
                 $('#oppListTableBody').append(row);
                 $("#oppListTableBody").trigger("update");
+
             }
         } else {
             alert("Error response");

@@ -61,7 +61,9 @@ function getOppList() {
             for(var i=0;i<size;i++) {
                 var opp = jsonArray.opportunity[i];
                 var row = "<tr><td>" + opp.OpportunityID + "</td><td>" + "<a href='javascript:showOpp()'>" + opp.Name +
-                    "</a></td><td>" + opp.ClosingDate + "</td><td>" + opp.Description + "</td></tr>";
+                    "</a></td><td>" + opp.ClosingDate + "</td><td>" + opp.Description + "</td><td>" +
+                    "<button id='showNewOpp' value='" + opp.OpportunityID + "' type='button' class='btn btn-primary btn-lg'>" +
+                    "<span class='glyphicon glyphicon-plus' aria-hidden='true'></span>Edit</button></td></tr>";
                 $('#oppListTable').append(row);
             }
         } else {

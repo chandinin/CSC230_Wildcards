@@ -11,15 +11,15 @@
 <!-- Nav tabs -->
 <ul class="nav nav-tabs nav-justified indigo" role="tablist">
     <li class="nav-item">
-        <a class="nav-link"  data-toggle="tab" href="#panel1" role="tab">
+        <a id="oppTab" class="nav-link"  data-toggle="tab" href="#panel1" role="tab">
             <i class="fa fa-user"></i> Opportunities</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#panel2" role="tab">
+        <a id="acctTabl" class="nav-link" data-toggle="tab" href="#panel2" role="tab">
             <i class="fa fa-heart"></i> Accounts</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#panel3" role="tab">
+        <a id="bidTab" class="nav-link" data-toggle="tab" href="#panel3" role="tab">
             <i class="fa fa-heart"></i> Bidders</a>
     </li>
 </ul>
@@ -31,17 +31,24 @@
         <!-- Nav tabs -->
         <div class="row">
 
-            <div class="col-md-9">
+            <div class="col-md-12">
                 <!-- Opportunity Tab panels -->
                 <!--
                 <button id="showNewOpp" type="button" class="btn btn-primary">Create New Opportunity</button>
                 -->
-                <div id="oppList" class="tab-content vertical">
-                    <button id="showNewOpp" type="button" class="btn btn-primary btn-lg">
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>New
-                    </button>
+                <div id="oppListPanel" class="tab-content vertical">
+
                     <!--List Panel 1-->
-                        <h3 class="my-2 h3">Current Opportunities</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h3 class="my-2 h3">Current Opportunities</h3>
+                            </div>
+                            <div class="col-md-3">
+                                <button id="showNewOpp" type="button" class="btn btn-success btn-lg">
+                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New
+                                </button>
+                            </div>
+                        </div>
                         <div class="row ">
                             <div class="col-md-9">
                                     <table id="oppListTable" class="table table-bordered table-striped table-hover">
@@ -51,6 +58,7 @@
                                         <th>Closing Date/Time</th>
                                         <th>Opportunity Description</th>
                                         <th>Status</th>
+                                        <th></th>
                                         </thead>
                                         <tbody id="oppListTableBody">
                                         </tbody>
@@ -59,16 +67,18 @@
                     </div>
                 </div>
                     <!--/.List Panel 1-->
-
-
-
-
-
-
-
                     <!--Create Panel 2-->
-                    <div id="newOpp">
-                        <h3 id="createOpp" class="my-2 h3">Create Opportunity</h3>
+                    <div id="newOppPanel">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h3 class="my-2 h3">Create Opportunity</h3>
+                            </div>
+                            <div class="col-md-3">
+                                <button id="oppListButton" type="button" class="btn btn-success btn-lg">
+                                    <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Show List
+                                </button>
+                            </div>
+                        </div>
                         <form id="newOppForm">
                             <div class="form-group">
                                 <label for="formId">Opportunity Id</label>
@@ -138,8 +148,8 @@
                     <!--/.Create Panel 2-->
 
                     <!-- Edit Panel 3 -->
-                <div class="col-md-8 clearfix bid-opportunities" id="editOpp">
-                    <h5 id="editOpp" class="my-2 h5" hidden>Edit Opportunity</h5>
+                <div class="col-md-8 clearfix bid-opportunities" id="editOppPanel">
+                    <h5 id="editOppPanel" class="my-2 h5" hidden>Edit Opportunity</h5>
                     <table id="opDescTable" class="table table-responsive">
                         <tbody>
                         <tr>
