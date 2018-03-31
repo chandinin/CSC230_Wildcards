@@ -8,6 +8,8 @@ header('Content-Type: application/json');
 include_once '../config/Database.php';
 include_once '../objects/opportunity.php';
 
+date_default_timezone_set('America/Tijuana');
+
 $database = new Database();
 $db = $database->Connect();
 
@@ -19,8 +21,11 @@ $data = json_decode(file_get_contents("php://input"));
 if(json_last_error() === JSON_ERROR_NONE)
 {
   $opportunity->OpportunityID = $data->OpportunityID;
-  $opportunity->ClosingDate =$data->ClosingDate;
-  $opportunity->ScoringCategoryBlob = $data->ScoringCategoryBlob;
+
+  $ClosingDate = htmlspecialchars(strip_tags($data->ClosingDate));
+  $date = new DateTime($ClosingDate);
+  $opportunity->ClosingDate = $date->format('Y-m-d H:i:s');
+
   $opportunity->LeadEvaluatorID = $data->LeadEvaluatorID;
   $opportunity->Name = $data->Name;
   $opportunity->LowestBid = $data->LowestBid;
@@ -54,15 +59,16 @@ else
     {
       $ClosingDate = $_POST_LowerCase["closingdate"];
       $ClosingDate = htmlspecialchars(strip_tags($ClosingDate));
-      $opportunity->ClosingDate =$ClosingDate;
+      $date = new DateTime($ClosingDate);
+      $opportunity->ClosingDate = $date->format('Y-m-d H:i:s');
     }
 
-    if(isSet($_POST_LowerCase["scoringcategoryblob"]))
-    {
-      $ScoringCategoryBlob = $_POST_LowerCase["scoringcategoryblob"];
-      $ScoringCategoryBlob = htmlspecialchars(strip_tags($ScoringCategoryBlob));
-      $opportunity->ScoringCategoryBlob = $ScoringCategoryBlob;
-    }
+    //if(isSet($_POST_LowerCase["scoringcategoryblob"]))
+    //{
+    //  $ScoringCategoryBlob = $_POST_LowerCase["scoringcategoryblob"];
+    //  $ScoringCategoryBlob = htmlspecialchars(strip_tags($ScoringCategoryBlob));
+    //  $opportunity->ScoringCategoryBlob = $ScoringCategoryBlob;
+    //}
 
     if(isSet($_POST_LowerCase["leadevaluatorid"]))
     {
@@ -113,6 +119,4 @@ else
   }
 }
 ?>
-
-
 

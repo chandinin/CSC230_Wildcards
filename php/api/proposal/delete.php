@@ -6,34 +6,34 @@ header("Access-Control-Allow-Credentials: true");
 header('Content-Type: application/json');
 
 include_once '../config/Database.php';
-include_once '../objects/employee.php';
+include_once '../objects/proposal.php';
 
 $database = new Database();
 $db = $database->Connect();
 
 // prepare to retrieve bidder data by instantiate the Bidder.
-$employee = new Employee($db);
+$proposal = new Proposal($db);
 
-// get employeeID from POST
+// get proposalID from POST
 $_POST_LowerCase = array_change_key_case($_POST, CASE_LOWER);
-if(isSet($_POST_LowerCase["employeeid"]))
+if(isSet($_POST_LowerCase["proposalid"]))
 {
-  $employeeID = $_POST_LowerCase["employeeid"];
+  $proposalID = $_POST_LowerCase["proposalid"];
 
   //Search
-  $employee->id = $employeeID;
+  $proposal->selectByID($proposalID);
 
   //delete bidder.
-  if($employee->delete())
+  if($proposal->delete())
   {  
     echo '{';
-    echo ' message : "Delete suceeded.  Record(EmployeeID='.$employeeID.')"';
+       echo ' message : "Delete suceeded. (proposalID = ' . $proposalID . ')"';
     echo '}';
   }
   else
   {
     echo '{';
-    echo ' message : "Delete failed.  Record(EmployeeID='.$employeeID.')"';
+       echo ' message : "Delete failed."';
     echo '}';
   }
 }

@@ -26,7 +26,7 @@ if(isSet($_POST_LowerCase["opportunityid"]))
   $opportunity_arr = array(
     "OpportunityID" =>  $opportunity->OpportunityID,
     "ClosingDate" =>  $opportunity->ClosingDate,
-    "ScoringCategoryBlob" =>  $opportunity->ScoringCategoryBlob,
+    //"ScoringCategoryBlob" =>  $opportunity->ScoringCategoryBlob,
     "LeadEvaluatorID" =>  $opportunity->LeadEvaluatorID,
     "Name" =>  $opportunity->Name,
     "LowestBid" =>  $opportunity->LowestBid,
@@ -53,7 +53,7 @@ else
       $opportunity_arr = array(
           "OpportunityID" => $row['OpportunityID'],
           "ClosingDate" => $row['ClosingDate'],
-          "ScoringCategoryBlob" => $row['ScoringCategoryBlob'],
+          //"ScoringCategoryBlob" => $row['ScoringCategoryBlob'],
           "LeadEvaluatorID" => $row['LeadEvaluatorID'],
           "Name" => $row['Name'],
           "LowestBid" => $row['LowestBid'],
