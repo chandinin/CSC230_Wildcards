@@ -11,7 +11,7 @@
 <!-- Nav tabs -->
 <ul class="nav nav-tabs nav-justified indigo" role="tablist">
     <li class="nav-item">
-        <a id="oppTab" class="nav-link"  data-toggle="tab" href="#panel1" role="tab">
+        <a id="oppTab" class="nav-link" data-toggle="tab" href="#panel1" role="tab">
             <i class="fa fa-user"></i> Opportunities</a>
     </li>
     <li class="nav-item">
@@ -39,116 +39,109 @@
                 <div id="listOppPanel" class="tab-content vertical">
 
                     <!--List Panel 1-->
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h3 class="my-2 h3">Current Opportunities</h3>
-                            </div>
-                            <div class="col-md-3">
-                                <button id="showNewOpp" type="button" class="btn btn-success btn-lg">
-                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New
-                                </button>
-                            </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h3 class="my-2 h3">Current Opportunities</h3>
                         </div>
-                        <div class="row ">
-                            <div class="col-md-9">
-                                    <table id="oppListTable" class="table table-bordered table-striped table-hover">
-                                        <thead>
-                                        <th>Category</th>
-                                        <th>Opportunity Id</th>
-                                        <th>Opportunity Name</th>
-                                        <th>Closing Date/Time</th>
-                                        <th>Opportunity Description</th>
-                                        <th>Status</th>
-                                        <th></th>
-                                        </thead>
-                                        <tbody id="oppListTableBody">
-                                        </tbody>
-                                    </table>
-                            </div>
+                        <div class="col-md-3">
+                            <button id="showNewOpp" type="button" class="btn btn-success btn-lg">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="col-md-9">
+                            <table id="oppListTable" class="table table-bordered table-striped table-hover">
+                                <thead>
+                                <th>Category</th>
+                                <th>Opportunity Id</th>
+                                <th>Opportunity Name</th>
+                                <th>Closing Date/Time</th>
+                                <th>Opportunity Description</th>
+                                <th>Status</th>
+                                <th></th>
+                                </thead>
+                                <tbody id="oppListTableBody">
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-                    <!--/.List Panel 1-->
-                    <!--Create Panel 2-->
-                    <div id="newOppPanel">
+                <!--/.List Panel 1-->
+                <!--Create Panel 2-->
+                <div id="newOppPanel1">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h3 class="my-2 h3">Create Opportunity</h3>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="button" class="btn btn-success btn-lg oppListButton">
+                                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Show List
+                            </button>
+                        </div>
+                    </div>
+                    <form id="newOppForm">
+                        <div class="form-group">
+                            <label for="formId">Opportunity Id</label>
+                            <input type="text" size="10" class="form-control" id="formIdInput"
+                                   placeholder="Opportunity Id" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="formName">Name</label>
+                            <input type="text" size="20" class="form-control" id="formNameInput"
+                                   placeholder="Opportunity Name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="formDescription">Description</label>
+                            <textarea class="form-control" id="formDescriptionInput" rows="4"
+                                      placeholder="Describe the opportunity." required></textarea>
+                        </div>
+
                         <div class="row">
-                            <div class="col-md-6">
-                                <h3 class="my-2 h3">Create Opportunity</h3>
+                            <div class="col-sm-6">
+                                <label for="close_date">Closing Date</label>
+                                <input type="date" class="" id="close_date" placeholder="mm/dd/yyyy" name="close_date"/>
                             </div>
-                            <div class="col-md-3">
-                                <button type="button" class="btn btn-success btn-lg oppListButton">
-                                    <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Show List
-                                </button>
+                            <div class="col-sm-6">
+                                <label for="close_time">Closing Time</label>
+                                <input type="time" class="" id="close_time" value="15:00" name="close_time"/>
                             </div>
                         </div>
-                        <form id="newOppForm">
-                            <div class="form-group">
-                                <label for="formId">Opportunity Id</label>
-                                <input type="text" size="10" class="form-control" id="formIdInput" placeholder="Opportunity Id" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="formName">Name</label>
-                                <input type="text" size="20" class="form-control" id="formNameInput" placeholder="Opportunity Name" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="formDescription">Description</label>
-                                <textarea class="form-control" id="formDescriptionInput" rows="4" placeholder="Describe the opportunity." required></textarea>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <label for="close_date">Closing Date</label>
-                                    <input type="date" class="" id="close_date" placeholder="mm/dd/yyyy" name="close_date"/>
-                                </div>
-                                <div class="col-sm-6">
-                                    <label for="close_time">Closing Time</label>
-                                    <input type="time" class="" id="close_time" value="15:00" name="close_time"/>
-                                </div>
-                            </div>
                         </br>
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label class="my-1 mr-2" for="selectLead">Lead Evaluator</label>
-                                        <select class="custom-select my-1 mr-sm-2" id="selectLead" name="lead" required>
-                                            <option>Choose...</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-8">
-                                    <div class="form-group">
-                                        <div class="custom-file">
-                                            <label class="my-1 mr-2" for="criteriaFile">Scoring Criteria</label>
-                                            <input id="criteriaFile" type="file" name="criteriaFile">
-                                        </div>
-                                    </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="my-1 mr-2" for="selectLead">Lead Evaluator</label>
+                                    <select class="custom-select my-1 mr-sm-2" id="selectLead" name="lead" required>
+                                        <option>Choose...</option>
+                                    </select>
                                 </div>
                             </div>
 
-                            <div class="page-header">
-                                <h4>Upload  multiple new documents</h4>
-                                <div class="">
-                                    <div class="form-group">
-                                        <div class="custom-file">
-                                            <label class="my-1 mr-2" for="uploadMFileName">New Document Upload</label>
-                                            <input id="uploadMFileName" type="file" name="uploadMFileName" multiple>
-                                        </div>
+                            <div class="col-sm-8">
+                                <div class="form-group">
+                                    <div class="custom-file">
+                                        <label class="my-1 mr-2" for="criteriaFile">Scoring Criteria</label>
+                                        <input id="criteriaFile" type="file" name="criteriaFile">
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="form-group">
+                            <button id="saveNewOpp" type="button" class="btn btn-primary">Save</button>
+                            <button id="clearNewOpp" type="button" class="btn btn-primary">Clear Form</button>
+                            <button id="exitNewOpp" type="button" class="btn btn-primary">Exit</button>
+                        </div>
 
-                            <div class="form-group">
-                                <button id="saveNewOpp" type="submit" class="btn btn-primary">Save</button>
-                                <button id="clearNewOpp" type="button" class="btn btn-primary">Clear Form</button>
-                                <button id="exitNewOpp" type="button" class="btn btn-primary">Exit</button>
-                            </div>
-                        </form>
-                    </div>
-                    <!--/.Create Panel 2-->
 
-                    <!-- Edit Panel 3 -->
+
+                    </form>
+                </div>
+                <!--/.Create Panel 2-->
+
+                <!-- Edit Panel 3 -->
                 <div class="col-md-8 clearfix bid-opportunities" id="editOppPanel">
                     <div class="row">
                         <div class="col-md-6">
@@ -156,7 +149,7 @@
                         </div>
                         <div class="col-md-3">
                             <button type="button" class="btn btn-success btn-lg oppListButton">
-                                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> List Opportunities
+                                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Show List
                             </button>
                         </div>
                     </div>
@@ -181,22 +174,29 @@
                         </tr>
                         <tr>
                             <th scope="row">Description</th>
-                            <td>The California Public Employees Retirement System (CalPERS) is soliciting qualified firms for up to a five (5) years service agreement providing production and fulfillment of the Open Enrollment (OE) Communication Dissemination materials.  CalPERS is required to provide members an Open Enrollment period to exercise an informed choice for their health benefit plan.  </td>
+                            <td>The California Public Employees Retirement System (CalPERS) is soliciting qualified
+                                firms for up to a five (5) years service agreement providing production and fulfillment
+                                of the Open Enrollment (OE) Communication Dissemination materials. CalPERS is required
+                                to provide members an Open Enrollment period to exercise an informed choice for their
+                                health benefit plan.
+                            </td>
                         </tr>
                         </tbody>
                     </table>
 
 
                     <div class="page-header">
-                        <h4>Upload a new document to attach to this opportunity.</h4>
-                        <form>
+                        <form id="uploadDocTemplatesForm" >
                             <div class="col-12">
-                                <div class="form-group">
-                                    <div class="custom-file">
-                                        <label class="custom-file-label" for="uploadFileName">Scoring Criteria</label>
-                                        <input id="uploadFileName" type="file" name="uploadFileName">
+                                    <h4>Upload more documents for this opportunity</h4>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <div class="custom-file">
+                                                <label class="my-1 mr-2" for="uploadMFileName">New Document Upload</label>
+                                                <input id="uploadMFileName" type="file" name="uploadMFileName" multiple>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
                             </div>
 
                             <div class="col-12">
@@ -207,29 +207,16 @@
                             </div>
                         </form>
                     </div>
-                    <div class="">
-                        <h4>Choose existing documents to attach to this opportunity.</h4>
+                    <div class="col-12">
+                        <h4>Existing documents attached to this opportunity.</h4>
                         <form>
-                            <table id="" class="table table-responsive">
+                            <table id="listDocTemplates" class="table table-responsive">
                                 <thead>
-                                <th scope="col">Include</th>
                                 <th scope="col">Name</th>
-                                <th scope="col">ID</th>
-                                <th scope="col">Description</th>
+                                <th scope="col">Action</th>
                                 </thead>
-                                <tbody>
-                                <tr>
-                                    <td><input name="oppDoc" type="checkbox" value="1"> </td>
-                                    <td>Proposal Cover Letter</td>
-                                    <td>Doc-8258</td>
-                                    <td>Letter Vendor to include</td>
-                                </tr>
-                                <tr>
-                                    <td><input name="oppDoc" type="checkbox" value="2"> </td>
-                                    <td>W-9</td>
-                                    <td>Doc-8894</td>
-                                    <td>W-9 Form</td>
-                                </tr>
+                                <tbody id="docTemplatesBody" class="table table-bordered table-striped table-hover" >
+
                                 </tbody>
                             </table>
                         </form>
@@ -237,25 +224,30 @@
                 </div>
                 <!-- Edit Panel 3 -->
 
-                </div>
             </div>
         </div>
-        <!-- Nav tabs -->
+    </div>
+    <!-- Nav tabs -->
     <!--/.Opportunity Panel 1-->
     <!--Accounts Panel 2-->
     <div class="tab-pane fade" id="panel2" role="tabpanel">
         <br>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil odit magnam minima, soluta doloribus reiciendis molestiae
-            placeat unde eos molestias. Quisquam aperiam, pariatur. Tempora, placeat ratione porro voluptate odit minima.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil odit magnam minima, soluta doloribus reiciendis molestiae
-            placeat unde eos molestias. Quisquam aperiam, pariatur. Tempora, placeat ratione porro voluptate odit minima.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil odit magnam minima, soluta doloribus
+            reiciendis molestiae
+            placeat unde eos molestias. Quisquam aperiam, pariatur. Tempora, placeat ratione porro voluptate odit
+            minima.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil odit magnam minima, soluta doloribus
+            reiciendis molestiae
+            placeat unde eos molestias. Quisquam aperiam, pariatur. Tempora, placeat ratione porro voluptate odit
+            minima.</p>
     </div>
     <!--/.Accounts Panel 2-->
     <!--Bidders Panel 3-->
     <div class="tab-pane fade" id="panel3" role="tabpanel">
         <br>
         <p>Blah Blahll.</p>
-        <p>    placeat unde eos molestias. Quisquam aperiam, pariatur. Tempora, placeat ratione porro voluptate odit minima.</p>
+        <p> placeat unde eos molestias. Quisquam aperiam, pariatur. Tempora, placeat ratione porro voluptate odit
+            minima.</p>
     </div>
     <!--/.Bidders Panel 2-->
 </div>
@@ -263,9 +255,9 @@
 </body>
 <link rel="stylesheet" href="js/MDB Free/css/bootstrap.css">
 <link rel="stylesheet" href="js/MDB Free/css/mdb.css">
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/bootstrap.min.css" />
+<link rel="stylesheet" href="css/bootstrap.min.css"/>
 <link rel="stylesheet" href="css/bootstrap-datepicker.css">
+<link rel="stylesheet" href="css/style.css">
 <script src="js/MDB Free/js/jquery-3.2.1.min.js"></script>
 <script src="js/MDB Free/js/bootstrap.js"></script>
 <script src="js/MDB Free/js/popper.min.js"></script>
