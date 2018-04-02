@@ -23,8 +23,6 @@ class DocTemplate
   function selectByOppID($opportunityID)
   {
     $query = "select DocTemplateID, DocTitle, `Path`, `Blob` from DocTemplate where DocTemplateID in (select DocTemplateID from OppDocTemplate where OpportunityID = ? );";
-
-//echo $query;
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
