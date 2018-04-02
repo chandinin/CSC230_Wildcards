@@ -15,10 +15,14 @@ $db = $database->Connect();
 $opportunity = new Opportunity($db);
 
 // get opportunityID from POST
+$_GET_LowerCase = array_change_key_case($_GET, CASE_LOWER);
 $_POST_LowerCase = array_change_key_case($_POST, CASE_LOWER);
-if(isSet($_POST_LowerCase["opportunityid"]))
+if(isSet($_POST_LowerCase["opportunityid"])
+|| isSet($_GET_LowerCase["opportunityid"]))
 {
-  $opportunityID = $_POST_LowerCase["opportunityid"];
+  //$opportunityID = $_POST_LowerCase["opportunityid"];
+  $opportunityID = isSet($_GET_LowerCase["opportunityid"]) ?
+     $_GET_LowerCase["opportunityid"] : $_POST_LowerCase["opportunityid"];
 
   //Search
   $opportunity->selectByID($opportunityID);
