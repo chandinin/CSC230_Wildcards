@@ -2,9 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="143ccf83-bc51-4c5e-a3ee-f556d890400c" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Opportunity_tab.html" beforeDir="false" afterPath="$PROJECT_DIR$/Opportunity_tab.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bidder_login.html" beforeDir="false" afterPath="$PROJECT_DIR$/bidder_login.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/employee_login.html" beforeDir="false" afterPath="$PROJECT_DIR$/employee_login.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/employee_login.js" beforeDir="false" afterPath="$PROJECT_DIR$/employee_login.js" afterDir="false" />
     </list>
@@ -17,11 +14,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="employee_login.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="employee_login.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/employee_login.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="140" column="57" selection-start-line="140" selection-start-column="51" selection-end-line="140" selection-end-column="57" />
+            <state relative-caret-position="578">
+              <caret line="139" column="78" lean-forward="true" selection-start-line="139" selection-start-column="78" selection-end-line="139" selection-end-column="78" />
               <folding>
                 <element signature="n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" />
                 <element signature="n#style#0;n#select#0;n#div#1;n#div#0;n#div#0;n#div#0;n#form#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -30,11 +27,25 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="employee_login.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="bidder_login.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bidder_login.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="129">
+              <caret line="125" column="17" lean-forward="true" selection-start-line="125" selection-start-column="17" selection-end-line="125" selection-end-column="17" />
+              <folding>
+                <element signature="n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" />
+                <element signature="n#div#2;n#div#0;n#body#0;n#html#0;n#!!top" />
+                <element signature="n#style#0;n#h2#0;n#div#2;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="employee_login.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/employee_login.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="489">
-              <caret line="38" lean-forward="true" selection-start-line="38" selection-end-line="38" />
+            <state relative-caret-position="459">
+              <caret line="47" column="74" lean-forward="true" selection-start-line="47" selection-start-column="74" selection-end-line="47" selection-end-column="74" />
             </state>
           </provider>
         </entry>
@@ -79,16 +90,16 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find />
+      <find>Register for</find>
       <find>register</find>
       <find>email</find>
-      <find />
+      <find>Bid Opportunities</find>
       <find>bidderlogin</find>
       <find>password</find>
       <find>BidderLoginAction</find>
-      <find />
-      <find />
-      <find />
+      <find>calpers sta</find>
+      <find>Log in</find>
+      <find>Bidder loh</find>
       <find>js</find>
       <find>font-size</find>
       <find>loginform</find>
@@ -154,8 +165,8 @@
         <option value="$PROJECT_DIR$/css/style.css" />
         <option value="$PROJECT_DIR$/bidder_login.html" />
         <option value="$PROJECT_DIR$/Opportunity_tab.html" />
-        <option value="$PROJECT_DIR$/employee_login.js" />
         <option value="$PROJECT_DIR$/employee_login.html" />
+        <option value="$PROJECT_DIR$/employee_login.js" />
       </list>
     </option>
   </component>
@@ -241,7 +252,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JavaScript Debug.Opportunity_orig.html">
+  <component name="RunManager" selected="JavaScript Debug.employee_login.html">
     <configuration name="Opportunity.html" type="JavascriptDebugType" factoryName="JavaScript Debug" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/Opportunity.html" />
     <configuration name="Opportunity_orig.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/Opportunity_orig.html" />
     <configuration name="Opportunity_tab.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/Opportunity_tab.html" />
@@ -251,8 +262,8 @@
     <configuration name="bidder_register.html" type="JavascriptDebugType" factoryName="JavaScript Debug" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/bidder_register.html" />
     <configuration name="bidops_template.html" type="JavascriptDebugType" factoryName="JavaScript Debug" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/bidops_template.html" />
     <configuration name="employee_login.html" type="JavascriptDebugType" factoryName="JavaScript Debug" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/employee_login.html" />
-    <configuration name="home_page.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/home_page.html" />
     <configuration name="opportunity_detail.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/opportunity_detail.html" />
+    <configuration name="employee_login.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" nameIsGenerated="true" path-to-js-file="employee_login.js" working-dir="$PROJECT_DIR$" />
     <list>
       <item itemvalue="JavaScript Debug.bidder_login.html" />
       <item itemvalue="JavaScript Debug.bidder_register.html" />
@@ -260,18 +271,18 @@
       <item itemvalue="JavaScript Debug.bidops_template.html" />
       <item itemvalue="JavaScript Debug.employee_login.html" />
       <item itemvalue="JavaScript Debug.bidder_landing.html" />
-      <item itemvalue="JavaScript Debug.home_page.html" />
       <item itemvalue="JavaScript Debug.opportunity_detail.html" />
       <item itemvalue="JavaScript Debug.Opportunity_tab.html" />
       <item itemvalue="JavaScript Debug.Opportunity_orig.html" />
+      <item itemvalue="Node.js.employee_login.js" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Node.js.employee_login.js" />
         <item itemvalue="JavaScript Debug.Opportunity_orig.html" />
         <item itemvalue="JavaScript Debug.Opportunity_tab.html" />
         <item itemvalue="JavaScript Debug.opportunity_detail.html" />
         <item itemvalue="JavaScript Debug.bidder_landing.html" />
-        <item itemvalue="JavaScript Debug.home_page.html" />
       </list>
     </recent_temporary>
   </component>
@@ -299,15 +310,15 @@
       <workItem from="1521694488818" duration="11797000" />
       <workItem from="1521952699501" duration="17959000" />
       <workItem from="1522620466739" duration="3536000" />
-      <workItem from="1522637310026" duration="954000" />
+      <workItem from="1522637310026" duration="4839000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="87305000" />
+    <option name="totallyTimeSpent" value="91190000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1928" y="-8" width="1936" height="1066" extended-state="7" />
+    <frame x="-1928" y="-8" width="1936" height="1066" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -316,10 +327,10 @@
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.18796198" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32946146" />
       <window_info anchor="bottom" id="Terminal" order="9" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14322917" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14322917" />
       <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="3" />
-      <window_info active="true" anchor="bottom" id="Find" order="1" visible="true" weight="0.3291536" />
+      <window_info anchor="bottom" id="Find" order="1" visible="true" weight="0.3291536" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
@@ -619,13 +630,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bidder_login.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="350">
-          <caret line="138" column="18" lean-forward="true" selection-start-line="138" selection-start-column="18" selection-end-line="138" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Opportunity_tab.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="395">
@@ -654,21 +658,33 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/employee_login.js">
+    <entry file="file://$PROJECT_DIR$/bidder_login.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="489">
-          <caret line="38" lean-forward="true" selection-start-line="38" selection-end-line="38" />
+        <state relative-caret-position="129">
+          <caret line="125" column="17" lean-forward="true" selection-start-line="125" selection-start-column="17" selection-end-line="125" selection-end-column="17" />
+          <folding>
+            <element signature="n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" />
+            <element signature="n#div#2;n#div#0;n#body#0;n#html#0;n#!!top" />
+            <element signature="n#style#0;n#h2#0;n#div#2;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/employee_login.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="140" column="57" selection-start-line="140" selection-start-column="51" selection-end-line="140" selection-end-column="57" />
+        <state relative-caret-position="578">
+          <caret line="139" column="78" lean-forward="true" selection-start-line="139" selection-start-column="78" selection-end-line="139" selection-end-column="78" />
           <folding>
             <element signature="n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" />
             <element signature="n#style#0;n#select#0;n#div#1;n#div#0;n#div#0;n#div#0;n#form#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/employee_login.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="47" column="74" lean-forward="true" selection-start-line="47" selection-start-column="74" selection-end-line="47" selection-end-column="74" />
         </state>
       </provider>
     </entry>
