@@ -1,3 +1,9 @@
+$(document).ready(function () {
+    $("#locationSelect").change(function () {
+        $("#displayText").html($(this).val());
+    });
+});
+
 function EmployeeLoginAction() {
 
     var username = document.getElementById("username").value;

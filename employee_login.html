@@ -45,6 +45,8 @@
 <body>
 
 <div id="page" class="single">
+
+    <!-- Logo-->
     <div class="navbar navbar-default navbar-static-top navbar-global">
         <div class="container relative">
             <!-- Skip to content link for Screen readers and keyboard users only -->
@@ -103,22 +105,8 @@
             </div>
         </div>
     </div>
-    <div id="header"><!-- start header -->
-        <div id="skipTo">
-            Skip to:
-            <a href="#content">Content</a> |
-            <a href="#footer">Footer</a>
-        </div>
-        <div id="controls">
-            <div>
-                <a href="https://www.calpers.ca.gov/page/contact" title="Opens in a new window" target="_blank">Contact
-                    Us</a> |
-                <a href="http://www.calpers.ca.gov" title="Opens in a new window" target="_blank">CalPERS</a>
-            </div>
-        </div>
 
-    </div><!-- end header -->
-
+    <!--Glyphicon home-->
     <div class="navbar navbar-inverse navbar-static-top navbar-tab">
         <div class="container">
             <div class="navbar-header">
@@ -128,7 +116,6 @@
                 <ul class="nav navbar-nav">
                     <li class=""><a href="home_page.html"><span class="glyphicon glyphicon-home hidden-xs"
                                                                 aria-hidden="true"> </span> Home</a>
-
                 </ul>
             </div>
         </div>
@@ -136,32 +123,39 @@
 
     <!--<form id="loginForm" name="loginForm" onSubmit="return EmployeeLoginAction(this)" autocomplete="off">-->
     <form action="#" method="post" id="employeelogin_formid" name="employeelogin_formname" class="employeelogin_formclass" autocomplete="off">
-        <div id="leftLogin">
-            <div class="grid ">
-                <h2>Welcome to CalPERS</h2>
-            </div>
-        </div>
-        <div id="rightLogin">
-            <div class="container1">
-                <div class="grid1 grid gridbr ">
-                    <div id="bidopslogin"><h1>Bidops Log In</h1>
-                    </div>
-                    <br/>
-                    <label for="username" id="usernameLbl">Username <span
-                            class="required">(required)</span></label>
-                    <input id="username" name="username" type="text" value="" size="24" maxlength="35"/>
-                    <p></p>
-                    <label for="password" id="passwordLbl">Password <span
-                            class="required">(required)</span></label>
-                    <input id="password" name="password" type="password" value="" size="24" maxlength="35"/>
+            <div>
+                <div>
+                    <div align = "center">
+                        <div id="bidopslogin"><h1>Bidops Log In</h1>
+                        </div>
+                        <br/>
+                        <label align ="left" for="username" id="usernameLbl">Username <span
+                                class="required">(required)</span></label><br>
+                        <input id="username" name="username" type="text" value="" size="24" maxlength="35"/>
+                        <p></p>
+
+                            <div class="form-group">
+                                <label class="my-1 mr-2" for="selectRole">Role</label><br>
+                                <select id="selectRole" name="role" required style="width: 200px">
+                                    <option>Choose...</option>
+                                    <option value="author">Author</option>
+                                    <option value="eval1">Evaluator 1</option>
+                                    <option value="eval2">Evaluator 2</option>
+                                </select>
+                            </div>
+
+                        <p></p>
+                        <label for="password" id="passwordLbl">Password <span
+                                class="required">(required)</span></label><br>
+                        <input id="password" name="password" type="password" value="" size="24" maxlength="35"/>
+                        </div>
+                    <br>
                 </div>
             </div>
-            <div class="grid10 grid gridbr ">
+            <div align="center">
                 <input type="button" name="submit_id" id="btn_id" value="Continue" class="mainButton" onclick="EmployeeLoginAction()"/>
                 <div class="clear"></div>
             </div>
-            <hr/>
-        </div>
     </form>
 </div>
 

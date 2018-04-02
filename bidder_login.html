@@ -45,6 +45,7 @@
 <body>
 
 <div id="page" class="single">
+    <!--logo-->
     <div class="navbar navbar-default navbar-static-top navbar-global">
         <div class="container relative">
             <!-- Skip to content link for Screen readers and keyboard users only -->
@@ -103,22 +104,8 @@
             </div>
         </div>
     </div>
-    <div id="header"><!-- start header -->
-        <div id="skipTo">
-            Skip to:
-            <a href="#content">Content</a> |
-            <a href="#footer">Footer</a>
-        </div>
-        <div id="controls">
-            <div>
-                <a href="https://www.calpers.ca.gov/page/contact" title="Opens in a new window" target="_blank">Contact
-                    Us</a> |
-                <a href="http://www.calpers.ca.gov" title="Opens in a new window" target="_blank">CalPERS</a>
-            </div>
-        </div>
 
-    </div><!-- end header -->
-
+    <!--glyphicon list-->
     <div class="navbar navbar-inverse navbar-static-top navbar-tab">
         <div class="container">
             <div class="navbar-header">
@@ -135,50 +122,38 @@
     </div>
 
     <form action="#" method="post" id="bidderlogin_formid" name="bidderlogin_formname" class="bidderlogin_formclass" autocomplete="off">
-        <div id="leftLogin">
-            <div class="grid ">
-                <h2>Welcome to CalPERS</h2>
-            </div>
-        </div>
-        <div id="rightLogin">
-            <div class="container1">
-                <div class="grid1 grid gridbr ">
+        <div>
+            <div>
+                    <div align="center">
                     <div id="newUser"><h1>Bidder Log In</h1></div>
                     <br/>
                     <label for="username" id="usernameLbl">Username <span
-                            class="required">(required)</span></label>
+                            class="required">(required)</span></label><br>
                     <input id="username" name="username" type="text" value="" size="24" maxlength="35"/>
                     <p></p>
                     <label for="password" id="passwordLbl">Password <span
-                            class="required">(required)</span></label>
+                            class="required">(required)</span></label><br>
                     <input id="password" name="password" type="password" value="" size="24" maxlength="35"/>
-                </div>
+                    </div>
+            <br>
             </div>
-            <div class="grid10 grid gridbr ">
+            <div align="center">
                 <input type="button" name="submit_id" id="btn_id" value="Continue" class="mainButton" onclick="BidderLoginAction()"/>
                 <div class="clear"></div>
             </div>
             <div class="clear"></div>
-            <hr/>
-            <div class="grid ">
-
-                <h2 class="question" style="display: inline">New to CalPERS?</h2>
-                <span class="question">
-						<a href="bidder_register.html">Register now.</a>
-					</span>
-                <br/><br/>
-                For your security, we recommend that you log out when you're done,
-                and close all of your browser windows.
-            </div>
         </div>
     </form>
-</div>
 
+    <div>
+<hr>
+        <h2 class="question" style="display: inline">New to CalPERS?</h2>
+        <span class="question">
+						<a href="bidder_register.html">Register now.</a>
+					</span>
+        <br/><br/>
+    </div>
 </div>
-</div>
-</div>
-</div>
-<div class="clear"></div>
 <div id="footer"><!-- start footer -->
 
 
