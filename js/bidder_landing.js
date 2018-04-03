@@ -2,10 +2,12 @@
 var bidder_id;
 
 $(document).ready(function(){
-    activateOpportunitiesList();
     $("#show-list-btn").click(function() { router("#spa-opportunities-list"); });
 
-    bidder_id = "1";
+    $("#proposals-tab").click(function() { activateProposalsList(); });
+    $("#opportunities-tab").click(function() { activateOpportunitiesList(); });
+
+    bidder_id = "2";
 });
 
 
@@ -16,7 +18,9 @@ function router(div_to_show)
     div_list = [
                     "#spa-opportunities-list",
                     "#spa-opportunity-detail",
-                    "#spa-create-proposal"
+                    "#spa-create-proposal",
+                    "#spa-proposals-list",
+                    "#spa-edit-proposal"
                ];
 
     if(!(div_list.includes(div_to_show)))
@@ -60,7 +64,9 @@ function populateOpportunitiesList(opportunities_json) {
     console.log("Length of opportunity array: " + opportunities.length.toString());
 
     list = document.createElement('ul');
+    document.getElementById("spa-opportunities-list").innerHTML = ""; // Clear what we may already have there
     document.getElementById("spa-opportunities-list").appendChild(list);
+
 
     for(var i = 0; i < opportunities.length; i++)
     {
@@ -186,25 +192,53 @@ function saveNewProposal(opportunity_id)
 
     for(i = 0; i < doc_list_children.length; i++)
     {
-        
+        current_child = doc_list_children[i];
+        current_input = null;
+
+        // Search for just the input in each li via localName=input
+        for(j = 0; j < current_child.children.length; j++)
+        {
+            if(current_child.children[j].localName.toLowerCase() == "input")
+                current_input = current_child.children[j];
+        }
+
+        if(current_input == null)
+        {
+            alert("Something terribly wrong has ocurred when trying to get a lock on the input");
+            return false;
+        }
+
+        // console.log(current_input);
+
+        // Check if there is a file for our current input, if so get a reference
+        current_file = current_input.files.length > 0 ? current_input.files[0] : null;
+
+        if(current_file == null)
+        {
+            console.log("No file for " + current_child.dataset.DocTemplateID + ", but that's ok!");
+            continue;
+        }
+
+        console.log(current_child.dataset.DocTemplateID + " got file with name: " + current_file.name);
+        console.log("Atthempting to upload...");
+
+        var formData=new FormData();
+        formData.append('upload[]', current_file, current_file.name);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST','php/api/docs/create.php');
+        xhr.onload = function() {
+            if(xhr.status == 200) {
+                alert('File uploaded');
+            } else {
+                alert('Error uploading file:' + xhr.response);
+            }
+        };
+        xhr.send(formData);
     }
 
-    var formData=new FormData();
-    for(i=0;i<numfiles;i++){
-        file = $('#uploadMFileName')[0].files[i];
-        formData.append('upload[]', file,file.name);
-        console.log(file.name);
-    }
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST','php/api/document/create.php');
-    xhr.onload = function() {
-        if(xhr.status == 200) {
-            alert('File uploaded');
-        } else {
-        alert('Error uploading file');
-        }
-    };
-    xhr.send(formData);
+    alert("TODO: Go back to list of opportunities");
+
 }
 
 
@@ -257,8 +291,10 @@ function populateOppDocTemplates(opp_doc_templates)
 
     for(i = 0; i < doc_templates.length; i++)
     {
-        console.log(doc_templates[i].DocTitle);
         list_item = document.createElement('li');
+        // Attach the DocTemplateID to the li itself for access by other functions
+        // Will undoubtedly bite me in the ass down the road...
+        list_item.dataset.DocTemplateID = doc_templates[i].DocTemplateID;
 
         // Create Template download anchor
         anchor = document.createElement("a");
@@ -284,3 +320,71 @@ function populateOppDocTemplates(opp_doc_templates)
         doc_list.appendChild(list_item);
     }
 }
+
+
+
+/*********************
+ * spa-proposals-list*
+ *********************/
+function activateProposalsList()
+{
+    initializeProposalsList();
+    router("#spa-proposals-list");
+}
+
+function initializeProposalsList()
+{
+    // Fuck yeah, take that, readability!
+    // Just gets all of the proposals, and then attaches the associated opportunity title to it
+    $.ajax({
+        url: "php/api/proposal/read.php", 
+        success: function(proposals_json) {
+            // TODO: If time, learn about promises
+            num_proposal_callbacks_left = proposals_json["proposal"].length;
+
+            proposals_json["proposal"].forEach( function (proposal_json)
+            {
+                $.ajax({
+                    url: "php/api/opportunity/read.php?opportunityid="+proposal_json["OpportunityID"], 
+                    success: function(opportunity_json) {
+                        proposal_json["OpportunityName"] = opportunity_json["Name"];
+                        num_proposal_callbacks_left--;
+
+                        if(num_proposal_callbacks_left == 0) 
+                        {
+                            // Filter down all proposals till we get just ours
+                            populateProposalList(proposals_json["proposal"].filter(proposal => proposal["BidderID"] == bidder_id)); 
+                        }
+                    }
+                });
+            });
+        }
+    });
+}
+
+function populateProposalList(proposals_json)
+{
+    list = document.createElement('ul');
+    document.getElementById("spa-proposals-list").innerHTML = ""; // Clear what we may already have there
+    document.getElementById("spa-proposals-list").appendChild(list);
+
+    for(var i = 0; i < proposals_json.length; i++)
+    {
+        list_item = document.createElement('li');
+        anchor = document.createElement("a");
+        anchor.appendChild(document.createTextNode(proposals_json[i].OpportunityName + " - " + proposals_json[i].Status));
+
+        list_item.appendChild(anchor);
+        list.appendChild(list_item);
+
+        anchor.onclick = (function() { 
+
+            var ID = proposals_json[i].ProposalID;
+            return function() { activateEditProposal(ID); };
+        })();
+    }
+}
+
+
+
+

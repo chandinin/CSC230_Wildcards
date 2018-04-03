@@ -183,10 +183,10 @@ li {
                     <div class="row" id="chooseAction">
                         <ul class="nav nav-tabs nav-justified" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#opportunity-panel" role="tab">View Opportunities</a>
+                                <a class="nav-link active" data-toggle="tab" id="opportunities-tab" href="#opportunity-panel" role="tab">View Opportunities</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#proposals-panel" role="tab">View Your Proposals</a>
+                                <a class="nav-link" data-toggle="tab" id="proposals-tab" href="#proposals-panel" role="tab">View Your Proposals</a>
                             </li>
                         </ul>
                     </div>
@@ -253,8 +253,11 @@ li {
                         </div>
 
                         <div class="row tab-pane fade in" id="proposals-panel" role="tabpanel">
-                            <div class="col-md-8" id="view-proposals">
-                                <h3>Coming Soon!</h3>
+                            <div class="col-md-8" id="spa-proposals-list">
+                                <h3 id="proposals-list-loading">Loading...</h3>
+                            </div>
+                            <div id="spa-edit-proposal">
+                                <h3>Not Coming Soon!</h3>
                             </div>
                         </div>
 				    </div>
