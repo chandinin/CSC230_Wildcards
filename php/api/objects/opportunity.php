@@ -18,7 +18,7 @@ class Opportunity
   public $Name;
   public $LowestBid;
   public $Description;
-
+  public $Status;
 
   // Constructor
   // Note: Must pass connection as a parameter.
@@ -30,7 +30,7 @@ class Opportunity
   // select one by ID
   function selectByID($id)
   {
-    $query = "SELECT OpportunityID, ClosingDate, LeadEvaluatorID, Name, LowestBid, Description FROM Opportunity WHERE OpportunityID = ? ;";
+    $query = "SELECT OpportunityID, ClosingDate, LeadEvaluatorID, Name, LowestBid, Description, Status FROM Opportunity WHERE OpportunityID = ? ;";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
@@ -49,12 +49,13 @@ class Opportunity
     $this->Name = $row['Name'];
     $this->LowestBid = $row['LowestBid'];
     $this->Description = $row['Description'];
+    $this->Status = $row['Status'];
   }
 
   // select All in the table
   function selectAll()
   {
-    $query = "SELECT OpportunityID, ClosingDate, LeadEvaluatorID, Name, LowestBid, Description FROM Opportunity;";
+    $query = "SELECT OpportunityID, ClosingDate, LeadEvaluatorID, Name, LowestBid, Description, Status FROM Opportunity;";
     $stmt = $this->conn->prepare( $query );
 
     // execute query
@@ -65,18 +66,18 @@ class Opportunity
 
   function update()
   {
-    $query = "UPDATE Opportunity set ClosingDate = :ClosingDate, ScoringCategoryBlob = :ScoringCategoryBlob, LeadEvaluatorID = :LeadEvaluatorID, Name = :Name, LowestBid = :LowestBid, Description = :Description WHERE OpportunityID = :OpportunityID;";
+    $query = "UPDATE Opportunity set ClosingDate = :ClosingDate, LeadEvaluatorID = :LeadEvaluatorID, Name = :Name, LowestBid = :LowestBid, Description = :Description, Status = :Status WHERE OpportunityID = :OpportunityID;";
 
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
     $stmt->bindParam(':OpportunityID', $this->OpportunityID);
     $stmt->bindParam(':ClosingDate', $this->ClosingDate);
-    $stmt->bindParam(':ScoringCategoryBlob', $this->ScoringCategoryBlob);
     $stmt->bindParam(':LeadEvaluatorID', $this->LeadEvaluatorID);
     $stmt->bindParam(':Name', $this->Name);
     $stmt->bindParam(':LowestBid', $this->LowestBid);
     $stmt->bindParam(':Description', $this->Description);
+    $stmt->bindParam(':Status', $this->Status);
 
     if($stmt->execute())
       return true;
@@ -86,18 +87,18 @@ class Opportunity
 
   function create()
   {
-    $query = "INSERT INTO Opportunity (OpportunityID, ClosingDate, ScoringCategoryBlob, LeadEvaluatorID, Name, LowestBid, Description) " .
-             "VALUES(:OpportunityID, :ClosingDate, :ScoringCategoryBlob, :LeadEvaluatorID, :Name, :LowestBid, :Description);";
+    $query = "INSERT INTO Opportunity (OpportunityID, ClosingDate, LeadEvaluatorID, Name, LowestBid, Description, Status) " .
+             "VALUES(:OpportunityID, :ClosingDate, :LeadEvaluatorID, :Name, :LowestBid, :Description, :Status);";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
     $stmt->bindParam(':OpportunityID', $this->OpportunityID);
     $stmt->bindParam(':ClosingDate', $this->ClosingDate);
-    $stmt->bindParam(':ScoringCategoryBlob', $this->ScoringCategoryBlob);
     $stmt->bindParam(':LeadEvaluatorID', $this->LeadEvaluatorID);
     $stmt->bindParam(':Name', $this->Name);
     $stmt->bindParam(':LowestBid', $this->LowestBid);
     $stmt->bindParam(':Description', $this->Description);
+    $stmt->bindParam(':Status', $this->Status);
 
     if($stmt->execute())
       return true;
