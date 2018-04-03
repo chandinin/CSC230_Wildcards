@@ -47,6 +47,8 @@ function EmployeeLoginAction() {
                     case 'Evaluator 2':
                         alert("Evaluator 2 is under construction, Coming soon!");
                         break;
+                    default:
+                        alert("Please pick a role!");
                 }
             }
             else {
