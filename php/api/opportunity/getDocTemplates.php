@@ -52,14 +52,14 @@ if(isSet($_POST_LowerCase["opportunityid"]) || isSet($_GET_LowerCase["opportunit
   else
   {
     echo '{';
-    echo ' "message" : "Sorry, there was an error retrieving your file."';
+    echo ' "message" : "Sorry, there was an error retrieving your file due to a database error"';
     echo '}';
   }
 }
 else
 {
   echo '{';
-  echo ' "message" : "Sorry, there was an error retrieving your file."';
+  echo ' "message" : "Sorry, there was an error retrieving your file due to incorrect request args"';
   echo '}';
 }
 ?>

@@ -51,6 +51,7 @@ else
     while($row = $stmt->fetch(PDO::FETCH_ASSOC))
     {
       $proposal_arr = array(
+        "ProposalID" => $row['ProposalID'],
         "OpportunityID" =>  $row['OpportunityID'],
         "BidderID" =>  $row['BidderID'],
         "Status" =>  $row['Status'],
