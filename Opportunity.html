@@ -49,6 +49,7 @@
                             </button>
                         </div>
                     </div>
+                    <br>
                     <div class="row ">
                         <div class="col-md-9">
                             <table id="oppListTable" class="table table-bordered table-striped table-hover">
@@ -80,6 +81,7 @@
                             </button>
                         </div>
                     </div>
+                    <br>
                     <form id="newOppForm">
                         <div class="form-group">
                             <label for="formId">Opportunity Id</label>
@@ -153,32 +155,29 @@
                             </button>
                         </div>
                     </div>
+                <br>
                     <table id="opDescTable" class="table table-responsive">
                         <tbody>
                         <tr>
-                            <th scope="row">Number</th>
-                            <td>2016-8258</td>
+                            <th scope="row">Number: </th>
+                            <td id="oppNumber"></td>
                         </tr>
 
                         <tr>
-                            <th scope="row">Final Filing Date</th>
-                            <td>01/26/2017 at 3:00 p.m. (Pacific Time)</td>
+                            <th scope="row">Final Filing Date: </th>
+                            <td id="oppDate"></td>
                         </tr>
                         <tr>
-                            <th scope="row">Name</th>
-                            <td>Health Open Enrollment Communication Dissemination</td>
+                            <th scope="row">Name: </th>
+                            <td id="oppName"></td>
                         </tr>
                         <tr>
-                            <th scope="row">Type</th>
-                            <td>Request for Proposal</td>
+                            <th scope="row">Type: </th>
+                            <td id="oppType" ></td>
                         </tr>
                         <tr>
-                            <th scope="row">Description</th>
-                            <td>The California Public Employees Retirement System (CalPERS) is soliciting qualified
-                                firms for up to a five (5) years service agreement providing production and fulfillment
-                                of the Open Enrollment (OE) Communication Dissemination materials. CalPERS is required
-                                to provide members an Open Enrollment period to exercise an informed choice for their
-                                health benefit plan.
+                            <th scope="row">Description: </th>
+                            <td id="oppDesc">
                             </td>
                         </tr>
                         </tbody>
@@ -201,8 +200,8 @@
 
                             <div class="col-12">
                                 <div class="form-group">
-                                    <button id="uploadFile" type="button" class="btn btn-primary">Upload</button>
-                                    <button id="clearFile" type="button" class="btn btn-primary">Clear</button>
+                                    <button id="uploadDocTemplates" value="" type="button" class="btn btn-primary">Upload</button>
+                                    <button id="clearDocTemplates" type="button" class="btn btn-primary">Clear</button>
                                 </div>
                             </div>
                         </form>

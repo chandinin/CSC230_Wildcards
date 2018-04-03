@@ -49,14 +49,24 @@ $(document).ready(
             $('#newOppPanel1').hide();
         });
 
+        $('#uploadDocTemplates').click(function() {
+            uploadDocTemplates();
+        });
+
+        $('#clearDocTemplates').click(function () {
+            $('#uploadDocTemplatesForm').reset();
+        });
+
     });
 
-function showEditOpp(oppId) {
+function showEditOpp(opId) {
     //alert("Editing: " + oppId);
     $('#listOppPanel').hide();
     $('#newOppPanel1').hide();
     $('#editOppPanel').show();
-    getDocTemplates(oppId);
+    getOpportunity(opId);
+    getDocTemplates(opId);
+    $('#uploadDocTemplates').val(opId);
     $('.table').tablesorter();
 }
 
@@ -82,21 +92,28 @@ function saveJunk() {
 
 function getOpportunity(opId) {
 var xhr = new XMLHttpRequest();
-xhr.open('POST', 'http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php');
+    var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php?OpportunityID="+opId;
+    xhr.open('POST', url);
     xhr.onload = function () {
     if (xhr.status == 200) {
-        alert('');
+        alert('Got data for opp ' + opId);
+        var jsonArray = JSON.parse(xhr.responseText);
+        $("#oppNumber").text(jsonArray.OpportunityID);
+        $("#oppDate").text(jsonArray.ClosingDate);
+        $("#oppName").text(jsonArray.Name);
+        $("#oppType").text("Type");
+        $("#oppDesc").text(jsonArray.Description);
     } else {
         alert('');
     }
 };
-xhr.send(formData);
+xhr.send();
 }
 
 function getDocTemplates(opId) {
     $('#docTemplatesBody').empty();
     var xhr = new XMLHttpRequest();
-    var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/getDocTemplates.php?opportunityID="+opId;
+    var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/getDocTemplates.php?OpportunityID="+opId;
     xhr.open('GET',url);
     xhr.onload = function () {
         if (xhr.status == 200) {
@@ -120,11 +137,6 @@ function getDocTemplates(opId) {
     };
     xhr.send();
 }
-
-function uploadDocTemplates() {
-
-}
-
 function getOppList() {
     $('#oppListTableBody').empty();
     var xhr = new XMLHttpRequest();
@@ -224,22 +236,24 @@ function saveOpportunity() {
     var close = $('#close_date').val() + " " + $('#close_time').val();
     var lead = parseInt($('#selectLead').val());
     var jsonRecord =
-        {
-            "OpportunityID": opId,
-            "Name": name,
-            "ClosingDate": close,
-            "LeadEvaluatorID": lead,
-            "LowestBid":0,
-            "Description": desc
+        {"OpportunityID": opId,
+            "ClosingDate":close,
+            //"ScoringCategoryBlob":null,
+            "LeadEvaluatorID":lead,
+            "Name":name,
+            "LowestBid":"0",
+            "Description":desc,
+            "Status":"New"
         };
+
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/create.php', true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=utf-8');  //Creates an  error
     xhr.onload = function () {
         if (xhr.status == 200) {
             var retval = xhr.responseText;
-            var saved = retval.includes("uccess");
-            if(saved) {
+            var failed = retval.includes("failed");
+            if(!failed) {
                 uploadScoring(scoreFile,opId);
                 showEditOpp(opId);
             }
@@ -254,7 +268,7 @@ function saveOpportunity() {
     console.log("Wrote Json: " + jsonString);
 }
 
-var fakedata = {
+var fakelist = {
     "opportunity": [{
         "OpportunityID": "",
         "ClosingDate": "0000-00-00 00:00:00",
@@ -435,6 +449,16 @@ var fakedata = {
             "LowestBid": "10000",
             "Description": "Buy now or dont"
         }]
+};
+
+var fakesubmit= {"OpportunityID":"266",
+    "ClosingDate":"2019-02-14 12:00:00",
+    "ScoringCategoryBlob":null,
+    "LeadEvaluatorID":"2",
+    "Name":"Opp_266",
+    "LowestBid":"0",
+    "Description":"this is it************",
+    "Status":"New"
 };
 
 
