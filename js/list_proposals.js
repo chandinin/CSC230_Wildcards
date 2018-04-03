@@ -32,16 +32,8 @@ function getOppList() {
     xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/proposal/read.php',true);
     xhr.onload = function() {
         if (xhr.status == 200) {
-            // var jsonArray = fakedata;
             var jsonArray = JSON.parse(xhr.responseText);
-            var size = jsonArray.proposal.length;
-            for(var i=0;i<size;i++) {
-                var proposal = jsonArray.proposal[i];
-                var row ="<tr>"+"</td><td>" + proposal.OpportunityID+ "</td><td>" + "<a href='javascript:showOpp()'>" +  proposal.BidderID + "</a></td><td>"
-                    + proposal.Status + "</td>";
-                $('#proposalListTableBody').append(row);
-                $("#proposalListTableBody").trigger("update");
-            }
+            fillProposalTable(jsonArray);
         } else {
             alert("Error response");
         }
@@ -58,17 +50,40 @@ function showOpp() {
     window.location.replace("Opportunity_new.html")
 }
 
-
-//TODO Logic for pagination
 function fillProposalTable(jsonArray){
 
-    var size = jsonArray.opportunity.length;
-        for(var i=start;i<size;i++) {
-            fillOppTable(jsonArray);
-            var opp = jsonArray.opportunity[i];
-            var row ="<tr>"+"</td><td>" + opp.OpportunityID+ "</td><td>" + "<a href='javascript:showOpp()'>" +  opp.Name + "</a></td><td>"
-                +  opp.Status + " </td>";
-            $('#oppListTableBody').append(row);
-            $("#oppListTableBody").trigger("update");
+    var start = 0;
+    var elements_per_page = 7;
+    var limit = elements_per_page;
+    var size = jsonArray.proposal.length;
+    fillOppTable(start, limit);
+
+    function fillOppTable(start, limit){
+        for(var i=0;i<size;i++) {
+            var proposal = jsonArray.proposal[i];
+            var row ="<tr>"+"</td><td>" + proposal.OpportunityID+ "</td><td>" + "<a href='javascript:showOpp()'>" +  proposal.BidderID + "</a></td><td>"
+                + proposal.Status + "</td>";
+            $('#proposalListTableBody').append(row);
+            $("#proposalListTableBody").trigger("update");
         }
+    }
+    $('#next').click(function(){
+        var next = limit;
+        if(size>=next) {
+            limit = limit + elements_per_page;
+            $('#proposalListTableBody').empty();
+            console.log(next +' -next- '+limit);
+            fillOppTable(next,limit);
+        }
+    });
+
+    $('#prev').click(function(){
+        var pre = limit-(2*elements_per_page);
+        if(pre >= 0) {
+            limit = limit - elements_per_page;
+            console.log(pre +' -pre- '+limit);
+            $('#proposalListTableBody').empty();
+            fillOppTable(pre,limit);
+        }
+    });
 }

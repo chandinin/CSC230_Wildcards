@@ -72,14 +72,14 @@ function getOppList() {
     xhr.send();
 }
 
-//TODO Logic for pagination
+//Logic for pagination
 function fillOppTable(jsonArray){
 
     var start = 0;
-    var elements_per_page = 4;
+    var elements_per_page = 7;
     var limit = elements_per_page;
     var size = jsonArray.opportunity.length;
-    fillOppTable(start, size);
+    fillOppTable(start, limit);
 
     function fillOppTable(start, limit){
         for(var i=start;i<limit;i++) {
@@ -91,10 +91,9 @@ function fillOppTable(jsonArray){
             $("#oppListTableBody").trigger("update");
         }
     }
-    $('#nextValue').click(function(){
-
+    $('#next').click(function(){
         var next = limit;
-        if(max_size>=next) {
+        if(size>=next) {
             limit = limit + elements_per_page;
             $('#oppListTableBody').empty();
             console.log(next +' -next- '+limit);
@@ -102,7 +101,7 @@ function fillOppTable(jsonArray){
         }
     });
 
-    $('#PreValue').click(function(){
+    $('#prev').click(function(){
         var pre = limit-(2*elements_per_page);
         if(pre >= 0) {
             limit = limit - elements_per_page;
