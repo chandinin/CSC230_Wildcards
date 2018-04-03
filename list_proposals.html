@@ -1,13 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-
-<html lang="en-us">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta http-equiv="content-type" content="text/xhtml; charset=utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <title>Bidops - Log In</title>
-
+    <meta charset="UTF-8">
+    <title>Proposals</title>
     <!-- CSS Includes -->
     <link rel="stylesheet" type="text/css" href="css/ept/menu2.css"/>
     <link rel="stylesheet" type="text/css" href="css/ept/style.css"/>
@@ -40,11 +35,12 @@
     <!-- Page Specific JS/CSS -->
     <link rel="stylesheet" type="text/css" href="css/ept/login.css"/>
     <script type="text/javascript" src="js/ept/jquery.cookie.js"></script>
-    <script src="js/employee_login.js"></script>
+    <script src="js/bidder_login.js"></script>
+    <script src="js/list_proposals.js"></script>
 </head>
 <body>
 
-<div id="page" class="single">
+<div id = "page" class="single">
 
     <!-- Logo-->
     <div class="navbar navbar-default navbar-static-top navbar-global">
@@ -121,57 +117,30 @@
         </div>
     </div>
 
-    <!--Loginform-->
-    <form action="#" method="post" id="employeelogin_formid" name="employeelogin_formname" class="employeelogin_formclass" autocomplete="off">
-            <div>
-                <div>
-                    <div align = "center">
-                        <div id="bidopslogin"><h1>Bidops Log In</h1>
-                        </div>
-                        <br/>
-                        <label align ="left" for="username" id="usernameLbl">Username <span
-                                class="required">(required)</span></label><br>
-                        <input id="username" name="username" type="text" value="" size="24" maxlength="35"/>
-                        <p></p>
 
-                            <div class="form-group">
-                                <label class="my-1 mr-2" for="selectRole">Role</label><br>
-                                <select id="selectRole" name="role" required style="width: 200px">
-                                    <option>Choose...</option>
-                                    <option value="author">Author</option>
-                                    <option value="eval1">Evaluator 1</option>
-                                    <option value="eval2">Evaluator 2</option>
-                                </select>
-                            </div>
-                        <p></p>
-                        <label for="password" id="passwordLbl">Password <span
-                                class="required">(required)</span></label><br>
-                        <input id="password" name="password" type="password" value="" size="24" maxlength="35"/>
-                        </div>
-                    <br>
-                </div>
+    <div class="container">
+        <ul class="breadcrumb">
+            <li><a href="home_page.html">Home</a></li>
+            <li><a href="evaluator1_landing.html">Preliminary Evaluation</a></li>
+            <li class="active">Proposals</li>
+        </ul>
+    </div>
+
+    <div id="listOppPanel" class="tab-content vertical">
+        <div class="row ">
+            <div class="col-md-9">
+                <table id="proposalListTable" class="table table-bordered table-striped table-hover">
+                    <thead>
+                    <th>Opportunity</th>
+                    <th>Proposal</th>
+                    <th>Status</th>
+                    </thead>
+                    <tbody id="proposalListTableBody">
+                    </tbody>
+                </table>
             </div>
-            <div align="center">
-                <input type="button" name="submit_id" id="btn_id" value="Continue" class="mainButton" onclick="EmployeeLoginAction()"/>
-                <div class="clear"></div>
-            </div>
-    </form>
+        </div>
+    </div>
 </div>
-<div id="footer"><!-- start footer -->
-
-
-    <span>Copyright 2018 CalPERS</span> |
-    <span><a href="https://www.calpers.ca.gov/page/privacy-policy" title="Opens in a new window" target="_blank">Privacy Policy</a></span>
-    |
-    <span><a href="https://www.calpers.ca.gov/page/conditions-of-use" title="Opens in a new window" target="_blank">Conditions of Use</a></span>
-    |
-    <span><a href="https://www.calpers.ca.gov/page/accessibility" title="Opens in a new window" target="_blank">Accessibility</a></span>
-
-    <br/>
-
-</div><!--  end footer -->
-</div>
-
 </body>
 </html>
-

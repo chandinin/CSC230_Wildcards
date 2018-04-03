@@ -42,10 +42,10 @@ function EmployeeLoginAction() {
                         window.location.replace("Opportunity.html")
                         break;
                     case 'Evaluator 1':
-                        window.location.replace("bidder_login.html")
+                        window.location.replace("evaluator1_landing.html")
                         break;
                     case 'Evaluator 2':
-                        window.location.replace("list_opportunities.html")
+                        alert("Evaluator 2 is under construction, Coming soon!");
                         break;
                 }
             }

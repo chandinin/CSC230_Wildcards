@@ -3052,3 +3052,13 @@ span.video-duration {
 .table-hover > tbody > tr:hover > th {
     background-color: #9fadc4;
 }
+
+.container {
+    margin-top: 20px;
+}
+.page {
+    display: none;
+}
+.page-active {
+    display: block;
+}
