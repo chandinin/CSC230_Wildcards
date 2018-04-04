@@ -2,100 +2,157 @@ $(document).ready(
     function () {
         initNewOppForm();
         $('#editOppPanel').hide();
-        $('#newOppPanel').hide();
+        $('#newOppPanel1').hide();
         $('.datepicker').datepicker();
         $('#listOppPanel').show();
 
-        $('#manageOpp').click(function() {
+        $('#manageOpp').click(function () {
             getOppList();
-
             $('.table').tablesorter();
             $("#oppsMenu option[id='opplist']").attr("selected", "selected");
         });
 
 
-        $('#saveNewOpp').click(function() {
+        $('#saveNewOpp').click(function () {
             saveOpportunity();
         });
-        $('#showNewOpp').click(function (){
-            $('#newOppPanel').show();
-            $('#listOppPanel').hide();
+
+        $('#showNewOpp').click(function () {
+            showNewOpp();
         });
 
-        $('#exitNewOpp').click(function() {
-            $('#newOppPanel').hide();
+        $('#exitNewOpp').click(function () {
             $('#newOppForm')[0].reset();
-            $("#listOppPanel").show();
-        });
-
-        $('#clearNewOpp').click(function() {
-            $('#newOppForm')[0].reset();
-        });
-
-        $('#oppListTable tr').click(function() {
-                showOpp();
-        });
-
-        $('#oppTab').click(function() {
-            showOppList();
-        });
-        $('.oppListButton').click(function(){
             showOppList();
         });
 
-        $('#editOppButton').click(function() {
+        $('#clearNewOpp').click(function () {
+            $('#newOppForm')[0].reset();
+        });
+/*
+        $('#oppListTable tr').click(function () {
+            showOpp();
+        });
+*/
+        $('#oppTab').click(function () {
+            showOppList();
+        });
+        $('.oppListButton').click(function () {
+            showOppList();
+        });
+
+        $('#editOppButton').click(function () {
             showEditOpp();
         });
 
-        $('#exitNewOpp').click(function() {
-            $('#newOppPanel').hide();
+        $('#exitNewOpp').click(function () {
+            $('#newOppPanel1').hide();
+        });
+
+        $('#uploadDocTemplates').click(function() {
+            uploadDocTemplates();
+        });
+
+        $('#clearDocTemplates').click(function () {
+            $('#uploadDocTemplatesForm').reset();
         });
 
     });
 
-function showEditOpp() {
+function showEditOpp(opId) {
+    //alert("Editing: " + oppId);
     $('#listOppPanel').hide();
-    $('#newOppPanel').hide();
+    $('#newOppPanel1').hide();
     $('#editOppPanel').show();
-};
+    getOpportunity(opId);
+    getDocTemplates(opId);
+    $('#uploadDocTemplates').val(opId);
+    $('.table').tablesorter();
+}
 
 function showNewOpp() {
+    getLeadEvals();
+    $('#newOppPanel1').show();
+    $('#listOppPanel').hide();
 
-};
+}
 
 function showOppList() {
-    $('#newOppPanel').hide();
+    getOppList();  //refresh list everytime
+    $('#newOppPanel1').hide();
     $('#editOppPanel').hide();
     $('#listOppPanel').show();
-};
+}
 
 function saveJunk() {
-    $('clearFile').click(function() {
-});
-}
-
-function showOpp() {
-    alert("this is the opp");
+    $('clearFile').click(function () {
+    });
 }
 
 
+function getOpportunity(opId) {
+var xhr = new XMLHttpRequest();
+    var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php?OpportunityID="+opId;
+    xhr.open('POST', url);
+    xhr.onload = function () {
+    if (xhr.status == 200) {
+        alert('Got data for opp ' + opId);
+        var jsonArray = JSON.parse(xhr.responseText);
+        $("#oppNumber").text(jsonArray.OpportunityID);
+        $("#oppDate").text(jsonArray.ClosingDate);
+        $("#oppName").text(jsonArray.Name);
+        $("#oppType").text("Type");
+        $("#oppDesc").text(jsonArray.Description);
+    } else {
+        alert('');
+    }
+};
+xhr.send();
+}
+
+function getDocTemplates(opId) {
+    $('#docTemplatesBody').empty();
+    var xhr = new XMLHttpRequest();
+    var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/getDocTemplates.php?OpportunityID="+opId;
+    xhr.open('GET',url);
+    xhr.onload = function () {
+        if (xhr.status == 200) {
+            var jsonArray = JSON.parse(xhr.responseText);
+            var size = jsonArray.doctemplate.length;
+            for(var i = 0; i< size; i++) {
+                var template = jsonArray.doctemplate[i];
+                if (template.Url != null) {
+                    var row = "<tr><td>" + template.DocTitle + "</td><td><a class='btn btn-primary btn-lg' href='" + template.Url +
+                        "'><span class='glyphicon glyphicon-circle-arrow-down' aria-hidden='true'></span>   Download</a> " +
+                        "<button class='btn btn-delete btn-lg'><span class='glyphicon glyphicon-remove'" +
+                        "aria-hidden='true'></span> Delete </button></td></tr>";
+                    $('#docTemplatesBody').append(row);
+                    $("#docTempatesBody").trigger("update");
+                }
+            }
+
+        } else {
+            alert('Error retrieving Document Templates');
+        }
+    };
+    xhr.send();
+}
 function getOppList() {
-
     $('#oppListTableBody').empty();
     var xhr = new XMLHttpRequest();
-    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php',true);
-    xhr.onload = function() {
+    xhr.open('GET', 'http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php', true);
+    xhr.onload = function () {
         if (xhr.status == 200) {
-            var jsonArray = fakedata;
-           // var jsonArray = JSON.parse(xhr.responseText);
+            //var jsonArray = fakedata;
+            var jsonArray = JSON.parse(xhr.responseText);
             var size = jsonArray.opportunity.length;
-            for(var i=0;i<size;i++) {
+            for (var i = 0; i < size; i++) {
                 var opp = jsonArray.opportunity[i];
-                var row = "<tr><td></td></td><td>" + opp.OpportunityID + "</td><td>"  + opp.Name +
+                var row = "<tr><td></td></td><td>" + opp.OpportunityID + "</td><td>" + opp.Name +
                     "</td><td>" + opp.ClosingDate + "</td><td>" + opp.Description + "</td><td>" +
                     "Status</td><td>" +
-                    "<button onclick='showEditOpp()' id='editOppButton' value='" + opp.OpportunityID + "' type='button' class='btn btn-primary btn-lg'>" +
-                    "<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>View</button></td></tr>";
+                    "<button onclick='showEditOpp(\"" + opp.OpportunityID + "\")' id='editOppButton' value='" + opp.OpportunityID + "' type='button' class='btn btn-primary btn-lg'>" +
+                    "<span class='glyphicon glyphicon-eye-open' aria-hidden='true'></span> View</button></td></tr>";
                 $('#oppListTableBody').append(row);
                 $("#oppListTableBody").trigger("update");
 
@@ -109,72 +166,66 @@ function getOppList() {
 }
 
 function initNewOppForm() {
-    getLeadEvals();
     getOppList();
 }
 
-function uploadAllDocs() {
+function uploadScoring(file, opId) {
     /* Upload scoring criteria*/
-
-        var file = $('#criteriaFile')[0].files[0];
-        var opid = $('#formIdInput').val();
-        console.log(file.name);
-        var formData=new FormData();
-        formData.append('ScoringCategoryBlob',file,file.name);
-        formData.append('OpportunityID', opid);
-        formData.append('filename', file.name);
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/uploadScoringCriteria.php');
-        //xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.onload = function() {
-            if(xhr.status == 200) {
-                alert('Scoring File uploaded');
-            } else {
-                alert('Error uploading scoring file');
-            }
-        };
-        xhr.send(formData);
-
-        /*upload other documents
-        var numfiles =  $('#uploadMFileName')[0].files.length;
-        var file;
-        var formData=new FormData();
-        for(i=0;i<numfiles;i++){
-            file = $('#uploadMFileName')[0].files[i];
-            formData.append('upload[]', file,file.name);
-            console.log(file.name);
+    console.log(file.name);
+    var formData = new FormData();
+    formData.append('OpportunityID', opId);
+    formData.append('filename', file, file.name);
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/uploadScoringCriteria.php');
+    //xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onload = function () {
+        if (xhr.status == 200) {
+            alert('Scoring File uploaded');
+        } else {
+            alert('Error uploading scoring file');
         }
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/update.php');
-        xhr.onload = function() {
-            if(xhr.status == 200) {
-                alert('File uploaded');
-            } else {
-            alert('Error uploading file');
-            }
-        };
-        xhr.send(formData);
-
-        */
+    };
+    xhr.send(formData);
+}
+function uploadDocTemplates() {
+    /*upload other documents */
+    var numfiles =  $('#uploadMFileName')[0].files.length;
+    var file;
+    var formData=new FormData();
+    for(i=0;i<numfiles;i++){
+        file = $('#uploadMFileName')[0].files[i];
+        formData.append('upload[]', file,file.name);
+        console.log(file.name);
+    }
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/update.php');
+    xhr.onload = function() {
+        if(xhr.status == 200) {
+            alert('File uploaded');
+        } else {
+        alert('Error uploading file');
+        }
+    };
+    xhr.send(formData);
 }
 
 function getLeadEvals() {
-	var xhr = new XMLHttpRequest();
-	xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/employee/read.php',true);
-	xhr.onload = function() {
-		if (xhr.status == 200) {
-			var jsonArray = JSON.parse(xhr.responseText);
-			var size = jsonArray.employee.length;
-			for(var i=0;i<size;i++) {
-				var lead = jsonArray.employee[i];
-				var name = lead.first_name + " " + lead.last_name;
-                $('select').append($('<option>', {value:lead.id, text:name }));
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'http://athena.ecs.csus.edu/~wildcard/php/api/employee/read.php', true);
+    xhr.onload = function () {
+        if (xhr.status == 200) {
+            var jsonArray = JSON.parse(xhr.responseText);
+            var size = jsonArray.employee.length;
+            for (var i = 0; i < size; i++) {
+                var lead = jsonArray.employee[i];
+                var name = lead.first_name + " " + lead.last_name;
+                $('select').append($('<option>', {value: lead.id, text: name}));
             }
-		} else {
+        } else {
             alert("Error response");
-		}
-	};
-	xhr.send();
+        }
+    };
+    xhr.send();
 }
 
 function saveOpportunity() {
@@ -184,23 +235,32 @@ function saveOpportunity() {
     var desc = $('#formDescriptionInput').val();
     var close = $('#close_date').val() + " " + $('#close_time').val();
     var lead = parseInt($('#selectLead').val());
-    var senddate = convertDate(close);
     var jsonRecord =
-			{"OpportunityID":opId,
-                "Name":name,
-				"ClosingDate":close,
-				"LeadEvaluatorID":lead,
-				"LowestBid":10000,
-				"Description":desc};
+        {"OpportunityID": opId,
+            "ClosingDate":close,
+            //"ScoringCategoryBlob":null,
+            "LeadEvaluatorID":lead,
+            "Name":name,
+            "LowestBid":"0",
+            "Description":desc,
+            "Status":"New"
+        };
+
     var xhr = new XMLHttpRequest();
-    xhr.open('POST','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/create.php',true);
-    xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded; charset=utf-8');  //Creates an  error
-    xhr.onload = function() {
+    xhr.open('POST', 'http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/create.php', true);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=utf-8');  //Creates an  error
+    xhr.onload = function () {
         if (xhr.status == 200) {
-            alert(xhr.responseText);
-            uploadAllDocs();
+            var retval = xhr.responseText;
+            var failed = retval.includes("failed");
+            if(!failed) {
+                uploadScoring(scoreFile,opId);
+                showEditOpp(opId);
+            }
+            else
+                alert("Failed to create new opportunity");
         } else {
-        	alert("Error saving opportunity");
+            alert("500: Server error saving opportunity");
         }
     };
     var jsonString = JSON.stringify(jsonRecord);
@@ -208,23 +268,7 @@ function saveOpportunity() {
     console.log("Wrote Json: " + jsonString);
 }
 
-function submitDocList() {
-
-}
-
-
-function getDocList() {
-
-}
-
-function convertDate(dateString) {
-    var thedate = new Date(dateString);
-    var newdate = thedate.getFullYear() + "-" + (thedate.getMonth()+1) + "-" + thedate.getDay() +
-                    " " + thedate.getHours() + ":" + thedate.getMinutes() + ":" + thedate.getSeconds();
-    return newdate;
-}
-
-var fakedata ={
+var fakelist = {
     "opportunity": [{
         "OpportunityID": "",
         "ClosingDate": "0000-00-00 00:00:00",
@@ -405,6 +449,16 @@ var fakedata ={
             "LowestBid": "10000",
             "Description": "Buy now or dont"
         }]
+};
+
+var fakesubmit= {"OpportunityID":"266",
+    "ClosingDate":"2019-02-14 12:00:00",
+    "ScoringCategoryBlob":null,
+    "LeadEvaluatorID":"2",
+    "Name":"Opp_266",
+    "LowestBid":"0",
+    "Description":"this is it************",
+    "Status":"New"
 };
 
 
