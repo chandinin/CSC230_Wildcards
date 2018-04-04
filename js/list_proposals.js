@@ -69,7 +69,7 @@ function fillProposalTable(jsonArray){
     }
     $('#next').click(function(){
         var next = limit;
-        if(size>=next) {
+        if(size>next) {
             limit = limit + elements_per_page;
             $('#proposalListTableBody').empty();
             console.log(next +' -next- '+limit);

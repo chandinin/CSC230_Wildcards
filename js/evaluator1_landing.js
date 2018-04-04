@@ -62,8 +62,11 @@ function fillOppTable(jsonArray){
         for(var i=start;i<limit;i++) {
             fillOppTable(jsonArray);
             var opp = jsonArray.opportunity[i];
-            var row ="<tr>"+"</td><td>" + opp.OpportunityID+ "</td><td>" + "<a href='javascript:showOppDetails()'>" +  opp.Name + "</a></td><td>"
-                + opp.ClosingDate + "<td>"+ opp.Status + " <td>" +  "<button onclick='completeOpportunityEval(\"" + opp.OpportunityID + "\")' id='editOppButton' value='\" + opp.OpportunityID + \"' type='button' class='btn btn-primary btn-sm'>" +
+            var row ="<tr>"+"</td><td>" + opp.OpportunityID+ "</td><td>" + "<a href='javascript:showOppDetails()'>" +
+                opp.Name + "</a></td><td>"
+                + opp.ClosingDate + "<td>"+ opp.Status + " <td>" +  "<button onclick='completeOpportunityEval(\"" +
+                opp.OpportunityID + "\")' id='editOppButton' value='\" + opp.OpportunityID + \"' type='button' " +
+                "class='btn btn-primary btn-sm'>" +
                 "Complete</button></td>";
             $('#oppListTableBody').append(row);
             $("#oppListTableBody").trigger("update");
@@ -132,7 +135,7 @@ $(document).ready(function () {
 //Show opportunity detail page
 function showOppDetails() {
     //place holder screen
-    window.location.replace("Opportunity_new.html");
+    window.location.replace("list_proposals.html");
 }
 
 //Function to update opportunity status
