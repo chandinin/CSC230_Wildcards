@@ -17,6 +17,8 @@ class Proposal
   public $TechnicalScore;
   public $FeeScore;
   public $FinalTotalScore;
+  public $CreatedDate;
+  public $LastEditDate;
 
   // Constructor
   // Note: Must pass connection as a parameter.

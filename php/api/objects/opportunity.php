@@ -19,6 +19,9 @@ class Opportunity
   public $LowestBid;
   public $Description;
   public $Status;
+  public $CategoryID;
+  public $CreatedDate;
+  public $LastEditDate;
 
   // Constructor
   // Note: Must pass connection as a parameter.
@@ -30,7 +33,7 @@ class Opportunity
   // select one by ID
   function selectByID($id)
   {
-    $query = "SELECT OpportunityID, ClosingDate, LeadEvaluatorID, Name, LowestBid, Description, Status FROM Opportunity WHERE OpportunityID = ? ;";
+    $query = "SELECT OpportunityID, ClosingDate, LeadEvaluatorID, Name, LowestBid, Description, Status, CategoryID, CreatedDate, LastEditDate FROM Opportunity WHERE OpportunityID = ? ;";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
@@ -50,12 +53,31 @@ class Opportunity
     $this->LowestBid = $row['LowestBid'];
     $this->Description = $row['Description'];
     $this->Status = $row['Status'];
+    $this->CategoryID = $row['CategoryID'];
+    $this->CreatedDate = $row['CreatedDate']; 
+    $this->LastEditDate = $row['LastEditDate'];
+  }
+
+
+  // select one by ID
+  function selectByCategoryID($CategoryID)
+  {
+    $query = "SELECT OpportunityID, ClosingDate, LeadEvaluatorID, Name, LowestBid, Description, Status, CategoryID, CreatedDate, LastEditDate FROM Opportunity WHERE CategoryID = ? ;";
+    $stmt = $this->conn->prepare( $query );
+
+    // bind parameters
+    $stmt->bindParam(1, $CategoryID);
+
+    // execute query
+    $stmt->execute();
+
+    return $stmt;
   }
 
   // select All in the table
   function selectAll()
   {
-    $query = "SELECT OpportunityID, ClosingDate, LeadEvaluatorID, Name, LowestBid, Description, Status FROM Opportunity;";
+    $query = "SELECT OpportunityID, ClosingDate, LeadEvaluatorID, Name, LowestBid, Description, Status, CategoryID, CreatedDate, LastEditDate FROM Opportunity;";
     $stmt = $this->conn->prepare( $query );
 
     // execute query
@@ -66,7 +88,7 @@ class Opportunity
 
   function update()
   {
-    $query = "UPDATE Opportunity set ClosingDate = :ClosingDate, LeadEvaluatorID = :LeadEvaluatorID, Name = :Name, LowestBid = :LowestBid, Description = :Description, Status = :Status WHERE OpportunityID = :OpportunityID;";
+    $query = "UPDATE Opportunity set ClosingDate = :ClosingDate, LeadEvaluatorID = :LeadEvaluatorID, Name = :Name, LowestBid = :LowestBid, Description = :Description, Status = :Status, LastEditDate = NOW() WHERE OpportunityID = :OpportunityID;";
 
     $stmt = $this->conn->prepare( $query );
 
@@ -87,8 +109,8 @@ class Opportunity
 
   function create()
   {
-    $query = "INSERT INTO Opportunity (OpportunityID, ClosingDate, LeadEvaluatorID, Name, LowestBid, Description, Status) " .
-             "VALUES(:OpportunityID, :ClosingDate, :LeadEvaluatorID, :Name, :LowestBid, :Description, :Status);";
+    $query = "INSERT INTO Opportunity (OpportunityID, ClosingDate, LeadEvaluatorID, Name, LowestBid, Description, Status, CategoryID, CreatedDate, LastEditDate) " .
+             "VALUES(:OpportunityID, :ClosingDate, :LeadEvaluatorID, :Name, :LowestBid, :Description, :Status, :CategoryID, NOW(), NOW());";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
@@ -99,6 +121,10 @@ class Opportunity
     $stmt->bindParam(':LowestBid', $this->LowestBid);
     $stmt->bindParam(':Description', $this->Description);
     $stmt->bindParam(':Status', $this->Status);
+    $stmt->bindParam(':CategoryID', $this->CategoryID);
+
+    //$date = new DateTime(date("Y-m-d H:i:s"));
+    //$stmt->bindParam(':CreatedDate', $date->format('Y-m-d H:i:s'));
 
     if($stmt->execute())
       return true;
@@ -118,6 +144,23 @@ class Opportunity
       return true;
     else
       return false;
+  }
+
+  // Get Category Dropdown Data
+  function getCategories()
+  {
+    try
+    {
+      $query = "SELECT CategoryID, `Name` FROM OppCategory ORDER BY CategoryID;";
+      $stmt = $this->conn->prepare( $query );
+      $stmt->execute();
+
+      return $stmt;
+    }
+    catch (PDOException $e)
+    {
+      echo 'Connection failed: ' . $e->getMessage();
+    }
   }
 
   // Upload Blob File
