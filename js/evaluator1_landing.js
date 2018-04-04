@@ -65,6 +65,7 @@ function getOppList() {
         if (xhr.status == 200) {
             var jsonArray = JSON.parse(xhr.responseText);
             fillOppTable(jsonArray);
+            fillCategoryDropdown(jsonArray);
         } else {
             alert("Error response");
         }
@@ -112,6 +113,20 @@ function fillOppTable(jsonArray){
     });
 }
 
+//TODO write logic to get categories.
+function fillCategoryDropdown(jsonArray){
+    var start = 0;
+    var select = document.getElementById("selectCategory")
+    var size = jsonArray.opportunity.length;
+
+    for(var i=start;i<size;i++) {
+        var option = document.createElement("OPTION");
+        txt = document.createTextNode(jsonArray.opportunity[i].Name);
+        option.appendChild(txt);
+        option.setAttribute("value", jsonArray.opportunity[i].Name)
+        select.insertBefore(option, select.lastChild);
+    }
+}
 
 function initNewOppForm() {
     getOppList();

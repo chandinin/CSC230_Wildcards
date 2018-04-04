@@ -34,7 +34,7 @@
     <script src="http://malsup.github.com/jquery.form.js"></script>
 
     <!--For breadcrumb-->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
@@ -122,11 +122,19 @@
         </div>
     </div>
 
+    <!--breadcrumb-->
     <div class="container">
         <ul class="breadcrumb">
             <li><a href="home_page.html">Home</a></li>
             <li class="active">Preliminary Evaluation</li>
         </ul>
+
+        <div class="form-group">
+            <label class="my-1 mr-2" for="selectCategory">Category</label><br>
+            <select id="selectCategory" name="category" required style="width: 200px">
+                <option value="default">Choose..</option>
+            </select>
+        </div>
     </div>
 
     <div id="listOppPanel" class="tab-content vertical">
