@@ -37,20 +37,9 @@ $(document).ready(
             $('#oppButtons').hide();
         });
 
-            $("div.bhoechie-tab-menu>div.list-group>a").click(function(e) {
-                e.preventDefault();
-                $(this).siblings('a.active').removeClass("active");
-                $(this).addClass("active");
-                var index = $(this).index();
-                $("div.bhoechie-tab>div.bhoechie-tab-content").removeClass("active");
-                $("div.bhoechie-tab>div.bhoechie-tab-content").eq(index).addClass("active");
-            });
-
+        $('.table').tablesorter();
     });
 
-function showOpp() {
-    alert("this is the opp");
-}
 function getOppList() {
     var xhr = new XMLHttpRequest();
     xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php',true);

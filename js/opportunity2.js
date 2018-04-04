@@ -57,6 +57,7 @@ $(document).ready(
             $('#uploadDocTemplatesForm').reset();
         });
 
+        $('.table').tablesorter();
     });
 
 function showEditOpp(opId) {
@@ -96,7 +97,6 @@ var xhr = new XMLHttpRequest();
     xhr.open('POST', url);
     xhr.onload = function () {
     if (xhr.status == 200) {
-        alert('Got data for opp ' + opId);
         var jsonArray = JSON.parse(xhr.responseText);
         $("#oppNumber").text(jsonArray.OpportunityID);
         $("#oppDate").text(jsonArray.ClosingDate);
