@@ -169,6 +169,10 @@ li {
   border-bottom: 1px solid #ccc;
 }
 
+.opportunity-property {
+    font: 200 20px/1.5 Helvetica, Verdana, sans-serif;
+}
+
 #opp-doc-templates-list INPUT {
     display: inline;
     float: right;
@@ -200,11 +204,42 @@ li {
                                  -->
                                 <div id="spa-opportunities-list">
                                 </div>
+                                <div>
+                                    <table id="myTable" class="tablesorter">
+                                      <thead>
+                                        <tr>
+                                          <th>Opportunity Name</th>
+                                          <th>Closing Date and Time</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <tr>
+                                          <td>Smith</td>
+                                          <td>John</td>
+                                        </tr>
+                                        <tr>
+                                          <td>Bach</td>
+                                          <td>Frank</td>
+                                        </tr>
+                                        <tr>
+                                          <td>Doe</td>
+                                          <td>Jason</td>
+                                        </tr>
+                                        <tr>
+                                          <td>Conway</td>
+                                          <td>Tim</td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                </div>
 
                                 <div id="spa-opportunity-detail">
-                                    <span class="opportunity-property">Opportunity Title: </span>
-                                    <span class="opportunity-detail" id="Title"> Sample Title </span>
+
                                     <div class="row marketing">
+                                        <div class="col-md-6">
+                                            <span class="opportunity-property">Opportunity Title: </span>
+                                            <span class="opportunity-detail" id="Title"> Sample Title </span>
+                                        </div>
                                         <div class="col-md-6">
                                             <span class="opportunity-property">Closing Date: </span>
                                             <span class="opportunity-detail" id="ClosingDate"> Sample Closing </span>
@@ -218,12 +253,22 @@ li {
                                     <div class="row marketing">
                                         <div class="col-xs-12">
                                             <span class="opportunity-property">Description: </span>
-                                            
                                         </div>
+
                                     </div>
                                     <div class="row marketing">
                                         <div class="col-xs-12">
                                             <span class="opportunity-detail" id="Description"> Sample Description</span>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <div class="row marketing">
+                                        <div class="col-xs-12">
+                                            <span class="opportunity-property">Associated Docs and Forms:</span>
+                                            <ul id=opp-detail-doc-templates-list>
+                                                <li>fuggg</li>
+                                            </ul>
                                         </div>
                                     </div>
                                     <br><br>

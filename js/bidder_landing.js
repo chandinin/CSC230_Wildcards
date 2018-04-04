@@ -5,9 +5,16 @@ $(document).ready(function(){
     $("#show-list-btn").click(function() { router("#spa-opportunities-list"); });
 
     $("#proposals-tab").click(function() { activateProposalsList(); });
-    $("#opportunities-tab").click(function() { activateOpportunitiesList(); });
+    $("#opportunities-tab").click(function() 
+    { 
+        activateOpportunitiesList(); 
+        insertTableRows([["jej", "lel"]], document.getElementById("myTable"));
+    });
+    $("#myTable").tablesorter(); 
 
-    bidder_id = "2";
+
+
+    bidder_id = "1";
 });
 
 
@@ -35,6 +42,54 @@ function router(div_to_show)
     }
 
     $(div_to_show).show();
+}
+
+// Removes all elements in tbody, preserving 'thead'
+function removeAllTableElements(table)
+{
+    var tbody = null;
+    for(i = 0; i < table.children.length; i++)
+    {
+        if(table.children[i].localName.toLowerCase() == "tbody") 
+        {
+            table.children[i].innerHTML = "";
+        }
+    }
+}
+
+// Blindly inserts rows into the specified table DOM node
+function insertTableRows(rows_array, table_node)
+{
+    var tbody = null;
+    for(i = 0; i < table_node.children.length; i++)
+    {
+        if(table_node.children[i].localName.toLowerCase() == "tbody") 
+        {
+            tbody = table_node.children[i];
+            break;
+        }
+    }
+
+    if(tbody == null)
+    {
+        alert("There was an error inserting table_node rows, see logs");
+        console.log(rows_array);
+        console.log(table_node);
+    }
+
+    for(i = 0; i < rows_array.length; i++)
+    {
+        current_row = rows_array[i];
+        var tr = document.createElement('TR');
+
+        for(j = 0; j < current_row.length; j++)
+        {
+            var td = document.createElement('TD');
+            td.appendChild(document.createTextNode(rows_array[i][j]));
+            tr.appendChild(td);
+        }
+        tbody.appendChild(tr);
+    }
 }
 
 
@@ -155,9 +210,10 @@ function saveNewProposal(opportunity_id)
 
     // Before we upload anything, create the new proposal record
     var proposal_create_success = false;
+    var proposal_id = getUniqueProposalID();
 
     new_proposal_json = {
-        "ProposalID": getUniqueProposalID(),
+        "ProposalID": Proposal_id,
         "OpportunityID": opportunity_id,
         "BidderID": bidder_id,
         "Status": "saved, still open",
@@ -223,13 +279,17 @@ function saveNewProposal(opportunity_id)
         console.log("Atthempting to upload...");
 
         var formData=new FormData();
-        formData.append('upload[]', current_file, current_file.name);
+        formData.append('filename', current_file, current_file.name);
+        formData.append('ProposalID', proposal_id);
+        formData.append("OpportunityID", opportunity_id);
+        formData.append("DocTemplateID", current_child.dataset.DocTemplateID);
+        formData.append('submit', "Lol this needs to be filled");
 
         var xhr = new XMLHttpRequest();
         xhr.open('POST','php/api/proposal/uploadDoc.php');
         xhr.onload = function() {
             if(xhr.status == 200) {
-                alert('File uploaded');
+                console.log('File uploaded' + xhr.response);
             } else {
                 alert('Error uploading file:' + xhr.response);
             }
