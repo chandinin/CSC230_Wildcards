@@ -48,6 +48,9 @@
     background-color: #757575;
 }
 
+.btn-delete {
+    background-color: #d80d17;
+}
 .btn-warning {
     color: #000000;
     background-color: #ffb200;
@@ -3052,3 +3055,4 @@ span.video-duration {
 .table-hover > tbody > tr:hover > th {
     background-color: #9fadc4;
 }
+th {text-align:center}
