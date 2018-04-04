@@ -1,0 +1,26 @@
+Here's the blob methods I created for Opportunity to upload the scoring criteria (excel spreadsheet?).  
+
+TO UPLOAD A BLOB:
+You need to submit the file with FORM POST:
+http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/uploadScoringCritera.php
+
+you need to have 2 things:
+1) an input tag of type=file called "filename".
+2) a variable called "OpportunityID".
+
+<!DOCTYPE html>
+<html>
+<body>
+
+<form action="uploadScoringCritera.php" method="post" enctype="multipart/form-data">
+    Select image to upload:
+    <input type="file" name="filename" id="filename">
+    <input type="submit" value="Upload Image" name="submit">
+    <input type="text" value="2" name="OpportunityID">
+</form>
+
+</body>
+</html> 
+
+TO DOWNLOAD A BLOB:
+http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/getScoringCriteria.php?opportunityid=2

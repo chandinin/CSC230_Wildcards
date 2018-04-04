@@ -15,10 +15,14 @@ $db = $database->Connect();
 $opportunity = new Opportunity($db);
 
 // get opportunityID from POST
+$_GET_LowerCase = array_change_key_case($_GET, CASE_LOWER);
 $_POST_LowerCase = array_change_key_case($_POST, CASE_LOWER);
-if(isSet($_POST_LowerCase["opportunityid"]))
+if(isSet($_POST_LowerCase["opportunityid"]) 
+|| isSet($_GET_LowerCase["opportunityid"]))
 {
-  $opportunityID = $_POST_LowerCase["opportunityid"];
+  //$opportunityID = $_POST_LowerCase["opportunityid"];
+  $opportunityID = isSet($_GET_LowerCase["opportunityid"]) ? 
+     $_GET_LowerCase["opportunityid"] : $_POST_LowerCase["opportunityid"];
 
   //Search
   $opportunity->selectByID($opportunityID);
@@ -26,11 +30,11 @@ if(isSet($_POST_LowerCase["opportunityid"]))
   $opportunity_arr = array(
     "OpportunityID" =>  $opportunity->OpportunityID,
     "ClosingDate" =>  $opportunity->ClosingDate,
-    "ScoringCategoryBlob" =>  $opportunity->ScoringCategoryBlob,
     "LeadEvaluatorID" =>  $opportunity->LeadEvaluatorID,
     "Name" =>  $opportunity->Name,
     "LowestBid" =>  $opportunity->LowestBid,
-    "Description" =>  $opportunity->Description
+    "Description" =>  $opportunity->Description,
+    "Status" =>  $opportunity->Status
   );
 
   // make it json format
@@ -53,11 +57,11 @@ else
       $opportunity_arr = array(
           "OpportunityID" => $row['OpportunityID'],
           "ClosingDate" => $row['ClosingDate'],
-          "ScoringCategoryBlob" => $row['ScoringCategoryBlob'],
           "LeadEvaluatorID" => $row['LeadEvaluatorID'],
           "Name" => $row['Name'],
           "LowestBid" => $row['LowestBid'],
-          "Description" => $row['Description']
+          "Description" => $row['Description'],
+          "Status" => $row['Status']
       );
      
       array_push($opportunities_arr["opportunity"], $opportunity_arr);
