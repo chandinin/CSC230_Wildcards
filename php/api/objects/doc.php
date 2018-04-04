@@ -1,13 +1,13 @@
 <?php
 /**
- * Class: DocTemplate
+ * Class: Doc
  * Description: This is the database wrapper for retrieving the
- *              DocTemplate record from the database.
+ *              Doc record from the database.
  */
-class DocTemplate
+class Doc
 {
   private $conn;
-  public $DocTemplateID;
+  public $DocID;
   public $DocTitle;
   public $Path;
   public $Blob;
@@ -22,7 +22,7 @@ class DocTemplate
   // select one by ID
   function selectByOppID($opportunityID)
   {
-    $query = "select DocTemplateID, DocTitle, `Path`, `Blob` from DocTemplate where DocTemplateID in (select DocTemplateID from OppDocTemplate where OpportunityID = ? );";
+    $query = "select DocID, DocTitle, `Path`, `Blob` from Docs where DocID in (select DocID from ProposalDoc where ProposalID = ? );";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
@@ -34,13 +34,13 @@ class DocTemplate
   }
 
   // select one by ID
-  function selectByDocTemplateID($DocTemplateID)
+  function selectByDocID($DocID)
   {
-    $query = "SELECT DocTemplateID, DocTitle, `Path`, `Blob` FROM DocTemplate WHERE DocTemplateID = ? ;";
+    $query = "SELECT DocID, DocTitle, `Path`, `Blob` FROM Docs WHERE DocID = ? ;";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
-    $stmt->bindParam(1, $DocTemplateID);
+    $stmt->bindParam(1, $DocID);
 
     // execute query
     $stmt->execute();
@@ -49,24 +49,24 @@ class DocTemplate
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
     // set values to object properties
-    $this->DocTemplateID = $row['DocTemplateID'];
+    $this->DocID = $row['DocID'];
     $this->DocTitle = $row['DocTitle'];
     $this->Path = $row['Path'];
     $this->Blob = $row['Blob'];
   }
 
   // Upload Document Template 
-  function DocTemplateExistsByID($DocTemplateID)
+  function DocExistsByID($DocID)
   { 
     try
     {
-      $query = "SELECT count(*) as docCount FROM DocTemplate WHERE DocTemplateID = :DocTemplateID; ";
+      $query = "SELECT count(*) as docCount FROM Docs WHERE DocID = :DocID; ";
       
 
       $stmt = $this->conn->prepare( $query );
    
       // bind parameters
-      $stmt->bindParam(':DocTemplateID', $DocTemplateID);
+      $stmt->bindParam(':DocID', $DocID);
       $count = 0;
 
       if($stmt->execute())
@@ -100,7 +100,7 @@ class DocTemplate
   // select one by ID
   function searchByTitle($DocTitle)
   {   
-    $query = "SELECT DocTemplateID, DocTitle, `Path`, `Blob` FROM DocTemplate WHERE DocTitle like '%".$DocTitle."%' ;";    
+    $query = "SELECT DocID, DocTitle, `Path`, `Blob` FROM Docs WHERE DocTitle like '%".$DocTitle."%' ;";    
     $stmt = $this->conn->prepare( $query );
 
     // execute query
@@ -111,7 +111,7 @@ class DocTemplate
   // select All in the table
   function selectAll()
   {
-    $query = "SELECT DocTemplateID, DocTitle, `Path`, `Blob` FROM DocTemplate;";
+    $query = "SELECT DocID, DocTitle, `Path`, `Blob` FROM Docs;";
     $stmt = $this->conn->prepare( $query );
 
     // execute query
@@ -121,12 +121,12 @@ class DocTemplate
 
   function update()
   {
-    $query = "UPDATE DocTemplate set DocTitle = :DocTitle, `Path` = :Path, `Blob` = :Blob WHERE DocTemplateID = :DocTemplateID;";
+    $query = "UPDATE Docs set DocTitle = :DocTitle, `Path` = :Path, `Blob` = :Blob WHERE DocID = :DocID;";
 
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
-    $stmt->bindParam(':DocTemplateID', $this->DocTemplateID);
+    $stmt->bindParam(':DocID', $this->DocID);
     $stmt->bindParam(':DocTitle', $this->DocTitle);
     $stmt->bindParam(':Path', $this->Path);
     $stmt->bindParam(':Blob', $this->Blob);
@@ -139,12 +139,12 @@ class DocTemplate
 
   function create()
   {
-    $query = "INSERT INTO DocTemplate (DocTemplateID, DocTitle, `Path`, `Blob`) " .
-             "VALUES(:DocTemplateID, :DocTitle, :Path, :Blob);";
+    $query = "INSERT INTO Docs (DocID, DocTitle, `Path`, `Blob`) " .
+             "VALUES(:DocID, :DocTitle, :Path, :Blob);";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
-    $stmt->bindParam(':DocTemplateID', $this->DocTemplateID);
+    $stmt->bindParam(':DocID', $this->DocID);
     $stmt->bindParam(':DocTitle', $this->DocTitle);
     $stmt->bindParam(':Path', $this->Path);
     $stmt->bindParam(':Blob', $this->Blob);
@@ -157,11 +157,11 @@ class DocTemplate
 
   function delete()
   {
-    $query = "DELETE FROM DocTemplate WHERE DocTemplateID = :DocTemplateID;";
+    $query = "DELETE FROM Docs WHERE DocID = :DocID;";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
-    $stmt->bindParam(':DocTemplateID', $this->DocTemplateID);
+    $stmt->bindParam(':DocID', $this->DocID);
 
     if($stmt->execute())
       return true;

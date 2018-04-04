@@ -7,7 +7,6 @@
 ini_set('display_errors', 'On');
 error_reporting(E_ALL);
 
-
 class Opportunity
 {
   private $conn;
@@ -18,7 +17,10 @@ class Opportunity
   public $Name;
   public $LowestBid;
   public $Description;
-
+  public $Status;
+  public $CategoryID;
+  public $CreatedDate;
+  public $LastEditDate;
 
   // Constructor
   // Note: Must pass connection as a parameter.
@@ -30,7 +32,7 @@ class Opportunity
   // select one by ID
   function selectByID($id)
   {
-    $query = "SELECT OpportunityID, ClosingDate, LeadEvaluatorID, Name, LowestBid, Description FROM Opportunity WHERE OpportunityID = ? ;";
+    $query = "SELECT OpportunityID, ClosingDate, LeadEvaluatorID, Name, LowestBid, Description, Status, CategoryID, CreatedDate, LastEditDate FROM Opportunity WHERE OpportunityID = ? ;";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
@@ -49,12 +51,32 @@ class Opportunity
     $this->Name = $row['Name'];
     $this->LowestBid = $row['LowestBid'];
     $this->Description = $row['Description'];
+    $this->Status = $row['Status'];
+    $this->CategoryID = $row['CategoryID'];
+    $this->CreatedDate = $row['CreatedDate'];
+    $this->LastEditDate = $row['LastEditDate'];
+  }
+
+
+  // select one by ID
+  function selectByCategoryID($CategoryID)
+  {
+    $query = "SELECT OpportunityID, ClosingDate, LeadEvaluatorID, Name, LowestBid, Description, Status, CategoryID, CreatedDate, LastEditDate FROM Opportunity WHERE CategoryID = ? ;";
+    $stmt = $this->conn->prepare( $query );
+
+    // bind parameters
+    $stmt->bindParam(1, $CategoryID);
+
+    // execute query
+    $stmt->execute();
+
+    return $stmt;
   }
 
   // select All in the table
   function selectAll()
   {
-    $query = "SELECT OpportunityID, ClosingDate, LeadEvaluatorID, Name, LowestBid, Description FROM Opportunity;";
+    $query = "SELECT OpportunityID, ClosingDate, LeadEvaluatorID, Name, LowestBid, Description, Status, CategoryID, CreatedDate, LastEditDate FROM Opportunity;";
     $stmt = $this->conn->prepare( $query );
 
     // execute query
@@ -63,20 +85,21 @@ class Opportunity
     return $stmt;
   }
 
+
   function update()
   {
-    $query = "UPDATE Opportunity set ClosingDate = :ClosingDate, ScoringCategoryBlob = :ScoringCategoryBlob, LeadEvaluatorID = :LeadEvaluatorID, Name = :Name, LowestBid = :LowestBid, Description = :Description WHERE OpportunityID = :OpportunityID;";
+    $query = "UPDATE Opportunity set ClosingDate = :ClosingDate, LeadEvaluatorID = :LeadEvaluatorID, Name = :Name, LowestBid = :LowestBid, Description = :Description, Status = :Status, LastEditDate = NOW() WHERE OpportunityID = :OpportunityID;";
 
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
     $stmt->bindParam(':OpportunityID', $this->OpportunityID);
     $stmt->bindParam(':ClosingDate', $this->ClosingDate);
-    $stmt->bindParam(':ScoringCategoryBlob', $this->ScoringCategoryBlob);
     $stmt->bindParam(':LeadEvaluatorID', $this->LeadEvaluatorID);
     $stmt->bindParam(':Name', $this->Name);
     $stmt->bindParam(':LowestBid', $this->LowestBid);
     $stmt->bindParam(':Description', $this->Description);
+    $stmt->bindParam(':Status', $this->Status);
 
     if($stmt->execute())
       return true;
@@ -86,18 +109,22 @@ class Opportunity
 
   function create()
   {
-    $query = "INSERT INTO Opportunity (OpportunityID, ClosingDate, ScoringCategoryBlob, LeadEvaluatorID, Name, LowestBid, Description) " .
-             "VALUES(:OpportunityID, :ClosingDate, :ScoringCategoryBlob, :LeadEvaluatorID, :Name, :LowestBid, :Description);";
+    $query = "INSERT INTO Opportunity (OpportunityID, ClosingDate, LeadEvaluatorID, Name, LowestBid, Description, Status, CategoryID, CreatedDate, LastEditDate) " .
+             "VALUES(:OpportunityID, :ClosingDate, :LeadEvaluatorID, :Name, :LowestBid, :Description, :Status, :CategoryID, NOW(), NOW());";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
     $stmt->bindParam(':OpportunityID', $this->OpportunityID);
     $stmt->bindParam(':ClosingDate', $this->ClosingDate);
-    $stmt->bindParam(':ScoringCategoryBlob', $this->ScoringCategoryBlob);
     $stmt->bindParam(':LeadEvaluatorID', $this->LeadEvaluatorID);
     $stmt->bindParam(':Name', $this->Name);
     $stmt->bindParam(':LowestBid', $this->LowestBid);
     $stmt->bindParam(':Description', $this->Description);
+    $stmt->bindParam(':Status', $this->Status);
+    $stmt->bindParam(':CategoryID', $this->CategoryID);
+
+    //$date = new DateTime(date("Y-m-d H:i:s"));
+    //$stmt->bindParam(':CreatedDate', $date->format('Y-m-d H:i:s'));
 
     if($stmt->execute())
       return true;
@@ -119,11 +146,28 @@ class Opportunity
       return false;
   }
 
+  // Get Category Dropdown Data
+  function getCategories()
+  {
+    try
+    {
+      $query = "SELECT CategoryID, `Name` FROM OppCategory ORDER BY CategoryID;";
+      $stmt = $this->conn->prepare( $query );
+      $stmt->execute();
+
+      return $stmt;
+    }
+    catch (PDOException $e)
+    {
+      echo 'Connection failed: ' . $e->getMessage();
+    }
+  }
+
   // Upload Blob File
   function UploadBlobByID($FilePath, $ID, $MimeType,
   $size,
   $filename)
-  { 
+  {
     try
     {
       //$fileData = mysql_real_escape_string(file_get_contents($FilePath));
@@ -143,10 +187,10 @@ class Opportunity
   :MimeType,
   :size,
   :filename)";
-      
+
 
       $stmt = $this->conn->prepare( $query );
-   
+
       // bind parameters
       $stmt->bindParam(':OpportunityID', $ID);
       $stmt->bindParam(':fileData', $fileData, PDO::PARAM_LOB);
@@ -159,7 +203,7 @@ class Opportunity
       else
         return false;
     }
-    catch (PDOException $e) 
+    catch (PDOException $e)
     {
       echo 'Connection failed: ' . $e->getMessage();
     }
@@ -167,7 +211,7 @@ class Opportunity
 
   // Upload Blob File
   function getBlobByID($OpportunityID)
-  { 
+  {
     try
     {
       $query = "SELECT OpportunityID,
@@ -175,35 +219,35 @@ class Opportunity
   MimeType,
   size,
   filename FROM ScoringCriteriaBlob WHERE OpportunityID = '" . $OpportunityID . "' ;";
-      
+
 
       //echo $query;
 
       $stmt = $this->conn->prepare( $query );
-   
+
       // bind parameters
       //$stmt->bindParam(':OpportunityID', $OpportunityID);
 
       $stmt->execute();
-      
+
       return $stmt;
     }
-    catch (PDOException $e) 
+    catch (PDOException $e)
     {
       echo 'Connection failed: ' . $e->getMessage();
     }
   }
 
-  // Upload Document Template 
+  // Upload Document Template
   function UploadDocTemplate($DocTemplateID, $DocTitle, $Path, $Url)
-  { 
+  {
     try
     {
       $query = "INSERT INTO DocTemplate (DocTemplateID, DocTitle, Path, Url) VALUES (:DocTemplateID, :DocTitle, :Path, :Url)";
-      
+
 
       $stmt = $this->conn->prepare( $query );
-   
+
       // bind parameters
       $stmt->bindParam(':DocTemplateID', $DocTemplateID);
       $stmt->bindParam(':DocTitle', $DocTitle);
@@ -215,23 +259,23 @@ class Opportunity
       else
         return false;
     }
-    catch (PDOException $e) 
+    catch (PDOException $e)
     {
       echo 'Connection failed: ' . $e->getMessage();
       return false;
     }
   }
 
-  // Upload Document Template 
+  // Upload Document Template
   function UpdateDocTemplate($DocTemplateID, $DocTitle, $Path)
-  { 
+  {
     try
     {
       $query = "UPDATE doctemplate set DocTitle = :DocTitle, Path = :Path WHERE DocTemplateID = :DocTemplateID; ";
-      
+
 
       $stmt = $this->conn->prepare( $query );
-   
+
       // bind parameters
       $stmt->bindParam(':DocTemplateID', $DocTemplateID);
       $stmt->bindParam(':DocTitle', $DocTitle);
@@ -242,23 +286,23 @@ class Opportunity
       else
         return false;
     }
-    catch (PDOException $e) 
+    catch (PDOException $e)
     {
       echo 'Connection failed: ' . $e->getMessage();
       return false;
     }
   }
 
-  // Upload Document Template 
+  // Upload Document Template
   function DocTemplateExists($DocTemplateID, $DocTitle)
-  { 
+  {
     try
     {
       $query = "SELECT count(*) FROM DocTemplate WHERE DocTemplateID = :DocTemplateID OR DocTitle like '" . $DocTitle . "'; ";
-      
+
 
       $stmt = $this->conn->prepare( $query );
-   
+
       // bind parameters
       $stmt->bindParam(':DocTemplateID', $DocTemplateID);
 
@@ -267,54 +311,53 @@ class Opportunity
       else
         return false;
     }
-    catch (PDOException $e) 
+    catch (PDOException $e)
     {
       echo 'Connection failed: ' . $e->getMessage();
       return false;
     }
   }
 
-  // Upload Document Template 
+  // Upload Document Template
   function getDocTemplates($OpportunityID)
-  { 
+  {
     try
     {
       $query = "SELECT DocTemplateID, DocTitle, Path, Url FROM DocTemplate WHERE DocTemplateID in (SELECT DocTemplateID FROM OppDocTemplate WHERE OpportunityID = :OpportunityID) ";
-      
+
 
       $stmt = $this->conn->prepare( $query );
-   
+
       // bind parameters
       $stmt->bindParam(':OpportunityID', $OpportunityID);
       $stmt->execute();
 
       return $stmt;
     }
-    catch (PDOException $e) 
+    catch (PDOException $e)
     {
       echo 'Connection failed: ' . $e->getMessage();
     }
   }
 
-
-  // Upload Document Template 
+  // Upload Document Template
   function getNewDocTemplateID()
-  { 
+  {
     $DocTemplateID = 0;
     try
     {
       $query = "SELECT max(DocTemplateID) + 1 as newid FROM DocTemplate; ";
-      
+
 
       $stmt = $this->conn->prepare( $query );
-   
+
       if($stmt->execute())
       {
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $DocTemplateID = $row['newid'];
       }
     }
-    catch (PDOException $e) 
+    catch (PDOException $e)
     {
       echo 'Connection failed: ' . $e->getMessage();
     }
@@ -322,16 +365,16 @@ class Opportunity
     return $DocTemplateID;
   }
 
-  // Upload Document Template 
+  // Upload Document Template
   function RelateDocTemplateToOppID($OpportunityID, $DocTemplateID, $ExpirationDate)
-  { 
+  {
     try
     {
       $query = "INSERT INTO OppDocTemplate (OpportunityID, DocTemplateID, ExpirationDate) VALUES (:OpportunityID, :DocTemplateID, :ExpirationDate)";
-      
+
 
       $stmt = $this->conn->prepare( $query );
-   
+
       // bind parameters
       $stmt->bindParam(':OpportunityID', $OpportunityID);
       $stmt->bindParam(':DocTemplateID', $DocTemplateID);
@@ -342,7 +385,7 @@ class Opportunity
       else
         return false;
     }
-    catch (PDOException $e) 
+    catch (PDOException $e)
     {
       echo 'Connection failed: ' . $e->getMessage();
       return false;
