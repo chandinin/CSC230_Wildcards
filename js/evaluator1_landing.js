@@ -1,10 +1,8 @@
 $(document).ready(
     function () {
-        initNewOppForm();
-        $('#editOppPanel').hide();
-        $('#newOppPanel').hide();
+        getOppList();
+        getCategories();
         $('.datepicker').datepicker();
-        $('#listOppPanel').show();
 
         $('#manageOpp').click(function() {
             getOppList();
@@ -12,50 +10,12 @@ $(document).ready(
             $('.table').tablesorter();
             $("#oppsMenu option[id='opplist']").attr("selected", "selected");
         });
-
-        $('#showNewOpp').click(function (){
-            $('#newOppPanel').show();
-            $('#listOppPanel').hide();
-        });
-
-        $('#exitNewOpp').click(function() {
-            $('#newOppPanel').hide();
-            $('#newOppForm')[0].reset();
-            $("#listOppPanel").show();
-        });
-
-        $('#clearNewOpp').click(function() {
-            $('#newOppForm')[0].reset();
-        });
-
         $('#oppListTable tr').click(function() {
             showOpp();
         });
-
-        $('.oppListButton').click(function(){
-            showOppList();
-        });
-
-        $('#editOppButton').click(function() {
-            showEditOpp();
-        });
-
-        $('#exitNewOpp').click(function() {
-            $('#newOppPanel').hide();
-        });
-
     });
 
-function showEditOpp() {
-    $('#listOppPanel').hide();
-    $('#newOppPanel').hide();
-    $('#editOppPanel').show();
-};
-
-function showOppList() {
-    $('#listOppPanel').show();
-};
-
+//Get opportunity list from server
 function getOppList() {
 
     $('#oppListTableBody').empty();
@@ -65,7 +25,6 @@ function getOppList() {
         if (xhr.status == 200) {
             var jsonArray = JSON.parse(xhr.responseText);
             fillOppTable(jsonArray);
-            fillCategoryDropdown(jsonArray);
         } else {
             alert("Error response");
         }
@@ -73,7 +32,23 @@ function getOppList() {
     xhr.send();
 }
 
-//Logic for pagination
+//Get opportunity list given an id
+function getOppListbyID(id) {
+
+    $('#oppListTableBody').empty();
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php?CategoryID='+id,true);
+    xhr.onload = function() {
+        if (xhr.status == 200) {
+            var jsonArray = JSON.parse(xhr.responseText);
+            fillOppTable(jsonArray);
+        } else {
+            alert("Error response");
+        }
+    };
+    xhr.send();
+}
+//Logic for pagination & fill table
 function fillOppTable(jsonArray){
 
     var start = 0;
@@ -86,7 +61,7 @@ function fillOppTable(jsonArray){
         for(var i=start;i<limit;i++) {
             fillOppTable(jsonArray);
             var opp = jsonArray.opportunity[i];
-            var row ="<tr>"+"</td><td>" + opp.OpportunityID+ "</td><td>" + "<a href='javascript:showOpp()'>" +  opp.Name + "</a></td><td>"
+            var row ="<tr>"+"</td><td>" + opp.OpportunityID+ "</td><td>" + "<a href='javascript:showOppDetails()'>" +  opp.Name + "</a></td><td>"
                 + opp.ClosingDate + "<td>"+ opp.Status + " <td>" +  "<button onclick='completeOpportunityEval(\"" + opp.OpportunityID + "\")' id='editOppButton' value='\" + opp.OpportunityID + \"' type='button' class='btn btn-primary btn-sm'>" +
                 "Complete</button></td>";
             $('#oppListTableBody').append(row);
@@ -113,28 +88,53 @@ function fillOppTable(jsonArray){
 }
 
 //TODO write logic to get categories.
+function getCategories(){
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/getOppCategoryList.php',true);
+    xhr.onload = function() {
+        if (xhr.status == 200) {
+            var jsonArray = JSON.parse(xhr.responseText);
+            fillCategoryDropdown(jsonArray);
+        } else {
+            alert("Error response");
+        }
+    };
+    xhr.send();
+}
+
+//Fill dropdown
 function fillCategoryDropdown(jsonArray){
     var start = 0;
     var select = document.getElementById("selectCategory")
-    var size = jsonArray.opportunity.length;
+    var size = jsonArray.Category.length;
 
     for(var i=start;i<size;i++) {
         var option = document.createElement("OPTION");
-        txt = document.createTextNode(jsonArray.opportunity[i].Name);
+        txt = document.createTextNode(jsonArray.Category[i].Name);
         option.appendChild(txt);
-        option.setAttribute("value", jsonArray.opportunity[i].Name)
+        option.setAttribute("value", jsonArray.Category[i].Name)
+        option.setAttribute("id", jsonArray.Category[i].CategoryID)
         select.insertBefore(option, select.lastChild);
     }
 }
 
-function initNewOppForm() {
-    getOppList();
-}
+$(document).ready(function () {
+    $("#selectCategory").change(function () {
+        //Storing the dropdown selection in category variable
+        category= $('#selectCategory option:selected').attr('id');
+        getOppListbyID(category);
+    });
+});
 
-function showOpp() {
+//Show opportunity detail page
+function showOppDetails() {
+    //place holder screen
     window.location.replace("Opportunity_new.html")
+    //TODO write screen logic for proposal screen
 }
 
+//Function to update opportunity status
 function completeOpportunityEval(opId) {
 
     alert(opId);
