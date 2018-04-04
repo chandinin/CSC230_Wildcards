@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="143ccf83-bc51-4c5e-a3ee-f556d890400c" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/js/list_documents.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/list_documents.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/evaluator1_landing.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/evaluator1_landing.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/list_documents.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/list_documents.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/list_proposals.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/list_proposals.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -16,13 +14,9 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="list_documents.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="list_documents.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/list_documents.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="481">
-              <caret line="38" column="114" selection-start-line="38" selection-start-column="114" selection-end-line="38" selection-end-column="114" />
-            </state>
-          </provider>
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
       <file leaf-file-name="opportunity2.js" pinned="false" current-in-tab="false">
@@ -37,8 +31,8 @@
       <file leaf-file-name="evaluator1_landing.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/evaluator1_landing.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-246">
-              <caret line="67" lean-forward="true" selection-start-line="67" selection-end-line="83" selection-end-column="7" />
+            <state relative-caret-position="723">
+              <caret line="135" column="4" selection-start-line="135" selection-start-column="4" selection-end-line="135" selection-end-column="16" />
             </state>
           </provider>
         </entry>
@@ -46,8 +40,8 @@
       <file leaf-file-name="evaluator1_landing.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/evaluator1_landing.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="50" lean-forward="true" selection-start-line="50" selection-end-line="50" />
+            <state relative-caret-position="187">
+              <caret line="111" column="25" lean-forward="true" selection-start-line="111" selection-start-column="25" selection-end-line="111" selection-end-column="25" />
               <folding>
                 <element signature="n#head#0;n#html#0;n#!!top" />
                 <element signature="n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" />
@@ -61,16 +55,34 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="list_documents.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="list_documents.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/list_documents.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="23" lean-forward="true" selection-start-line="23" selection-end-line="23" />
+            <state relative-caret-position="782">
+              <caret line="46" column="7" lean-forward="true" selection-start-line="46" selection-start-column="7" selection-end-line="46" selection-end-column="7" />
               <folding>
                 <element signature="n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" />
                 <element signature="n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" />
                 <element signature="n#div#2;n#div#0;n#body#0;n#html#0;n#!!top" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="list_proposals.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/list_proposals.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="787">
+              <caret line="96" column="43" selection-start-line="96" selection-start-column="43" selection-end-line="96" selection-end-column="43" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="list_proposals.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/list_proposals.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="113">
+              <caret line="97" lean-forward="true" selection-start-line="97" selection-end-line="97" />
             </state>
           </provider>
         </entry>
@@ -171,9 +183,9 @@
         <option value="$PROJECT_DIR$/employee_login.html" />
         <option value="$PROJECT_DIR$/js/employee_login.js" />
         <option value="$PROJECT_DIR$/php/api/employee/authentication.php" />
-        <option value="$PROJECT_DIR$/js/list_proposals.js" />
         <option value="$PROJECT_DIR$/js/evaluator1_landing.js" />
         <option value="$PROJECT_DIR$/list_documents.html" />
+        <option value="$PROJECT_DIR$/js/list_proposals.js" />
         <option value="$PROJECT_DIR$/js/list_documents.js" />
       </list>
     </option>
@@ -257,9 +269,8 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JavaScript Debug.list_documents.html">
+  <component name="RunManager" selected="JavaScript Debug.list_proposals.html">
     <configuration name="Opportunity.html" type="JavascriptDebugType" factoryName="JavaScript Debug" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/Opportunity.html" />
-    <configuration name="Opportunity_orig.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/Opportunity_orig.html" />
     <configuration name="bidder_login.html" type="JavascriptDebugType" factoryName="JavaScript Debug" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/bidder_login.html" />
     <configuration name="bidder_login.html" type="JavascriptDebugType" factoryName="JavaScript Debug" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/bidder_login.html" />
     <configuration name="bidder_register.html" type="JavascriptDebugType" factoryName="JavaScript Debug" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/bidder_register.html" />
@@ -268,6 +279,7 @@
     <configuration name="evaluator1_landing.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/evaluator1_landing.html" />
     <configuration name="list_documents.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/list_documents.html" />
     <configuration name="list_opportunities.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/list_opportunities.html" />
+    <configuration name="list_proposals.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/list_proposals.html" />
     <configuration name="opportunity_detail.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/opportunity_detail.html" />
     <list>
       <item itemvalue="JavaScript Debug.bidder_login.html" />
@@ -276,18 +288,18 @@
       <item itemvalue="JavaScript Debug.bidops_template.html" />
       <item itemvalue="JavaScript Debug.employee_login.html" />
       <item itemvalue="JavaScript Debug.evaluator1_landing.html" />
-      <item itemvalue="JavaScript Debug.Opportunity_orig.html" />
       <item itemvalue="JavaScript Debug.opportunity_detail.html" />
       <item itemvalue="JavaScript Debug.list_opportunities.html" />
       <item itemvalue="JavaScript Debug.list_documents.html" />
+      <item itemvalue="JavaScript Debug.list_proposals.html" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JavaScript Debug.list_documents.html" />
+        <item itemvalue="JavaScript Debug.list_proposals.html" />
         <item itemvalue="JavaScript Debug.evaluator1_landing.html" />
+        <item itemvalue="JavaScript Debug.list_documents.html" />
         <item itemvalue="JavaScript Debug.opportunity_detail.html" />
         <item itemvalue="JavaScript Debug.list_opportunities.html" />
-        <item itemvalue="JavaScript Debug.Opportunity_orig.html" />
       </list>
     </recent_temporary>
   </component>
@@ -318,12 +330,12 @@
       <workItem from="1522637310026" duration="29972000" />
       <workItem from="1522805779885" duration="5054000" />
       <workItem from="1522825475973" duration="7427000" />
-      <workItem from="1522871347025" duration="6782000" />
+      <workItem from="1522871347025" duration="8785000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="137539000" />
+    <option name="totallyTimeSpent" value="139542000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1928" y="-8" width="1936" height="1066" extended-state="6" />
@@ -678,20 +690,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/list_proposals.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1382">
-          <caret line="83" column="46" lean-forward="true" selection-start-line="83" selection-start-column="46" selection-end-line="83" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/list_proposals.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="895">
-          <caret line="143" column="10" lean-forward="true" selection-start-line="143" selection-start-column="10" selection-end-line="143" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/opportunity2.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="543">
@@ -699,10 +697,22 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/list_documents.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="782">
+          <caret line="46" column="7" lean-forward="true" selection-start-line="46" selection-start-column="7" selection-end-line="46" selection-end-column="7" />
+          <folding>
+            <element signature="n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" />
+            <element signature="n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" />
+            <element signature="n#div#2;n#div#0;n#body#0;n#html#0;n#!!top" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/evaluator1_landing.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="50" lean-forward="true" selection-start-line="50" selection-end-line="50" />
+        <state relative-caret-position="187">
+          <caret line="111" column="25" lean-forward="true" selection-start-line="111" selection-start-column="25" selection-end-line="111" selection-end-column="25" />
           <folding>
             <element signature="n#head#0;n#html#0;n#!!top" />
             <element signature="n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" />
@@ -717,29 +727,27 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/evaluator1_landing.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-246">
-          <caret line="67" lean-forward="true" selection-start-line="67" selection-end-line="83" selection-end-column="7" />
+        <state relative-caret-position="723">
+          <caret line="135" column="4" selection-start-line="135" selection-start-column="4" selection-end-line="135" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/list_proposals.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="787">
+          <caret line="96" column="43" selection-start-line="96" selection-start-column="43" selection-end-line="96" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/list_proposals.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="113">
+          <caret line="97" lean-forward="true" selection-start-line="97" selection-end-line="97" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/list_documents.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="481">
-          <caret line="38" column="114" selection-start-line="38" selection-start-column="114" selection-end-line="38" selection-end-column="114" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/list_documents.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="23" lean-forward="true" selection-start-line="23" selection-end-line="23" />
-          <folding>
-            <element signature="n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" />
-            <element signature="n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" />
-            <element signature="n#div#2;n#div#0;n#body#0;n#html#0;n#!!top" />
-          </folding>
-        </state>
-      </provider>
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
   </component>
 </project>

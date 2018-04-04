@@ -10,10 +10,10 @@ $(document).ready(
 
 //Get all Documents for the proposal from server
 function getDocumentList() {
-
+    var proposalID = localStorage.getItem("storageName");
     $('#documentsTableBody').empty();
     var xhr = new XMLHttpRequest();
-    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/proposal/getDocsList.php?proposalid='+19241,true);
+    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/proposal/getDocsList.php?proposalid='+proposalID,true);
     xhr.onload = function() {
         if (xhr.status == 200) {
             var jsonArray = JSON.parse(xhr.responseText);

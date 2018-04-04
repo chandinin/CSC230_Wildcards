@@ -61,8 +61,9 @@ function fillProposalTable(jsonArray){
     function fillOppTable(start, limit){
         for(var i=0;i<size;i++) {
             var proposal = jsonArray.proposal[i];
-            var row ="<tr>"+"</td><td>" + proposal.OpportunityID+ "</td><td>" + "<a href='javascript:showOpp()'>" +  proposal.BidderID + "</a></td><td>"
+            var row ="<tr>"+"</td><td>" + proposal.OpportunityID+ "</td><td>" + "<a href='javascript:showProposalDetails(\"" + proposal.ProposalID + "\")'>" +  proposal.ProposalID + "</a></td><td>"
                 + proposal.Status + "</td>";
+                "Complete</button></td>";
             $('#proposalListTableBody').append(row);
             $("#proposalListTableBody").trigger("update");
         }
@@ -86,4 +87,12 @@ function fillProposalTable(jsonArray){
             fillOppTable(pre,limit);
         }
     });
+}
+
+function showProposalDetails(id) {
+    //place holder screen
+    alert(id);
+    localStorage.setItem("storageName",id);
+    //window.location.href = "list_documents.html" + id;
+    window.location.replace("list_documents.html");
 }
