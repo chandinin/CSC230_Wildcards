@@ -15,10 +15,20 @@ $db = $database->Connect();
 $proposal = new Proposal($db);
 
 // get proposalID from POST
+$_GET_LowerCase = array_change_key_case($_GET, CASE_LOWER);
 $_POST_LowerCase = array_change_key_case($_POST, CASE_LOWER);
-if(isSet($_POST_LowerCase["proposalid"]))
+if(isSet($_POST_LowerCase["proposalid"]) 
+|| isSet($_GET_LowerCase["proposalid"]))
 {
-  $proposalID = $_POST_LowerCase["proposalid"];
+  //$proposalID = $_POST_LowerCase["proposalid"];
+  $proposalID = isSet($_GET_LowerCase["proposalid"]) ?
+     $_GET_LowerCase["proposalid"] : $_POST_LowerCase["proposalid"];
+
+
+//  echo '{';
+//  echo ' message : "ProposalID.  Record(ProposalID='.$proposalID.')"';
+//  echo '}';
+
 
   //Search
   $proposal->selectByID($proposalID);
@@ -62,8 +72,15 @@ else
       array_push($proposals_arr["proposal"], $proposal_arr);
     }
   }
+
   // make it json format
   print_r(json_encode($proposals_arr));
+
+  //echo '{';
+  //echo ' "message" : "Read Succeeded."';
+  //echo '}';
+
 }
+
 ?>
 

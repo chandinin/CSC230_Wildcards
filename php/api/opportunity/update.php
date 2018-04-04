@@ -25,11 +25,11 @@ if(json_last_error() === JSON_ERROR_NONE)
   $ClosingDate = htmlspecialchars(strip_tags($data->ClosingDate));
   $date = new DateTime($ClosingDate);
   $opportunity->ClosingDate = $date->format('Y-m-d H:i:s');
-
   $opportunity->LeadEvaluatorID = $data->LeadEvaluatorID;
   $opportunity->Name = $data->Name;
   $opportunity->LowestBid = $data->LowestBid;
   $opportunity->Description = $data->Description;
+  $opportunity->Status = $data->Status;
 
   if($opportunity->update())
   {  
@@ -96,6 +96,13 @@ else
       $Description = $_POST_LowerCase["description"];
       $Description = htmlspecialchars(strip_tags($Description));
       $opportunity->Description = $Description;
+    }
+
+    if(isSet($_POST_LowerCase["status"]))
+    {
+      $Status = $_POST_LowerCase["status"];
+      $Status = htmlspecialchars(strip_tags($Status));
+      $opportunity->Status = $Status;
     }
 
     if($opportunity->update())
