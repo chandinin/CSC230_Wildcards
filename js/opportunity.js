@@ -4,16 +4,24 @@ $(document).ready(
         $('#formdatetimepicker2').datetimepicker();
         $('#editOpp').hide();
         $('#newOpp').hide();
+        $('#oppList').show();
         $('#showNewOpp').click(function (){
             $('#newOpp').show();
             $('#oppButtons').hide();
             $('#docListTable').tablesorter();
         });
 
+        $('#manageOpp').click(function() {
+            getOppList();
+            $('#oppListTable').tablesorter();
+            $("#oppsMenu option[id='opplist']").attr("selected", "selected");
+        });
+
 
         $('clearFile').click(function() {
 
         });
+
         $('#saveNewOpp').click(function() {
             saveOpportunity();
         });
@@ -28,33 +36,71 @@ $(document).ready(
             $('#editOpp').show();
             $('#oppButtons').hide();
         });
+
+            $("div.bhoechie-tab-menu>div.list-group>a").click(function(e) {
+                e.preventDefault();
+                $(this).siblings('a.active').removeClass("active");
+                $(this).addClass("active");
+                var index = $(this).index();
+                $("div.bhoechie-tab>div.bhoechie-tab-content").removeClass("active");
+                $("div.bhoechie-tab>div.bhoechie-tab-content").eq(index).addClass("active");
+            });
+
     });
 
+function showOpp() {
+    alert("this is the opp");
+}
+function getOppList() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php',true);
+    xhr.onload = function() {
+        if (xhr.status == 200) {
+            var jsonArray = JSON.parse(xhr.responseText);
+            var size = jsonArray.opportunity.length;
+            for(var i=0;i<size;i++) {
+                var opp = jsonArray.opportunity[i];
+                var row = "<tr><td>" + opp.OpportunityID + "</td><td>" + "<a href='javascript:showOpp()'>" + opp.Name +
+                    "</a></td><td>" + opp.ClosingDate + "</td><td>" + opp.Description + "</td><td>" +
+                    "<button id='showNewOpp' value='" + opp.OpportunityID + "' type='button' class='btn btn-primary btn-lg'>" +
+                    "<span class='glyphicon glyphicon-plus' aria-hidden='true'></span>Edit</button></td></tr>";
+                $('#oppListTable').append(row);
+            }
+        } else {
+            alert("Error response");
+        }
+    };
+    xhr.send();
 
-
+}
 
 function initNewOppForm() {
     getLeadEvals()	;
 }
 
 function uploadAllDocs() {
-    /*
-        var file=$('#uploadFileName')[0].files[0];
+    /* Upload scoring criteria*/
+
+        var file = $('#criteriaFile')[0].files[0];
+        var opid = $('#formIdInput').val();
         console.log(file.name);
         var formData=new FormData();
-        formData.append('file',file,file.name);
+        formData.append('ScoringCategoryBlob',file,file.name);
+        formData.append('OpportunityID', opid);
+        formData.append('filename', file.name);
         var xhr = new XMLHttpRequest();
-        xhr.open('POST',l'http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/update.php')
+        xhr.open('POST','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/uploadScoringCriteria.php');
+        //xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.onload = function() {
             if(xhr.status == 200) {
-                alert('File uploaded');
+                alert('Scoring File uploaded');
             } else {
-                alert('Error uploading file');
+                alert('Error uploading scoring file');
             }
         };
         xhr.send(formData);
-       */
 
+        /*upload other documents
         var numfiles =  $('#uploadMFileName')[0].files.length;
         var file;
         var formData=new FormData();
@@ -73,6 +119,8 @@ function uploadAllDocs() {
             }
         };
         xhr.send(formData);
+
+        */
 }
 
 function getLeadEvals() {
@@ -115,7 +163,7 @@ function saveOpportunity() {
     xhr.onload = function() {
         if (xhr.status == 200) {
             alert(xhr.responseText);
-           // uploadAllDocs();
+            uploadAllDocs();
         } else {
         	alert("Error saving opportunity");
         }

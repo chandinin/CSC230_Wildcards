@@ -66,6 +66,7 @@ caption {
 .table thead tr {
 	background: #00659e;
 	color: #ffffff;
+	font-size:16px !important;
 }
 .table > thead > tr > th {
 	border-bottom: none;
@@ -198,7 +199,6 @@ caption {
 	border: 1px solid #bababa;
 }
 .tab-content {
-	border: 1px solid #bababa;
 	border-top: none;
 	padding: 15px;
 }

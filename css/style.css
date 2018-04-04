@@ -1,6 +1,9 @@
 /* calpers theme css */
 @import url("calpers-theme.css");
 
+.pills-primary .nav-link.active {
+    background-color: #4285f4!important;
+}
 /* override bootstrap styles */
 
 .panel, .panel-group .panel, .well, .thumbnail, .navbar, .alert {
@@ -516,7 +519,6 @@ iframe.subscribe-social {
 .topic .page-header {
     border-bottom: 1px solid #fcb614;
 }
-
 hr {
     border-top: 1px solid #00659e;
 }
@@ -3044,4 +3046,9 @@ span.video-duration {
 
 .navbar.navbar-default.navbar-category .nav.navbar-nav li:last-child a:after {
     width: 0;
+}
+
+.table-hover > tbody > tr:hover > td,
+.table-hover > tbody > tr:hover > th {
+    background-color: #9fadc4;
 }
