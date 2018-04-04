@@ -2,16 +2,10 @@ $(document).ready(
     function () {
         getOppList();
         getCategories();
-        $('.datepicker').datepicker();
-
         $('#manageOpp').click(function() {
             getOppList();
-
             $('.table').tablesorter();
             $("#oppsMenu option[id='opplist']").attr("selected", "selected");
-        });
-        $('#oppListTable tr').click(function() {
-            showOpp();
         });
     });
 
@@ -60,7 +54,6 @@ function fillOppTable(jsonArray){
 
     function fillOppTable(start, limit){
         for(var i=start;i<limit;i++) {
-            fillOppTable(jsonArray);
             var opp = jsonArray.opportunity[i];
             var row ="<tr>"+"</td><td>" + opp.OpportunityID+ "</td><td>" + "<a href='javascript:showOppDetails()'>" +
                 opp.Name + "</a></td><td>"
