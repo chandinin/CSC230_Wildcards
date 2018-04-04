@@ -25,14 +25,15 @@ if(json_last_error() === JSON_ERROR_NONE)
   $ClosingDate = htmlspecialchars(strip_tags($data->ClosingDate));
   $date = new DateTime($ClosingDate);
   $opportunity->ClosingDate = $date->format('Y-m-d H:i:s');
-
   $opportunity->LeadEvaluatorID = $data->LeadEvaluatorID;
   $opportunity->Name = $data->Name;
   $opportunity->LowestBid = $data->LowestBid;
   $opportunity->Description = $data->Description;
+  $opportunity->Status = $data->Status;
+  $opportunity->CategoryID = $data->CategoryID;
 
   if($opportunity->update())
-  {  
+  {
     echo '{';
        echo ' message : "Update suceeded. "';
     echo '}';
@@ -45,7 +46,7 @@ if(json_last_error() === JSON_ERROR_NONE)
   }
 }
 // get opportunityID from POST
-else 
+else
 {
   $_POST_LowerCase = array_change_key_case($_POST, CASE_LOWER);
   if(isSet($_POST_LowerCase["opportunityid"]))
@@ -98,8 +99,22 @@ else
       $opportunity->Description = $Description;
     }
 
+    if(isSet($_POST_LowerCase["status"]))
+    {
+      $Status = $_POST_LowerCase["status"];
+      $Status = htmlspecialchars(strip_tags($Status));
+      $opportunity->Status = $Status;
+    }
+
+    if(isSet($_POST_LowerCase["categoryid"]))
+    {
+      $CategoryID = $_POST_LowerCase["categoryid"];
+      $CategoryID = htmlspecialchars(strip_tags($CategoryID));
+      $opportunity->CategoryID = $CategoryID;
+    }
+
     if($opportunity->update())
-    {  
+    {
       echo '{';
       echo ' message : "Update suceeded. (' .$opportunityID.')"';
       echo '}';
@@ -119,4 +134,3 @@ else
   }
 }
 ?>
-
