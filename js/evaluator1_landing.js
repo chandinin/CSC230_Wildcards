@@ -15,7 +15,7 @@ $(document).ready(
         });
     });
 
-//Get opportunity list from server
+//Get all opportunity list from server
 function getOppList() {
 
     $('#oppListTableBody').empty();
@@ -48,6 +48,7 @@ function getOppListbyID(id) {
     };
     xhr.send();
 }
+
 //Logic for pagination & fill table
 function fillOppTable(jsonArray){
 
@@ -87,9 +88,8 @@ function fillOppTable(jsonArray){
     });
 }
 
-//TODO write logic to get categories.
+//get all categories to populate dropdown
 function getCategories(){
-
     var xhr = new XMLHttpRequest();
     xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/getOppCategoryList.php',true);
     xhr.onload = function() {
@@ -103,7 +103,7 @@ function getCategories(){
     xhr.send();
 }
 
-//Fill dropdown
+//Fill dropdown with categories
 function fillCategoryDropdown(jsonArray){
     var start = 0;
     var select = document.getElementById("selectCategory")
@@ -119,6 +119,7 @@ function fillCategoryDropdown(jsonArray){
     }
 }
 
+//Capture the category id of the selection from user
 $(document).ready(function () {
     $("#selectCategory").change(function () {
         //Storing the dropdown selection in category variable
@@ -127,17 +128,16 @@ $(document).ready(function () {
     });
 });
 
+//TODO write screen logic for proposal screen
 //Show opportunity detail page
 function showOppDetails() {
     //place holder screen
-    window.location.replace("Opportunity_new.html")
-    //TODO write screen logic for proposal screen
+    window.location.replace("Opportunity_new.html");
 }
 
 //Function to update opportunity status
 function completeOpportunityEval(opId) {
-
     alert(opId);
-    //TODO
+    //TODO write logic to update opportunity status
     //Write logic to update opportunity status to complete.
 }
