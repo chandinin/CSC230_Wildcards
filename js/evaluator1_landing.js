@@ -87,17 +87,17 @@ function fillOppTable(jsonArray){
             fillOppTable(jsonArray);
             var opp = jsonArray.opportunity[i];
             var row ="<tr>"+"</td><td>" + opp.OpportunityID+ "</td><td>" + "<a href='javascript:showOpp()'>" +  opp.Name + "</a></td><td>"
-                +  opp.Status + " </td>";
+                + opp.ClosingDate + "<td>"+ opp.Status + " <td>" +  "<button onclick='completeOpportunityEval(\"" + opp.OpportunityID + "\")' id='editOppButton' value='\" + opp.OpportunityID + \"' type='button' class='btn btn-primary btn-sm'>" +
+                "Complete</button></td>";
             $('#oppListTableBody').append(row);
             $("#oppListTableBody").trigger("update");
         }
     }
     $('#next').click(function(){
         var next = limit;
-        if(size>=next) {
+        if(size>next) {
             limit = limit + elements_per_page;
             $('#oppListTableBody').empty();
-            console.log(next +' -next- '+limit);
             fillOppTable(next,limit);
         }
     });
@@ -106,7 +106,6 @@ function fillOppTable(jsonArray){
         var pre = limit-(2*elements_per_page);
         if(pre >= 0) {
             limit = limit - elements_per_page;
-            console.log(pre +' -pre- '+limit);
             $('#oppListTableBody').empty();
             fillOppTable(pre,limit);
         }
@@ -136,3 +135,9 @@ function showOpp() {
     window.location.replace("Opportunity_new.html")
 }
 
+function completeOpportunityEval(opId) {
+
+    alert(opId);
+    //TODO
+    //Write logic to update opportunity status to complete.
+}

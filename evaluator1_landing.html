@@ -45,6 +45,8 @@
     <script src="js/evaluator1_landing.js"></script>
 </head>
 <body>
+
+<!--Contents of the whole page-->
 <div id = "page" class="single">
 
     <!-- Logo-->
@@ -110,9 +112,6 @@
     <!--Glyphicon home-->
     <div class="navbar navbar-inverse navbar-static-top navbar-tab">
         <div class="container">
-            <div class="navbar-header">
-                <!-- end comment out to hide search form -->
-            </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li class=""><a href="home_page.html"><span class="glyphicon glyphicon-home hidden-xs"
@@ -128,23 +127,26 @@
             <li><a href="home_page.html">Home</a></li>
             <li class="active">Preliminary Evaluation</li>
         </ul>
-
-        <div class="form-group">
-            <label class="my-1 mr-2" for="selectCategory">Category</label><br>
-            <select id="selectCategory" name="category" required style="width: 200px">
-                <option value="default">Choose..</option>
-            </select>
-        </div>
     </div>
 
+    <!--Category dropdown-->
+    <div class="form-group">
+        <select id="selectCategory" name="category" required style="width: 200px">
+            <option value="default">Category</option>
+        </select>
+    </div>
+
+    <!--Table contents-->
     <div id="listOppPanel" class="tab-content vertical">
     <div class="row ">
-        <div class="col-md-9">
+        <div class="col-md-20">
             <table id="oppListTable" class="table table-bordered table-striped table-hover">
                 <thead>
-                <th>Category</th>
+                <th>OpportunityID</th>
                 <th>Opportunity</th>
+                <th>Closing Date/Time</th>
                 <th>Status</th>
+                <th></th>
                 </thead>
                 <tbody id="oppListTableBody">
                 </tbody>
@@ -153,6 +155,7 @@
     </div>
     </div>
 
+    <!--Pagination-->
     <div class="container">
         <ul class="pagination">
             <li class="page-item"><a id="prev" class="page-link" href="#">Previous</a></li>
