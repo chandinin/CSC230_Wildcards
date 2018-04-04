@@ -1,0 +1,17 @@
+1) Top Popular Movies               Pass (5 seconds)
+2) Movies by Title                  Pass (2 seconds) 
+3) Top Movies by Genre              Pass (2 seconds)
+4) All Movies by Director           Slow (29 seconds)
+5) All Movies by Actor              Pass
+6) All Movies by Tag                Pass
+7) Top Directors                    Pass 
+8) Top Actors                       Slow (10 Mins)
+9) All Movies by User               Pass
+10) All Tags Associated With Movie         Pass  
+11) Recommended Top 5 Movies by Genre      Pass 
+12) Recommended Top 5 Movies by Director   Pass
+
+
+
+ALTER TABLE `awesome_movies`.`person` 
+ADD INDEX `name` (`name` ASC);
