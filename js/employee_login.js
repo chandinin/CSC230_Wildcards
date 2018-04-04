@@ -41,10 +41,10 @@ function EmployeeLoginAction() {
                     case 'Author':
                         window.location.replace("Opportunity.html")
                         break;
-                    case 'Evaluator 1':
+                    case 'Preliminary Evaluator':
                         window.location.replace("evaluator1_landing.html")
                         break;
-                    case 'Evaluator 2':
+                    case 'Secondary Evaluator':
                         alert("Evaluator 2 is under construction, Coming soon!");
                         break;
                     default:
