@@ -226,7 +226,7 @@ function saveNewProposal(opportunity_id)
         formData.append('upload[]', current_file, current_file.name);
 
         var xhr = new XMLHttpRequest();
-        xhr.open('POST','php/api/docs/create.php');
+        xhr.open('POST','php/api/proposal/uploadDoc.php');
         xhr.onload = function() {
             if(xhr.status == 200) {
                 alert('File uploaded');

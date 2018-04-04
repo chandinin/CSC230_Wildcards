@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Method: GetDocTemplates
+ * Method: GetDocs
  * Description: Gets a JSON table of templates with names and urls.
  *              
  */
@@ -13,41 +13,45 @@ header("Access-Control-Allow-Credentials: true");
 header('Content-Type: application/json');
 
 include_once '../config/Database.php';
-include_once '../objects/opportunity.php';
+include_once '../objects/proposal.php';
 
 $_GET_LowerCase = array_change_key_case($_GET, CASE_LOWER);
 $_POST_LowerCase = array_change_key_case($_POST, CASE_LOWER);
-if(isSet($_POST_LowerCase["opportunityid"]) || isSet($_GET_LowerCase["opportunityid"]))
+if(isSet($_POST_LowerCase["proposalid"]) || isSet($_GET_LowerCase["proposalid"]))
 {
-  $OpportunityID = isSet($_GET_LowerCase["opportunityid"]) ? $_GET_LowerCase["opportunityid"] : $_POST_LowerCase["opportunityid"];
+  $ProposalID = isSet($_GET_LowerCase["proposalid"]) ? $_GET_LowerCase["proposalid"] : $_POST_LowerCase["proposalid"];
 
   // prepare to retrieve bidder data by instantiate the Bidder.
   $database = new Database();
   $db = $database->Connect();
 
-  $opportunity = new Opportunity($db);
+  $proposal = new Proposal($db);
+
+  //  echo '{';
+  //  echo ' "message" : "$ProposalID = ' . $ProposalID . '"';
+  //  echo '}';
   
-  $stmt = $opportunity->getDocTemplates($OpportunityID);
+  $stmt = $proposal->getDocByProposalID($ProposalID);
   $rowCount = $stmt->rowCount();
     
   if($rowCount > 0)
   {
-    $DocTemplates_arr = array();
-    $DocTemplates_arr["doctemplate"] = array();
+    $Docs_arr = array();
+    $Docs_arr["doc"] = array();
 
     while($row = $stmt->fetch(PDO::FETCH_ASSOC))
     {
-      $DocTemplate_arr = array(
-          "DocTemplateID" => $row['DocTemplateID'],
+      $Doc_arr = array(
+          "DocID" => $row['DocID'],
           "DocTitle" => $row['DocTitle'],
           "Url" => $row['Url']
       );
      
-      array_push($DocTemplates_arr["doctemplate"], $DocTemplate_arr);
+      array_push($Docs_arr["doc"], $Doc_arr);
     }
 
     // make it json format
-    print_r(json_encode($DocTemplates_arr));
+    print_r(json_encode($Docs_arr));
   }
   else
   {
