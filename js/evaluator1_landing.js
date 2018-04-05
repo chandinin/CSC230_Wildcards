@@ -1,3 +1,4 @@
+//Onstart?
 $(document).ready(
     function () {
         getOppList();
@@ -11,7 +12,6 @@ $(document).ready(
 
 //Get all opportunity list from server
 function getOppList() {
-
     $('#oppListTableBody').empty();
     var xhr = new XMLHttpRequest();
     xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php',true);
@@ -28,7 +28,6 @@ function getOppList() {
 
 //Get opportunity list given an id
 function getOppListbyID(id) {
-
     $('#oppListTableBody').empty();
     var xhr = new XMLHttpRequest();
     xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php?CategoryID='+id,true);
@@ -45,7 +44,6 @@ function getOppListbyID(id) {
 
 //Logic for pagination & fill table
 function fillOppTable(jsonArray){
-
     var start = 0;
     var elements_per_page = 7;
     var limit = elements_per_page;
@@ -123,7 +121,6 @@ $(document).ready(function () {
         getOppListbyID(category);
     });
 });
-
 
 //Show opportunity detail page
 function showOppDetails(opId) {
