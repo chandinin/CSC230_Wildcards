@@ -98,6 +98,8 @@ function insertTableRows(rows_array, table_node)
         console.log(table_node);
         return;
     }
+
+    $("#"+table_node.id).trigger("update");
 }
 
 
@@ -581,8 +583,8 @@ function initializeEditProposal(proposal_id)
         data: {"OpportunityID": opportunity_id},
         success: function(opportunity)
         {
-            $("#opportunity-title").text("Title: " + opportunity["Name"]);
-            $("#opportunity-countdown").text("Closing Date and Time: " + opportunity["ClosingDate"]);
+            $("#edit-opportunity-title").text("Title: " + opportunity["Name"]);
+            $("#edit-opportunity-countdown").text("Closing Date and Time: " + opportunity["ClosingDate"]);
         }
     });
 
