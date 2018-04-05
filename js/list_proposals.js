@@ -26,10 +26,10 @@ function showOppList() {
 };
 
 function getOppList() {
-
+    var opportunityID = localStorage.getItem("opportunityID");
     $('#proposalListTableBody').empty();
     var xhr = new XMLHttpRequest();
-    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/proposal/read.php',true);
+    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/proposal/read.php?OpportunityID'+opportunityID,true);
     xhr.onload = function() {
         if (xhr.status == 200) {
             var jsonArray = JSON.parse(xhr.responseText);
@@ -90,6 +90,6 @@ function fillProposalTable(jsonArray){
 }
 
 function showProposalDetails(id) {
-    localStorage.setItem("storageName",id);
+    localStorage.setItem("proposalId",id);
     window.location.replace("list_documents.html");
 }

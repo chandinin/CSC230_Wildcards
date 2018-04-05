@@ -1,3 +1,7 @@
+//proposal id passes from the previous page where a specific proposal is selected
+var proposalID = localStorage.getItem("proposalId");
+
+//onstart?
 $(document).ready(
     function () {
         getDocumentList();
@@ -10,7 +14,6 @@ $(document).ready(
 
 //Get all Documents for the proposal from server
 function getDocumentList() {
-    var proposalID = localStorage.getItem("storageName");
     $('#documentsTableBody').empty();
     var xhr = new XMLHttpRequest();
     xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/proposal/getDocsList.php?proposalid='+proposalID,true);
@@ -25,6 +28,7 @@ function getDocumentList() {
     xhr.send();
 }
 
+//Fill table with all the documents belonging to proposal and pagination logic
 function fillDocumentTable(jsonArray){
     var start = 0;
     var elements_per_page = 7;
@@ -59,6 +63,22 @@ function fillDocumentTable(jsonArray){
             fillOppTable(pre,limit);
         }
     });
+}
 
-
+//Function to update proposal status
+//TODO get the right endpoint to use
+function updateProposalStatus(status) {
+    //status is passed and proposal id is a global variable
+    var formData = new FormData();
+    formData.append('Status', status);
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'http://athena.ecs.csus.edu/~wildcard/php/api/proposal/update.php?ProposalID='+proposalID);
+    xhr.onload = function () {
+        if (xhr.status == 200) {
+            alert('Update successful');
+        } else {
+            alert('Error updating status');
+        }
+    };
+    xhr.send(formData);
 }

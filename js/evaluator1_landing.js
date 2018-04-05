@@ -55,7 +55,7 @@ function fillOppTable(jsonArray){
     function fillOppTable(start, limit){
         for(var i=start;i<limit;i++) {
             var opp = jsonArray.opportunity[i];
-            var row ="<tr>"+"</td><td>" + opp.OpportunityID+ "</td><td>" + "<a href='javascript:showOppDetails()'>" +
+            var row ="<tr>"+"</td><td>" + opp.OpportunityID+ "</td><td>" + "<a href='javascript:showOppDetails(\"" + opp.OpportunityID + "\")'>" +
                 opp.Name + "</a></td><td>"
                 + opp.ClosingDate + "<td>"+ opp.Status + " <td>" +  "<button onclick='completeOpportunityEval(\"" +
                 opp.OpportunityID + "\")' id='editOppButton' value='\" + opp.OpportunityID + \"' type='button' " +
@@ -124,10 +124,10 @@ $(document).ready(function () {
     });
 });
 
-//TODO write screen logic for proposal screen
+
 //Show opportunity detail page
-function showOppDetails() {
-    //place holder screen
+function showOppDetails(opId) {
+    localStorage.setItem("opportunityID",opId);
     window.location.replace("list_proposals.html");
 }
 

@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="143ccf83-bc51-4c5e-a3ee-f556d890400c" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/evaluator1_landing.html" beforeDir="false" afterPath="$PROJECT_DIR$/evaluator1_landing.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/evaluator1_landing.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/evaluator1_landing.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/list_documents.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/list_documents.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/list_proposals.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/list_proposals.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/list_documents.html" beforeDir="false" afterPath="$PROJECT_DIR$/list_documents.html" afterDir="false" />
     </list>
@@ -15,21 +17,52 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="list_documents.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/list_documents.js">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
       <file leaf-file-name="evaluator1_landing.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/evaluator1_landing.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="112" selection-start-line="112" selection-end-line="121" selection-end-column="10" />
+            <state relative-caret-position="153">
+              <caret line="109" column="10" lean-forward="true" selection-start-line="109" selection-start-column="10" selection-end-line="109" selection-end-column="10" />
               <folding>
                 <element signature="n#head#0;n#html#0;n#!!top" />
                 <element signature="n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" />
                 <element signature="n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" />
                 <element signature="n#div#2;n#div#0;n#body#0;n#html#0;n#!!top" />
+                <element signature="n#div#3;n#div#0;n#body#0;n#html#0;n#!!top" />
+                <element signature="n#div#5;n#div#0;n#body#0;n#html#0;n#!!top" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="evaluator1_landing.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/evaluator1_landing.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1408">
+              <caret line="128" column="31" selection-start-line="128" selection-start-column="31" selection-end-line="128" selection-end-column="31" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="list_proposals.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/list_proposals.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="291">
+              <caret line="137" column="28" lean-forward="true" selection-start-line="137" selection-start-column="28" selection-end-line="137" selection-end-column="28" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="list_documents.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/list_documents.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="187">
+              <caret line="128" column="10" lean-forward="true" selection-start-line="128" selection-start-column="10" selection-end-line="128" selection-end-column="10" />
+              <folding>
+                <element signature="n#head#0;n#html#0;n#!!top" />
+                <element signature="n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" />
+                <element signature="n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" />
+                <element signature="n#div#2;n#div#0;n#body#0;n#html#0;n#!!top" />
+                <element signature="n#div#3;n#div#0;n#body#0;n#html#0;n#!!top" />
                 <element signature="n#div#4;n#div#0;n#body#0;n#html#0;n#!!top" />
                 <element signature="n#div#5;n#div#0;n#body#0;n#html#0;n#!!top" />
               </folding>
@@ -37,23 +70,17 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="list_documents.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/list_documents.html">
+      <file leaf-file-name="list_documents.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/js/list_documents.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="379">
-              <caret line="123" column="56" selection-start-line="123" selection-start-column="56" selection-end-line="123" selection-end-column="56" />
+            <state relative-caret-position="51">
+              <caret line="3" column="10" selection-start-line="3" selection-start-column="10" selection-end-line="3" selection-end-column="10" />
               <folding>
-                <element signature="n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" />
+                <element signature="e#35#272#0" />
+                <element signature="n#!!block;n#getDocumentList#0" />
+                <element signature="n#!!block;n#fillDocumentTable#0" />
+                <element signature="n#!!block;n#updateProposalStatus#0" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="style.css" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/css/style.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="626">
-              <caret line="3079" selection-start-line="3079" selection-end-line="3079" />
             </state>
           </provider>
         </entry>
@@ -61,8 +88,8 @@
       <file leaf-file-name="bidder_login.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/bidder_login.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="510">
-              <caret line="142" column="18" lean-forward="true" selection-start-line="139" selection-start-column="10" selection-end-line="142" selection-end-column="18" />
+            <state relative-caret-position="476">
+              <caret line="140" column="131" lean-forward="true" selection-start-line="140" selection-start-column="102" selection-end-line="140" selection-end-column="131" />
               <folding>
                 <element signature="n#head#0;n#html#0;n#!!top" />
                 <element signature="n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" />
@@ -76,17 +103,22 @@
       <file leaf-file-name="list_proposals.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/list_proposals.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="651">
-              <caret line="86" column="36" lean-forward="true" selection-start-line="86" selection-start-column="36" selection-end-line="86" selection-end-column="36" />
+            <state relative-caret-position="1564">
+              <caret line="92" column="36" selection-start-line="92" selection-start-column="26" selection-end-line="92" selection-end-column="36" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="list_proposals.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/list_proposals.html">
+      <file leaf-file-name="update.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/php/api/proposal/update.php">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file leaf-file-name="opportunity2.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/opportunity2.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="231">
-              <caret line="134" column="40" lean-forward="true" selection-start-line="134" selection-start-column="40" selection-end-line="134" selection-end-column="40" />
+            <state relative-caret-position="323">
+              <caret line="171" selection-start-line="171" selection-end-line="188" selection-end-column="1" />
             </state>
           </provider>
         </entry>
@@ -126,14 +158,14 @@
       <find>closing</find>
       <find>showEditOpp</find>
       <find>convertDate</find>
-      <find>showOppDetails</find>
       <find>showOpp</find>
       <find>btn-delete</find>
       <find>vertical</find>
-      <find />
+      <find>calpers</find>
       <find>li</find>
       <find>navbar-nav</find>
       <find>navbar-right</find>
+      <find>showOppDetails</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -182,15 +214,15 @@
         <option value="$PROJECT_DIR$/js/paging.js" />
         <option value="$PROJECT_DIR$/list_proposals.html" />
         <option value="$PROJECT_DIR$/bidder_login.html" />
-        <option value="$PROJECT_DIR$/evaluator1_landing.html" />
         <option value="$PROJECT_DIR$/employee_login.html" />
         <option value="$PROJECT_DIR$/js/employee_login.js" />
         <option value="$PROJECT_DIR$/php/api/employee/authentication.php" />
-        <option value="$PROJECT_DIR$/js/evaluator1_landing.js" />
-        <option value="$PROJECT_DIR$/js/list_documents.js" />
-        <option value="$PROJECT_DIR$/js/list_proposals.js" />
         <option value="$PROJECT_DIR$/css/style.css" />
+        <option value="$PROJECT_DIR$/evaluator1_landing.html" />
+        <option value="$PROJECT_DIR$/js/evaluator1_landing.js" />
         <option value="$PROJECT_DIR$/list_documents.html" />
+        <option value="$PROJECT_DIR$/js/list_proposals.js" />
+        <option value="$PROJECT_DIR$/js/list_documents.js" />
       </list>
     </option>
   </component>
@@ -226,11 +258,6 @@
             <path>
               <item name="CSC230_Wildcards" type="b2602c69:ProjectViewProjectNode" />
               <item name="CSC230_Wildcards" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="CSC230_Wildcards" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CSC230_Wildcards" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="css" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="CSC230_Wildcards" type="b2602c69:ProjectViewProjectNode" />
@@ -278,7 +305,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JavaScript Debug.list_documents.html">
+  <component name="RunManager" selected="JavaScript Debug.list_proposals.html">
     <configuration name="Opportunity.html" type="JavascriptDebugType" factoryName="JavaScript Debug" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/Opportunity.html" />
     <configuration name="bidder_login.html" type="JavascriptDebugType" factoryName="JavaScript Debug" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/bidder_login.html" />
     <configuration name="bidder_login.html" type="JavascriptDebugType" factoryName="JavaScript Debug" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/bidder_login.html" />
@@ -289,7 +316,7 @@
     <configuration name="list_documents.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/list_documents.html" />
     <configuration name="list_opportunities.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/list_opportunities.html" />
     <configuration name="list_proposals.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/list_proposals.html" />
-    <configuration name="opportunity_detail.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/opportunity_detail.html" />
+    <configuration name="list_documents.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" nameIsGenerated="true" path-to-js-file="list_documents.js" working-dir="$PROJECT_DIR$/js" />
     <list>
       <item itemvalue="JavaScript Debug.bidder_login.html" />
       <item itemvalue="JavaScript Debug.bidder_register.html" />
@@ -297,18 +324,18 @@
       <item itemvalue="JavaScript Debug.bidops_template.html" />
       <item itemvalue="JavaScript Debug.employee_login.html" />
       <item itemvalue="JavaScript Debug.evaluator1_landing.html" />
-      <item itemvalue="JavaScript Debug.opportunity_detail.html" />
       <item itemvalue="JavaScript Debug.list_opportunities.html" />
       <item itemvalue="JavaScript Debug.list_documents.html" />
       <item itemvalue="JavaScript Debug.list_proposals.html" />
+      <item itemvalue="Node.js.list_documents.js" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JavaScript Debug.list_documents.html" />
-        <item itemvalue="JavaScript Debug.list_opportunities.html" />
         <item itemvalue="JavaScript Debug.list_proposals.html" />
+        <item itemvalue="JavaScript Debug.list_documents.html" />
+        <item itemvalue="Node.js.list_documents.js" />
         <item itemvalue="JavaScript Debug.evaluator1_landing.html" />
-        <item itemvalue="JavaScript Debug.opportunity_detail.html" />
+        <item itemvalue="JavaScript Debug.list_opportunities.html" />
       </list>
     </recent_temporary>
   </component>
@@ -339,12 +366,12 @@
       <workItem from="1522637310026" duration="29972000" />
       <workItem from="1522805779885" duration="5054000" />
       <workItem from="1522825475973" duration="7427000" />
-      <workItem from="1522871347025" duration="17760000" />
+      <workItem from="1522871347025" duration="23160000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="148517000" />
+    <option name="totallyTimeSpent" value="153917000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="848" extended-state="6" />
@@ -452,8 +479,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/test22.php" />
-    <entry file="file://$PROJECT_DIR$/Bidder.html" />
     <entry file="file://$PROJECT_DIR$/BidderCRUD.php" />
     <entry file="file://$PROJECT_DIR$/login/login.html" />
     <entry file="file://$PROJECT_DIR$/login/username1.html" />
@@ -485,13 +510,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="612">
           <caret line="54" column="104" selection-start-line="54" selection-start-column="104" selection-end-line="54" selection-end-column="104" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bidder_register.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="194" column="12" lean-forward="true" selection-start-line="194" selection-start-column="12" selection-end-line="194" selection-end-column="12" />
         </state>
       </provider>
     </entry>
@@ -569,13 +587,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-901">
           <caret line="1722" column="14" selection-start-line="1722" selection-start-column="7" selection-end-line="1722" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bidder_landing.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2380">
-          <caret line="140" column="58" selection-start-line="140" selection-start-column="58" selection-end-line="140" selection-end-column="58" />
         </state>
       </provider>
     </entry>
@@ -678,65 +689,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/evaluator1_landing.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="723">
-          <caret line="135" column="4" selection-start-line="135" selection-start-column="4" selection-end-line="135" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/list_documents.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/list_proposals.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="651">
-          <caret line="86" column="36" lean-forward="true" selection-start-line="86" selection-start-column="36" selection-end-line="86" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bidder_login.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="142" column="18" lean-forward="true" selection-start-line="139" selection-start-column="10" selection-end-line="142" selection-end-column="18" />
-          <folding>
-            <element signature="n#head#0;n#html#0;n#!!top" />
-            <element signature="n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" />
-            <element signature="n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" />
-            <element signature="n#div#1;n#body#0;n#html#0;n#!!top" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/list_proposals.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="134" column="40" lean-forward="true" selection-start-line="134" selection-start-column="40" selection-end-line="134" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/opportunity2.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="577">
-          <caret line="126" column="86" lean-forward="true" selection-start-line="126" selection-start-column="86" selection-end-line="126" selection-end-column="102" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/evaluator1_landing.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="112" selection-start-line="112" selection-end-line="121" selection-end-column="10" />
-          <folding>
-            <element signature="n#head#0;n#html#0;n#!!top" />
-            <element signature="n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" />
-            <element signature="n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" />
-            <element signature="n#div#2;n#div#0;n#body#0;n#html#0;n#!!top" />
-            <element signature="n#div#4;n#div#0;n#body#0;n#html#0;n#!!top" />
-            <element signature="n#div#5;n#div#0;n#body#0;n#html#0;n#!!top" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/list_opportunities.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="356">
@@ -751,12 +703,111 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/bidder_landing.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="679">
+          <caret line="140" column="58" selection-start-line="140" selection-start-column="58" selection-end-line="140" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/php/api/doctemplate/update.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1326">
+          <caret line="78" column="52" lean-forward="true" selection-start-line="78" selection-start-column="52" selection-end-line="78" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/opportunity2.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="171" selection-start-line="171" selection-end-line="188" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/php/api/proposal/update.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bidder_register.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="302">
+          <caret line="253" column="71" lean-forward="true" selection-start-line="253" selection-start-column="71" selection-end-line="253" selection-end-column="71" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bidder_login.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="140" column="131" lean-forward="true" selection-start-line="140" selection-start-column="102" selection-end-line="140" selection-end-column="131" />
+          <folding>
+            <element signature="n#head#0;n#html#0;n#!!top" />
+            <element signature="n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" />
+            <element signature="n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" />
+            <element signature="n#div#1;n#body#0;n#html#0;n#!!top" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/evaluator1_landing.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="109" column="10" lean-forward="true" selection-start-line="109" selection-start-column="10" selection-end-line="109" selection-end-column="10" />
+          <folding>
+            <element signature="n#head#0;n#html#0;n#!!top" />
+            <element signature="n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" />
+            <element signature="n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" />
+            <element signature="n#div#2;n#div#0;n#body#0;n#html#0;n#!!top" />
+            <element signature="n#div#3;n#div#0;n#body#0;n#html#0;n#!!top" />
+            <element signature="n#div#5;n#div#0;n#body#0;n#html#0;n#!!top" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/evaluator1_landing.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1408">
+          <caret line="128" column="31" selection-start-line="128" selection-start-column="31" selection-end-line="128" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/list_proposals.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1564">
+          <caret line="92" column="36" selection-start-line="92" selection-start-column="26" selection-end-line="92" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/list_proposals.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="291">
+          <caret line="137" column="28" lean-forward="true" selection-start-line="137" selection-start-column="28" selection-end-line="137" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/list_documents.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="379">
-          <caret line="123" column="56" selection-start-line="123" selection-start-column="56" selection-end-line="123" selection-end-column="56" />
+        <state relative-caret-position="187">
+          <caret line="128" column="10" lean-forward="true" selection-start-line="128" selection-start-column="10" selection-end-line="128" selection-end-column="10" />
           <folding>
+            <element signature="n#head#0;n#html#0;n#!!top" />
             <element signature="n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" />
+            <element signature="n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" />
+            <element signature="n#div#2;n#div#0;n#body#0;n#html#0;n#!!top" />
+            <element signature="n#div#3;n#div#0;n#body#0;n#html#0;n#!!top" />
+            <element signature="n#div#4;n#div#0;n#body#0;n#html#0;n#!!top" />
+            <element signature="n#div#5;n#div#0;n#body#0;n#html#0;n#!!top" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/list_documents.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="10" selection-start-line="3" selection-start-column="10" selection-end-line="3" selection-end-column="10" />
+          <folding>
+            <element signature="e#35#272#0" />
+            <element signature="n#!!block;n#getDocumentList#0" />
+            <element signature="n#!!block;n#fillDocumentTable#0" />
+            <element signature="n#!!block;n#updateProposalStatus#0" />
           </folding>
         </state>
       </provider>
