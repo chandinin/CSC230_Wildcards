@@ -3,6 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Author</title>
+    <link rel="stylesheet" href="js/MDB Free/css/bootstrap.css">
+    <link rel="stylesheet" href="js/MDB Free/css/mdb.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/jodit/3.1.39/jodit.min.css">
+    <link rel="stylesheet" type="text/css" href="css/tablesorter-style.css">
+    <link rel="stylesheet" href="css/style.css">
+
+
+
 
     <!--
 -->
@@ -21,7 +31,7 @@
             <div class="col-lg-3 col-md-3 col-sm-12 logoContainer">
                 <div class="navbar-header display-flex"><a class="navbar-brand" href="home_page.html">
                     <div class="logoMain logo">
-                        <svg version="1.1" id="CalPERS_Logo" role="img" aria-label="CalPERS Logo" aria-labelledby="title" aria-describedby="desc" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 436.9 108.6" xml:space="preserve" focusable="false">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="CalPERS_Logo" role="img" aria-label="CalPERS Logo" aria-labelledby="title" aria-describedby="desc" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 436.9 108.6" xml:space="preserve" focusable="false">
 																		<title id="title">CalPERS Logo</title>
 																		<desc id="desc">CalPERS Logo</desc>
 																		<g class="calpersFill">
@@ -160,61 +170,15 @@
                     <div class="row">
 
                         <div class="col-md-12">
-                            <form id="chooseCategory">
-                                <label>Category</label><br>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="formCategoryInput" id="cat1" value="1" checked>
-                                    <label class="form-check-label" for="cat1">
-                                        All
-                                    </label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="formCategoryInput" id="cat2" value="1" >
-                                    <label class="form-check-label" for="cat2">
-                                        Actuarial Services
-                                    </label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="formCategoryInput" id="cat3" value="1" >
-                                    <label class="form-check-label" for="cat3">
-                                        Architecture & Engineering
-                                    </label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="formCategoryInput" id="cat4" value="1" >
-                                    <label class="form-check-label" for="cat4">
-                                        Construction
-                                    </label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="formCategoryInput" id="cat5" value="1" >
-                                    <label class="form-check-label" for="cat5">
-                                        Consulting
-                                    </label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="formCategoryInput" id="cat6" value="1" >
-                                    <label class="form-check-label" for="cat6">
-                                        Health
-                                    </label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="formCategoryInput" id="cat7" value="1" >
-                                    <label class="form-check-label" for="cat7">
-                                        Information Technology
-                                    </label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="formCategoryInput" id="cat1" value="1" >
-                                    <label class="form-check-label" for="cat1">
-                                        Court Jester
-                                    </label>
-                                </div>
-                            </form>
+
                         </div>
-                    </div>
-                    <div class="row ">
+
                         <div class="col-md-12">
+
+                            <select id="selectCategory" name="category" required style="width: 325px">
+                                <option id = "id" value="default">Category</option>
+                            </select><br>
+
                             <table id="oppListTable" class="table table-responsive table-bordered table-striped table-hover tablesorter">
                                 <thead>
                                 <th>Category</th>
@@ -257,10 +221,16 @@
                             <input type="text" size="20" class="form-control" id="formNameInput"
                                    placeholder="Opportunity Name" required>
                         </div>
-
+<!--
                         <div class="form-group">
                             <label for="formDescription">Description</label>
-                            <textarea class="form-control" id="formDescriptionInput" rows="4"
+                            <textarea class="form-control" id="formDescriptionInput editor" name="editor" rows="4"
+                                      placeholder="Describe the opportunity." required></textarea>
+                        </div>
+-->
+                        <div id="editor" class="form-group">
+                            <label for="formDescription">Description</label>
+                            <textarea class="form-control" id="formDescriptionInput" name="editor" rows="4"
                                       placeholder="Describe the opportunity." required></textarea>
                         </div>
 
@@ -367,8 +337,9 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <div class="custom-file">
-                                            <label class="my-1 mr-2" for="uploadMFileName">New Document(s) Upload</label>
+                                            <label class="my-1 mr-2" for="uploadMFileName">New Document(s) Upload
                                             <input id="uploadMFileName" type="file" name="uploadMFileName" multiple>
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
@@ -430,13 +401,7 @@
     </div>
 </div>
 <!-- END FOOTER -->
-</body>
-<link rel="stylesheet" href="js/MDB Free/css/bootstrap.css">
-<link rel="stylesheet" href="js/MDB Free/css/mdb.css">
-<link rel="stylesheet" href="css/bootstrap.min.css"/>
-<link rel="stylesheet" href="css/bootstrap-datepicker.css">
-<link rel="stylesheet" type="text/css" href="css/tablesorter-style.css">
-<link rel="stylesheet" href="css/style.css">
+
 <script src="js/MDB Free/js/jquery-3.2.1.min.js"></script>
 <script src="js/MDB Free/js/bootstrap.js"></script>
 <script src="js/MDB Free/js/popper.min.js"></script>
@@ -445,4 +410,7 @@
 <script src="js/opportunity2.js"></script>
 <script src="js/bootstrap-datepicker.js"></script>
 <script src="js/MDB Free/js/mdb.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jodit/3.1.39/jodit.min.js"></script>
+</body>
+
 </html>
