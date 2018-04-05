@@ -618,33 +618,114 @@ function initializeEditProposal(proposal_json)
         success: function(proposal_docs_json)
         {
             docs = proposal_docs_json.doc;
-            doc_map = {};
+            doc_map = {}; // with DocTemplateID as the key
 
-            // Fix the URLs for each doc
+            // Fix the URLs for each doc, populate our DocTemplateID based doc_map
             docs.forEach(function(doc)
             {
                 doc.Url = doc.Url.replace("https://athena.ecs.csus.edu/~wildcard/", "");
                 console.log(doc.Url);
-
-                
+                doc_map[doc.DocTemplateID] = doc;
             });
+
+            for(i = 0; i < doc_list.children.length; i++)
+            {
+                child = doc_list.children[i];
+
+                if(doc_map[child.dataset.DocTemplateID] != null)
+                {
+                    prev_doc_anchor = document.createElement("a");
+                    prev_doc_anchor.href = doc_map[child.dataset.DocTemplateID].Url;
+                    prev_doc_anchor.appendChild(document.createTextNode("View what you uploaded"));
+                    prev_doc_anchor.className += "old_doc_a";
+
+                    child.dataset.DocID = doc_map[child.dataset.DocTemplateID].DocID;
+
+                    doc_list.children[i].appendChild(prev_doc_anchor);
+                    console.log(doc_list.children[i]);
+                }
+
+            } 
 
         }
     });
-
-    for(i = 0; i < doc_list.children.length; i++)
-    {
-        prev_doc_anchor = document.createElement("a");
-        prev_doc_anchor.href = "google.com";
-        prev_doc_anchor.appendChild(document.createTextNode("View what you uploaded"));
-        prev_doc_anchor.className += "old_doc_a";
-
-        doc_list.children[i].appendChild(prev_doc_anchor);
-        console.log(doc_list.children[i]);
-    }
 }
 
 function saveProposal(proposal_json)
 {
 
+    /************************
+     * Upload the documents *
+     ************************/
+    // First Calculate how many we have to upload.
+    doc_list_children = document.getElementById("opp-doc-templates-list").childNodes;
+
+    for(i = 0; i < doc_list_children.length; i++)
+    {
+        current_child = doc_list_children[i];
+        current_input = null;
+
+        // Search for just the input in each li via localName=input
+        for(j = 0; j < current_child.children.length; j++)
+        {
+            if(current_child.children[j].localName.toLowerCase() == "input")
+                current_input = current_child.children[j];
+        }
+
+        if(current_input == null)
+        {
+            alert("Something terribly wrong has ocurred when trying to get a lock on the input");
+            return false;
+        }
+
+        // console.log(current_input);
+
+        // Check if there is a file for our current input, if so get a reference
+        current_file = current_input.files.length > 0 ? current_input.files[0] : null;
+
+        if(current_file == null)
+        {
+            console.log("No file for " + current_child.dataset.DocTemplateID + ", but that's ok!");
+            continue;
+        }
+
+        // If we get here, we have an input element that has a file
+        console.log(current_child.dataset.DocTemplateID + " got file with name: " + current_file.name);
+
+        // Need to check if there is a doc already associated with this...
+        if(current_child.dataset.DocID != null)
+        {
+            console.log("There is already a doc (" + current_child.dataset.DocID + ") associated with this DocTemplate");
+            console.log("Attempting to delete old document...");
+
+            // $.ajax({
+            //     url: "",
+            //     type: "GET",
+            //     success: function() { console.log("Success deleting DocID"+current_child.dataset.DocID)}
+            // });
+            console.log("TODO: Endpoint for deleting a doc/ProposalDoc");
+        }
+        console.log("Attempting to upload...");
+
+        var formData=new FormData();
+        formData.append('filename', current_file, current_file.name);
+        formData.append('ProposalID', proposal_json.ProposalID);
+        formData.append("OpportunityID", proposal_json.OpportunityID);
+        formData.append("DocTemplateID", current_child.dataset.DocTemplateID);
+        formData.append('submit', "Lol this needs to be filled");
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST','php/api/proposal/uploadDoc.php');
+        xhr.onload = function() {
+            if(xhr.status == 200) {
+                console.log('File uploaded' + xhr.response);
+            } else {
+                alert('Error uploading file:' + xhr.response);
+            }
+        };
+        xhr.send(formData);
+    }
+
+    alert("Your proposal was succesfully saved");
+    activateProposalsList();
 }
