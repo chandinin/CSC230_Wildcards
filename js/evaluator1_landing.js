@@ -130,7 +130,13 @@ function showOppDetails(opId) {
 
 //Function to update opportunity status
 function completeOpportunityEval(opId) {
-    alert(opId);
+    if(opId == 1){
+        alert("Cannot complete this opportunity. Please complete processing all Proposals for this Opportunity");
+    }
+    else{
+        alert("Processing opportunity completed!");
+    }
+
     //TODO write logic to update opportunity status
     //Write logic to update opportunity status to complete.
 }
