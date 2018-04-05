@@ -1,9 +1,8 @@
 $(document).ready(
     function () {
         initNewOppForm();
-        $('#editOppPanel').hide();
+       $('#editOppPanel').hide();
         $('#newOppPanel1').hide();
-        $('.datepicker').datepicker();
         $('#listOppPanel').show();
 
         $('#manageOpp').click(function () {
@@ -34,6 +33,7 @@ $(document).ready(
             showOpp();
         });
 */
+
         $('#oppTab').click(function () {
             showOppList();
         });
@@ -50,6 +50,7 @@ $(document).ready(
         });
 
         $('#uploadDocTemplates').click(function() {
+            alert("uploading files...");
             uploadDocTemplates();
         });
 
@@ -58,6 +59,15 @@ $(document).ready(
         });
 
         $('.table').tablesorter();
+
+        $("#selectCategory").change(function () {
+            //Storing the dropdown selection in category variable
+            category= $('#selectCategory option:selected').attr('id');
+            getOppListbyID(category);
+        });
+
+
+
     });
 
 function showEditOpp(opId) {
@@ -75,6 +85,8 @@ function showNewOpp() {
     getLeadEvals();
     $('#newOppPanel1').show();
     $('#listOppPanel').hide();
+    var editor = new Jodit("#editor");
+    editor.setEditorValue('<p>start</p>')
 
 }
 
@@ -117,7 +129,11 @@ function getDocTemplates(opId) {
     xhr.open('GET',url);
     xhr.onload = function () {
         if (xhr.status == 200) {
-            var jsonArray = JSON.parse(xhr.responseText);
+            var retval = xhr.responseText;
+            var failed = retval.includes("error");
+            if(failed)
+               return;
+            var jsonArray = JSON.parse(retval);
             var size = jsonArray.doctemplate.length;
             for(var i = 0; i< size; i++) {
                 var template = jsonArray.doctemplate[i];
@@ -148,9 +164,9 @@ function getOppList() {
             var size = jsonArray.opportunity.length;
             for (var i = 0; i < size; i++) {
                 var opp = jsonArray.opportunity[i];
-                var row = "<tr><td></td></td><td>" + opp.OpportunityID + "</td><td>" + opp.Name +
+                var row = "<tr><td>" + opp.CategoryID + "</td></td><td>" + opp.OpportunityID + "</td><td>" + opp.Name +
                     "</td><td>" + opp.ClosingDate + "</td><td>" + opp.Description + "</td><td>" +
-                    "Status</td><td>" +
+                    opp.Status + "</td><td>" +
                     "<button onclick='showEditOpp(\"" + opp.OpportunityID + "\")' id='editOppButton' value='" + opp.OpportunityID + "' type='button' class='btn btn-primary btn-lg'>" +
                     "<span class='glyphicon glyphicon-eye-open' aria-hidden='true'></span> View</button></td></tr>";
                 $('#oppListTableBody').append(row);
@@ -167,6 +183,7 @@ function getOppList() {
 
 function initNewOppForm() {
     getOppList();
+    getCategories();
 }
 
 function uploadScoring(file, opId) {
@@ -194,14 +211,18 @@ function uploadDocTemplates() {
     var formData=new FormData();
     for(i=0;i<numfiles;i++){
         file = $('#uploadMFileName')[0].files[i];
-        formData.append('upload[]', file,file.name);
+        formData.append('filename[]', file,file.name);
         console.log(file.name);
     }
+    formData.append('OpportunityID','2');
+    formData.append('submit','Upload Image');
     var xhr = new XMLHttpRequest();
-    xhr.open('POST','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/update.php');
+    xhr.open('POST','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/uploadDocArray.php');
     xhr.onload = function() {
         if(xhr.status == 200) {
             alert('File uploaded');
+            console.log(xhr.responseText);
+            $('#uploadMFileName').val("");
         } else {
         alert('Error uploading file');
         }
@@ -266,6 +287,37 @@ function saveOpportunity() {
     var jsonString = JSON.stringify(jsonRecord);
     xhr.send(jsonString);
     console.log("Wrote Json: " + jsonString);
+}
+
+//get all categories to populate dropdown
+function getCategories(){
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/getOppCategoryList.php',true);
+    xhr.onload = function() {
+        if (xhr.status == 200) {
+            var jsonArray = JSON.parse(xhr.responseText);
+            fillCategoryDropdown(jsonArray);
+        } else {
+            alert("Error response");
+        }
+    };
+    xhr.send();
+}
+
+//Fill dropdown with categories
+function fillCategoryDropdown(jsonArray){
+    var start = 0;
+    var select = document.getElementById("selectCategory")
+    var size = jsonArray.Category.length;
+
+    for(var i=start;i<size;i++) {
+        var option = document.createElement("OPTION");
+        txt = document.createTextNode(jsonArray.Category[i].Name);
+        option.appendChild(txt);
+        option.setAttribute("value", jsonArray.Category[i].Name)
+        option.setAttribute("id", jsonArray.Category[i].CategoryID)
+        select.insertBefore(option, select.lastChild);
+    }
 }
 
 var fakelist = {
