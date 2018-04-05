@@ -40,7 +40,9 @@ if(isSet($_POST_LowerCase["proposalid"])
     "Status" =>  $proposal->Status,
     "TechnicalScore" =>  $proposal->TechnicalScore,
     "FeeScore" =>  $proposal->FeeScore,
-    "FinalTotalScore" =>  $proposal->FinalTotalScore
+    "FinalTotalScore" =>  $proposal->FinalTotalScore,
+    "CreatedDate" =>  $proposal->CreatedDate,
+    "LastEditDate" =>  $proposal->LastEditDate
   );
 
   // make it json format
@@ -61,12 +63,15 @@ else
     while($row = $stmt->fetch(PDO::FETCH_ASSOC))
     {
       $proposal_arr = array(
+        "ProposalID" =>  $row['ProposalID'],
         "OpportunityID" =>  $row['OpportunityID'],
         "BidderID" =>  $row['BidderID'],
         "Status" =>  $row['Status'],
         "TechnicalScore" =>  $row['TechnicalScore'],
         "FeeScore" =>  $row['FeeScore'],
-        "FinalTotalScore" =>  $row['FinalTotalScore']
+        "FinalTotalScore" =>  $row['FinalTotalScore'],
+        "CreatedDate" =>  $row['CreatedDate'],
+        "LastEditDate" =>  $row['LastEditDate']
         );
      
       array_push($proposals_arr["proposal"], $proposal_arr);

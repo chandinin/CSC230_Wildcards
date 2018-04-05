@@ -30,6 +30,7 @@ if(json_last_error() === JSON_ERROR_NONE)
   $opportunity->LowestBid = $data->LowestBid;
   $opportunity->Description = $data->Description;
   $opportunity->Status = $data->Status;
+  $opportunity->CategoryID = $data->CategoryID;
 
   if($opportunity->update())
   {  
@@ -103,6 +104,13 @@ else
       $Status = $_POST_LowerCase["status"];
       $Status = htmlspecialchars(strip_tags($Status));
       $opportunity->Status = $Status;
+    }
+
+    if(isSet($_POST_LowerCase["categoryid"]))
+    {
+      $CategoryID = $_POST_LowerCase["categoryid"];
+      $CategoryID = htmlspecialchars(strip_tags($CategoryID));
+      $opportunity->CategoryID = $CategoryID;
     }
 
     if($opportunity->update())
