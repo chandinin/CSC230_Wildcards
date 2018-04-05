@@ -44,6 +44,7 @@ function fillProposalTable(jsonArray){
             $("#proposalListTableBody").trigger("update");
         }
     }
+    //next
     $('#next').click(function(){
         var next = limit;
         if(size>next) {
@@ -53,7 +54,7 @@ function fillProposalTable(jsonArray){
             fillOppTable(next,limit);
         }
     });
-
+//prev
     $('#prev').click(function(){
         var pre = limit-(2*elements_per_page);
         if(pre >= 0) {

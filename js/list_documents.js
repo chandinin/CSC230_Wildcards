@@ -76,9 +76,9 @@ function updateProposalStatus(status) {
     xhttp.open("POST", "http://athena.ecs.csus.edu/~wildcard/php/api/proposal/update.php",true);
     xhttp.onload = function () {
         if (xhttp.status == 200) {
-            alert("Update successful");
+            alert(proposalID+" Update successful");
         } else {
-            alert("Error updating status");
+            alert("Error updating status of " +proposalID);
         }
     }
     xhttp.send(myJson);
