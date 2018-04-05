@@ -69,16 +69,22 @@ function fillDocumentTable(jsonArray){
 //TODO get the right endpoint to use
 function updateProposalStatus(status) {
     //status is passed and proposal id is a global variable
-    var formData = new FormData();
+/*    var formData = new FormData();
     formData.append('Status', status);
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://athena.ecs.csus.edu/~wildcard/php/api/proposal/update.php?ProposalID='+proposalID);
-    xhr.onload = function () {
-        if (xhr.status == 200) {
+    formData.append('proposalID', proposalID);*/
+    var params = {"proposalid":proposalID,
+        "status":status};
+    var hello = JSON.stringify(params);
+    var xhttp = new XMLHttpRequest();
+   // var xhr = new XMLHttpRequest();
+    xhttp.open("POST", "http://athena.ecs.csus.edu/~wildcard/php/api/proposal/update.php'", true);
+    xhttp.onload = function () {
+        if (xhttp.status == 200) {
             alert('Update successful');
         } else {
             alert('Error updating status');
         }
-    };
-    xhr.send(formData);
+    }
+    xhttp.send(hello);
 }
+

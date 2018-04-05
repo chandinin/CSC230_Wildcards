@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Documents</title>
-
+    <title>Secondary Evaluation</title>
     <!-- CSS Includes -->
     <link rel="stylesheet" type="text/css" href="css/ept/menu2.css"/>
     <link rel="stylesheet" type="text/css" href="css/ept/style.css"/>
@@ -34,11 +33,8 @@
     <script src="js/youtube.js?ver=1.9"></script>
     <script src="http://malsup.github.com/jquery.form.js"></script>
 
-    <!--Button with glyphicon-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
     <!--For breadcrumb-->
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
@@ -46,14 +42,15 @@
     <link rel="stylesheet" type="text/css" href="css/ept/login.css"/>
     <script type="text/javascript" src="js/ept/jquery.cookie.js"></script>
     <script src="js/bidder_login.js"></script>
-    <script src="js/list_documents.js"></script>
+    <script src="js/evaluator2_landing.js"></script>
 </head>
 <body>
+
 <!--Contents of the whole page-->
 <div id = "page" class="single">
 
     <!-- Logo-->
-    <div class="navbar navbar-default navbar-static-top navbar-right">
+    <div class="navbar navbar-default navbar-static-top navbar-global">
         <div class="container relative">
             <!-- Skip to content link for Screen readers and keyboard users only -->
             <a href="#main" style="position:absolute; font-size:.8em;" class="sr-only sr-only-focusable"
@@ -132,39 +129,38 @@
     <div class="container navbar-right">
         <ul class="breadcrumb">
             <li><a href="home_page.html">Home</a></li>
-            <li><a href="evaluator1_landing.html">Preliminary Evaluation</a></li>
-            <li><a href="list_proposals.html">Proposals</a></li>
-            <li class="active">Documents</li>
+            <li class="active">Secondary Evaluation</li>
         </ul>
+    </div>
+
+    <!--Category dropdown-->
+    <div class="container navbar-right">
+        <div class="form-group">
+            <select id="selectCategory" name="category" required style="width: 325px">
+                <option id = "id" value="default">Category</option>
+            </select>
+        </div>
     </div>
 
     <!--Table contents-->
     <div class="container navbar-right">
-        <div id="listOppPanel" class="tab-content vertical">
+        <div id="secondarylistOppPanel" class="tab-content vertical">
             <div class="row ">
                 <div class="col-md-20">
-                    <table id="documentsTable" class="table table-bordered table-striped table-hover">
+                    <table id="secondaryOppListTable" class="table table-bordered table-striped table-hover">
                         <thead>
-                        <th>Document title</th>
+                        <th>OpportunityID</th>
+                        <th>Opportunity</th>
+                        <th>Closing Date/Time</th>
+                        <th>Status</th>
                         <th></th>
                         </thead>
-                        <tbody id="documentsTableBody">
+                        <tbody id="secondaryOppListTableBody">
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-    </div>
-
-    <!--Accept and reject buttons-->
-    <div class="tab-content vertical" align="right">
-        <button type="button" class="btn btn-accept btn-sm" onclick="updateProposalStatus('Accept')">
-            <span class="glyphicon glyphicon-remove-sign"></span> Accept Proposal
-        </button>
-
-        <button type="button" class="btn btn-reject btn-sm" onclick="updateProposalStatus('Reject')">
-            <span class="glyphicon glyphicon-remove-sign"></span> Reject Proposal
-        </button>
     </div>
 
     <!--Pagination-->
@@ -174,7 +170,6 @@
             <li class="page-item"><a id="next" class="page-link" href="#">Next</a></li>
         </ul>
     </div>
-
 </div>
 
 </body>
