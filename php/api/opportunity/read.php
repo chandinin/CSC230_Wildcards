@@ -34,11 +34,53 @@ if(isSet($_POST_LowerCase["opportunityid"])
     "Name" =>  $opportunity->Name,
     "LowestBid" =>  $opportunity->LowestBid,
     "Description" =>  $opportunity->Description,
-    "Status" =>  $opportunity->Status
+    "Status" =>  $opportunity->Status,
+    "CategoryID" =>  $opportunity->CategoryID,
+    "CreatedDate" =>  $opportunity->CreatedDate,
+    "LastEditDate" =>  $opportunity->LastEditDate
   );
 
   // make it json format
   print_r(json_encode($opportunity_arr));
+}
+else if(isSet($_POST_LowerCase["categoryid"])
+|| isSet($_GET_LowerCase["categoryid"]))
+{
+  //$opportunityID = $_POST_LowerCase["opportunityid"];
+  $categoryid = isSet($_GET_LowerCase["categoryid"]) ?
+     $_GET_LowerCase["categoryid"] : $_POST_LowerCase["categoryid"];
+
+  //Search
+  $stmt = $opportunity->selectByCategoryID($categoryid);
+  $rowCount = $stmt->rowCount();
+
+  $opportunities_arr = array();
+  $opportunities_arr["opportunity"] = array();
+
+  if($rowCount > 0)
+  {
+
+    while($row = $stmt->fetch(PDO::FETCH_ASSOC))
+    {
+      $opportunity_arr = array(
+          "OpportunityID" => $row['OpportunityID'],
+          "ClosingDate" => $row['ClosingDate'],
+          "LeadEvaluatorID" => $row['LeadEvaluatorID'],
+          "Name" => $row['Name'],
+          "LowestBid" => $row['LowestBid'],
+          "Description" => $row['Description'],
+          "Status" => $row['Status'],
+          "CategoryID" => $row['CategoryID'],
+          "CreatedDate" => $row['CreatedDate'],
+          "LastEditDate" => $row['LastEditDate']
+      );
+
+      array_push($opportunities_arr["opportunity"], $opportunity_arr);
+    }
+  }
+
+  // make it json format
+  print_r(json_encode($opportunities_arr));
 }
 else
 {
@@ -61,7 +103,10 @@ else
           "Name" => $row['Name'],
           "LowestBid" => $row['LowestBid'],
           "Description" => $row['Description'],
-          "Status" => $row['Status']
+          "Status" => $row['Status'],
+          "CategoryID" => $row['CategoryID'],
+          "CreatedDate" => $row['CreatedDate'],
+          "LastEditDate" => $row['LastEditDate']
       );
      
       array_push($opportunities_arr["opportunity"], $opportunity_arr);
