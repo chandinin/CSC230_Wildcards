@@ -26,11 +26,11 @@ function getOppList() {
     xhr.send();
 }
 
-//Get opportunity list given an id
+//Get opportunity list given an categoryid
 function getOppListbyID(id) {
     $('#oppListTableBody').empty();
     var xhr = new XMLHttpRequest();
-    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php?CategoryID='+id,true);
+    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php?CategoryID'+id,true);
     xhr.onload = function() {
         if (xhr.status == 200) {
             var jsonArray = JSON.parse(xhr.responseText);
@@ -129,6 +129,7 @@ function showOppDetails(opId) {
 }
 
 //Function to update opportunity status
+//Start by telling tablesorter to sort your table when the document is loaded:
 function completeOpportunityEval(opId) {
     if(opId == 1){
         alert("Cannot complete this opportunity. Please complete processing all Proposals for this Opportunity");
@@ -140,3 +141,21 @@ function completeOpportunityEval(opId) {
     //TODO write logic to update opportunity status
     //Write logic to update opportunity status to complete.
 }
+
+//table sorter logic
+/*$(document).ready(function()
+    {
+        $("#listOppPanel").tablesorter();
+    }
+);*/
+
+//Click on the headers and you'll see that your table is now sortable!
+// You can also pass in configuration options when you initialize the table.
+// This tells tablesorter to sort on the first and second column in ascending order.
+/*
+$(document).ready(function()
+    {
+        $("#listOppPanel").tablesorter( {sortList: [[0,0], [1,0]]} );
+    }
+);
+*/
