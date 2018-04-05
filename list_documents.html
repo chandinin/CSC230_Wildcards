@@ -138,6 +138,15 @@
         </ul>
     </div>
 
+    <div class="container navbar-right">
+        <div align="left">
+            <button type="button" class="btn btn-openportal btn-sm" onclick="updateProposalStatus('Accept')">
+                <span class="glyphicon glyphicon-open-file"></span> Open Portal for Resubmission
+            </button>
+        </div>
+    </div>
+
+
     <!--Table contents-->
     <div class="container navbar-right">
         <div id="listOppPanel" class="tab-content vertical">
@@ -157,7 +166,8 @@
     </div>
 
     <!--Accept and reject buttons-->
-    <div class="tab-content vertical" align="right">
+    <div align="right">
+
         <button type="button" class="btn btn-accept btn-sm" onclick="updateProposalStatus('Accept')">
             <span class="glyphicon glyphicon-remove-sign"></span> Accept Proposal
         </button>
