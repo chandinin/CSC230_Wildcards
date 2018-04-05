@@ -26,11 +26,11 @@ function getOppList() {
     xhr.send();
 }
 
-//Get opportunity list given an id
+//Get opportunity list given an categoryid
 function getOppListbyID(id) {
     $('#oppListTableBody').empty();
     var xhr = new XMLHttpRequest();
-    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/proposal/read.php?OpportunityID='+id,true);
+    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php?CategoryID'+id,true);
     xhr.onload = function() {
         if (xhr.status == 200) {
             var jsonArray = JSON.parse(xhr.responseText);
