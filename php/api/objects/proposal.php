@@ -30,7 +30,7 @@ class Proposal
   // select one by ID
   function selectByID($id)
   {
-    $query = "SELECT ProposalID, OpportunityID, BidderID, Status, TechnicalScore, FeeScore, FinalTotalScore FROM Proposal WHERE ProposalID = ? ;";
+    $query = "SELECT ProposalID, OpportunityID, BidderID, Status, TechnicalScore, FeeScore, FinalTotalScore, CreatedDate, LastEditDate FROM Proposal WHERE ProposalID = ? ;";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
@@ -50,12 +50,14 @@ class Proposal
     $this->TechnicalScore = $row['TechnicalScore'];
     $this->FeeScore = $row['FeeScore'];
     $this->FinalTotalScore = $row['FinalTotalScore'];
+    $this->CreatedDate = $row['CreatedDate'];
+    $this->LastEditDate = $row['LastEditDate'];
   }
 
   // select All in the table
   function selectAll()
   {
-    $query = "SELECT ProposalID, OpportunityID, BidderID, Status, TechnicalScore, FeeScore, FinalTotalScore FROM Proposal;";
+    $query = "SELECT ProposalID, OpportunityID, BidderID, Status, TechnicalScore, FeeScore, FinalTotalScore, CreatedDate, LastEditDate FROM Proposal;";
     $stmt = $this->conn->prepare( $query );
 
     // execute query
@@ -66,7 +68,7 @@ class Proposal
 
   function update()
   {
-    $query = "UPDATE Proposal set OpportunityID=:OpportunityID, BidderID=:BidderID, Status=:Status, TechnicalScore=:TechnicalScore, FeeScore=:FeeScore, FinalTotalScore=:FinalTotalScore WHERE ProposalID = :ProposalID;";
+    $query = "UPDATE Proposal set OpportunityID=:OpportunityID, BidderID=:BidderID, Status=:Status, TechnicalScore=:TechnicalScore, FeeScore=:FeeScore, FinalTotalScore=:FinalTotalScore, LastEditDate=NOW() WHERE ProposalID = :ProposalID;";
 
     $stmt = $this->conn->prepare( $query );
 
@@ -87,8 +89,8 @@ class Proposal
 
   function create()
   {
-    $query = "INSERT INTO Proposal (ProposalID, OpportunityID, BidderID, Status, TechnicalScore, FeeScore, FinalTotalScore) " .
-             "VALUES(:ProposalID, :OpportunityID, :BidderID, :Status, :TechnicalScore, :FeeScore, :FinalTotalScore);";
+    $query = "INSERT INTO Proposal (ProposalID, OpportunityID, BidderID, Status, TechnicalScore, FeeScore, FinalTotalScore, CreatedDate, LastEditDate) " .
+             "VALUES(:ProposalID, :OpportunityID, :BidderID, :Status, :TechnicalScore, :FeeScore, :FinalTotalScore, NOW(), NOW());";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters

@@ -126,21 +126,21 @@ function initializeOpportunitiesList()
             opportunities = opportunities_json["opportunity"];
             num_opportunity_callbacks_left = opportunities.length;
 
-            // TODO: Make this actual call when the endpoint for getting category names is ready
             opportunities.forEach(function(opportunity)
             {
-                // $.ajax({
-                //     url: "php/api/opportunity/read.php", 
-                //     success: populateOpportunitiesList
-                // });
+                $.ajax({
+                    url: "php/api/opportunity/categoryName.php?CategoryID="+opportunity.CategoryID, 
+                    success: function(category_json)
+                    {
+                        opportunity.CategoryName = category_json.Name;
+                        num_opportunity_callbacks_left--;
 
-                opportunity.Category = opportunity.CategoryID;
-                num_opportunity_callbacks_left--;
-
-                if(num_opportunity_callbacks_left == 0)
-                {
-                    populateOpportunitiesList(opportunities_json);
-                }
+                        if(num_opportunity_callbacks_left == 0)
+                        {
+                            populateOpportunitiesList(opportunities_json);
+                        }
+                    }
+                });
             });
         }
     });
@@ -159,7 +159,7 @@ function populateOpportunitiesList(opportunities_json) {
     for(var i = 0; i < opportunities.length; i++)
     {
         closingDate_textNode = document.createTextNode(opportunities[i].ClosingDate);
-        category_textNode = document.createTextNode(opportunities[i].Category);
+        category_textNode = document.createTextNode(opportunities[i].CategoryName);
         anchor   = document.createElement("a");
 
         anchor.appendChild(document.createTextNode(opportunities[i].Name));
@@ -198,9 +198,14 @@ function initializeOpportunityDetail(ID) {
         data: {"OpportunityID": ID},
         success: function(opportunity)
         {
-            // TODO: make ajax call to get category name based on ID
-            opportunity.Category = opportunity.CategoryID;
-            parseOpportunity(opportunity);
+            $.ajax({
+                url: "php/api/opportunity/categoryName.php?CategoryID="+opportunity.CategoryID, 
+                success: function(category_json)
+                {
+                    opportunity.CategoryName = category_json.Name;
+                    parseOpportunity(opportunity);
+                }
+            });
         }
     });
 }
@@ -211,7 +216,7 @@ function parseOpportunity(opportunity) {
     $("#Title").text(opportunity["Name"]);
     $("#ClosingDate").text(opportunity["ClosingDate"]);
     $("#Description").text(opportunity["Description"]);
-    $("#Category").text(opportunity.Category);
+    $("#Category").text(opportunity.CategoryName);
 
     $("#create-proposal-btn").off();
     $("#create-proposal-btn").click( function() { activateCreateProposal(opportunity["OpportunityID"]); } );
