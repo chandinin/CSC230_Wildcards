@@ -10,7 +10,11 @@ $(document).ready(function(){
     $("#opportunities-list-table").tablesorter();
     $("#proposals-list-table").tablesorter();
 
+    // Set the tab to active, because I don't know what I'm doing...
+    $('#opportunities-tab').trigger('click');
+
     bidder_id = "1";
+    activateOpportunitiesList();
 });
 
 
@@ -102,6 +106,13 @@ function insertTableRows(rows_array, table_node)
     $("#"+table_node.id).trigger("update");
 }
 
+// ( YYYY-MM-DD HH:MM:SS )
+function getFormattedDate() {
+    var date = new Date();
+    var str = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " +  date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+
+    return str;
+}
 
 /**************************
  * spa-opportunities-list *
@@ -232,6 +243,7 @@ function parseOpportunity(opportunity) {
         type: "GET",
         success: function(opp_doc_templates)
         {
+            console.log(opp_doc_templates);
             // TODO: Need more coverage on this URL, returning 3 byte files
             GET_FILE_URL_BASE = "php/api/doctemplate/getFile.php?doctemplateid=";
             doc_list = document.getElementById("opp-detail-doc-templates-list");
@@ -253,7 +265,11 @@ function parseOpportunity(opportunity) {
 
                 // Create Template download anchor
                 anchor = document.createElement("a");
-                anchor.href = GET_FILE_URL_BASE+doc_templates[i].DocTemplateID;
+                if(doc_templates[i].Url != null)
+                    anchor.href = doc_templates[i].Url.replace("https://athena.ecs.csus.edu/~wildcard/", "");
+                else
+                    anchor.href = "google.com";
+
                 anchor.appendChild(document.createTextNode(doc_templates[i].DocTitle));
 
                 // Attach all elements to the list_item
@@ -285,7 +301,8 @@ function initializeCreateProposal(opportunity_id)
     $.ajax({
         url: "php/api/opportunity/getDocTemplates.php?opportunityid="+opportunity_id, 
         type: "GET",
-        success: populateOppDocTemplates
+        success: populateOppDocTemplates,
+        async: false
     });
 
     $.ajax({
@@ -296,10 +313,10 @@ function initializeCreateProposal(opportunity_id)
     });
 
     $("#proposal-back-list-btn").off();
-    $("#poposal-save-btn").off();
+    $("#proposal-save-btn").off();
 
     $("#proposal-back-list-btn").click(function() { router("#spa-opportunities-list"); });
-    $("#poposal-save-btn").click(function() { console.log("Pressed poposal-save-btn"); saveNewProposal(opportunity_id); });
+    $("#proposal-save-btn").click(function() { console.log("Pressed proposal-save-btn"); saveNewProposal(opportunity_id); });
 }
 
 function saveNewProposal(opportunity_id)
@@ -317,7 +334,9 @@ function saveNewProposal(opportunity_id)
         "Status": "saved, still open",
         "TechnicalScore": -1,
         "FeeScore": -1,
-        "FinalTotalScore": -1
+        "FinalTotalScore": -1,
+        "CreatedDate": getFormattedDate(),
+        "LastEditDate": getFormattedDate()
     }
 
     console.log(new_proposal_json);
@@ -462,7 +481,10 @@ function populateOppDocTemplates(opp_doc_templates)
 
         // Create Template download anchor
         anchor = document.createElement("a");
-        anchor.href = GET_FILE_URL_BASE+doc_templates[i].DocTemplateID;
+        if(doc_templates[i].Url != null)
+            anchor.href = doc_templates[i].Url.replace("https://athena.ecs.csus.edu/~wildcard/", "");
+        else
+            anchor.href = "google.com";
         anchor.appendChild(document.createTextNode(doc_templates[i].DocTitle));
 
         // Create file upload element
@@ -512,9 +534,10 @@ function initializeProposalsList()
                     url: "php/api/opportunity/read.php?opportunityid="+proposal_json["OpportunityID"], 
                     success: function(opportunity_json) {
                         proposal_json["OpportunityName"] = opportunity_json["Name"];
+                        proposal_json["ClosingDate"] = opportunity_json["ClosingDate"];
                         num_proposal_callbacks_left--;
 
-                        if(num_proposal_callbacks_left == 0) 
+                        if(num_proposal_callbacks_left == 0)
                         {
                             // Filter down all proposals till we get just ours
                             populateProposalList(proposals_json["proposal"].filter(proposal => proposal["BidderID"] == bidder_id)); 
@@ -557,146 +580,71 @@ function populateProposalList(proposals_json)
 /********************
  * spa-edit-proposal*
  ********************/
-// Forgive me padre...
+// Gonna be a little sneaky and reuse the create-opportunity spa
 
 function activateEditProposal(proposal_id)
 {
-    initializeEditProposal(proposal_id);
-    router("#spa-edit-proposal");
-}
-
-
-// Trying to use http://athena.ecs.csus.edu/~mackeys/php/api/opportunity/getDocTemplates.php
-// Currently just kludge with getting all doctemplates
-function initializeEditProposal(proposal_id)
-{
-    // Probably want to make this synchronous, so that we can populate the doc list then do other things
     $.ajax({
-        url: "php/api/doctemplate/read.php", 
+        url: "php/api/proposal/read.php?proposalid="+proposal_id, 
         type: "GET",
-        success: populateProposalDocTemplates
+        success: function(proposal_json)
+        {
+            initializeCreateProposal(proposal_json.OpportunityID);
+            initializeEditProposal(proposal_json);
+            router("#spa-create-proposal");    
+        }
     });
 
+}
+
+function initializeEditProposal(proposal_json)
+{
+    console.log("In initializeEditProposal");
+    $("#create-proposal-header").text("Edit proposal");
+    $("#proposal-time-last-edit").text("Time last edit: " + proposal_json.LastEditDate);
+    $("#proposal-back-list-btn").off();
+    $("#proposal-save-btn").off();
+
+    $("#proposal-back-list-btn").click(function() { router("#spa-proposals-list"); });
+    $("#proposal-save-btn").click(function() { saveProposal(proposal_json); });
+
+
+    doc_list = document.getElementById("opp-doc-templates-list");
+
+    // If already have files, show them
     $.ajax({
-        url: "php/api/opportunity/read.php", 
-        type: "POST",
-        data: {"OpportunityID": opportunity_id},
-        success: function(opportunity)
+        url: "php/api/proposal/getDocsList.php?proposalid="+proposal_json.ProposalID, 
+        type: "GET",
+        success: function(proposal_docs_json)
         {
-            $("#edit-opportunity-title").text("Title: " + opportunity["Name"]);
-            $("#edit-opportunity-countdown").text("Closing Date and Time: " + opportunity["ClosingDate"]);
+            docs = proposal_docs_json.doc;
+            doc_map = {};
+
+            // Fix the URLs for each doc
+            docs.forEach(function(doc)
+            {
+                doc.Url = doc.Url.replace("https://athena.ecs.csus.edu/~wildcard/", "");
+                console.log(doc.Url);
+
+                
+            });
+
         }
     });
 
-    $("#edit-proposal-back-list-btn").off();
-    $("#edit-poposal-save-btn").off();
+    for(i = 0; i < doc_list.children.length; i++)
+    {
+        prev_doc_anchor = document.createElement("a");
+        prev_doc_anchor.href = "google.com";
+        prev_doc_anchor.appendChild(document.createTextNode("View what you uploaded"));
+        prev_doc_anchor.className += "old_doc_a";
 
-    $("#edit-proposal-back-list-btn").click(function() { router("#spa-opportunities-list"); });
-    $("#edit-poposal-save-btn").click(function() { saveProposal(opportunity_id); });
+        doc_list.children[i].appendChild(prev_doc_anchor);
+        console.log(doc_list.children[i]);
+    }
 }
 
-function saveProposal(opportunity_id)
+function saveProposal(proposal_json)
 {
-    /************************
-     * Upload the documents *
-     ************************/
-    // First Calculate how many we have to upload.
-    doc_list_children = document.getElementById("opp-doc-templates-list").childNodes;
 
-    for(i = 0; i < doc_list_children.length; i++)
-    {
-        current_child = doc_list_children[i];
-        current_input = null;
-
-        // Search for just the input in each li via localName=input
-        for(j = 0; j < current_child.children.length; j++)
-        {
-            if(current_child.children[j].localName.toLowerCase() == "input")
-                current_input = current_child.children[j];
-        }
-
-        if(current_input == null)
-        {
-            alert("Something terribly wrong has ocurred when trying to get a lock on the input");
-            return false;
-        }
-
-        // console.log(current_input);
-
-        // Check if there is a file for our current input, if so get a reference
-        current_file = current_input.files.length > 0 ? current_input.files[0] : null;
-
-        if(current_file == null)
-        {
-            console.log("No file for " + current_child.dataset.DocTemplateID + ", but that's ok!");
-            continue;
-        }
-
-        console.log(current_child.dataset.DocTemplateID + " got file with name: " + current_file.name);
-        console.log("Attempting to upload...");
-
-        var formData=new FormData();
-        formData.append('filename', current_file, current_file.name);
-        formData.append('ProposalID', proposal_id);
-        formData.append("OpportunityID", opportunity_id);
-        formData.append("DocTemplateID", current_child.dataset.DocTemplateID);
-        formData.append('submit', "Lol this needs to be filled");
-
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST','php/api/proposal/uploadDoc.php');
-        xhr.onload = function() {
-            if(xhr.status == 200) {
-                console.log('File uploaded' + xhr.response);
-            } else {
-                alert('Error uploading file:' + xhr.response);
-            }
-        };
-        xhr.send(formData);
-    }
-
-    alert("TODO: Go back to list of opportunities");
-}
-
-function populateProposalDocTemplates(opp_doc_templates)
-{
-    // TODO: Need more coverage on this URL, returning 3 byte files
-    GET_FILE_URL_BASE = "php/api/doctemplate/getFile.php?doctemplateid=";
-
-    doc_templates = opp_doc_templates["doctemplate"];
-
-    console.log("Retrieved " + doc_templates.length.toString() + " doc templates");
-
-    doc_list = document.getElementById("edit-opp-doc-templates-list");
-    doc_list.innerHTML = ""; // Clear what we may already have there
-
-    for(i = 0; i < doc_templates.length; i++)
-    {
-        list_item = document.createElement('li');
-        // Attach the DocTemplateID to the li itself for access by other functions
-        // Will undoubtedly bite me in the ass down the road...
-        list_item.dataset.DocTemplateID = doc_templates[i].DocTemplateID;
-
-        // Create Template download anchor
-        anchor = document.createElement("a");
-        anchor.href = GET_FILE_URL_BASE+doc_templates[i].DocTemplateID;
-        anchor.appendChild(document.createTextNode(doc_templates[i].DocTitle));
-
-        // Create file upload element
-        file_upload = document.createElement("INPUT");
-        file_upload.setAttribute("type", "file");
-        
-        // Create submit button
-        // file_upload_button = document.createElement("a");
-        // file_upload_button.classList.add('btn');
-        // file_upload_button.appendChild(document.createTextNode("upload"))
-
-
-
-        // Attach all elements to the list_item
-        list_item.appendChild(anchor);
-        list_item.appendChild(file_upload);
-        // list_item.appendChild(file_upload_button);
-
-        doc_list.appendChild(list_item);
-    }
 }

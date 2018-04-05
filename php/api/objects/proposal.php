@@ -127,7 +127,7 @@ class Proposal
   {
     try
     {
-      $query = "INSERT INTO Docs (DocID, DocTitle, Path, Url) VALUES (:DocID, :DocTitle, :Path, :Url)";
+      $query = "INSERT INTO Docs (DocID, DocTitle, Path, Url, CreatedDate, LastEditDate) VALUES (:DocID, :DocTitle, :Path, :Url, NOW(), NOW())";
 
 
       $stmt = $this->conn->prepare( $query );
@@ -181,6 +181,7 @@ class Proposal
     try
     {
       $query = "SELECT DocID, DocTitle, Description, Path, Url FROM Docs WHERE DocID in (SELECT DocID FROM ProposalDocs WHERE ProposalID = '".$ProposalID."') ";
+      $query = "SELECT ProposalDocs.DocTemplateID, Docs.DocID, Docs.DocTitle, Docs.Description, Docs.Path, Docs.Url FROM Docs JOIN ProposalDocs ON Docs.DocID=ProposalDocs.DocID WHERE ProposalDocs.ProposalID='".$ProposalID."' ";
 
 
       $stmt = $this->conn->prepare( $query );
@@ -229,10 +230,6 @@ class Proposal
     {
       $query = "INSERT INTO ProposalDocs (ProposalID, DocID, ExpirationDate) VALUES ('".$ProposalID."', ".$DocsID.", '".$ExpirationDate."'); ";
 
-      //echo '{';
-      //echo ' "query" : "'.$query.'"';
-      //echo '}';
-
       $stmt = $this->conn->prepare( $query );
 
       // bind parameters
@@ -250,6 +247,45 @@ class Proposal
       echo 'Connection failed: ' . $e->getMessage();
       return false;
     }
+  }
+
+  function RelateDocsToProposalID2($ProposalID, $DocsID, $ExpirationDate, $OpportunityID, $DocTemplateID)
+  {
+    try
+    {
+      $query = "INSERT INTO ProposalDocs (ProposalID, DocID, ExpirationDate, OpportunityID, DocTemplateID, CreatedDate, LastEditDate) VALUES ('".$ProposalID."', ".$DocsID.", '".$ExpirationDate."', '".$OpportunityID."', ".$DocTemplateID.", NOW(), NOW()); ";
+      $stmt = $this->conn->prepare( $query );
+
+      if($stmt->execute())
+        return true;
+      else
+        return false;
+    }
+    catch (PDOException $e)
+    {
+      echo 'Connection failed: ' . $e->getMessage();
+      return false;
+    }
+  }
+
+  function getOpportunityIDByProposalID($ProposalID)
+  {
+    $query = "SELECT OpportunityID FROM Proposal WHERE ProposalID = ? ;";
+    $stmt = $this->conn->prepare( $query );
+
+    // bind parameters
+    $stmt->bindParam(1, $ProposalID);
+
+    // execute query
+    $stmt->execute();
+
+    // get retrieved row
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // set values to object properties
+    $OpportunityID = $row['OpportunityID'];
+
+    return $OpportunityID;
   }
 }
 ?>

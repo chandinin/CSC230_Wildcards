@@ -44,7 +44,8 @@ if(isSet($_POST_LowerCase["proposalid"]) || isSet($_GET_LowerCase["proposalid"])
       $Doc_arr = array(
           "DocID" => $row['DocID'],
           "DocTitle" => $row['DocTitle'],
-          "Url" => $row['Url']
+          "Url" => $row['Url'],
+          "DocTemplateID" => $row['DocTemplateID']
       );
      
       array_push($Docs_arr["doc"], $Doc_arr);
