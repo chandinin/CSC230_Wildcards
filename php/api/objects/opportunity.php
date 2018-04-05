@@ -391,6 +391,21 @@ class Opportunity
       return false;
     }
   }
+
+  // select one by ID
+  function getCategoryByID($CategoryID)
+  {
+    $query = "SELECT CategoryID, Name FROM OppCategory WHERE CategoryID = ? ;";
+    $stmt = $this->conn->prepare( $query );
+
+    // bind parameters
+    $stmt->bindParam(1, $CategoryID);
+
+    // execute query
+    $stmt->execute();
+
+    return $stmt;
+  }
 }
 ?>
 

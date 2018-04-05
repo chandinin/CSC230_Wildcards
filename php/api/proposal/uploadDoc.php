@@ -20,7 +20,8 @@ $db = $database->Connect();
 $proposal = new Proposal($db);
 
 $temp_base_dir = "../../../data/files/";
-$base_url = "https://athena.ecs.csus.edu/~wildcard/php/api/";
+//$base_url = "https://athena.ecs.csus.edu/~wildcard/php/api/";
+$base_url = "http://localhost/PHP_TEST/api/";
 
 //
 //
@@ -63,14 +64,25 @@ if(isset($_POST["submit"]))
       $url = $base_url . "docs/getFile.php?docid=" . $proposalID . "_" . $DocID;
       if($proposal->UploadDoc($DocID, $filename, $tempFilePath, $url))
       {
-        $proposal->RelateDocsToProposalID($proposalID, $DocID, $ExpirationDate);
-        $Exists = "Uploaded Document (" . $proposalID . ", " . $DocID . ", " . $ExpirationDate.") ";        
+        if(isSet($_POST_LowerCase["doctemplateid"]))
+        {
+          $DocTemplateID = $_POST_LowerCase["doctemplateid"];
+          $OpportunityID = $proposal->getOpportunityIDByProposalID($proposalID);
+
+          $proposal->RelateDocsToProposalID2($proposalID, $DocID, $ExpirationDate, $OpportunityID, $DocTemplateID);
+          $Exists = "Uploaded Document (" . $proposalID . ", " . $DocID . ", " . $ExpirationDate.", ".$OpportunityID.", ".$DocTemplateID.") ";        
+        }
+        else
+        {
+          $proposal->RelateDocsToProposalID($proposalID, $DocID, $ExpirationDate);
+          $Exists = "Uploaded Document (" . $proposalID . ", " . $DocID . ", " . $ExpirationDate.") ";        
+        }
       }
 
       echo '{';
       echo ' "message" : "Uploading Successful."';
       echo ', "DocID" : "'. $DocID .'"';
-      //echo ', "message3" : "Exists = '. $Exists .'"';
+      echo ', "message3" : "Exists = '. $Exists .'"';
       echo ', "message4" : "URL = '. $url .'"';
       echo '}';
     } 

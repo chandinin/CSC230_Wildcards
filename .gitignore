@@ -1,2 +1,3 @@
 .idea*
 .swp
+/php/api/docs/php_errors.log

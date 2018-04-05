@@ -17,6 +17,8 @@ class Proposal
   public $TechnicalScore;
   public $FeeScore;
   public $FinalTotalScore;
+  public $CreatedDate;
+  public $LastEditDate;
 
   // Constructor
   // Note: Must pass connection as a parameter.
@@ -28,7 +30,7 @@ class Proposal
   // select one by ID
   function selectByID($id)
   {
-    $query = "SELECT ProposalID, OpportunityID, BidderID, Status, TechnicalScore, FeeScore, FinalTotalScore FROM Proposal WHERE ProposalID = ? ;";
+    $query = "SELECT ProposalID, OpportunityID, BidderID, Status, TechnicalScore, FeeScore, FinalTotalScore, CreatedDate, LastEditDate FROM Proposal WHERE ProposalID = ? ;";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
@@ -48,12 +50,14 @@ class Proposal
     $this->TechnicalScore = $row['TechnicalScore'];
     $this->FeeScore = $row['FeeScore'];
     $this->FinalTotalScore = $row['FinalTotalScore'];
+    $this->CreatedDate = $row['CreatedDate'];
+    $this->LastEditDate = $row['LastEditDate'];
   }
 
   // select All in the table
   function selectAll()
   {
-    $query = "SELECT ProposalID, OpportunityID, BidderID, Status, TechnicalScore, FeeScore, FinalTotalScore FROM Proposal;";
+    $query = "SELECT ProposalID, OpportunityID, BidderID, Status, TechnicalScore, FeeScore, FinalTotalScore, CreatedDate, LastEditDate FROM Proposal;";
     $stmt = $this->conn->prepare( $query );
 
     // execute query
@@ -64,7 +68,7 @@ class Proposal
 
   function update()
   {
-    $query = "UPDATE Proposal set OpportunityID=:OpportunityID, BidderID=:BidderID, Status=:Status, TechnicalScore=:TechnicalScore, FeeScore=:FeeScore, FinalTotalScore=:FinalTotalScore WHERE ProposalID = :ProposalID;";
+    $query = "UPDATE Proposal set OpportunityID=:OpportunityID, BidderID=:BidderID, Status=:Status, TechnicalScore=:TechnicalScore, FeeScore=:FeeScore, FinalTotalScore=:FinalTotalScore, LastEditDate=NOW() WHERE ProposalID = :ProposalID;";
 
     $stmt = $this->conn->prepare( $query );
 
@@ -85,8 +89,8 @@ class Proposal
 
   function create()
   {
-    $query = "INSERT INTO Proposal (ProposalID, OpportunityID, BidderID, Status, TechnicalScore, FeeScore, FinalTotalScore) " .
-             "VALUES(:ProposalID, :OpportunityID, :BidderID, :Status, :TechnicalScore, :FeeScore, :FinalTotalScore);";
+    $query = "INSERT INTO Proposal (ProposalID, OpportunityID, BidderID, Status, TechnicalScore, FeeScore, FinalTotalScore, CreatedDate, LastEditDate) " .
+             "VALUES(:ProposalID, :OpportunityID, :BidderID, :Status, :TechnicalScore, :FeeScore, :FinalTotalScore, NOW(), NOW());";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
@@ -123,7 +127,7 @@ class Proposal
   {
     try
     {
-      $query = "INSERT INTO Docs (DocID, DocTitle, Path, Url) VALUES (:DocID, :DocTitle, :Path, :Url)";
+      $query = "INSERT INTO Docs (DocID, DocTitle, Path, Url, CreatedDate, LastEditDate) VALUES (:DocID, :DocTitle, :Path, :Url, NOW(), NOW())";
 
 
       $stmt = $this->conn->prepare( $query );
@@ -225,10 +229,6 @@ class Proposal
     {
       $query = "INSERT INTO ProposalDocs (ProposalID, DocID, ExpirationDate) VALUES ('".$ProposalID."', ".$DocsID.", '".$ExpirationDate."'); ";
 
-      echo '{';
-      echo ' "query" : "'.$query.'"';
-      echo '}';
-
       $stmt = $this->conn->prepare( $query );
 
       // bind parameters
@@ -246,6 +246,45 @@ class Proposal
       echo 'Connection failed: ' . $e->getMessage();
       return false;
     }
+  }
+
+  function RelateDocsToProposalID2($ProposalID, $DocsID, $ExpirationDate, $OpportunityID, $DocTemplateID)
+  {
+    try
+    {
+      $query = "INSERT INTO ProposalDocs (ProposalID, DocID, ExpirationDate, OpportunityID, DocTemplateID, CreatedDate, LastEditDate) VALUES ('".$ProposalID."', ".$DocsID.", '".$ExpirationDate."', '".$OpportunityID."', ".$DocTemplateID.", NOW(), NOW()); ";
+      $stmt = $this->conn->prepare( $query );
+
+      if($stmt->execute())
+        return true;
+      else
+        return false;
+    }
+    catch (PDOException $e)
+    {
+      echo 'Connection failed: ' . $e->getMessage();
+      return false;
+    }
+  }
+
+  function getOpportunityIDByProposalID($ProposalID)
+  {
+    $query = "SELECT OpportunityID FROM Proposal WHERE ProposalID = ? ;";
+    $stmt = $this->conn->prepare( $query );
+
+    // bind parameters
+    $stmt->bindParam(1, $ProposalID);
+
+    // execute query
+    $stmt->execute();
+
+    // get retrieved row
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // set values to object properties
+    $OpportunityID = $row['OpportunityID'];
+
+    return $OpportunityID;
   }
 }
 ?>

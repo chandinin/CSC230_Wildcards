@@ -26,10 +26,10 @@ if(json_last_error() === JSON_ERROR_NONE)
   $employee->phone = $data->phone;
   $employee->middle_init = $data->middle_init;
   $employee->address = $data->address;
-  $employee->user_name = $data->user_name;  
+  $employee->user_name = $data->user_name;
 
   if($employee->create())
-  {  
+  {
     echo '{';
        echo ' message : "Create suceeded. "';
     echo '}';
@@ -109,7 +109,7 @@ else
     }
 
     if($employee->create())
-    {  
+    {
       echo '{';
       echo ' message : "Create suceeded.  (EmployeeID=' . $employeeID . ')"';
       echo '}';
@@ -129,4 +129,3 @@ else
   }
 }
 ?>
-

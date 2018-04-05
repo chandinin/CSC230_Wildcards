@@ -30,7 +30,11 @@ if(isset($_POST_LowerCase["submit"]))
     $database = new Database();
     $db = $database->Connect();
     $proposal = new Proposal($db);
-    $base_url = "https://athena.ecs.csus.edu/~wildcard/php/api/";
+    //$base_url = "https://athena.ecs.csus.edu/~wildcard/php/api/";
+    $base_url = "http://localhost/PHP_TEST/api/";
+
+    $DocTemplateID = $_POST_LowerCase["doctemplateid"];
+    $OpportunityID = $proposal->getOpportunityIDByProposalID($proposalID);
    
     foreach($_FILES['filename']['tmp_name'] as $key => $tmpName) 
     {
@@ -47,8 +51,8 @@ if(isset($_POST_LowerCase["submit"]))
         if($proposal->UploadDoc($DocID, 
                 $filename, $tempFilePath, $url))
         {
-          $proposal->RelateDocsToProposalID($proposalID, 
-                        $DocID, $ExpirationDate);
+          $proposal->RelateDocsToProposalID2($proposalID, $DocID, $ExpirationDate, $OpportunityID, $DocTemplateID);
+          //$proposal->RelateDocsToProposalID($proposalID, $DocID, $ExpirationDate);
         }  
       }
     }
