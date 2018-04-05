@@ -1,30 +1,15 @@
+//On Start
 $(document).ready(
     function () {
-        initNewOppForm();
+        getOppList();
         $('#listOppPanel').show();
-
-        $('#exitNewOpp').click(function() {
-            $("#listOppPanel").show();
-        });
-
-        $('#clearNewOpp').click(function() {
-            $('#newOppForm')[0].reset();
-        });
 
         $('#proposalListTable tr').click(function() {
             showOpp();
         });
-
-        $('#exitNewOpp').click(function() {
-            $('#newOppPanel').hide();
-        });
-
     });
 
-function showOppList() {
-    $('#listOppPanel').show();
-};
-
+//get proposal list based on opportunity id
 function getOppList() {
     var opportunityID = localStorage.getItem("opportunityID");
     $('#proposalListTableBody').empty();
@@ -39,19 +24,10 @@ function getOppList() {
         }
     };
     xhr.send();
-
 }
 
-function initNewOppForm() {
-    getOppList();
-}
-
-function showOpp() {
-    window.location.replace("Opportunity_new.html")
-}
-
+//Fill proposal table and pagination logic
 function fillProposalTable(jsonArray){
-
     var start = 0;
     var elements_per_page = 7;
     var limit = elements_per_page;
@@ -89,6 +65,7 @@ function fillProposalTable(jsonArray){
     });
 }
 
+//Store proposal id to pass to next screen to get a list of documents
 function showProposalDetails(id) {
     localStorage.setItem("proposalId",id);
     window.location.replace("list_documents.html");
