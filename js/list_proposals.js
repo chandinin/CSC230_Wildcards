@@ -90,9 +90,6 @@ function fillProposalTable(jsonArray){
 }
 
 function showProposalDetails(id) {
-    //place holder screen
-    alert(id);
     localStorage.setItem("storageName",id);
-    //window.location.href = "list_documents.html" + id;
     window.location.replace("list_documents.html");
 }

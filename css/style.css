@@ -51,6 +51,16 @@
 .btn-delete {
     background-color: #d80d17;
 }
+
+.btn-reject {
+    color: white;
+    background-color: #DC143C;
+}
+
+.btn-accept {
+    color: white;
+    background-color: #3CB371;
+}
 .btn-warning {
     color: #000000;
     background-color: #ffb200;
@@ -150,7 +160,6 @@ a:hover {
 }
 
 .navbar-global .navbar-nav > li > a {
-    /*border-bottom: 2px solid #ffffff;*/
     font-size: 14px;
     padding: 0;
     margin: 0 12px;
@@ -162,10 +171,7 @@ a:hover {
 }
 
 .navbar-global .navbar-nav > li > a:hover {
-    /*border-bottom: 2px solid #00659e;*/
     color: #003c5e;
-    /*font-weight:600;*/
-    /*border-bottom: 2px solid #000;*/
     color: #000;
 }
 
@@ -173,8 +179,10 @@ a:hover {
     color: #000;
     background: #ffffff;
     font-weight: 600;
-    /*border-bottom: 2px solid #000;
-      padding-bottom: 5px;*/
+}
+
+li.right{
+    float: right;
 }
 
 .navbar-collapse.collapse.flexEndCenter {
@@ -3058,17 +3066,14 @@ span.video-duration {
 .table-hover > tbody > tr:hover > th {
     background-color: #9fadc4;
 }
-<<<<<<< HEAD
 
-.container {
-    margin-top: 20px;
-}
 .page {
     display: none;
 }
 .page-active {
     display: block;
 }
-=======
+
+
+
 th {text-align:center}
->>>>>>> f083ea687efb936e9acc66e4bd6544816819f526
