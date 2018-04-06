@@ -11,10 +11,10 @@ $(document).ready(
 
 //get proposal list based on opportunity id
 function getProposalList() {
-    var opportunityID = localStorage.getItem("opportunityID");
+    var oppID = localStorage.getItem("opportunityID");
     $('#proposalListTableBody').empty();
     var xhr = new XMLHttpRequest();
-    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/proposal/read.php?OpportunityID='+opportunityID,true);
+    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/proposal/read.php?OpportunityID='+oppID,true);
     xhr.onload = function() {
         if (xhr.status == 200) {
             var jsonArray = JSON.parse(xhr.responseText);
