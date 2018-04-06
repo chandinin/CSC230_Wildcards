@@ -54,6 +54,21 @@ class Proposal
     $this->LastEditDate = $row['LastEditDate'];
   }
 
+  // select one by ID
+  function selectByOppID($id)
+  {
+    $query = "SELECT ProposalID, OpportunityID, BidderID, Status, TechnicalScore, FeeScore, FinalTotalScore, CreatedDate, LastEditDate FROM Proposal WHERE OpportunityID = ? ;";
+    $stmt = $this->conn->prepare( $query );
+
+    // bind parameters
+    $stmt->bindParam(1, $id);
+
+    // execute query
+    $stmt->execute();
+
+    return $stmt;
+  }
+
   // select All in the table
   function selectAll()
   {
@@ -68,18 +83,51 @@ class Proposal
 
   function update()
   {
-    $query = "UPDATE Proposal set OpportunityID=:OpportunityID, BidderID=:BidderID, Status=:Status, TechnicalScore=:TechnicalScore, FeeScore=:FeeScore, FinalTotalScore=:FinalTotalScore, LastEditDate=NOW() WHERE ProposalID = :ProposalID;";
+//    $query = "UPDATE Proposal set OpportunityID=:OpportunityID, BidderID=:BidderID, Status=:Status, TechnicalScore=:TechnicalScore, FeeScore=:FeeScore, FinalTotalScore=:FinalTotalScore, LastEditDate=NOW() WHERE ProposalID = :ProposalID;";
+
+    $query = "UPDATE Proposal set ";
+    $query = $query . "LastEditDate=NOW()";
+    if(isset($this->BidderID))
+    {
+      $query = $query . ", OpportunityID = '" . $this->OpportunityID . "'";      
+    }
+
+    if(isset($this->BidderID))
+    {
+      $query = $query . ", BidderID = '" . $this->BidderID . "'";      
+    }
+
+    if(isset($this->Status))
+    {
+      $query = $query . ", Status = '" . $this->Status . "'";      
+    }
+
+    if(isset($this->TechnicalScore))
+    {
+      $query = $query . ", TechnicalScore = " . $this->TechnicalScore . " ";      
+    }
+
+    if(isset($this->FeeScore))
+    {
+      $query = $query . ", FeeScore = " . $this->FeeScore . " ";      
+    }
+
+    if(isset($this->TechnicalScore))
+    {
+      $query = $query . ", FinalTotalScore = " . $this->FinalTotalScore . " ";      
+    }
+    $query = $query . " WHERE ProposalID = '" . $this->ProposalID . "';";
 
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
-    $stmt->bindParam(':ProposalID', $this->ProposalID);
-    $stmt->bindParam(':OpportunityID', $this->OpportunityID);
-    $stmt->bindParam(':BidderID', $this->BidderID);
-    $stmt->bindParam(':Status', $this->Status);
-    $stmt->bindParam(':TechnicalScore', $this->TechnicalScore);
-    $stmt->bindParam(':FeeScore', $this->FeeScore);
-    $stmt->bindParam(':FinalTotalScore', $this->FinalTotalScore);
+    //$stmt->bindParam(':ProposalID', $this->ProposalID);
+    //$stmt->bindParam(':OpportunityID', $this->OpportunityID);
+    //$stmt->bindParam(':BidderID', $this->BidderID);
+    //$stmt->bindParam(':Status', $this->Status);
+    //$stmt->bindParam(':TechnicalScore', $this->TechnicalScore);
+   // $stmt->bindParam(':FeeScore', $this->FeeScore);
+    //$stmt->bindParam(':FinalTotalScore', $this->FinalTotalScore);
 
     if($stmt->execute())
       return true;
