@@ -60,10 +60,16 @@ $(document).ready(
 
         $('.table').tablesorter();
 
-        $("#selectCategory").change(function () {
+        $("#selectFilterCategory").change(function () {
             //Storing the dropdown selection in category variable
-            category= $('#selectCategory option:selected').attr('id');
+            category= $('#selectFilterCategory option:selected').attr('id');
         });
+
+        $("#selectNewCategory").change(function () {
+            //Storing the dropdown selection in category variable
+            category= $('#selectNewCategory option:selected').attr('id');
+        });
+
 
 
 
@@ -82,6 +88,7 @@ function showEditOpp(opId) {
 
 function showNewOpp() {
     getLeadEvals();
+    getCategories($('#selectNewCategory'))
     $('#newOppPanel1').show();
     $('#listOppPanel').hide();
     var editor = new Jodit("#editor");
@@ -108,12 +115,12 @@ var xhr = new XMLHttpRequest();
     xhr.open('POST', url);
     xhr.onload = function () {
     if (xhr.status == 200) {
-        var jsonArray = JSON.parse(xhr.responseText);
-        $("#oppNumber").text(jsonArray.OpportunityID);
-        $("#oppDate").text(jsonArray.ClosingDate);
-        $("#oppName").text(jsonArray.Name);
+        var oppArray = JSON.parse(xhr.responseText);
+        $("#oppNumber").text(oppArray.OpportunityID);
+        $("#oppDate").text(oppArray.ClosingDate);
+        $("#oppName").text(oppArray.Name);
         $("#oppType").text("Type");
-        $("#oppDesc").text(jsonArray.Description);
+        $("#oppDesc").text(oppArray.Description);
     } else {
         alert('');
     }
@@ -132,10 +139,10 @@ function getDocTemplates(opId) {
             var failed = retval.includes('error');
             if(failed)
                return;
-            var jsonArray= JSON.parse(retval);
-            var size = jsonArray.doctemplate.length;
+            var docArray= JSON.parse(retval);
+            var size = docArray.doctemplate.length;
             for(var i = 0; i< size; i++) {
-                var template = jsonArray.doctemplate[i];
+                var template = docArray.doctemplate[i];
                 if (template.Url != null) {
                     var row = "<tr><td>" + template.DocTitle + "</td><td><a class='btn btn-primary btn-lg' href='" + template.Url +
                         "'><span class='glyphicon glyphicon-circle-arrow-down' aria-hidden='true'></span>   Download</a> " +
@@ -158,11 +165,11 @@ function getOppList() {
     xhr.open('GET', 'http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php', true);
     xhr.onload = function () {
         if (xhr.status == 200) {
-            //var jsonArray = fakedata;
-            var jsonArray = JSON.parse(xhr.responseText);
-            var size = jsonArray.opportunity.length;
+            //var oppArray = fakedata;
+            var oppArray = JSON.parse(xhr.responseText);
+            var size = oppArray.opportunity.length;
             for (var i = 0; i < size; i++) {
-                var opp = jsonArray.opportunity[i];
+                var opp = oppArray.opportunity[i];
                 var row = "<tr><td>" + opp.CategoryID + "</td></td><td>" + opp.OpportunityID + "</td><td>" + opp.Name +
                     "</td><td>" + opp.ClosingDate + "</td><td>" + opp.Description + "</td><td>" +
                     opp.Status + "</td><td>" +
@@ -182,7 +189,7 @@ function getOppList() {
 
 function initNewOppForm() {
     getOppList();
-    getCategories();
+    getCategories($('#selectFilterCategory'));
 }
 
 function uploadScoring(file, opId) {
@@ -234,12 +241,12 @@ function getLeadEvals() {
     xhr.open('GET', 'http://athena.ecs.csus.edu/~wildcard/php/api/employee/read.php', true);
     xhr.onload = function () {
         if (xhr.status == 200) {
-            var jsonArray = JSON.parse(xhr.responseText);
-            var size = jsonArray.employee.length;
+            var evalArray = JSON.parse(xhr.responseText);
+            var size = evalArray.employee.length;
             for (var i = 0; i < size; i++) {
-                var lead = jsonArray.employee[i];
+                var lead = evalArray.employee[i];
                 var name = lead.first_name + " " + lead.last_name;
-                $('select').append($('<option>', {value: lead.id, text: name}));
+                $('#selectLead').append($('<option>', {value: lead.id, text: name}));
             }
         } else {
             alert("Error response");
@@ -258,7 +265,6 @@ function saveOpportunity() {
     var jsonRecord =
         {"OpportunityID": opId,
             "ClosingDate":close,
-            //"ScoringCategoryBlob":null,
             "LeadEvaluatorID":lead,
             "Name":name,
             "LowestBid":"0",
@@ -289,13 +295,14 @@ function saveOpportunity() {
 }
 
 //get all categories to populate dropdown
-function getCategories(){
+function getCategories(select){
     var xhr = new XMLHttpRequest();
     xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/getOppCategoryList.php',true);
     xhr.onload = function() {
         if (xhr.status == 200) {
-            var jsonArray = JSON.parse(xhr.responseText);
-            fillCategoryDropdown(jsonArray);
+            var catArray = JSON.parse(xhr.responseText);
+            console.log(xhr.responseText);
+            fillCategoryDropdown(catArray,select);
         } else {
             alert("Error response");
         }
@@ -304,18 +311,18 @@ function getCategories(){
 }
 
 //Fill dropdown with categories
-function fillCategoryDropdown(jsonArray){
+function fillCategoryDropdown(catArray, select){
     var start = 0;
-    var select = document.getElementById("selectCategory")
-    var size = jsonArray.Category.length;
+    //var select = document.getElementById("selectCategory")
+    var size = catArray.Category.length;
 
     for(var i=start;i<size;i++) {
         var option = document.createElement("OPTION");
-        txt = document.createTextNode(jsonArray.Category[i].Name);
+        txt = document.createTextNode(catArray.Category[i].Name);
         option.appendChild(txt);
-        option.setAttribute("value", jsonArray.Category[i].Name)
-        option.setAttribute("id", jsonArray.Category[i].CategoryID)
-        select.insertBefore(option, select.lastChild);
+        option.setAttribute("value", catArray.Category[i].Name)
+        option.setAttribute("id", catArray.Category[i].CategoryID)
+          select.append(option);
     }
 }
 
