@@ -40,11 +40,49 @@ if(isSet($_POST_LowerCase["proposalid"])
     "Status" =>  $proposal->Status,
     "TechnicalScore" =>  $proposal->TechnicalScore,
     "FeeScore" =>  $proposal->FeeScore,
-    "FinalTotalScore" =>  $proposal->FinalTotalScore
+    "FinalTotalScore" =>  $proposal->FinalTotalScore,
+    "CreatedDate" =>  $proposal->CreatedDate,
+    "LastEditDate" =>  $proposal->LastEditDate
   );
 
   // make it json format
   print_r(json_encode($proposal_arr));
+}
+else if(isSet($_POST_LowerCase["opportunityid"])
+|| isSet($_GET_LowerCase["opportunityid"]))
+{
+  $opportunityid = isSet($_GET_LowerCase["opportunityid"]) ?
+     $_GET_LowerCase["opportunityid"] : $_POST_LowerCase["opportunityid"];
+
+  //Search
+  $stmt = $proposal->selectByOppID($opportunityid);
+  $rowCount = $stmt->rowCount();
+
+  $proposals_arr = array();
+  $proposals_arr["proposal"] = array();
+
+  if($rowCount > 0)
+  {
+    while($row = $stmt->fetch(PDO::FETCH_ASSOC))
+    {
+      $proposal_arr = array(
+        "ProposalID" =>  $row['ProposalID'],
+        "OpportunityID" =>  $row['OpportunityID'],
+        "BidderID" =>  $row['BidderID'],
+        "Status" =>  $row['Status'],
+        "TechnicalScore" =>  $row['TechnicalScore'],
+        "FeeScore" =>  $row['FeeScore'],
+        "FinalTotalScore" =>  $row['FinalTotalScore'],
+        "CreatedDate" =>  $row['CreatedDate'],
+        "LastEditDate" =>  $row['LastEditDate']
+        );
+
+      array_push($proposals_arr["proposal"], $proposal_arr);
+    }
+  }
+
+  // make it json format
+  print_r(json_encode($proposals_arr));
 }
 else
 {
@@ -61,12 +99,15 @@ else
     while($row = $stmt->fetch(PDO::FETCH_ASSOC))
     {
       $proposal_arr = array(
+        "ProposalID" =>  $row['ProposalID'],
         "OpportunityID" =>  $row['OpportunityID'],
         "BidderID" =>  $row['BidderID'],
         "Status" =>  $row['Status'],
         "TechnicalScore" =>  $row['TechnicalScore'],
         "FeeScore" =>  $row['FeeScore'],
-        "FinalTotalScore" =>  $row['FinalTotalScore']
+        "FinalTotalScore" =>  $row['FinalTotalScore'],
+        "CreatedDate" =>  $row['CreatedDate'],
+        "LastEditDate" =>  $row['LastEditDate']
         );
      
       array_push($proposals_arr["proposal"], $proposal_arr);

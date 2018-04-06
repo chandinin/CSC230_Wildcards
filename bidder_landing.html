@@ -156,71 +156,149 @@
 											<!-- END HEADER -->
 
 											<!-- ==========================CONTENT STARTS HERE ========================== -->
+
+<style type="text/css">
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+    cursor: pointer;
+}
+
+li,td,th {
+  font: 200 20px/1.5 Helvetica, Verdana, sans-serif;
+  border-bottom: 1px solid #ccc;
+}
+
+.opportunity-property {
+    font: 200 20px/1.5 Helvetica, Verdana, sans-serif;
+}
+
+#opp-doc-templates-list INPUT {
+    display: inline;
+    float: right;
+}
+
+#opp-doc-templates-list .old_doc_a {
+    display: inline;
+    float: right;
+    margin-right: 20px;
+}
+
+</style>
+
 		<div id="main" role="main">
 			<div class="custom-app">
 				<div class="container content">
                     <div class="row" id="chooseAction">
                         <ul class="nav nav-tabs nav-justified" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#opportunity-panel" role="tab">View Opportunities</a>
+                                <a class="nav-link active in" data-toggle="tab" id="opportunities-tab" href="#opportunity-panel" role="tab">View Opportunities</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#proposals-panel" role="tab">View Your Proposals</a>
+                                <a class="nav-link" data-toggle="tab" id="proposals-tab" href="#proposals-panel" role="tab">View Your Proposals</a>
                             </li>
                         </ul>
                     </div>
-
                     <div class="tab-content card">
-                        <div class="row tab-pane fade" id="opportunity-panel" role="tabpanel">
-                            <div class="col-md-8 clearfix bid-opportunities" id="view-opporunities">
+                        <div class="col-md-12 clearfix bid-opportunities" id="view-opporunities">
 
-                                <!-- This will show a list of all opportunities -->
-                                <div id="opportunities-results">
-                                </div>
+                            <!-- These divs are essentially place holders for the different SPA views that can be active -->
+                            <!-- All will be hidden except one at any given time
+                             -->
+                            <div id="spa-opportunities-list">
+                                <table id="opportunities-list-table" class="tablesorter">
+                                  <thead>
+                                    <tr>
+                                      <th>Opportunity Name</th>
+                                      <th>Category</th>
+                                      <th>Closing Date and Time</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                  </tbody>
+                                </table>
+                            </div>
+                            <div>
 
-                                <!-- This will show a detailed view of a single opportuity -->
-                                <!-- Only one will be visible at a time -->
-                                <div id="opportunity-detail">
-                                    <span class="opportunity-property">Opportunity Title: </span>
-                                    <span class="opportunity-detail" id="Title"> Sample Title </span>
-                                    <div class="row marketing">
-                                        <div class="col-md-6">
-                                            <span class="opportunity-property">Closing Date: </span>
-                                            <span class="opportunity-detail" id="ClosingDate"> Sample Closing </span>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <span class="opportunity-property">Category: </span>
-                                            <span class="opportunity-detail" id="Category"> Sample Category </span>
-                                        </div>
+                            </div>
+
+                            <div id="spa-opportunity-detail">
+
+                                <div class="row marketing">
+                                    <div class="col-md-6">
+                                        <span class="opportunity-property">Opportunity Title: </span>
+                                        <span class="opportunity-detail" id="Title"> Sample Title </span>
                                     </div>
-                                    <br>
-                                    <div class="row marketing">
-                                        <div class="col-xs-12">
-                                            <span class="opportunity-property">Description: </span>
-                                            
-                                        </div>
+                                    <div class="col-md-6">
+                                        <span class="opportunity-property">Closing Date: </span>
+                                        <span class="opportunity-detail" id="ClosingDate"> Sample Closing </span>
                                     </div>
-                                    <div class="row marketing">
-                                        <div class="col-xs-12">
-                                            <span class="opportunity-detail" id="Description"> Sample Description</span>
-                                        </div>
-                                    </div>
-                                    <br><br>
-                                    <div class="row marketing">
-                                        <div class="col-md-6">
-                                            <a href="" class="btn btn-primary">Create Proposal</a>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <a id="show-list-btn" class="btn btn-primary">Back to Opportunities list</a>
-                                        </div>
+                                    <div class="col-md-6">
+                                        <span class="opportunity-property">Category: </span>
+                                        <span class="opportunity-detail" id="Category"> Sample Category </span>
                                     </div>
                                 </div>
-    						</div>
-                        </div>
+                                <br>
+                                <div class="row marketing">
+                                    <div class="col-xs-12">
+                                        <span class="opportunity-property">Description: </span>
+                                    </div>
 
-                        <div class="row tab-pane fade in" id="proposals-panel" role="tabpanel">
-                            <div class="col-md-8" id="view-proposals">
-                                <h3>Coming Soon!</h3>
+                                </div>
+                                <div class="row marketing">
+                                    <div class="col-xs-12">
+                                        <span class="opportunity-detail" id="Description"> Sample Description</span>
+                                    </div>
+                                </div>
+                                <br>
+                                <br>
+                                <div class="row marketing">
+                                    <div class="col-xs-12">
+                                        <span class="opportunity-property">Associated Docs and Forms:</span>
+                                        <ul id=opp-detail-doc-templates-list>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <br><br>
+                                <div class="row marketing">
+                                    <div class="col-md-2">
+                                        <a id="create-proposal-btn" class="btn btn-primary">Create Proposal</a>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <a id="show-list-btn" class="btn btn-primary">Back to Opportunities list</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="spa-create-proposal">
+                                <h1 id="create-proposal-header">Create Proposal</h1>
+                                <h3 id="opportunity-title">TODO: Opportunity Title</h3>
+                                <h5 id="opportunity-countdown">Close Date and Time: TODO</h5>
+                                <h5 id="proposal-time-last-edit"></h5>
+
+                                <span>Please download, fill out, and upload all requested forms. You can come back and edit your documents at any time before the deadline for submissions, just press 'save and come back later'</span>
+                                <ul id="opp-doc-templates-list">
+                                </ul>
+                                <br>
+                                <a id="proposal-save-btn" class="btn btn-primary">Save For Later</a>
+                                <a id="proposal-back-list-btn" class="btn btn-primary">Nevermind, back to list</a>
+                            </div>
+                            <div class="col-md-12" id="spa-proposals-list">
+                                <table id="proposals-list-table" class="tablesorter">
+                                  <thead>
+                                    <tr>
+                                      <th>Opportunity Name</th>
+                                      <th>Closing Date and Time</th>
+                                      <th>Status</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                  </tbody>
+                                </table>
                             </div>
                         </div>
 				    </div>
