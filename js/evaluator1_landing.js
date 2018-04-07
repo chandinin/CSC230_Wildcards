@@ -117,7 +117,7 @@ function fillCategoryDropdown(jsonArray){
 $(document).ready(function () {
     $("#selectCategory").change(function () {
         //Storing the dropdown selection in category variable
-        category= $('#selectCategory option:selected').attr('id');
+         var category= $('#selectCategory option:selected').attr('id');
         getOppListbyID(category);
     });
 });
