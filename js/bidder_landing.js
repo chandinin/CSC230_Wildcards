@@ -13,6 +13,11 @@ $(document).ready(function(){
     // Set the tab to active, because I don't know what I'm doing...
     $('#opportunities-tab').trigger('click');
 
+    // init the category picker
+    getCategories();
+
+    $("#selectCategory").change(function(change) { activateOpportunitiesList(); });
+
     bidder_id = "1";
     activateOpportunitiesList();
 });
@@ -106,13 +111,79 @@ function insertTableRows(rows_array, table_node)
     $("#"+table_node.id).trigger("update");
 }
 
-// ( YYYY-MM-DD HH:MM:SS )
-function getFormattedDate() {
-    var date = new Date();
+/******************
+ * Date Utilities *
+ ******************/
+ 
+// returns string in format "YYYY-MM-DD HH:MM:SS"
+function getCustomDateStringFromDate(date_object)
+{
+    date = date_object;
     var str = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " +  date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
 
     return str;
 }
+
+// returns string in format "YYYY-MM-DD HH:MM:SS"
+function getFormattedCurrentDate() {
+    var date = new Date();
+
+    return getCustomDateStringFromDate(date);
+}
+
+// Returns standard Date object
+function parseCustomDateStringToDate(date_string)
+{
+    reg = /(.{4})-(.{0,2})-(.{0,2}) (.{0,2}):(.{0,2}):(.{0,4})/g;
+    match = reg.exec(date_string);
+
+    year = match[1];
+    month = match[2];
+    day = match[3];
+    hour = match[4];
+    minute = match[5];
+    second = match[6];
+
+    date = new Date();
+
+    date.setYear(year);
+    date.setMonth(month-1); // Month is 0 based lol wtf
+    date.setDate(day);
+    date.setHours(hour);
+    date.setMinutes(minute);
+    date.setSeconds(second);
+
+    return date;
+}
+
+
+// Returns json with keys Days, hours, minutes, seconds
+function millisecondsToReasonable(ms)
+{
+    floor = Math.floor;
+
+    if(ms == undefined)
+        ms = new Date() - new Date(1979,0);
+
+    MS_PER_SECOND = 1000;
+    SECONDS_PER_MINUTE = 60;
+    MINUTES_PER_HOUR = 60;
+    HOURS_PER_DAY = 24;
+
+    seconds = floor(ms/MS_PER_SECOND);
+
+    days = floor(seconds/(SECONDS_PER_MINUTE*MINUTES_PER_HOUR*HOURS_PER_DAY));
+    seconds = seconds % (SECONDS_PER_MINUTE*MINUTES_PER_HOUR*HOURS_PER_DAY);
+
+    hours = floor(seconds/(SECONDS_PER_MINUTE*MINUTES_PER_HOUR));
+    seconds = seconds % (SECONDS_PER_MINUTE*MINUTES_PER_HOUR);
+
+    minutes = floor(seconds/SECONDS_PER_MINUTE);
+    seconds = seconds % SECONDS_PER_MINUTE;
+
+    return {"days":days, "hours": hours, "minutes": minutes, "seconds": seconds};
+}
+
 
 /**************************
  * spa-opportunities-list *
@@ -127,11 +198,6 @@ function activateOpportunitiesList()
 
 function initializeOpportunitiesList()
 {
-    // $.ajax({
-    //     url: "php/api/opportunity/read.php", 
-    //     success: populateOpportunitiesList
-    // });
-
     $.ajax({
         url: "php/api/opportunity/read.php", 
         success: function(opportunities_json)
@@ -139,6 +205,7 @@ function initializeOpportunitiesList()
             opportunities = opportunities_json["opportunity"];
             num_opportunity_callbacks_left = opportunities.length;
 
+            // We need to get the category name for each opportunity, via the categoryID
             opportunities.forEach(function(opportunity)
             {
                 $.ajax({
@@ -161,8 +228,14 @@ function initializeOpportunitiesList()
 
 
 function populateOpportunitiesList(opportunities_json) {
+    console.log(opportunities_json);
+
     opportunities = opportunities_json["opportunity"];
     console.log("Length of opportunity array: " + opportunities.length.toString());
+
+    // Get which category we should be showing
+    selected_categoryID = $('#selectCategory option:selected').attr('categoryID');
+    console.log("selected categoryID: " + selected_categoryID + ", Name: " + $('#selectCategory option:selected').attr('Name'));
 
     opportunities_table = document.getElementById("opportunities-list-table");
     removeAllTableElements(opportunities_table); // Clear what we might already have there
@@ -171,6 +244,12 @@ function populateOpportunitiesList(opportunities_json) {
 
     for(var i = 0; i < opportunities.length; i++)
     {
+        // Skip and do not add any opportunities that don't match our selected category, if we have selected one
+        if(selected_categoryID != undefined && opportunities[i].CategoryID != selected_categoryID)
+        {
+            continue;
+        }
+        opportunityID_textNode = document.createTextNode(opportunities[i].OpportunityID);
         closingDate_textNode = document.createTextNode(opportunities[i].ClosingDate);
         category_textNode = document.createTextNode(opportunities[i].CategoryName);
         anchor   = document.createElement("a");
@@ -181,7 +260,7 @@ function populateOpportunitiesList(opportunities_json) {
             return function() { activateOpportunityDetail(ID); };
         })();
 
-        table_array.push([anchor, category_textNode, closingDate_textNode]);
+        table_array.push([opportunityID_textNode, anchor, category_textNode, closingDate_textNode]);
     }
 
     insertTableRows(table_array, opportunities_table);
@@ -335,8 +414,8 @@ function saveNewProposal(opportunity_id)
         "TechnicalScore": -1,
         "FeeScore": -1,
         "FinalTotalScore": -1,
-        "CreatedDate": getFormattedDate(),
-        "LastEditDate": getFormattedDate()
+        "CreatedDate": getFormattedCurrentDate(),
+        "LastEditDate": getFormattedCurrentDate()
     }
 
     console.log(new_proposal_json);
@@ -728,4 +807,40 @@ function saveProposal(proposal_json)
 
     alert("Your proposal was succesfully saved");
     activateProposalsList();
+}
+
+
+/********************************
+ * Category picker related code *
+ ********************************/
+
+//get all categories to populate dropdown
+function getCategories(){
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/getOppCategoryList.php',true);
+    xhr.onload = function() {
+        if (xhr.status == 200) {
+            var jsonArray = JSON.parse(xhr.responseText);
+            fillCategoryDropdown(jsonArray);
+        } else {
+            alert("Error response");
+        }
+    };
+    xhr.send();
+}
+
+//Fill dropdown with categories
+function fillCategoryDropdown(jsonArray){
+    var start = 0;
+    var select = document.getElementById("selectCategory")
+    var size = jsonArray.Category.length;
+
+    for(var i=start;i<size;i++) {
+        var option = document.createElement("OPTION");
+        txt = document.createTextNode(jsonArray.Category[i].Name);
+        option.appendChild(txt);
+        option.setAttribute("Name", jsonArray.Category[i].Name)
+        option.setAttribute("categoryID", jsonArray.Category[i].CategoryID)
+        select.insertBefore(option, select.lastChild);
+    }
 }

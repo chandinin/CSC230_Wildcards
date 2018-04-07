@@ -206,26 +206,31 @@ li,td,th {
                     <div class="tab-content card">
                         <div class="col-md-12 clearfix bid-opportunities" id="view-opporunities">
 
+
+
                             <!-- These divs are essentially place holders for the different SPA views that can be active -->
                             <!-- All will be hidden except one at any given time
                              -->
                             <div id="spa-opportunities-list">
-                                <table id="opportunities-list-table" class="tablesorter">
-                                  <thead>
-                                    <tr>
-                                      <th>Opportunity Name</th>
-                                      <th>Category</th>
-                                      <th>Closing Date and Time</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                  </tbody>
+                                <!--Category dropdown-->
+                                <div class="form-group">
+                                    <select id="selectCategory" name="category" required style="width: 325px">
+                                        <option id = "id" value="default">All</option>
+                                    </select>
+                                </div>
+                                <table id="opportunities-list-table" class="tablesorter table table-bordered table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>OpportunityID</th>
+                                            <th>Opportunity Name</th>
+                                            <th>Category</th>
+                                            <th>Closing Date and Time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
                                 </table>
                             </div>
-                            <div>
-
-                            </div>
-
                             <div id="spa-opportunity-detail">
 
                                 <div class="row marketing">
@@ -288,7 +293,7 @@ li,td,th {
                                 <a id="proposal-back-list-btn" class="btn btn-primary">Nevermind, back to list</a>
                             </div>
                             <div class="col-md-12" id="spa-proposals-list">
-                                <table id="proposals-list-table" class="tablesorter">
+                                <table id="proposals-list-table" class="tablesorter table table-bordered table-striped table-hover">
                                   <thead>
                                     <tr>
                                       <th>Opportunity Name</th>
