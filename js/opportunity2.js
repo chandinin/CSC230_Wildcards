@@ -11,6 +11,10 @@ $(document).ready(
             $("#oppsMenu option[id='opplist']").attr("selected", "selected");
         });
 
+        $('#bidTab').click(function() {
+            getBidderList();
+            getCategories($('#selectBidderCategory'));
+        });
 
         $('#saveNewOpp').click(function () {
             saveOpportunity();
@@ -51,7 +55,9 @@ $(document).ready(
 
         $('#uploadDocTemplates').click(function() {
             alert("uploading files...");
-            uploadDocTemplates($('#oppNumber').text());
+            opId = $('#oppNumber').text();
+            uploadDocTemplates(opId);
+            getDocTemplates(opId);
         });
 
         $('#clearDocTemplates').click(function () {
@@ -70,13 +76,26 @@ $(document).ready(
             category= $('#selectNewCategory option:selected').attr('id');
         });
 
+        $("#selectBidderCategory").change(function () {
+            //Storing the dropdown selection in category variable
+            category= $('#selectBidderCategory option:selected').attr('id');
+        });
 
 
+        $('#formDescriptionInput').wysihtml5({
+            "font-styles": true, //Font styling, e.g. h1, h2, etc. Default true
+            "emphasis": true, //Italics, bold, etc. Default true
+            "lists": true, //(Un)ordered lists, e.g. Bullets, Numbers. Default true
+            "html": false, //Button which allows you to edit the generated HTML. Default false
+            "link": true, //Button to insert a link. Default true
+            "image": false, //Button to insert an image. Default true,
+            "color": false, //Button to change color of font
+            "blockquote": true, //Blockquote
+         });
 
     });
 
 function showEditOpp(opId) {
-    //alert("Editing: " + oppId);
     $('#listOppPanel').hide();
     $('#newOppPanel1').hide();
     $('#editOppPanel').show();
@@ -91,9 +110,6 @@ function showNewOpp() {
     getCategories($('#selectNewCategory'))
     $('#newOppPanel1').show();
     $('#listOppPanel').hide();
-    var editor = new Jodit("#editor");
-    editor.setEditorValue('<p>start</p>')
-
 }
 
 function showOppList() {
@@ -103,30 +119,29 @@ function showOppList() {
     $('#listOppPanel').show();
 }
 
-function saveJunk() {
-    $('clearFile').click(function () {
-    });
-}
-
-
 function getOpportunity(opId) {
 var xhr = new XMLHttpRequest();
     var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php?OpportunityID="+opId;
     xhr.open('POST', url);
+
     xhr.onload = function () {
     if (xhr.status == 200) {
         var oppArray = JSON.parse(xhr.responseText);
+        var catName = categoryArray.Category[oppArray.CategoryID].Name;
         $("#oppNumber").text(oppArray.OpportunityID);
         $("#oppDate").text(oppArray.ClosingDate);
         $("#oppName").text(oppArray.Name);
-        $("#oppType").text("Type");
-        $("#oppDesc").text(oppArray.Description);
+        $("#oppType").text(catName);
+        $("#oppDesc").html(oppArray.Description);
+        $("#oppScore").html("<a href='http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/getScoringCriteria.php?OpportunityID="+opId+"'>" +
+            "View Scoring Criteria</a>");
     } else {
-        alert('');
+        alert('Unable to locate Opportunity '+ opId);
     }
 };
 xhr.send();
 }
+
 
 function getDocTemplates(opId) {
     $('#docTemplatesBody').empty();
@@ -262,10 +277,12 @@ function saveOpportunity() {
     var desc = $('#formDescriptionInput').val();
     var close = $('#close_date').val() + " " + $('#close_time').val();
     var lead = parseInt($('#selectLead').val());
+    var category = $('#selectNewCategory option:selected').attr('id');
     var jsonRecord =
         {"OpportunityID": opId,
             "ClosingDate":close,
             "LeadEvaluatorID":lead,
+            "CategoryID": category,
             "Name":name,
             "LowestBid":"0",
             "Description":desc,
@@ -519,8 +536,4 @@ var fakesubmit= {"OpportunityID":"266",
     "Status":"New"
 };
 
-
-
-
-
-
+var categoryArray = {"Category":[{"CategoryID":"0","Name":"None"},{"CategoryID":"1","Name":"Actuarial Services"},{"CategoryID":"2","Name":"Architecture & Engineering"},{"CategoryID":"3","Name":"Construction"},{"CategoryID":"4","Name":"Consulting"},{"CategoryID":"5","Name":"Health"},{"CategoryID":"6","Name":"Information Technology"},{"CategoryID":"7","Name":"Investments (Non-manager)"},{"CategoryID":"8","Name":"Legal Services - Outside Counsel"},{"CategoryID":"9","Name":"Mailing"},{"CategoryID":"10","Name":"Miscellaneous"},{"CategoryID":"11","Name":"Photography\/Video Services"},{"CategoryID":"12","Name":"Printing\/Reproduction\/Graphic Design"}]};

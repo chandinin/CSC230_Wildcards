@@ -7,11 +7,10 @@
     <link rel="stylesheet" href="js/MDB Free/css/mdb.css">
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/bootstrap-datepicker.css">
-    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/jodit/3.1.39/jodit.min.css">
     <link rel="stylesheet" type="text/css" href="css/tablesorter-style.css">
     <link rel="stylesheet" href="css/style.css">
-
-
+    <link rel="stylesheet" href="css/bootstrap3-wysihtml5.css">
+    <link rel="stylesheet" href="css/opportunity.css">
 
 
     <!--
@@ -180,14 +179,14 @@
                             </select><br>
 
                             <table id="oppListTable" class="table table-responsive table-bordered table-striped table-hover tablesorter">
-                                <thead>
-                                <th>Category</th>
+                                <thead class="">
+                                <th class="">Category</th>
                                 <th>Opportunity Id</th>
                                 <th>Opportunity Name</th>
                                 <th>Closing Date/Time</th>
                                 <th>Opportunity Description</th>
                                 <th>Status</th>
-                                <th></th>
+                                <th>Action</th>
                                 </thead>
                                 <tbody id="oppListTableBody">
                                 </tbody>
@@ -195,6 +194,7 @@
                         </div>
                     </div>
                 </div>
+
                 <!--/.List Panel 1-->
                 <!--Create Panel 2-->
                 <div id="newOppPanel1">
@@ -211,7 +211,9 @@
                     <br>
                     <form id="newOppForm">
                         <select id="selectNewCategory" name="category" required style="width: 325px">
-                            <option id = "id" value="default">Category</option>
+                            <optgroup label="">
+                                <option id = "id" value="default">Category</option>
+                            </optgroup>
                         </select><br>
                         <div class="form-group">
                             <label for="formId">Opportunity Id</label>
@@ -231,9 +233,9 @@
                                       placeholder="Describe the opportunity." required></textarea>
                         </div>
 -->
-                        <div id="editor" class="form-group">
+                        <div id="" class="form-group">
                             <label for="formDescription">Description</label>
-                            <textarea class="form-control" id="formDescriptionInput" name="editor" rows="4"
+                            <textarea class="form-control" id="formDescriptionInput" rows="4"
                                       placeholder="Describe the opportunity." required></textarea>
                         </div>
 
@@ -294,25 +296,29 @@
                     </div>
                 <br>
                     <div class="row">
+                    <div class="col-md-12">
+                        <span class="opportunity-property">Category: </span>
+                        <span class="opportunity-detail" id="oppType">1</span>
+                    </div>
                     <div class="col-md-6">
-                        <span class="opportunity-property">Number </span>
+                        <span class="opportunity-property">Opportunity Number: </span>
                         <span class="opportunity-detail" id="oppNumber">1</span>
                     </div>
                     <div class="col-md-6">
-                        <span class="opportunity-property">Name </span>
+                        <span class="opportunity-property">Opportunity Name: </span>
                         <span class="opportunity-detail" id="oppName">1</span>
                     </div>
                     <div class="col-md-6">
                         <span class="opportunity-property">Final Filing Date: </span>
                         <span class="opportunity-detail" id="oppDate">1</span>
                     </div>
-                    <div class="col-md-6">
-                        <span class="opportunity-property">Type: </span>
-                        <span class="opportunity-detail" id="oppType">1</span>
-                    </div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <span class="opportunity-property">Description: </span>
                         <span class="opportunity-detail" id="oppDesc">1</span>
+                    </div>
+                    <div class="col-md-12">
+                        <span class="opportunity-property">Scoring Criteria: </span>
+                        <span class="opportunity-detail" id="oppScore">1</span>
                     </div>
                     <hr>
                     </div>
@@ -383,10 +389,27 @@
     <!--/.Accounts Panel 2-->
     <!--Bidders Panel 3-->
     <div class="tab-pane fade" id="panel3" role="tabpanel">
-        <br>
-        <p>Blah Blahll.</p>
-        <p> placeat unde eos molestias. Quisquam aperiam, pariatur. Tempora, placeat ratione porro voluptate odit
-            minima.</p>
+        <div class="col-md-6">
+            <h3 class="my-2 h3">Bidders</h3>
+        </div>
+        <div class="col-md-12">
+            <select id="selectBidderCategory" name="category" required style="width: 325px">
+                <option id = "id" value="default">Category</option>
+            </select><br>
+        <table id="bidListTable" class="table table-responsive table-bordered table-striped table-hover tablesorter">
+           <thead>
+               <th>Username</th>
+               <th>Id</th>
+               <th>First Name</th>
+               <th>Last Name</th>
+               <th>Email</th>
+               <th>Phone</th>
+               <th>Address</th>
+               <th>Action</th>
+           </thead>
+            <tbody id="bidListTableBody"></tbody>
+        </table>
+        </div>
     </div>
     <!--/.Bidders Panel 2-->
 </div>
@@ -413,11 +436,15 @@
 <script src="js/MDB Free/js/bootstrap.js"></script>
 <script src="js/MDB Free/js/popper.min.js"></script>
 <script src="js/widgets.js"></script>
-<script src="js/jquery.tablesorter.js"></script>
 <script src="js/opportunity2.js"></script>
+<script src="js/opportunity.js"></script>
 <script src="js/bootstrap-datepicker.js"></script>
 <script src="js/MDB Free/js/mdb.js"></script>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/jodit/3.1.39/jodit.min.js"></script>
+<script src="js/jquery.tablesorter.js"></script>
+<!--script src="js/jquery.tablesorter.widgets.js"></script-->
+<script src="js/widget-storage.js"></script>
+<script src="js/widget-filter.js"></script>
+<script src="js/bootstrap3-wysihtml5.all.min.js"></script>
 </body>
 
 </html>
