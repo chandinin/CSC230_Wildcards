@@ -30,3 +30,29 @@ function getBidderList() {
 
 }
 
+function getEmployeeList() {
+    $('#employeeListTableBody').empty();
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'http://athena.ecs.csus.edu/~wildcard/php/api/employee/read.php', true);
+    xhr.onload = function () {
+        if (xhr.status == 200) {
+            //var bidArray = fakedata;
+            var empArray = JSON.parse(xhr.responseText);
+            var size = empArray.employee.length;
+            for (var i = 0; i < size; i++) {
+                var employee = empArray.employee[i];
+                var row = "<tr><td>" + employee.user_name + "</td><td>" + employee.id + "</td><td>" + employee.first_name +  "</td><td>" + employee.last_name +
+                    "</td><td>" + employee.email + "</td><td>" + employee.phone + "</td><td>" + employee.address + "</td><td>" +
+                    "<button class='btn btn-primary btn-lg'><span class='glyphicon glyphicon-eye-open'" +
+                    "aria-hidden='true'></span> Details </button></td></tr>";
+                $('#employeeListTableBody').append(row);
+                $("#employeeListTableBody").trigger("update");
+
+            }
+        } else {
+            alert("Error response");
+        }
+    };
+    xhr.send();
+
+}

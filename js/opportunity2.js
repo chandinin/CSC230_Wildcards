@@ -13,7 +13,11 @@ $(document).ready(
 
         $('#bidTab').click(function() {
             getBidderList();
-            getCategories($('#selectBidderCategory'));
+            getCategories($('#selectBidBiddderCategory'));
+        });
+
+        $('#empTab').click(function() {
+            getEmployeeList();
         });
 
         $('#saveNewOpp').click(function () {
@@ -185,7 +189,13 @@ function getOppList() {
             var size = oppArray.opportunity.length;
             for (var i = 0; i < size; i++) {
                 var opp = oppArray.opportunity[i];
-                var row = "<tr><td>" + opp.CategoryID + "</td></td><td>" + opp.OpportunityID + "</td><td>" + opp.Name +
+                try {
+                    var catName = categoryArray.Category[opp.CategoryID].Name;
+                }catch(err) {
+                    var catName  = "Undefined";
+                }
+
+                var row = "<tr><td>" + catName + "</td></td><td>" + opp.OpportunityID + "</td><td>" + opp.Name +
                     "</td><td>" + opp.ClosingDate + "</td><td>" + opp.Description + "</td><td>" +
                     opp.Status + "</td><td>" +
                     "<button onclick='showEditOpp(\"" + opp.OpportunityID + "\")' id='editOppButton' value='" + opp.OpportunityID + "' type='button' class='btn btn-primary btn-lg'>" +

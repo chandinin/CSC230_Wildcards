@@ -130,7 +130,7 @@
             <i class="fa fa-user"></i> Opportunities</a>
     </li>
     <li class="nav-item">
-        <a id="acctTabl" class="nav-link" data-toggle="tab" href="#panel2" role="tab">
+        <a id="empTab" class="nav-link" data-toggle="tab" href="#panel2" role="tab">
             <i class="fa fa-heart"></i> Accounts</a>
     </li>
     <li class="nav-item">
@@ -377,14 +377,24 @@
     <!--Accounts Panel 2-->
     <div class="tab-pane fade" id="panel2" role="tabpanel">
         <br>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil odit magnam minima, soluta doloribus
-            reiciendis molestiae
-            placeat unde eos molestias. Quisquam aperiam, pariatur. Tempora, placeat ratione porro voluptate odit
-            minima.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil odit magnam minima, soluta doloribus
-            reiciendis molestiae
-            placeat unde eos molestias. Quisquam aperiam, pariatur. Tempora, placeat ratione porro voluptate odit
-            minima.</p>
+        <div class="col-md-6">
+            <h3 class="my-2 h3">Employee Accounts</h3>
+        </div>
+        <div class="col-md-12">
+            <table id="employeeListTable" class="table table-responsive table-bordered table-striped table-hover tablesorter">
+                <thead>
+                <th>Username</th>
+                <th>Id</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Action</th>
+                </thead>
+                <tbody id="employeeListTableBody"></tbody>
+            </table>
+        </div>
     </div>
     <!--/.Accounts Panel 2-->
     <!--Bidders Panel 3-->
