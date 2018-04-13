@@ -73,16 +73,19 @@ $(document).ready(
         $("#selectFilterCategory").change(function () {
             //Storing the dropdown selection in category variable
             category= $('#selectFilterCategory option:selected').attr('id');
+            getOppListbyCategory(category);
         });
 
         $("#selectNewCategory").change(function () {
             //Storing the dropdown selection in category variable
             category= $('#selectNewCategory option:selected').attr('id');
+            //getOppListbyCategory(id);
         });
 
         $("#selectBidderCategory").change(function () {
             //Storing the dropdown selection in category variable
             category= $('#selectBidderCategory option:selected').attr('id');
+            //getOppListbyCategory(id);
         });
 
 
@@ -186,24 +189,7 @@ function getOppList() {
         if (xhr.status == 200) {
             //var oppArray = fakedata;
             var oppArray = JSON.parse(xhr.responseText);
-            var size = oppArray.opportunity.length;
-            for (var i = 0; i < size; i++) {
-                var opp = oppArray.opportunity[i];
-                try {
-                    var catName = categoryArray.Category[opp.CategoryID].Name;
-                }catch(err) {
-                    var catName  = "Undefined";
-                }
-
-                var row = "<tr><td>" + catName + "</td></td><td>" + opp.OpportunityID + "</td><td>" + opp.Name +
-                    "</td><td>" + opp.ClosingDate + "</td><td>" + opp.Description + "</td><td>" +
-                    opp.Status + "</td><td>" +
-                    "<button onclick='showEditOpp(\"" + opp.OpportunityID + "\")' id='editOppButton' value='" + opp.OpportunityID + "' type='button' class='btn btn-primary btn-lg'>" +
-                    "<span class='glyphicon glyphicon-eye-open' aria-hidden='true'></span> View</button></td></tr>";
-                $('#oppListTableBody').append(row);
-                $("#oppListTableBody").trigger("update");
-
-            }
+            fillOppTable(oppArray);
         } else {
             alert("Error response");
         }
@@ -211,6 +197,46 @@ function getOppList() {
     xhr.send();
 
 }
+
+function fillOppTable(oppArray) {
+    var size = oppArray.opportunity.length;
+    for (var i = 0; i < size; i++) {
+        var opp = oppArray.opportunity[i];
+        try {
+            var catName = categoryArray.Category[opp.CategoryID].Name;
+        }catch(err) {
+            var catName  = "Undefined";
+        }
+
+        var row = "<tr><td>" + catName + "</td></td><td>" + opp.OpportunityID + "</td><td>" + opp.Name +
+            "</td><td>" + opp.ClosingDate + "</td><td>" + opp.Description + "</td><td>" +
+            opp.Status + "</td><td>" +
+            "<button onclick='showEditOpp(\"" + opp.OpportunityID + "\")' id='editOppButton' value='" + opp.OpportunityID + "' type='button' class='btn btn-primary btn-lg'>" +
+            "<span class='glyphicon glyphicon-eye-open' aria-hidden='true'></span> View</button></td></tr>";
+        $('#oppListTableBody').append(row);
+        $("#oppListTableBody").trigger("update");
+
+    }
+}
+
+function getOppListbyCategory(category) {
+    url = 'http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php';
+    if(category !=="0")
+        url = url + '?CategoryID='+category;
+    $('#oppListTableBody').empty();
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET',url,true);
+    xhr.onload = function() {
+        if (xhr.status == 200) {
+            var jsonArray = JSON.parse(xhr.responseText);
+            fillOppTable(jsonArray);
+        } else {
+            alert("Error response");
+        }
+    };
+    xhr.send();
+}
+
 
 function initNewOppForm() {
     getOppList();
