@@ -166,7 +166,7 @@ function getDocTemplates(opId) {
             for(var i = 0; i< size; i++) {
                 var template = docArray.doctemplate[i];
                 if (template.Url != null) {
-                    var row = "<tr><td>" + template.DocTitle + "</td><td><a class='btn btn-primary btn-lg' href='" + template.Url +
+                    var row = "<tr><td>" + template.DocTitle + "</td><td>" + template.DocTitle + "</td><td>" + opId + "</td><td><a class='btn btn-primary btn-lg' href='" + template.Url +
                         "'><span class='glyphicon glyphicon-circle-arrow-down' aria-hidden='true'></span>   Download</a> " +
                         "<button class='btn btn-delete btn-lg'><span class='glyphicon glyphicon-remove'" +
                         "aria-hidden='true'></span> Delete </button></td></tr>";
@@ -209,8 +209,8 @@ function fillOppTable(oppArray) {
         }
 
         var row = "<tr><td>" + catName + "</td></td><td>" + opp.OpportunityID + "</td><td>" + opp.Name +
-            "</td><td>" + opp.ClosingDate + "</td><td>" + opp.Description + "</td><td>" +
-            opp.Status + "</td><td>" +
+            "</td><td>" + opp.ClosingDate + "</td><td>" + opp.LastEditDate + "</td><td>" + opp.Description + "</td><td>" +
+            opp.StatusName + "</td><td>" +
             "<button onclick='showEditOpp(\"" + opp.OpportunityID + "\")' id='editOppButton' value='" + opp.OpportunityID + "' type='button' class='btn btn-primary btn-lg'>" +
             "<span class='glyphicon glyphicon-eye-open' aria-hidden='true'></span> View</button></td></tr>";
         $('#oppListTableBody').append(row);
@@ -242,6 +242,8 @@ function initNewOppForm() {
     getOppList();
     getCategories($('#selectFilterCategory'));
 }
+
+
 
 function uploadScoring(file, opId) {
     /* Upload scoring criteria*/
@@ -377,6 +379,29 @@ function fillCategoryDropdown(catArray, select){
         option.setAttribute("id", catArray.Category[i].CategoryID)
           select.append(option);
     }
+}
+
+function processOpportunity(opId) {
+    var xhr = new XMLHttpRequest();
+    var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/update.php"
+    xhr.open('POST', url);
+    var formData = new FormData();
+    formData.append('OpportunityID', opId);
+    formData.append('StatusID', "7");
+    xhr.onload = function () {
+        if (xhr.status == 200) {
+            var retval = xhr.responseText;
+            var failed = retval.includes('failed');
+            if (failed)
+                return;
+            else
+                alert("Status changed to 'Ready for Review'");
+        } else {
+            alert('Unable update Opportunity ' + opId);
+        }
+        //alert("processed: " + opId);
+    }
+    xhr.send(formData);
 }
 
 var fakelist = {

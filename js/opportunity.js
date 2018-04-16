@@ -30,6 +30,10 @@ function getBidderList() {
 
 }
 
+function editEmployee(eid) {
+    alert('Editing employee');
+}
+
 function getEmployeeList() {
     $('#employeeListTableBody').empty();
     var xhr = new XMLHttpRequest();
@@ -41,10 +45,11 @@ function getEmployeeList() {
             var size = empArray.employee.length;
             for (var i = 0; i < size; i++) {
                 var employee = empArray.employee[i];
+                var editlink = "'editEmployee("+employee.id + ")'";
                 var row = "<tr><td>" + employee.user_name + "</td><td>" + employee.id + "</td><td>" + employee.first_name +  "</td><td>" + employee.last_name +
                     "</td><td>" + employee.email + "</td><td>" + employee.phone + "</td><td>" + employee.address + "</td><td>" +
-                    "<button class='btn btn-primary btn-lg'><span class='glyphicon glyphicon-eye-open'" +
-                    "aria-hidden='true'></span> Details </button></td></tr>";
+                    "<button onclick="+ editlink + " class='btn btn-success btn-lg'><span class='glyphicon glyphicon-pencil'" +
+                    "aria-hidden='true'></span> Edit </button></td></tr>";
                 $('#employeeListTableBody').append(row);
                 $("#employeeListTableBody").trigger("update");
 
