@@ -34,9 +34,9 @@ if(json_last_error() === JSON_ERROR_NONE)
 
   if($opportunity->create())
   {
-    echo '{';
-       echo ' message : "Create suceeded. "';
-    echo '}';
+    //echo '{';
+    //   echo ' message : "Create suceeded. "';
+    //echo '}';
   }
   else
   {
@@ -91,6 +91,7 @@ else
       $LowestBid = htmlspecialchars(strip_tags($LowestBid));
       $opportunity->LowestBid = $LowestBid;
     }
+
     if(isSet($_POST_LowerCase["description"]))
     {
       $Description = $_POST_LowerCase["description"];
@@ -114,9 +115,9 @@ else
 
     if($opportunity->create())
     {
-      echo '{';
-      echo ' message : "Create suceeded.  Record(OpportunityID='.$opportunityID.')"';
-      echo '}';
+      //echo '{';
+      //echo ' message : "Create suceeded.  Record(OpportunityID='.$opportunityID.')"';
+      //echo '}';
     }
     else
     {
@@ -133,6 +134,4 @@ else
   }
 }
 ?>
-
-
 

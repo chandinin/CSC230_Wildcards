@@ -28,12 +28,13 @@ if(isset($_POST_LowerCase["submit"]))
     $database = new Database();
     $db = $database->Connect();
     $opportunity = new Opportunity($db);
-    $base_url = "https://athena.ecs.csus.edu/~wildcard/php/api/";
+    //$base_url = "https://athena.ecs.csus.edu/~wildcard/php/api/";
+    $base_url = "http://localhost/PHP_TEST/api/";
    
     foreach($_FILES['filename']['tmp_name'] as $key => $tmpName) 
     {
       $filename = basename($_FILES['filename']['name'][$key]);
-      $tempFilePath =  $temp_base_dir . $filename;
+      $tempFilePath =  $temp_base_dir . "O" .$OpportunityID . "_" . $DocTemplateID . "_" . $filename;
       $file_type = strtolower(pathinfo($tempFilePath,PATHINFO_EXTENSION));
       $file_size = $_FILES['filename']['size'][$key];
       $DocTemplateID = $opportunity->getNewDocTemplateID();
