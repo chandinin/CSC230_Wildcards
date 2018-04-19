@@ -17,7 +17,7 @@ $proposal = new Proposal($db);
 // get proposalID from POST
 $_GET_LowerCase = array_change_key_case($_GET, CASE_LOWER);
 $_POST_LowerCase = array_change_key_case($_POST, CASE_LOWER);
-if(isSet($_POST_LowerCase["proposalid"])
+if(isSet($_POST_LowerCase["proposalid"]) 
 || isSet($_GET_LowerCase["proposalid"]))
 {
   //$proposalID = $_POST_LowerCase["proposalid"];
@@ -38,6 +38,7 @@ if(isSet($_POST_LowerCase["proposalid"])
     "OpportunityID" =>  $proposal->OpportunityID,
     "BidderID" =>  $proposal->BidderID,
     "Status" =>  $proposal->Status,
+    "StatusName" =>  $proposal->StatusName,
     "TechnicalScore" =>  $proposal->TechnicalScore,
     "FeeScore" =>  $proposal->FeeScore,
     "FinalTotalScore" =>  $proposal->FinalTotalScore,
@@ -47,6 +48,43 @@ if(isSet($_POST_LowerCase["proposalid"])
 
   // make it json format
   print_r(json_encode($proposal_arr));
+}
+else if(isSet($_POST_LowerCase["opportunityid"])
+|| isSet($_GET_LowerCase["opportunityid"]))
+{
+  $opportunityid = isSet($_GET_LowerCase["opportunityid"]) ?
+     $_GET_LowerCase["opportunityid"] : $_POST_LowerCase["opportunityid"];
+
+  //Search
+  $stmt = $proposal->selectByOppID($opportunityid);
+  $rowCount = $stmt->rowCount();
+
+  $proposals_arr = array();
+  $proposals_arr["proposal"] = array();
+
+  if($rowCount > 0)
+  {
+    while($row = $stmt->fetch(PDO::FETCH_ASSOC))
+    {
+      $proposal_arr = array(
+        "ProposalID" =>  $row['ProposalID'],
+        "OpportunityID" =>  $row['OpportunityID'],
+        "BidderID" =>  $row['BidderID'],
+        "Status" =>  $row['Status'],
+        "StatusName" =>  $row['StatusName'],
+        "TechnicalScore" =>  $row['TechnicalScore'],
+        "FeeScore" =>  $row['FeeScore'],
+        "FinalTotalScore" =>  $row['FinalTotalScore'],
+        "CreatedDate" =>  $row['CreatedDate'],
+        "LastEditDate" =>  $row['LastEditDate']
+        );
+
+      array_push($proposals_arr["proposal"], $proposal_arr);
+    }
+  }
+
+  // make it json format
+  print_r(json_encode($proposals_arr));
 }
 else
 {
@@ -67,13 +105,14 @@ else
         "OpportunityID" =>  $row['OpportunityID'],
         "BidderID" =>  $row['BidderID'],
         "Status" =>  $row['Status'],
+        "StatusName" =>  $row['StatusName'],
         "TechnicalScore" =>  $row['TechnicalScore'],
         "FeeScore" =>  $row['FeeScore'],
         "FinalTotalScore" =>  $row['FinalTotalScore'],
         "CreatedDate" =>  $row['CreatedDate'],
         "LastEditDate" =>  $row['LastEditDate']
         );
-
+     
       array_push($proposals_arr["proposal"], $proposal_arr);
     }
   }
@@ -88,3 +127,4 @@ else
 }
 
 ?>
+
