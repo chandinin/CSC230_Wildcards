@@ -9,7 +9,8 @@ create table Opportunity
   ScoringCategoryBlob blob,
   LeadEvaluatorID int not null,
   `Name` varchar(255) null,
-  LowestBid decimal,
+  LowestBid decimal null,
+  MinimumScore decimal null,
   `Status` varchar(255) null,
   Description varchar(255) null,
   CategoryID int null,
@@ -38,6 +39,62 @@ INSERT INTO OppCategory (CategoryID, `Name`) VALUES (9, 'Mailing');
 INSERT INTO OppCategory (CategoryID, `Name`) VALUES (10, 'Miscellaneous');
 INSERT INTO OppCategory (CategoryID, `Name`) VALUES (11, 'Photography/Video Services');
 INSERT INTO OppCategory (CategoryID, `Name`) VALUES (12, 'Printing/Reproduction/Graphic Design');
+
+create table OppStatus
+(
+  StatusID int not null,
+  `Name` varchar(255) null,
+  PRIMARY KEY (StatusID)
+);
+
+INSERT INTO OppStatus (StatusID, `Name`) VALUES (0, 'New');
+/*INSERT INTO OppStatus (StatusID, `Name`) VALUES (1, 'In Review');  Need to delete. */
+/*INSERT INTO OppStatus (StatusID, `Name`) VALUES (2, 'Approved');  Need to delete. */
+/*DELETE FROM OppStatus WHERE StatusID in (1,2); */
+
+INSERT INTO OppStatus (StatusID, `Name`) VALUES (3, 'Published');
+INSERT INTO OppStatus (StatusID, `Name`) VALUES (4, 'Eval 1 Closed');
+INSERT INTO OppStatus (StatusID, `Name`) VALUES (5, 'Eval 2 Closed');
+INSERT INTO OppStatus (StatusID, `Name`) VALUES (6, 'Closed');
+INSERT INTO OppStatus (StatusID, `Name`) VALUES (7, 'Ready for Review'); /* Add new Statuses */
+INSERT INTO OppStatus (StatusID, `Name`) VALUES (8, 'Ready for Approval'); /* Add new Statuses */
+INSERT INTO OppStatus (StatusID, `Name`) VALUES (9, 'Modify'); /* Add new Statuses */
+
+create table ProposalStatus
+(
+  StatusID int not null,
+  `Name` varchar(255) null,
+  PRIMARY KEY (StatusID)
+);
+
+INSERT INTO ProposalStatus (StatusID, `Name`) VALUES (0, 'Evaluation 1 Rejected');
+INSERT INTO ProposalStatus (StatusID, `Name`) VALUES (1, 'Evaluation 1 Accepted');
+/*
+UPDATE ProposalStatus SET `Name` = 'Evaluation 1 Rejected' WHERE StatusID = 0;
+UPDATE ProposalStatus SET `Name` = 'Evaluation 1 Accepted' WHERE StatusID = 1;
+*/
+INSERT INTO ProposalStatus (StatusID, `Name`) VALUES (2, 'Seeking Clarification');
+INSERT INTO ProposalStatus (StatusID, `Name`) VALUES (3, 'In Progress');
+INSERT INTO ProposalStatus (StatusID, `Name`) VALUES (4, 'Open');
+INSERT INTO ProposalStatus (StatusID, `Name`) VALUES (5, 'Clarification Received');
+
+INSERT INTO ProposalStatus (StatusID, `Name`) VALUES (6, 'Evaluation 2 Rejected');
+INSERT INTO ProposalStatus (StatusID, `Name`) VALUES (7, 'Evaluation 2 Accepted');
+
+create table Roles
+(
+  RoleID int not null,
+  `Name` varchar(255) null,
+  PRIMARY KEY (RoleID)
+);
+
+INSERT INTO Roles (RoleID, `Name`) VALUES (0, 'Author');
+INSERT INTO Roles (RoleID, `Name`) VALUES (1, 'Reviewer');
+INSERT INTO Roles (RoleID, `Name`) VALUES (2, 'Approver');
+INSERT INTO Roles (RoleID, `Name`) VALUES (3, 'Lead Evaluator');
+INSERT INTO Roles (RoleID, `Name`) VALUES (4, 'Preliminary Evaluator');
+INSERT INTO Roles (RoleID, `Name`) VALUES (5, 'Secondary Evaluator');
+
 
 create table ScoringCriteriaBlob
 (
@@ -132,7 +189,7 @@ create table EmployeeRole
   Description varchar(255) null,
   CreatedDate datetime null,
   LastEditDate datetime null,
-  PRIMARY KEY (EID)
+  PRIMARY KEY (EID, Role)
 );
 
 
@@ -155,6 +212,8 @@ create table DocTemplate
   `Url` varchar(255),
   CreatedDate datetime null,
   LastEditDate datetime null,
+  PostedDate datetime null,
+  DisplayTitle varchar(255),
   PRIMARY KEY (DocTemplateID)
 );
 
@@ -183,7 +242,7 @@ create table EmployeeRole
 (
   EID varchar(255) not null,
   ProposalID int not null,
-  Role int,
+  Role int null,
   Description varchar(255),
   CreatedDate datetime null,
   LastEditDate datetime null,
@@ -195,7 +254,7 @@ create table Proposal
   ProposalID varchar(255) not null,
   OpportunityID varchar(255) not null,
   BidderID int not null,
-  Status varchar(50),
+  Status int null,
   TechnicalScore decimal,
   FeeScore decimal,
   FinalTotalScore decimal,
@@ -204,16 +263,18 @@ create table Proposal
   PRIMARY KEY (ProposalID)
 );
 
+drop table Clarification;
 create table Clarification
 (
-  ProposalID varchar(255) not null,
-  DocID int not null,
   ClarificationID int not null,
-  question varchar(500),
-  answer varchar(500),
+  ProposalID varchar(255) not null,
+  DocID int null,
+  question varchar(500) null,
+  answer varchar(500) null,
   CreatedDate datetime null,
   LastEditDate datetime null,
-  PRIMARY KEY (ProposalID,DocID,ClarificationID)
+  ClosingDate datetime null,
+  PRIMARY KEY (ClarificationID,ProposalID)
 );
 
 create table Docs
