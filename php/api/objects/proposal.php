@@ -14,6 +14,7 @@ class Proposal
   public $OpportunityID;
   public $BidderID;
   public $Status;
+  public $StatusName;
   public $TechnicalScore;
   public $FeeScore;
   public $FinalTotalScore;
@@ -30,7 +31,7 @@ class Proposal
   // select one by ID
   function selectByID($id)
   {
-    $query = "SELECT ProposalID, OpportunityID, BidderID, Status, TechnicalScore, FeeScore, FinalTotalScore, CreatedDate, LastEditDate FROM Proposal WHERE ProposalID = ? ;";
+    $query = "SELECT ProposalID, OpportunityID, BidderID, Status, ps.Name as StatusName, TechnicalScore, FeeScore, FinalTotalScore, CreatedDate, LastEditDate FROM Proposal p LEFT JOIN ProposalStatus ps ON ps.StatusID = p.Status WHERE ProposalID = ? ;";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
@@ -47,6 +48,7 @@ class Proposal
     $this->OpportunityID = $row['OpportunityID'];
     $this->BidderID = $row['BidderID'];
     $this->Status = $row['Status'];
+    $this->StatusName = $row['StatusName'];
     $this->TechnicalScore = $row['TechnicalScore'];
     $this->FeeScore = $row['FeeScore'];
     $this->FinalTotalScore = $row['FinalTotalScore'];
@@ -54,10 +56,59 @@ class Proposal
     $this->LastEditDate = $row['LastEditDate'];
   }
 
+  // select one by ID
+  function selectByOppID($id)
+  {
+    $query = "SELECT ProposalID, OpportunityID, BidderID, Status, ps.Name as StatusName, TechnicalScore, FeeScore, FinalTotalScore, CreatedDate, LastEditDate FROM Proposal p LEFT JOIN ProposalStatus ps ON ps.StatusID = p.Status FROM Proposal WHERE OpportunityID = ? ;";
+    $stmt = $this->conn->prepare( $query );
+
+    // bind parameters
+    $stmt->bindParam(1, $id);
+
+    // execute query
+    $stmt->execute();
+
+    return $stmt;
+  }
+
+  // select one by ID
+  function AllPropsAcceptRejectByOppID($id)
+  {
+    $query = "select count(*) as total from Proposal where ((`Status` is null) OR (`Status` <> 0 AND `Status` <> 1)) AND OpportunityID = :ID ;";
+    $stmt = $this->conn->prepare( $query );
+
+    // bind parameters
+    $stmt->bindParam(':ID', $id);
+
+    // execute query
+    $stmt->execute();
+
+    // get retrieved row
+    $rowCount = $stmt->rowCount();
+    $proposalCount = 0;
+    if($rowCount > 0)
+    {
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+      $proposalCount = $row['total'];
+    }
+
+    //echo '{';
+    //echo ' "id" : "' . $id . '",';
+    //echo ' "itemcount" : "' . $rowCount . ',"';
+    //echo ' "total" : "' . $proposalCount . ',"';
+    //echo ' "query" : "' . $query . '"';
+    //echo '}';   
+
+    if($proposalCount > 0)
+      return false;
+    else
+      return true;
+  }
+
   // select All in the table
   function selectAll()
   {
-    $query = "SELECT ProposalID, OpportunityID, BidderID, Status, TechnicalScore, FeeScore, FinalTotalScore, CreatedDate, LastEditDate FROM Proposal;";
+    $query = "SELECT ProposalID, OpportunityID, BidderID, Status, ps.Name as StatusName, TechnicalScore, FeeScore, FinalTotalScore, CreatedDate, LastEditDate FROM Proposal p LEFT JOIN ProposalStatus ps ON ps.StatusID = p.Status;";
     $stmt = $this->conn->prepare( $query );
 
     // execute query
@@ -68,18 +119,51 @@ class Proposal
 
   function update()
   {
-    $query = "UPDATE Proposal set OpportunityID=:OpportunityID, BidderID=:BidderID, Status=:Status, TechnicalScore=:TechnicalScore, FeeScore=:FeeScore, FinalTotalScore=:FinalTotalScore, LastEditDate=NOW() WHERE ProposalID = :ProposalID;";
+//    $query = "UPDATE Proposal set OpportunityID=:OpportunityID, BidderID=:BidderID, Status=:Status, TechnicalScore=:TechnicalScore, FeeScore=:FeeScore, FinalTotalScore=:FinalTotalScore, LastEditDate=NOW() WHERE ProposalID = :ProposalID;";
+
+    $query = "UPDATE Proposal set ";
+    $query = $query . "LastEditDate=NOW()";
+    if(isset($this->BidderID))
+    {
+      $query = $query . ", OpportunityID = '" . $this->OpportunityID . "'";      
+    }
+
+    if(isset($this->BidderID))
+    {
+      $query = $query . ", BidderID = '" . $this->BidderID . "'";      
+    }
+
+    if(isset($this->Status))
+    {
+      $query = $query . ", Status = " . $this->Status . "";      
+    }
+
+    if(isset($this->TechnicalScore))
+    {
+      $query = $query . ", TechnicalScore = " . $this->TechnicalScore . " ";      
+    }
+
+    if(isset($this->FeeScore))
+    {
+      $query = $query . ", FeeScore = " . $this->FeeScore . " ";      
+    }
+
+    if(isset($this->TechnicalScore))
+    {
+      $query = $query . ", FinalTotalScore = " . $this->FinalTotalScore . " ";      
+    }
+    $query = $query . " WHERE ProposalID = '" . $this->ProposalID . "';";
 
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
-    $stmt->bindParam(':ProposalID', $this->ProposalID);
-    $stmt->bindParam(':OpportunityID', $this->OpportunityID);
-    $stmt->bindParam(':BidderID', $this->BidderID);
-    $stmt->bindParam(':Status', $this->Status);
-    $stmt->bindParam(':TechnicalScore', $this->TechnicalScore);
-    $stmt->bindParam(':FeeScore', $this->FeeScore);
-    $stmt->bindParam(':FinalTotalScore', $this->FinalTotalScore);
+    //$stmt->bindParam(':ProposalID', $this->ProposalID);
+    //$stmt->bindParam(':OpportunityID', $this->OpportunityID);
+    //$stmt->bindParam(':BidderID', $this->BidderID);
+    //$stmt->bindParam(':Status', $this->Status);
+    //$stmt->bindParam(':TechnicalScore', $this->TechnicalScore);
+   // $stmt->bindParam(':FeeScore', $this->FeeScore);
+    //$stmt->bindParam(':FinalTotalScore', $this->FinalTotalScore);
 
     if($stmt->execute())
       return true;
@@ -180,7 +264,8 @@ class Proposal
   {
     try
     {
-      $query = "SELECT DocID, DocTitle, Description, Path, Url FROM Docs WHERE DocID in (SELECT DocID FROM ProposalDocs WHERE ProposalID = '".$ProposalID."') ";
+      //$query = "SELECT DocID, DocTitle, Description, Path, Url FROM Docs WHERE DocID in (SELECT DocID FROM ProposalDocs WHERE ProposalID = '".$ProposalID."') ";
+      $query = "SELECT ProposalDocs.DocTemplateID, Docs.DocID, Docs.DocTitle, Docs.Description, Docs.Path, Docs.Url FROM Docs INNER JOIN ProposalDocs ON Docs.DocID=ProposalDocs.DocID WHERE ProposalDocs.ProposalID='".$ProposalID."' ";
 
 
       $stmt = $this->conn->prepare( $query );
@@ -286,6 +371,19 @@ class Proposal
 
     return $OpportunityID;
   }
+
+  // Get Dropdown List Data for Opportunity Status
+  function getProposalStatusList()
+  {
+    $query = "SELECT StatusID, Name FROM ProposalStatus;";
+    $stmt = $this->conn->prepare( $query );
+
+    // execute query
+    $stmt->execute();
+
+    return $stmt;
+  }
 }
 ?>
+
 
