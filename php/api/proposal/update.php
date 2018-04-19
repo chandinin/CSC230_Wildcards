@@ -19,18 +19,37 @@ $data = json_decode(file_get_contents("php://input"));
 if(json_last_error() === JSON_ERROR_NONE)
 {
   $proposal->ProposalID = $data->ProposalID;
-  $proposal->OpportunityID = $data->OpportunityID;
-  $proposal->BidderID = $data->BidderID;
-  $proposal->Status = $data->Status;
-  $proposal->TechnicalScore = $data->TechnicalScore;
-  $proposal->FeeScore = $data->FeeScore;
-  $proposal->FinalTotalScore = $data->FinalTotalScore;
+  if(isset($data->OpportunityID) and !is_null($data->OpportunityID))
+  {
+    $proposal->OpportunityID = $data->OpportunityID;
+  }
+  if(isset($data->BidderID) and !is_null($data->BidderID))
+    $proposal->BidderID = $data->BidderID;
+  if(isset($data->Status) and !is_null($data->Status))
+    $proposal->Status = $data->Status;
+  if(isset($data->TechnicalScore) and !is_null($data->TechnicalScore))
+    $proposal->TechnicalScore = $data->TechnicalScore;
+  if(isset($data->FeeScore) and !is_null($data->FeeScore))
+    $proposal->FeeScore = $data->FeeScore;
+  if(isset($data->FinalTotalScore) and !is_null($data->FinalTotalScore))
+    $proposal->FinalTotalScore = $data->FinalTotalScore;
+
+
+  //$proposal->ProposalID = $data->ProposalID;
+  //$proposal->OpportunityID = $data->OpportunityID;
+  //$proposal->BidderID = $data->BidderID;
+  //$proposal->Status = $data->Status;
+  //$proposal->TechnicalScore = $data->TechnicalScore;
+  //$proposal->FeeScore = $data->FeeScore;
+  //$proposal->FinalTotalScore = $data->FinalTotalScore;
 
   if($proposal->update())
   {  
-    echo '{';
-       echo ' message : "Update suceeded. "';
-    echo '}';
+   // http_response_code(200); 
+   // echo "SUCCESS";
+    //echo '{';
+    //   echo ' message : "Update suceeded. "';
+    //echo '}';
   }
   else
   {
@@ -96,9 +115,11 @@ else
 
     if($proposal->update())
     {  
-      echo '{';
-      echo ' message : "Update suceeded. (' . $proposalID .')"';
-      echo '}';
+      //http_response_code(200); 
+      //echo "SUCCESS";
+      //echo '{';
+      //echo ' message : "Update suceeded. (' . $proposalID .')"';
+      //echo '}';
     }
     else
     {
