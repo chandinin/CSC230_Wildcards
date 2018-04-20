@@ -1,12 +1,12 @@
 $(document).ready(
     function () {
-        initNewOppForm();
+        initNewOppForm(0);
        $('#editOppPanel').hide();
         $('#newOppPanel1').hide();
         $('#listOppPanel').show();
 
         $('#manageOpp').click(function () {
-            getOppList();
+            getOppList(type);
             $('.table').tablesorter();
             $("#oppsMenu option[id='opplist']").attr("selected", "selected");
         });
@@ -43,10 +43,23 @@ $(document).ready(
 */
 
         $('#oppTab').click(function () {
-            showOppList();
+            showOppList(0);
         });
+
+        $('#awTab').click(function () {
+            showOppList(10);
+        });
+
+        $('#canTab').click(function () {
+            showOppList(2);
+        });
+
+        $('#arcTab').click(function () {
+            showOppList(1);
+        });
+
         $('.oppListButton').click(function () {
-            showOppList();
+            showOppList(0);
         });
 
         $('#editOppButton').click(function () {
@@ -119,11 +132,37 @@ function showNewOpp() {
     $('#listOppPanel').hide();
 }
 
-function showOppList() {
-    getOppList();  //refresh list everytime
+function showOppList(type) {
+    getOppList(type);  //refresh list everytime
     $('#newOppPanel1').hide();
     $('#editOppPanel').hide();
-    $('#listOppPanel').show();
+    switch (type) {
+        case 1:
+            $('#listOppPanel').hide();
+            $('#listAROppPanel').show();
+            $('#listCOppPanel').hide();
+            $('#listAWOppPanel').hide();
+            break;
+        case 2:
+            $('#listOppPanel').hide();
+            $('#listAROppPanel').hide();
+            $('#listCOppPanel').show();
+            $('#listAWOppPanel').hide();
+            break;
+        case 10:
+            $('#listOppPanel').hide();
+            $('#listAROppPanel').hide();
+            $('#listCOppPanel').hide();
+            $('#listAWOppPanel').show();
+            break;
+        default:
+            $('#listOppPanel').show();
+            $('#listAROppPanel').hide();
+            $('#listCOppPanel').hide();
+            $('#listAWOppPanel').hide();
+            break;
+    }
+
 }
 
 function getOpportunity(opId) {
@@ -166,10 +205,13 @@ function getDocTemplates(opId) {
             for(var i = 0; i< size; i++) {
                 var template = docArray.doctemplate[i];
                 if (template.Url != null) {
-                    var row = "<tr><td>" + template.DocTitle + "</td><td>" + template.DocTitle + "</td><td>" + opId + "</td><td><a class='btn btn-primary btn-lg' href='" + template.Url +
-                        "'><span class='glyphicon glyphicon-circle-arrow-down' aria-hidden='true'></span>   Download</a> " +
-                        "<button class='btn btn-delete btn-lg'><span class='glyphicon glyphicon-remove'" +
-                        "aria-hidden='true'></span> Delete </button></td></tr>";
+                    var row = "<tr><td>" + template.DocTitle + "</td><td>" + "<a href ='" + template.Url + "'>" +
+                    template.DocTitle + "</a></td><td>" + "Posted Date" +
+                        "</td><td><a href onclick='editDoc(" + opId + "," + template.DocTemplateID + ")'" + "class='btn btn-primary btn-lg'>" +
+                        "<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>   Edit</a> " +
+                        "<a onclick='deleteDoc(" + opId + "," + template.DocTemplateID + ")'" +
+                        "class='btn btn-delete btn-lg'><span class='glyphicon glyphicon-remove'" +
+                        "aria-hidden='true'></span> Delete </a></td></tr>";
                     $('#docTemplatesBody').append(row);
                     $("#docTempatesBody").trigger("update");
                 }
@@ -181,15 +223,37 @@ function getDocTemplates(opId) {
     };
     xhr.send();
 }
-function getOppList() {
+
+function editDoc(opId, templateId) {
+    event.preventDefault();
+    alert("Edit OpId: " + opId + " templateId: " + templateId);
+}
+function deleteDoc(opId, templateId) {
+    event.preventDefault();
+    alert("Delete OpId: " + opId + " templateId: " + templateId);
+}
+
+function getOppList(type) {
     $('#oppListTableBody').empty();
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php', true);
+    var url = "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php";
+    switch (type)  {
+        case 1:
+            url = url + "?status=1";
+            break;
+        case 2:
+            url = url + "?status=2";
+            break;
+        case 10:
+            url = url + "?status=10";
+            break;
+    }
+    xhr.open('GET', url, true);
     xhr.onload = function () {
         if (xhr.status == 200) {
             //var oppArray = fakedata;
             var oppArray = JSON.parse(xhr.responseText);
-            fillOppTable(oppArray);
+            fillOppTable(oppArray, type);
         } else {
             alert("Error response");
         }
@@ -198,8 +262,20 @@ function getOppList() {
 
 }
 
-function fillOppTable(oppArray) {
+function fillOppTable(oppArray,type) {
     var size = oppArray.opportunity.length;
+    var tablename = "oppListTableBody";
+    switch (type)  {
+        case 1:
+            tablename = "oppArListTableBody";
+            break;
+        case 2:
+            tablename = "oppCListTableBody";
+            break;
+        case 10:
+            tablename = "oppAwListTableBody";
+            break;
+    }
     for (var i = 0; i < size; i++) {
         var opp = oppArray.opportunity[i];
         try {
@@ -213,8 +289,10 @@ function fillOppTable(oppArray) {
             opp.StatusName + "</td><td>" +
             "<button onclick='showEditOpp(\"" + opp.OpportunityID + "\")' id='editOppButton' value='" + opp.OpportunityID + "' type='button' class='btn btn-primary btn-lg'>" +
             "<span class='glyphicon glyphicon-eye-open' aria-hidden='true'></span> View</button></td></tr>";
-        $('#oppListTableBody').append(row);
-        $("#oppListTableBody").trigger("update");
+        //$('#oppListTableBody').append(row);
+        //$("#oppListTableBody").trigger("update");
+        $("#" + tablename).append(row);
+        $("#" + tablename).trigger("update");
 
     }
 }
@@ -238,8 +316,8 @@ function getOppListbyCategory(category) {
 }
 
 
-function initNewOppForm() {
-    getOppList();
+function initNewOppForm(type) {
+    getOppList(type);
     getCategories($('#selectFilterCategory'));
 }
 

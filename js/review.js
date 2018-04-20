@@ -29,7 +29,7 @@ $(document).ready(
             getOppListbyCategory(category);
         });
 
-        $('.oppReviewedButton').click(function() {
+        $('#oppReviewedButton').click(function() {
             var opId = $('#oppNumber').text();
             processOpportunity(opId);
         });
@@ -41,11 +41,12 @@ function processOpportunity(opId) {
     var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/update.php"
     xhr.open('POST', url);
     var formData = new FormData();
-    formData.append('OpportunityID', opId);
-    formData.append('Status', "8");
+    formData.append("OpportunityID", opId);
+    formData.append("Status", "8");
     xhr.onload = function () {
         if (xhr.status == 200) {
             var retval = xhr.responseText;
+            console.log("processOp: " +  retval);
             var failed = retval.includes('failed');
             if (failed)
                 return;
@@ -134,7 +135,7 @@ function getDocTemplates(opId) {
 function getOppList() {
     $('#oppListTableBody').empty();
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php', true);
+    xhr.open('GET', 'http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php?status=7', true);
     xhr.onload = function () {
         if (xhr.status == 200) {
             //var oppArray = fakedata;

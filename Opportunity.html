@@ -36,15 +36,15 @@
                         <i class="fa fa-user"></i> Current Opportunities</a>
                 </li>
                 <li class="nav-item">
-                    <a id="empTab" class="nav-link" data-toggle="tab" href="#panel2" role="tab">
+                    <a id="awTab" class="nav-link" data-toggle="tab" href="#panel2" role="tab">
                         <i class="fa fa-heart"></i> Awarded Opportunities</a>
                 </li>
                 <li class="nav-item">
-                    <a id="bidTab" class="nav-link" data-toggle="tab" href="#panel3" role="tab">
+                    <a id="canTab" class="nav-link" data-toggle="tab" href="#panel3" role="tab">
                         <i class="fa fa-heart"></i> Cancelled Opportunities</a>
                 </li>
                 <li class="nav-item">
-                    <a id="bidTab" class="nav-link" data-toggle="tab" href="#panel4" role="tab">
+                    <a id="arcTab" class="nav-link" data-toggle="tab" href="#panel4" role="tab">
                         <i class="fa fa-heart"></i> Archived Opportunities</a>
                 </li>
             </ul>
@@ -279,6 +279,88 @@
                             </div>
                             <!-- Edit Panel 3 -->
 
+                            <!--Edit Panel 4-->
+                        <div class="col-md-8 clearfix bid-opportunities" id="editOppPanel2">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h3 class="my-2 h3">Opportunity Details</h3>
+                                </div>
+                                <div class="col-md-3" >
+                                    <button type="button" class="btn btn-success btn-lg oppListButton">
+                                        <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>Save
+                                    </button>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <form id="editExistOpp">
+                                <div class="col-md-12">
+                                    <span class="opportunity-property">Category: </span>
+                                    <span class="opportunity-detail" id="editoppType">1</span>
+                                </div>
+                                <div class="col-md-6">
+                                    <span class="opportunity-property">Opportunity Number: </span>
+                                    <span class="opportunity-detail" id="editoppNumber">1</span>
+                                </div>
+                                <div class="col-md-6">
+                                    <span class="opportunity-property">Opportunity Name: </span>
+                                    <span class="opportunity-detail" id="editoppName">1</span>
+                                </div>
+                                <div class="col-md-6">
+                                    <span class="opportunity-property">Final Filing Date: </span>
+                                    <span class="opportunity-detail" id="editoppDate">1</span>
+                                </div>
+                                <div class="col-md-12">
+                                    <span class="opportunity-property">Description: </span>
+                                    <span class="opportunity-detail" id="editoppDesc">1</span>
+                                </div>
+                                <div class="col-md-12">
+                                    <span class="opportunity-property">Scoring Criteria: </span>
+                                    <span class="opportunity-detail" id="editoppScore">1</span>
+                                </div>
+                                <hr>
+                                </form>
+                            </div>
+
+
+                            <div class="col-12">
+                                <h4>Existing documents attached to this opportunity.</h4>
+                                <form>
+                                    <table id="listDocTemplates" class="table table-responsive">
+                                        <thead>
+                                        <th scope="col">Title</th>
+                                        <th scope="col">File Name</th>
+                                        <th scope="col">Posted Date</th>
+                                        <th scope="col">Action</th>
+                                        </thead>
+                                        <tbody id="docTemplatesBody" class="table table-bordered table-striped table-hover" >
+
+                                        </tbody>
+                                    </table>
+                                </form>
+                            </div>
+                            <div class="row">
+                                <form id="uploadDocTemplatesForm" >
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="my-1 mr-2" for="uploadMFileName">New Document(s) Upload </label>
+                                            <input type="file" id="uploadMFileName" name="uploadMFileName" multiple>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="col-12" >
+                                <div class="form-group">
+                                    <button id="uploadDocTemplates" value="" type="button" class="btn btn-primary">Upload</button>
+                                    <button id="clearDocTemplates" type="button" class="btn btn-primary">Clear</button>
+                                </div>
+                            </div>
+
+                        </div>
+                            <!--/.Edit Panel 4-->
+
+
                         </div>
                     </div>
                 <!--/.Opportunity Panel 1-->
@@ -310,7 +392,7 @@
                                             <option id = "id" value="default">Category</option>
                                         </select><br>
 
-                                        <table id="oppListTable" class="table table-responsive table-bordered table-striped table-hover tablesorter">
+                                        <table id="oppAwListTable" class="table table-responsive table-bordered table-striped table-hover tablesorter">
                                             <thead class="">
                                             <th class="">Category</th>
                                             <th>Opportunity Id</th>
@@ -321,7 +403,7 @@
                                             <th>Status</th>
                                             <th>Action</th>
                                             </thead>
-                                            <tbody id="oppListTableBody">
+                                            <tbody id="oppAwListTableBody">
                                             </tbody>
                                         </table>
                                     </div>
@@ -359,7 +441,7 @@
                                             <option id = "id" value="default">Category</option>
                                         </select><br>
 
-                                        <table id="oppListTable" class="table table-responsive table-bordered table-striped table-hover tablesorter">
+                                        <table id="oppCListTable" class="table table-responsive table-bordered table-striped table-hover tablesorter">
                                             <thead class="">
                                             <th class="">Category</th>
                                             <th>Opportunity Id</th>
@@ -370,7 +452,7 @@
                                             <th>Status</th>
                                             <th>Action</th>
                                             </thead>
-                                            <tbody id="oppListTableBody">
+                                            <tbody id="oppCListTableBody">
                                             </tbody>
                                         </table>
                                     </div>
@@ -409,7 +491,7 @@
                                             <option id = "id" value="default">Category</option>
                                         </select><br>
 
-                                        <table id="oppListTable" class="table table-responsive table-bordered table-striped table-hover tablesorter">
+                                        <table id="oppArListTable" class="table table-responsive table-bordered table-striped table-hover tablesorter">
                                             <thead class="">
                                             <th class="">Category</th>
                                             <th>Opportunity Id</th>
@@ -420,7 +502,7 @@
                                             <th>Status</th>
                                             <th>Action</th>
                                             </thead>
-                                            <tbody id="oppListTableBody">
+                                            <tbody id="oppArListTableBody">
                                             </tbody>
                                         </table>
                                     </div>
@@ -460,7 +542,6 @@
 <script src="js/bootstrap-datepicker.js"></script>
 <script src="js/MDB Free/js/mdb.js"></script>
 <script src="js/jquery.tablesorter.js"></script>
-<!--script src="js/jquery.tablesorter.widgets.js"></script-->
 <script src="js/widget-storage.js"></script>
 <script src="js/widget-filter.js"></script>
 <script src="js/bootstrap3-wysihtml5.all.min.js"></script>
