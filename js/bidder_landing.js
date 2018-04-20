@@ -5,10 +5,12 @@ $(document).ready(function(){
     $("#show-list-btn").click(function() { router("#spa-opportunities-list"); });
 
     $("#proposals-tab").click(function() { activateProposalsList(); });
-    $("#opportunities-tab").click(function() { activateOpportunitiesList(); }); 
+    $("#opportunities-tab").click(function() { activateOpportunitiesList(); });
+    $("#messages-tab").click(function() { activateMessageList(); });
 
     $("#opportunities-list-table").tablesorter();
     $("#proposals-list-table").tablesorter();
+    $("#messages-list-table").tablesorter();
 
     // Set the tab to active, because I don't know what I'm doing...
     $('#opportunities-tab').trigger('click');
@@ -18,6 +20,7 @@ $(document).ready(function(){
 
     $("#selectCategory").change(function(change) { activateOpportunitiesList(); });
 
+    // TODO: Figure out a good way to pass bidder ID around the site
     bidder_id = "1";
     activateOpportunitiesList();
 });
@@ -32,7 +35,9 @@ function router(div_to_show)
                     "#spa-opportunity-detail",
                     "#spa-create-proposal",
                     "#spa-proposals-list",
-                    "#spa-edit-proposal"
+                    "#spa-edit-proposal",
+                    "#spa-message-list",
+                    "#spa-message-detail"
                ];
 
     if(!(div_list.includes(div_to_show)))
@@ -844,3 +849,89 @@ function fillCategoryDropdown(jsonArray){
         select.insertBefore(option, select.lastChild);
     }
 }
+
+
+
+/********************
+ * spa-message-list *
+ ********************/
+
+function activateMessageList()
+{
+    initializeMessageList();
+    router("#spa-message-list");
+}
+
+function initializeMessageList()
+{
+    removeAllTableElements(document.getElementById("messages-list-table"));
+    // Ajax call for messages associated with bidderID will go here
+    populateMessageList();
+}
+
+
+function populateMessageList()
+{
+    PREVIEW_LENGTH = 40; // Number of characters in the message preview
+
+    message_type = document.createElement("a");
+    message_type.appendChild(document.createTextNode("New Opportunity Available") );
+
+    time_sent = document.createElement("a");
+    time_sent.appendChild(document.createTextNode(getFormattedCurrentDate()) );
+
+    // This will be clipped
+    preview_text = "Hello, this is an automated message. There is a new opportunity available in blah...";
+
+    preview = document.createElement("a");
+    preview.appendChild(document.createTextNode(preview_text.substring(0,PREVIEW_LENGTH)+"...") );
+
+
+    message_status = document.createElement("a");
+    message_status.appendChild(document.createTextNode("Unread") );
+
+
+
+    // Set onclick for each item in the table to activateMessageDetail for that item
+    message_type.onclick = (function() {
+        var ID = "0";
+        return function() { activateMessageDetail(ID); };
+    })();
+
+    time_sent.onclick = (function() {
+        var ID = "0";
+        return function() { activateMessageDetail(ID); };
+    })();
+
+    preview.onclick = (function() {
+        var ID = "0";
+        return function() { activateMessageDetail(ID); };
+    })();
+
+    message_status.onclick = (function() {
+        var ID = "0";
+        return function() { activateMessageDetail(ID); };
+    })();
+
+    // Stick it in the table message-list-table!
+    table_array = [[message_type, time_sent, preview, message_status]];
+    insertTableRows(table_array, document.getElementById("messages-list-table"));
+}
+
+
+/**********************
+ * spa-message-detail *
+ **********************/
+
+function activateMessageDetail(message_id)
+{
+    initializeMessageList(message_id);
+    router("#spa-message-detail");
+}
+
+function initializeMessageDetail(message_id)
+{
+
+}
+
+
