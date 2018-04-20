@@ -1,17 +1,24 @@
-<<<<<<< HEAD
 $(document).ready(
     function () {
-        initNewOppForm();
+        initNewOppForm(0);
        $('#editOppPanel').hide();
         $('#newOppPanel1').hide();
         $('#listOppPanel').show();
 
         $('#manageOpp').click(function () {
-            getOppList();
+            getOppList(type);
             $('.table').tablesorter();
             $("#oppsMenu option[id='opplist']").attr("selected", "selected");
         });
 
+        $('#bidTab').click(function() {
+            getBidderList();
+            getCategories($('#selectBidBiddderCategory'));
+        });
+
+        $('#empTab').click(function() {
+            getEmployeeList();
+        });
 
         $('#saveNewOpp').click(function () {
             saveOpportunity();
@@ -36,10 +43,23 @@ $(document).ready(
 */
 
         $('#oppTab').click(function () {
-            showOppList();
+            showOppList(0);
         });
+
+        $('#awTab').click(function () {
+            showOppList(10);
+        });
+
+        $('#canTab').click(function () {
+            showOppList(2);
+        });
+
+        $('#arcTab').click(function () {
+            showOppList(1);
+        });
+
         $('.oppListButton').click(function () {
-            showOppList();
+            showOppList(0);
         });
 
         $('#editOppButton').click(function () {
@@ -52,7 +72,9 @@ $(document).ready(
 
         $('#uploadDocTemplates').click(function() {
             alert("uploading files...");
-            uploadDocTemplates();
+            opId = $('#oppNumber').text();
+            uploadDocTemplates(opId);
+            getDocTemplates(opId);
         });
 
         $('#clearDocTemplates').click(function () {
@@ -61,18 +83,39 @@ $(document).ready(
 
         $('.table').tablesorter();
 
-        $("#selectCategory").change(function () {
+        $("#selectFilterCategory").change(function () {
             //Storing the dropdown selection in category variable
-            category= $('#selectCategory option:selected').attr('id');
-            getOppListbyID(category);
+            category= $('#selectFilterCategory option:selected').attr('id');
+            getOppListbyCategory(category);
+        });
+
+        $("#selectNewCategory").change(function () {
+            //Storing the dropdown selection in category variable
+            category= $('#selectNewCategory option:selected').attr('id');
+            //getOppListbyCategory(id);
+        });
+
+        $("#selectBidderCategory").change(function () {
+            //Storing the dropdown selection in category variable
+            category= $('#selectBidderCategory option:selected').attr('id');
+            //getOppListbyCategory(id);
         });
 
 
+        $('#formDescriptionInput').wysihtml5({
+            "font-styles": true, //Font styling, e.g. h1, h2, etc. Default true
+            "emphasis": true, //Italics, bold, etc. Default true
+            "lists": true, //(Un)ordered lists, e.g. Bullets, Numbers. Default true
+            "html": false, //Button which allows you to edit the generated HTML. Default false
+            "link": true, //Button to insert a link. Default true
+            "image": false, //Button to insert an image. Default true,
+            "color": false, //Button to change color of font
+            "blockquote": true, //Blockquote
+         });
 
     });
 
 function showEditOpp(opId) {
-    //alert("Editing: " + oppId);
     $('#listOppPanel').hide();
     $('#newOppPanel1').hide();
     $('#editOppPanel').show();
@@ -84,44 +127,67 @@ function showEditOpp(opId) {
 
 function showNewOpp() {
     getLeadEvals();
+    getCategories($('#selectNewCategory'))
     $('#newOppPanel1').show();
     $('#listOppPanel').hide();
-    var editor = new Jodit("#editor");
-    editor.setEditorValue('<p>start</p>')
-
 }
 
-function showOppList() {
-    getOppList();  //refresh list everytime
+function showOppList(type) {
+    getOppList(type);  //refresh list everytime
     $('#newOppPanel1').hide();
     $('#editOppPanel').hide();
-    $('#listOppPanel').show();
-}
+    switch (type) {
+        case 1:
+            $('#listOppPanel').hide();
+            $('#listAROppPanel').show();
+            $('#listCOppPanel').hide();
+            $('#listAWOppPanel').hide();
+            break;
+        case 2:
+            $('#listOppPanel').hide();
+            $('#listAROppPanel').hide();
+            $('#listCOppPanel').show();
+            $('#listAWOppPanel').hide();
+            break;
+        case 10:
+            $('#listOppPanel').hide();
+            $('#listAROppPanel').hide();
+            $('#listCOppPanel').hide();
+            $('#listAWOppPanel').show();
+            break;
+        default:
+            $('#listOppPanel').show();
+            $('#listAROppPanel').hide();
+            $('#listCOppPanel').hide();
+            $('#listAWOppPanel').hide();
+            break;
+    }
 
-function saveJunk() {
-    $('clearFile').click(function () {
-    });
 }
-
 
 function getOpportunity(opId) {
 var xhr = new XMLHttpRequest();
     var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php?OpportunityID="+opId;
     xhr.open('POST', url);
+
     xhr.onload = function () {
     if (xhr.status == 200) {
-        var jsonArray = JSON.parse(xhr.responseText);
-        $("#oppNumber").text(jsonArray.OpportunityID);
-        $("#oppDate").text(jsonArray.ClosingDate);
-        $("#oppName").text(jsonArray.Name);
-        $("#oppType").text("Type");
-        $("#oppDesc").text(jsonArray.Description);
+        var oppArray = JSON.parse(xhr.responseText);
+        var catName = categoryArray.Category[oppArray.CategoryID].Name;
+        $("#oppNumber").text(oppArray.OpportunityID);
+        $("#oppDate").text(oppArray.ClosingDate);
+        $("#oppName").text(oppArray.Name);
+        $("#oppType").text(catName);
+        $("#oppDesc").html(oppArray.Description);
+        $("#oppScore").html("<a href='http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/getScoringCriteria.php?OpportunityID="+opId+"'>" +
+            "View Scoring Criteria</a>");
     } else {
-        alert('');
+        alert('Unable to locate Opportunity '+ opId);
     }
 };
 xhr.send();
 }
+
 
 function getDocTemplates(opId) {
     $('#docTemplatesBody').empty();
@@ -131,18 +197,21 @@ function getDocTemplates(opId) {
     xhr.onload = function () {
         if (xhr.status == 200) {
             var retval = xhr.responseText;
-            var failed = retval.includes("error");
+            var failed = retval.includes('error');
             if(failed)
                return;
-            var jsonArray = JSON.parse(retval);
-            var size = jsonArray.doctemplate.length;
+            var docArray= JSON.parse(retval);
+            var size = docArray.doctemplate.length;
             for(var i = 0; i< size; i++) {
-                var template = jsonArray.doctemplate[i];
+                var template = docArray.doctemplate[i];
                 if (template.Url != null) {
-                    var row = "<tr><td>" + template.DocTitle + "</td><td><a class='btn btn-primary btn-lg' href='" + template.Url +
-                        "'><span class='glyphicon glyphicon-circle-arrow-down' aria-hidden='true'></span>   Download</a> " +
-                        "<button class='btn btn-delete btn-lg'><span class='glyphicon glyphicon-remove'" +
-                        "aria-hidden='true'></span> Delete </button></td></tr>";
+                    var row = "<tr><td>" + template.DocTitle + "</td><td>" + "<a href ='" + template.Url + "'>" +
+                    template.DocTitle + "</a></td><td>" + "Posted Date" +
+                        "</td><td><a href onclick='editDoc(" + opId + "," + template.DocTemplateID + ")'" + "class='btn btn-primary btn-lg'>" +
+                        "<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>   Edit</a> " +
+                        "<a onclick='deleteDoc(" + opId + "," + template.DocTemplateID + ")'" +
+                        "class='btn btn-delete btn-lg'><span class='glyphicon glyphicon-remove'" +
+                        "aria-hidden='true'></span> Delete </a></td></tr>";
                     $('#docTemplatesBody').append(row);
                     $("#docTempatesBody").trigger("update");
                 }
@@ -154,26 +223,37 @@ function getDocTemplates(opId) {
     };
     xhr.send();
 }
-function getOppList() {
+
+function editDoc(opId, templateId) {
+    event.preventDefault();
+    alert("Edit OpId: " + opId + " templateId: " + templateId);
+}
+function deleteDoc(opId, templateId) {
+    event.preventDefault();
+    alert("Delete OpId: " + opId + " templateId: " + templateId);
+}
+
+function getOppList(type) {
     $('#oppListTableBody').empty();
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php', true);
+    var url = "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php";
+    switch (type)  {
+        case 1:
+            url = url + "?status=1";
+            break;
+        case 2:
+            url = url + "?status=2";
+            break;
+        case 10:
+            url = url + "?status=10";
+            break;
+    }
+    xhr.open('GET', url, true);
     xhr.onload = function () {
         if (xhr.status == 200) {
-            //var jsonArray = fakedata;
-            var jsonArray = JSON.parse(xhr.responseText);
-            var size = jsonArray.opportunity.length;
-            for (var i = 0; i < size; i++) {
-                var opp = jsonArray.opportunity[i];
-                var row = "<tr><td>" + opp.CategoryID + "</td></td><td>" + opp.OpportunityID + "</td><td>" + opp.Name +
-                    "</td><td>" + opp.ClosingDate + "</td><td>" + opp.Description + "</td><td>" +
-                    opp.Status + "</td><td>" +
-                    "<button onclick='showEditOpp(\"" + opp.OpportunityID + "\")' id='editOppButton' value='" + opp.OpportunityID + "' type='button' class='btn btn-primary btn-lg'>" +
-                    "<span class='glyphicon glyphicon-eye-open' aria-hidden='true'></span> View</button></td></tr>";
-                $('#oppListTableBody').append(row);
-                $("#oppListTableBody").trigger("update");
-
-            }
+            //var oppArray = fakedata;
+            var oppArray = JSON.parse(xhr.responseText);
+            fillOppTable(oppArray, type);
         } else {
             alert("Error response");
         }
@@ -182,10 +262,66 @@ function getOppList() {
 
 }
 
-function initNewOppForm() {
-    getOppList();
-    getCategories();
+function fillOppTable(oppArray,type) {
+    var size = oppArray.opportunity.length;
+    var tablename = "oppListTableBody";
+    switch (type)  {
+        case 1:
+            tablename = "oppArListTableBody";
+            break;
+        case 2:
+            tablename = "oppCListTableBody";
+            break;
+        case 10:
+            tablename = "oppAwListTableBody";
+            break;
+    }
+    for (var i = 0; i < size; i++) {
+        var opp = oppArray.opportunity[i];
+        try {
+            var catName = categoryArray.Category[opp.CategoryID].Name;
+        }catch(err) {
+            var catName  = "Undefined";
+        }
+
+        var row = "<tr><td>" + catName + "</td></td><td>" + opp.OpportunityID + "</td><td>" + opp.Name +
+            "</td><td>" + opp.ClosingDate + "</td><td>" + opp.LastEditDate + "</td><td>" + opp.Description + "</td><td>" +
+            opp.StatusName + "</td><td>" +
+            "<button onclick='showEditOpp(\"" + opp.OpportunityID + "\")' id='editOppButton' value='" + opp.OpportunityID + "' type='button' class='btn btn-primary btn-lg'>" +
+            "<span class='glyphicon glyphicon-eye-open' aria-hidden='true'></span> View</button></td></tr>";
+        //$('#oppListTableBody').append(row);
+        //$("#oppListTableBody").trigger("update");
+        $("#" + tablename).append(row);
+        $("#" + tablename).trigger("update");
+
+    }
 }
+
+function getOppListbyCategory(category) {
+    url = 'http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php';
+    if(category !=="0")
+        url = url + '?CategoryID='+category;
+    $('#oppListTableBody').empty();
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET',url,true);
+    xhr.onload = function() {
+        if (xhr.status == 200) {
+            var jsonArray = JSON.parse(xhr.responseText);
+            fillOppTable(jsonArray);
+        } else {
+            alert("Error response");
+        }
+    };
+    xhr.send();
+}
+
+
+function initNewOppForm(type) {
+    getOppList(type);
+    getCategories($('#selectFilterCategory'));
+}
+
+
 
 function uploadScoring(file, opId) {
     /* Upload scoring criteria*/
@@ -205,7 +341,7 @@ function uploadScoring(file, opId) {
     };
     xhr.send(formData);
 }
-function uploadDocTemplates() {
+function uploadDocTemplates(opId) {
     /*upload other documents */
     var numfiles =  $('#uploadMFileName')[0].files.length;
     var file;
@@ -215,7 +351,7 @@ function uploadDocTemplates() {
         formData.append('filename[]', file,file.name);
         console.log(file.name);
     }
-    formData.append('OpportunityID','2');
+    formData.append('OpportunityID',opId);
     formData.append('submit','Upload Image');
     var xhr = new XMLHttpRequest();
     xhr.open('POST','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/uploadDocArray.php');
@@ -236,12 +372,12 @@ function getLeadEvals() {
     xhr.open('GET', 'http://athena.ecs.csus.edu/~wildcard/php/api/employee/read.php', true);
     xhr.onload = function () {
         if (xhr.status == 200) {
-            var jsonArray = JSON.parse(xhr.responseText);
-            var size = jsonArray.employee.length;
+            var evalArray = JSON.parse(xhr.responseText);
+            var size = evalArray.employee.length;
             for (var i = 0; i < size; i++) {
-                var lead = jsonArray.employee[i];
+                var lead = evalArray.employee[i];
                 var name = lead.first_name + " " + lead.last_name;
-                $('select').append($('<option>', {value: lead.id, text: name}));
+                $('#selectLead').append($('<option>', {value: lead.id, text: name}));
             }
         } else {
             alert("Error response");
@@ -257,11 +393,12 @@ function saveOpportunity() {
     var desc = $('#formDescriptionInput').val();
     var close = $('#close_date').val() + " " + $('#close_time').val();
     var lead = parseInt($('#selectLead').val());
+    var category = $('#selectNewCategory option:selected').attr('id');
     var jsonRecord =
         {"OpportunityID": opId,
             "ClosingDate":close,
-            //"ScoringCategoryBlob":null,
             "LeadEvaluatorID":lead,
+            "CategoryID": category,
             "Name":name,
             "LowestBid":"0",
             "Description":desc,
@@ -291,13 +428,14 @@ function saveOpportunity() {
 }
 
 //get all categories to populate dropdown
-function getCategories(){
+function getCategories(select){
     var xhr = new XMLHttpRequest();
     xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/getOppCategoryList.php',true);
     xhr.onload = function() {
         if (xhr.status == 200) {
-            var jsonArray = JSON.parse(xhr.responseText);
-            fillCategoryDropdown(jsonArray);
+            var catArray = JSON.parse(xhr.responseText);
+            console.log(xhr.responseText);
+            fillCategoryDropdown(catArray,select);
         } else {
             alert("Error response");
         }
@@ -306,536 +444,42 @@ function getCategories(){
 }
 
 //Fill dropdown with categories
-function fillCategoryDropdown(jsonArray){
+function fillCategoryDropdown(catArray, select){
     var start = 0;
-    var select = document.getElementById("selectCategory")
-    var size = jsonArray.Category.length;
+    //var select = document.getElementById("selectCategory")
+    var size = catArray.Category.length;
 
     for(var i=start;i<size;i++) {
         var option = document.createElement("OPTION");
-        txt = document.createTextNode(jsonArray.Category[i].Name);
+        txt = document.createTextNode(catArray.Category[i].Name);
         option.appendChild(txt);
-        option.setAttribute("value", jsonArray.Category[i].Name)
-        option.setAttribute("id", jsonArray.Category[i].CategoryID)
-        select.insertBefore(option, select.lastChild);
+        option.setAttribute("value", catArray.Category[i].Name)
+        option.setAttribute("id", catArray.Category[i].CategoryID)
+          select.append(option);
     }
 }
 
-var fakelist = {
-    "opportunity": [{
-        "OpportunityID": "",
-        "ClosingDate": "0000-00-00 00:00:00",
-        "ScoringCategoryBlob": null,
-        "LeadEvaluatorID": null,
-        "Name": "",
-        "LowestBid": "10000",
-        "Description": ""
-    },
-        {
-            "OpportunityID": "1",
-            "ClosingDate": "2019-01-01 12:00:00",
-            "ScoringCategoryBlob": null,
-            "LeadEvaluatorID": "3",
-            "Name": null,
-            "LowestBid": "10000",
-            "Description": null
-        },
-        {
-            "OpportunityID": "1111",
-            "ClosingDate": "0000-00-00 00:00:00",
-            "ScoringCategoryBlob": null,
-            "LeadEvaluatorID": "1",
-            "Name": "1111 Name Here",
-            "LowestBid": "10000",
-            "Description": "1111 Description is here"
-        },
-        {
-            "OpportunityID": "2",
-            "ClosingDate": "2019-02-14 12:00:00",
-            "ScoringCategoryBlob": null,
-            "LeadEvaluatorID": "2",
-            "Name": null,
-            "LowestBid": "3000",
-            "Description": null
-        },
-        {
-            "OpportunityID": "2018-12",
-            "ClosingDate": "0000-00-00 00:00:00",
-            "ScoringCategoryBlob": null,
-            "LeadEvaluatorID": "3",
-            "Name": "name",
-            "LowestBid": "10000",
-            "Description": "desc"
-        },
-        {
-            "OpportunityID": "2018-5544",
-            "ClosingDate": "0000-00-00 00:00:00",
-            "ScoringCategoryBlob": null,
-            "LeadEvaluatorID": "1",
-            "Name": "Chance to win big",
-            "LowestBid": "10000",
-            "Description": "This is a really big chance"
-        },
-        {
-            "OpportunityID": "2018-5555",
-            "ClosingDate": "0000-00-00 00:00:00",
-            "ScoringCategoryBlob": null,
-            "LeadEvaluatorID": "1",
-            "Name": "Chance to win big",
-            "LowestBid": "10000",
-            "Description": "This is a really big chance"
-        },
-        {
-            "OpportunityID": "2018-909",
-            "ClosingDate": "0000-00-00 00:00:00",
-            "ScoringCategoryBlob": null,
-            "LeadEvaluatorID": "3",
-            "Name": "Great Opportunity",
-            "LowestBid": "10000",
-            "Description": "Great Description"
-        },
-        {
-            "OpportunityID": "211-0056",
-            "ClosingDate": "0000-00-00 00:00:00",
-            "ScoringCategoryBlob": null,
-            "LeadEvaluatorID": "3",
-            "Name": "This is my opportunity",
-            "LowestBid": "10000",
-            "Description": "Describe"
-        },
-        {
-            "OpportunityID": "2222",
-            "ClosingDate": "0000-00-00 00:00:00",
-            "ScoringCategoryBlob": null,
-            "LeadEvaluatorID": "2",
-            "Name": "2222 Opportunity",
-            "LowestBid": "10000",
-            "Description": "2222 Description"
-        },
-        {
-            "OpportunityID": "2243-9987",
-            "ClosingDate": "0000-00-00 00:00:00",
-            "ScoringCategoryBlob": null,
-            "LeadEvaluatorID": "1",
-            "Name": "Name is here",
-            "LowestBid": "10000",
-            "Description": "Description is here"
-        },
-        {
-            "OpportunityID": "2294-888",
-            "ClosingDate": "0000-00-00 00:00:00",
-            "ScoringCategoryBlob": null,
-            "LeadEvaluatorID": "1",
-            "Name": "Opname2",
-            "LowestBid": "10000",
-            "Description": "opdesc2"
-        },
-        {
-            "OpportunityID": "25",
-            "ClosingDate": null,
-            "ScoringCategoryBlob": null,
-            "LeadEvaluatorID": null,
-            "Name": null,
-            "LowestBid": null,
-            "Description": null
-        },
-        {
-            "OpportunityID": "26",
-            "ClosingDate": "2019-02-14 12:00:00",
-            "ScoringCategoryBlob": null,
-            "LeadEvaluatorID": "2",
-            "Name": "Opp_25",
-            "LowestBid": "23014",
-            "Description": "FOOBAR************"
-        },
-        {
-            "OpportunityID": "34234",
-            "ClosingDate": "0000-00-00 00:00:00",
-            "ScoringCategoryBlob": null,
-            "LeadEvaluatorID": "2",
-            "Name": "name",
-            "LowestBid": "10000",
-            "Description": "desc"
-        },
-        {
-            "OpportunityID": "4444 ",
-            "ClosingDate": "0000-00-00 00:00:00",
-            "ScoringCategoryBlob": null,
-            "LeadEvaluatorID": "1",
-            "Name": "4444 Oppname",
-            "LowestBid": "10000",
-            "Description": "4444 Desc"
-        },
-        {
-            "OpportunityID": "54321",
-            "ClosingDate": "0000-00-00 00:00:00",
-            "ScoringCategoryBlob": null,
-            "LeadEvaluatorID": "2",
-            "Name": "name",
-            "LowestBid": "10000",
-            "Description": "desc"
-        },
-        {
-            "OpportunityID": "777777",
-            "ClosingDate": "2018-12-01 15:00:00",
-            "ScoringCategoryBlob": null,
-            "LeadEvaluatorID": "1",
-            "Name": "777Opp",
-            "LowestBid": "10000",
-            "Description": "777Desc"
-        },
-        {
-            "OpportunityID": "99999",
-            "ClosingDate": "0000-00-00 00:00:00",
-            "ScoringCategoryBlob": null,
-            "LeadEvaluatorID": "2",
-            "Name": "9999 Opportunity",
-            "LowestBid": "10000",
-            "Description": "9999 Description"
-        },
-        {
-            "OpportunityID": "tst-zz",
-            "ClosingDate": "0000-00-00 00:00:00",
-            "ScoringCategoryBlob": null,
-            "LeadEvaluatorID": "3",
-            "Name": "This is a great one",
-            "LowestBid": "10000",
-            "Description": "Buy now or dont"
-        }]
-};
-
-var fakesubmit= {"OpportunityID":"266",
-    "ClosingDate":"2019-02-14 12:00:00",
-    "ScoringCategoryBlob":null,
-    "LeadEvaluatorID":"2",
-    "Name":"Opp_266",
-    "LowestBid":"0",
-    "Description":"this is it************",
-    "Status":"New"
-};
-
-
-
-
-
-
-=======
-$(document).ready(
-    function () {
-        initNewOppForm();
-       $('#editOppPanel').hide();
-        $('#newOppPanel1').hide();
-        $('#listOppPanel').show();
-
-        $('#manageOpp').click(function () {
-            getOppList();
-            $('.table').tablesorter();
-            $("#oppsMenu option[id='opplist']").attr("selected", "selected");
-        });
-
-
-        $('#saveNewOpp').click(function () {
-            saveOpportunity();
-        });
-
-        $('#showNewOpp').click(function () {
-            showNewOpp();
-        });
-
-        $('#exitNewOpp').click(function () {
-            $('#newOppForm')[0].reset();
-            showOppList();
-        });
-
-        $('#clearNewOpp').click(function () {
-            $('#newOppForm')[0].reset();
-        });
-/*
-        $('#oppListTable tr').click(function () {
-            showOpp();
-        });
-*/
-
-        $('#oppTab').click(function () {
-            showOppList();
-        });
-        $('.oppListButton').click(function () {
-            showOppList();
-        });
-
-        $('#editOppButton').click(function () {
-            showEditOpp();
-        });
-
-        $('#exitNewOpp').click(function () {
-            $('#newOppPanel1').hide();
-        });
-
-        $('#uploadDocTemplates').click(function() {
-            alert("uploading files...");
-            uploadDocTemplates();
-        });
-
-        $('#clearDocTemplates').click(function () {
-            $('#uploadDocTemplatesForm').reset();
-        });
-
-        $('.table').tablesorter();
-
-        $("#selectCategory").change(function () {
-            //Storing the dropdown selection in category variable
-            category= $('#selectCategory option:selected').attr('id');
-            getOppListbyID(category);
-        });
-
-
-
-    });
-
-function showEditOpp(opId) {
-    //alert("Editing: " + oppId);
-    $('#listOppPanel').hide();
-    $('#newOppPanel1').hide();
-    $('#editOppPanel').show();
-    getOpportunity(opId);
-    getDocTemplates(opId);
-    $('#uploadDocTemplates').val(opId);
-    $('.table').tablesorter();
-}
-
-function showNewOpp() {
-    getLeadEvals();
-    $('#newOppPanel1').show();
-    $('#listOppPanel').hide();
-    var editor = new Jodit("#editor");
-    editor.setEditorValue('<p>start</p>')
-
-}
-
-function showOppList() {
-    getOppList();  //refresh list everytime
-    $('#newOppPanel1').hide();
-    $('#editOppPanel').hide();
-    $('#listOppPanel').show();
-}
-
-function saveJunk() {
-    $('clearFile').click(function () {
-    });
-}
-
-
-function getOpportunity(opId) {
-var xhr = new XMLHttpRequest();
-    var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php?OpportunityID="+opId;
+function processOpportunity(opId) {
+    var xhr = new XMLHttpRequest();
+    var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/update.php"
     xhr.open('POST', url);
-    xhr.onload = function () {
-    if (xhr.status == 200) {
-        var jsonArray = JSON.parse(xhr.responseText);
-        $("#oppNumber").text(jsonArray.OpportunityID);
-        $("#oppDate").text(jsonArray.ClosingDate);
-        $("#oppName").text(jsonArray.Name);
-        $("#oppType").text("Type");
-        $("#oppDesc").text(jsonArray.Description);
-    } else {
-        alert('');
-    }
-};
-xhr.send();
-}
-
-function getDocTemplates(opId) {
-    $('#docTemplatesBody').empty();
-    var xhr = new XMLHttpRequest();
-    var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/getDocTemplates.php?OpportunityID="+opId;
-    xhr.open('GET',url);
-    xhr.onload = function () {
-        if (xhr.status == 200) {
-            var jsonArray = JSON.parse(xhr.responseText);
-            var size = jsonArray.doctemplate.length;
-            for(var i = 0; i< size; i++) {
-                var template = jsonArray.doctemplate[i];
-                if (template.Url != null) {
-                    var row = "<tr><td>" + template.DocTitle + "</td><td><a class='btn btn-primary btn-lg' href='" + template.Url +
-                        "'><span class='glyphicon glyphicon-circle-arrow-down' aria-hidden='true'></span>   Download</a> " +
-                        "<button class='btn btn-delete btn-lg'><span class='glyphicon glyphicon-remove'" +
-                        "aria-hidden='true'></span> Delete </button></td></tr>";
-                    $('#docTemplatesBody').append(row);
-                    $("#docTempatesBody").trigger("update");
-                }
-            }
-
-        } else {
-            alert('Error retrieving Document Templates');
-        }
-    };
-    xhr.send();
-}
-function getOppList() {
-    $('#oppListTableBody').empty();
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php', true);
-    xhr.onload = function () {
-        if (xhr.status == 200) {
-            //var jsonArray = fakedata;
-            var jsonArray = JSON.parse(xhr.responseText);
-            var size = jsonArray.opportunity.length;
-            for (var i = 0; i < size; i++) {
-                var opp = jsonArray.opportunity[i];
-                var row = "<tr><td>" + opp.CategoryID + "</td></td><td>" + opp.OpportunityID + "</td><td>" + opp.Name +
-                    "</td><td>" + opp.ClosingDate + "</td><td>" + opp.Description + "</td><td>" +
-                    opp.Status + "</td><td>" +
-                    "<button onclick='showEditOpp(\"" + opp.OpportunityID + "\")' id='editOppButton' value='" + opp.OpportunityID + "' type='button' class='btn btn-primary btn-lg'>" +
-                    "<span class='glyphicon glyphicon-eye-open' aria-hidden='true'></span> View</button></td></tr>";
-                $('#oppListTableBody').append(row);
-                $("#oppListTableBody").trigger("update");
-
-            }
-        } else {
-            alert("Error response");
-        }
-    };
-    xhr.send();
-
-}
-
-function initNewOppForm() {
-    getOppList();
-    getCategories();
-}
-
-function uploadScoring(file, opId) {
-    /* Upload scoring criteria*/
-    console.log(file.name);
     var formData = new FormData();
     formData.append('OpportunityID', opId);
-    formData.append('filename', file, file.name);
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/uploadScoringCriteria.php');
-    //xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.onload = function () {
-        if (xhr.status == 200) {
-            alert('Scoring File uploaded');
-        } else {
-            alert('Error uploading scoring file');
-        }
-    };
-    xhr.send(formData);
-}
-function uploadDocTemplates() {
-    /*upload other documents */
-    var numfiles =  $('#uploadMFileName')[0].files.length;
-    var file;
-    var formData=new FormData();
-    for(i=0;i<numfiles;i++){
-        file = $('#uploadMFileName')[0].files[i];
-        formData.append('filename[]', file,file.name);
-        console.log(file.name);
-    }
-    formData.append('OpportunityID','2');
-    formData.append('submit','Upload Image');
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/uploadDocArray.php');
-    xhr.onload = function() {
-        if(xhr.status == 200) {
-            alert('File uploaded');
-            console.log(xhr.responseText);
-            $('#uploadMFileName').val("");
-        } else {
-        alert('Error uploading file');
-        }
-    };
-    xhr.send(formData);
-}
-
-function getLeadEvals() {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://athena.ecs.csus.edu/~wildcard/php/api/employee/read.php', true);
-    xhr.onload = function () {
-        if (xhr.status == 200) {
-            var jsonArray = JSON.parse(xhr.responseText);
-            var size = jsonArray.employee.length;
-            for (var i = 0; i < size; i++) {
-                var lead = jsonArray.employee[i];
-                var name = lead.first_name + " " + lead.last_name;
-                $('select').append($('<option>', {value: lead.id, text: name}));
-            }
-        } else {
-            alert("Error response");
-        }
-    };
-    xhr.send();
-}
-
-function saveOpportunity() {
-    var scoreFile = $('#criteriaFile')[0].files[0];
-    var opId = $('#formIdInput').val();
-    var name = $('#formNameInput').val();
-    var desc = $('#formDescriptionInput').val();
-    var close = $('#close_date').val() + " " + $('#close_time').val();
-    var lead = parseInt($('#selectLead').val());
-    var jsonRecord =
-        {"OpportunityID": opId,
-            "ClosingDate":close,
-            //"ScoringCategoryBlob":null,
-            "LeadEvaluatorID":lead,
-            "Name":name,
-            "LowestBid":"0",
-            "Description":desc,
-            "Status":"New"
-        };
-
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/create.php', true);
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=utf-8');  //Creates an  error
+    formData.append('StatusID', "7");
     xhr.onload = function () {
         if (xhr.status == 200) {
             var retval = xhr.responseText;
-            var failed = retval.includes("failed");
-            if(!failed) {
-                uploadScoring(scoreFile,opId);
-                showEditOpp(opId);
-            }
+            var failed = retval.includes('failed');
+            if (failed)
+                return;
             else
-                alert("Failed to create new opportunity");
+                alert("Status changed to 'Ready for Review'");
         } else {
-            alert("500: Server error saving opportunity");
+            alert('Unable update Opportunity ' + opId);
         }
-    };
-    var jsonString = JSON.stringify(jsonRecord);
-    xhr.send(jsonString);
-    console.log("Wrote Json: " + jsonString);
-}
-
-//get all categories to populate dropdown
-function getCategories(){
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/getOppCategoryList.php',true);
-    xhr.onload = function() {
-        if (xhr.status == 200) {
-            var jsonArray = JSON.parse(xhr.responseText);
-            fillCategoryDropdown(jsonArray);
-        } else {
-            alert("Error response");
-        }
-    };
-    xhr.send();
-}
-
-//Fill dropdown with categories
-function fillCategoryDropdown(jsonArray){
-    var start = 0;
-    var select = document.getElementById("selectCategory")
-    var size = jsonArray.Category.length;
-
-    for(var i=start;i<size;i++) {
-        var option = document.createElement("OPTION");
-        txt = document.createTextNode(jsonArray.Category[i].Name);
-        option.appendChild(txt);
-        option.setAttribute("value", jsonArray.Category[i].Name)
-        option.setAttribute("id", jsonArray.Category[i].CategoryID)
-        select.insertBefore(option, select.lastChild);
+        //alert("processed: " + opId);
     }
+    xhr.send(formData);
 }
 
 var fakelist = {
@@ -1031,9 +675,4 @@ var fakesubmit= {"OpportunityID":"266",
     "Status":"New"
 };
 
-
-
-
-
-
->>>>>>> b7a1128a2e4b66013440bbcc88e9d74bbe454cd8
+var categoryArray = {"Category":[{"CategoryID":"0","Name":"None"},{"CategoryID":"1","Name":"Actuarial Services"},{"CategoryID":"2","Name":"Architecture & Engineering"},{"CategoryID":"3","Name":"Construction"},{"CategoryID":"4","Name":"Consulting"},{"CategoryID":"5","Name":"Health"},{"CategoryID":"6","Name":"Information Technology"},{"CategoryID":"7","Name":"Investments (Non-manager)"},{"CategoryID":"8","Name":"Legal Services - Outside Counsel"},{"CategoryID":"9","Name":"Mailing"},{"CategoryID":"10","Name":"Miscellaneous"},{"CategoryID":"11","Name":"Photography\/Video Services"},{"CategoryID":"12","Name":"Printing\/Reproduction\/Graphic Design"}]};
