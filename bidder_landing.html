@@ -323,7 +323,28 @@ li,td,th {
                                 </table>
                             </div>
                             <div class="col-md-12" id="spa-message-detail">
-                                Message Detail
+                                <h2>Message Type: <span id="message-detail-type">Message type placeholder</span></h2>
+                                <h2>Time Received: <span id="message-detail-time-received">Message time received placeholder</span></h2>
+                                <h2 id="message-detail-time-responded-header">Time Responded: <span id="message-detail-time-responded">Message time response placeholder</span></h2>
+                                <h2>Message Body:</h2>
+                                <span id="message-detail-body">Placeholder message body</span>
+                                <br>
+                                <br>
+                                <div id="" class="form-group">
+                                    <label>Response</label>
+                                    <textarea class="form-control" id="message-response-editor" rows="4"
+                                              placeholder="Enter your response here." required></textarea>
+                                </div>
+
+                                <div class="row marketing">
+                                    <div class="col-md-2">
+                                        <a id="send-message-btn" class="btn btn-primary">Send Message</a>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <a id="discard-message-btn" class="btn btn-primary">Discard Message</a>
+                                        <a id="message-detail-back-btn" class="btn btn-primary" >Back to Messages</a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 				    </div>

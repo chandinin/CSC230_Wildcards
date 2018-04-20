@@ -23,6 +23,10 @@ $(document).ready(function(){
     // TODO: Figure out a good way to pass bidder ID around the site
     bidder_id = "1";
     activateOpportunitiesList();
+
+
+    d = new Date().setMonth(10);
+    timeRemainingCallback.start(function(date) { console.log(date); }, d);
 });
 
 
@@ -189,6 +193,37 @@ function millisecondsToReasonable(ms)
     return {"days":days, "hours": hours, "minutes": minutes, "seconds": seconds};
 }
 
+// Returns json with keys Days, hours, minutes, seconds
+function reasonableTimeRemaining(target_date)
+{
+    remaining = target_date - new Date();
+    return millisecondsToReasonable(remaining);
+}
+
+// What have I done..
+// start method requires a callback that will take a "reasonableTime" json, and a Date object for the target date
+// - will then immediately start calling
+// stop method will stop the chain...
+// Only one callback can be running at a given time
+function timeRemainingCallback(target_date)
+{
+    TIMEOUT_mSEC = 5000; 
+    if(timeRemainingCallback.stop_flag)
+        return;
+    else 
+    {
+        timeRemainingCallback.callback(reasonableTimeRemaining(target_date));
+        window.setTimeout(timeRemainingCallback, TIMEOUT_mSEC, target_date);
+    }
+}
+
+timeRemainingCallback.stop = function() { timeRemainingCallback.stop_flag = true; };
+timeRemainingCallback.start = function(cb, target_date)
+{ 
+    timeRemainingCallback.stop_flag = false; 
+    timeRemainingCallback.callback = cb;
+    timeRemainingCallback(target_date);
+};
 
 /**************************
  * spa-opportunities-list *
@@ -855,6 +890,7 @@ function fillCategoryDropdown(jsonArray){
 /********************
  * spa-message-list *
  ********************/
+ // Caution: Super sjank!
 
 function activateMessageList()
 {
@@ -925,13 +961,63 @@ function populateMessageList()
 
 function activateMessageDetail(message_id)
 {
-    initializeMessageList(message_id);
+    initializeMessageDetail(message_id);
     router("#spa-message-detail");
 }
 
 function initializeMessageDetail(message_id)
 {
 
+    // Ajax to get the specific message
+    populateMessageDetail(null);
+
 }
+
+// <h2>Message Type: <span id="message-detail-type">Message type placeholder</span></h2>
+// <h2>Time Received: <span id="message-detail-time-received">Message time received placeholder</span></h2>
+// <h2 id="message-detail-time-responded-header" class="hidden">Time Responded: <span id="message-detail-time-responded">Message time response placeholder</span></h2>
+// <a id="send-message-btn" class="btn btn-primary hidden">Send Message</a>
+// <a id="discard-message-btn" class="btn btn-primary  hidden">Discard Message</a>
+// <a id="message-detail-back-btn" class="btn btn-primary hidden" >Back to Messages</a>
+
+
+function populateMessageDetail(message)
+{
+    message_was_responded_to = true;
+    message = {};
+    message.body = "Jejejejjej"
+
+    
+    $("#message-detail-body").text(message.body);
+
+    if(message_was_responded_to)
+    {
+        // Hide these
+        $("#send-message-btn").hide();
+        $("#discard-message-btn").hide();
+
+        //Unhide these
+        $("#message-detail-time-responded-header").show();
+        $("#message-detail-back-btn").show();
+
+        // Set these
+        $("#message-response-editor").text("this was your response")
+    }
+    else
+    {
+        // Show these
+        $("#send-message-btn").show();
+        $("#discard-message-btn").show();
+
+        // Hide these
+        $("#message-detail-time-responded-header").hide();
+        $("#message-detail-back-btn").hide();
+    }
+
+    // Populate all fields
+
+}
+
+
 
 
