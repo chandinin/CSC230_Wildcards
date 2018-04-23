@@ -2,6 +2,7 @@ $(document).ready(
     function () {
         initNewOppForm(0);
        $('#editOppPanel').hide();
+        $('#editOppPanel2').hide();
         $('#newOppPanel1').hide();
         $('#listOppPanel').show();
 
@@ -62,8 +63,8 @@ $(document).ready(
             showOppList(0);
         });
 
-        $('#editOppButton').click(function () {
-            showEditOpp();
+        $('#oppEditButton').click(function () {
+            showEditOpp($("#oppNumber").text());
         });
 
         $('#exitNewOpp').click(function () {
@@ -113,16 +114,32 @@ $(document).ready(
             "blockquote": true, //Blockquote
          });
 
+        $('#docTemplatesBody').sortable();
     });
 
-function showEditOpp(opId) {
+function showOppView(opId) {
     $('#listOppPanel').hide();
     $('#newOppPanel1').hide();
     $('#editOppPanel').show();
     getOpportunity(opId);
+    getDocTemplatesView(opId);
+    $('#uploadDocTemplates').val(opId);
+    $('.table').tablesorter();
+}
+
+function showEditOpp(opId) {
+    $('#listOppPanel').hide();
+    $('#newOppPanel1').hide();
+    $('#editOppPanel').hide();
+    $('#editOppPanel2').show();
+    getOpportunityEdit(opId);
     getDocTemplates(opId);
     $('#uploadDocTemplates').val(opId);
     $('.table').tablesorter();
+}
+
+function saveEditOpp(opId) {
+    var sortedIDs = $( "#docTemplatesBody" ).sortable( "toArray");
 }
 
 function showNewOpp() {
@@ -133,9 +150,9 @@ function showNewOpp() {
 }
 
 function showOppList(type) {
-    getOppList(type);  //refresh list everytime
     $('#newOppPanel1').hide();
     $('#editOppPanel').hide();
+    $('#editOppPanel2').hide();
     switch (type) {
         case 1:
             $('#listOppPanel').hide();
@@ -163,11 +180,14 @@ function showOppList(type) {
             break;
     }
 
+    getOppList(type);  //refresh list everytime
+
+
 }
 
 function getOpportunity(opId) {
 var xhr = new XMLHttpRequest();
-    var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php?OpportunityID="+opId;
+    var url= "http://athena.ecs.csus.edu/~mackeys/php/api/opportunity/read.php?OpportunityID="+opId;
     xhr.open('POST', url);
 
     xhr.onload = function () {
@@ -179,7 +199,7 @@ var xhr = new XMLHttpRequest();
         $("#oppName").text(oppArray.Name);
         $("#oppType").text(catName);
         $("#oppDesc").html(oppArray.Description);
-        $("#oppScore").html("<a href='http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/getScoringCriteria.php?OpportunityID="+opId+"'>" +
+        $("#oppScore").html("<a href='http://athena.ecs.csus.edu/~mackeys/php/api/opportunity/getScoringCriteria.php?OpportunityID="+opId+"'>" +
             "View Scoring Criteria</a>");
     } else {
         alert('Unable to locate Opportunity '+ opId);
@@ -188,11 +208,33 @@ var xhr = new XMLHttpRequest();
 xhr.send();
 }
 
+function getOpportunityEdit(opId) {
+    var xhr = new XMLHttpRequest();
+    var url= "http://athena.ecs.csus.edu/~mackeys/php/api/opportunity/read.php?OpportunityID="+opId;
+    xhr.open('POST', url);
+
+    xhr.onload = function () {
+        if (xhr.status == 200) {
+            var oppArray = JSON.parse(xhr.responseText);
+            var catName = categoryArray.Category[oppArray.CategoryID].Name;
+            $("#editoppNumber").text(oppArray.OpportunityID);
+            $("#editoppDate").text(oppArray.ClosingDate);
+            $("#editoppName").text(oppArray.Name);
+            $("#editoppType").text(catName);
+            $("#editoppDesc").html(oppArray.Description);
+            $("#editoppScore").html("<a href='http://athena.ecs.csus.edu/~mackeys/php/api/opportunity/getScoringCriteria.php?OpportunityID="+opId+"'>" +
+                "View Scoring Criteria</a>");
+        } else {
+            alert('Unable to locate Opportunity '+ opId);
+        }
+    };
+    xhr.send();
+}
 
 function getDocTemplates(opId) {
     $('#docTemplatesBody').empty();
     var xhr = new XMLHttpRequest();
-    var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/getDocTemplates.php?OpportunityID="+opId;
+    var url= "http://athena.ecs.csus.edu/~mackeys/php/api/opportunity/getDocTemplates.php?OpportunityID="+opId;
     xhr.open('GET',url);
     xhr.onload = function () {
         if (xhr.status == 200) {
@@ -205,7 +247,7 @@ function getDocTemplates(opId) {
             for(var i = 0; i< size; i++) {
                 var template = docArray.doctemplate[i];
                 if (template.Url != null) {
-                    var row = "<tr><td>" + template.DocTitle + "</td><td>" + "<a href ='" + template.Url + "'>" +
+                    var row = "<tr id='" + template.DocTemplateID + "'><td>" + template.DocTitle + "</td><td>" + "<a href ='" + template.Url + "'>" +
                     template.DocTitle + "</a></td><td>" + "Posted Date" +
                         "</td><td><a href onclick='editDoc(" + opId + "," + template.DocTemplateID + ")'" + "class='btn btn-primary btn-lg'>" +
                         "<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>   Edit</a> " +
@@ -214,6 +256,37 @@ function getDocTemplates(opId) {
                         "aria-hidden='true'></span> Delete </a></td></tr>";
                     $('#docTemplatesBody').append(row);
                     $("#docTempatesBody").trigger("update");
+                }
+            }
+
+        } else {
+            alert('Error retrieving Document Templates');
+        }
+    };
+    xhr.send();
+}
+
+
+function getDocTemplatesView(opId) {
+    $('#docTemplatesBodyView').empty();
+    var xhr = new XMLHttpRequest();
+    var url= "http://athena.ecs.csus.edu/~mackeys/php/api/opportunity/getDocTemplates.php?OpportunityID="+opId;
+    xhr.open('GET',url);
+    xhr.onload = function () {
+        if (xhr.status == 200) {
+            var retval = xhr.responseText;
+            var failed = retval.includes('error');
+            if(failed)
+                return;
+            var docArray= JSON.parse(retval);
+            var size = docArray.doctemplate.length;
+            for(var i = 0; i< size; i++) {
+                var template = docArray.doctemplate[i];
+                if (template.Url != null) {
+                    var row = "<tr><td>" + template.DocTitle + "</td><td>" + "<a href ='" + template.Url + "'>" +
+                        template.DocTitle + "</a></td><td>" + "Posted Date" + "</td></tr>";
+                    $('#docTemplatesBodyView').append(row);
+                    $("#docTempatesBodyView").trigger("update");
                 }
             }
 
@@ -234,9 +307,16 @@ function deleteDoc(opId, templateId) {
 }
 
 function getOppList(type) {
+    /*
+    //Athena down 4.22.18
+    var oppArray = fakelist;
+    fillOppTable(oppArray,type);
+    return;
+    */
+
     $('#oppListTableBody').empty();
     var xhr = new XMLHttpRequest();
-    var url = "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php";
+    var url = "http://athena.ecs.csus.edu/~mackeys/php/api/opportunity/read.php";
     switch (type)  {
         case 1:
             url = url + "?status=1";
@@ -287,7 +367,7 @@ function fillOppTable(oppArray,type) {
         var row = "<tr><td>" + catName + "</td></td><td>" + opp.OpportunityID + "</td><td>" + opp.Name +
             "</td><td>" + opp.ClosingDate + "</td><td>" + opp.LastEditDate + "</td><td>" + opp.Description + "</td><td>" +
             opp.StatusName + "</td><td>" +
-            "<button onclick='showEditOpp(\"" + opp.OpportunityID + "\")' id='editOppButton' value='" + opp.OpportunityID + "' type='button' class='btn btn-primary btn-lg'>" +
+            "<button onclick='showOppView(\"" + opp.OpportunityID + "\")' id='editOppButton' value='" + opp.OpportunityID + "' type='button' class='btn btn-primary btn-lg'>" +
             "<span class='glyphicon glyphicon-eye-open' aria-hidden='true'></span> View</button></td></tr>";
         //$('#oppListTableBody').append(row);
         //$("#oppListTableBody").trigger("update");
@@ -298,7 +378,7 @@ function fillOppTable(oppArray,type) {
 }
 
 function getOppListbyCategory(category) {
-    url = 'http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php';
+    url = 'http://athena.ecs.csus.edu/~mackeys/php/api/opportunity/read.php';
     if(category !=="0")
         url = url + '?CategoryID='+category;
     $('#oppListTableBody').empty();
@@ -330,7 +410,7 @@ function uploadScoring(file, opId) {
     formData.append('OpportunityID', opId);
     formData.append('filename', file, file.name);
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/uploadScoringCriteria.php');
+    xhr.open('POST', 'http://athena.ecs.csus.edu/~mackeys/php/api/opportunity/uploadScoringCriteria.php');
     //xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.onload = function () {
         if (xhr.status == 200) {
@@ -354,7 +434,7 @@ function uploadDocTemplates(opId) {
     formData.append('OpportunityID',opId);
     formData.append('submit','Upload Image');
     var xhr = new XMLHttpRequest();
-    xhr.open('POST','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/uploadDocArray.php');
+    xhr.open('POST','http://athena.ecs.csus.edu/~mackeys/php/api/opportunity/uploadDocArray.php');
     xhr.onload = function() {
         if(xhr.status == 200) {
             alert('File uploaded');
@@ -369,7 +449,7 @@ function uploadDocTemplates(opId) {
 
 function getLeadEvals() {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://athena.ecs.csus.edu/~wildcard/php/api/employee/read.php', true);
+    xhr.open('GET', 'http://athena.ecs.csus.edu/~mackeys/php/api/employee/read.php', true);
     xhr.onload = function () {
         if (xhr.status == 200) {
             var evalArray = JSON.parse(xhr.responseText);
@@ -406,7 +486,7 @@ function saveOpportunity() {
         };
 
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/create.php', true);
+    xhr.open('POST', 'http://athena.ecs.csus.edu/~mackeys/php/api/opportunity/create.php', true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=utf-8');  //Creates an  error
     xhr.onload = function () {
         if (xhr.status == 200) {
@@ -430,7 +510,7 @@ function saveOpportunity() {
 //get all categories to populate dropdown
 function getCategories(select){
     var xhr = new XMLHttpRequest();
-    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/getOppCategoryList.php',true);
+    xhr.open('GET','http://athena.ecs.csus.edu/~mackeys/php/api/opportunity/getOppCategoryList.php',true);
     xhr.onload = function() {
         if (xhr.status == 200) {
             var catArray = JSON.parse(xhr.responseText);
@@ -461,7 +541,7 @@ function fillCategoryDropdown(catArray, select){
 
 function processOpportunity(opId) {
     var xhr = new XMLHttpRequest();
-    var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/update.php"
+    var url= "http://athena.ecs.csus.edu/~mackeys/php/api/opportunity/update.php"
     xhr.open('POST', url);
     var formData = new FormData();
     formData.append('OpportunityID', opId);

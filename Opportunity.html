@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/bootstrap3-wysihtml5.css">
     <link rel="stylesheet" href="css/opportunity.css">
-
+    <link rel="stylesheet" href="bootstrap-editable1.5.1.js/bootstrap3-editable/css/bootstrap-editable.css">
 
     <!--
 -->
@@ -194,7 +194,7 @@
                             </div>
                             <!--/.Create Panel 2-->
 
-                            <!-- Edit Panel 3 -->
+                            <!-- View Panel 3 -->
                             <div class="col-md-8 clearfix bid-opportunities" id="editOppPanel">
                                 <div class="row">
                                     <div class="col-md-6">
@@ -206,7 +206,7 @@
                                         </button>
                                     </div>
                                     <div class="col-md-3">
-                                        <button type="button" class="btn btn-primary btn-lg oppEditButton">
+                                        <button id="oppEditButton" type="button" class="btn btn-primary btn-lg oppEditButton">
                                             <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit
                                         </button>
                                     </div>
@@ -243,41 +243,21 @@
 
                                 <div class="col-12">
                                     <h4>Existing documents attached to this opportunity.</h4>
-                                    <form>
-                                        <table id="listDocTemplates" class="table table-responsive">
+                                        <table id="listDocTemplatesView" class="table table-responsive">
                                             <thead>
                                             <th scope="col">Title</th>
                                             <th scope="col">File Name</th>
                                             <th scope="col">Posted Date</th>
-                                            <th scope="col">Action</th>
                                             </thead>
-                                            <tbody id="docTemplatesBody" class="table table-bordered table-striped table-hover" >
+                                            <tbody id="docTemplatesBodyView" class="table table-bordered table-striped table-hover" >
 
                                             </tbody>
                                         </table>
-                                    </form>
                                 </div>
-                                <div class="row">
-                                    <form id="uploadDocTemplatesForm" >
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                        <label class="my-1 mr-2" for="uploadMFileName">New Document(s) Upload </label>
-                                                        <input type="file" id="uploadMFileName" name="uploadMFileName" multiple>
-                                                </div>
-                                            </div>
-                                    </form>
-                                        </div>
-
-                                        <div class="col-12" >
-                                            <div class="form-group">
-                                                <button id="uploadDocTemplates" value="" type="button" class="btn btn-primary">Upload</button>
-                                                <button id="clearDocTemplates" type="button" class="btn btn-primary">Clear</button>
-                                            </div>
-                                        </div>
 
                                 </div>
                             </div>
-                            <!-- Edit Panel 3 -->
+                            <!-- View Panel 3 -->
 
                             <!--Edit Panel 4-->
                         <div class="col-md-8 clearfix bid-opportunities" id="editOppPanel2">
@@ -287,11 +267,15 @@
                                 </div>
                                 <div class="col-md-3" >
                                     <button type="button" class="btn btn-success btn-lg oppListButton">
-                                        <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>Save
+                                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>Save
+                                    </button>
+                                </div>
+                                <div class="col-md-3" >
+                                    <button type="button" class="btn btn-primary btn-lg oppListButton">
+                                        <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>Exit Back to List
                                     </button>
                                 </div>
                             </div>
-                            <br>
                             <div class="row">
                                 <form id="editExistOpp">
                                 <div class="col-md-12">
@@ -545,6 +529,8 @@
 <script src="js/widget-storage.js"></script>
 <script src="js/widget-filter.js"></script>
 <script src="js/bootstrap3-wysihtml5.all.min.js"></script>
+<script src="bootstrap-editable1.5.1.js/bootstrap3-editable/js/bootstrap-editable.js"></script>
+<script src="jquery-ui-1.12.1.custom/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
 </body>
 
 </html>
