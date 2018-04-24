@@ -1,7 +1,17 @@
 $(document).ready(
     function () {
         initNewOppForm(0);
+        //turn to inline mode
+        $.fn.editable.defaults.mode = 'inline';
+        $('#editoppName').editable();
+        $('#editoppDate').editable();
+        $('#editoppDesc').editable();
+        $('#editoppSave').click(function() {
+            saveEditOpp($("#editoppNumber").text());
+        });
+
        $('#editOppPanel').hide();
+        $('#editOppPanel2').hide();
         $('#newOppPanel1').hide();
         $('#listOppPanel').show();
 
@@ -62,8 +72,8 @@ $(document).ready(
             showOppList(0);
         });
 
-        $('#editOppButton').click(function () {
-            showEditOpp();
+        $('#oppEditButton').click(function () {
+            showEditOpp($("#oppNumber").text());
         });
 
         $('#exitNewOpp').click(function () {
@@ -113,16 +123,33 @@ $(document).ready(
             "blockquote": true, //Blockquote
          });
 
+        $('#docTemplatesBody').sortable();
     });
 
-function showEditOpp(opId) {
+function showOppView(opId) {
     $('#listOppPanel').hide();
     $('#newOppPanel1').hide();
     $('#editOppPanel').show();
     getOpportunity(opId);
+    getDocTemplatesView(opId);
+    $('#uploadDocTemplates').val(opId);
+    $('.table').tablesorter();
+}
+
+function showEditOpp(opId) {
+    $('#listOppPanel').hide();
+    $('#newOppPanel1').hide();
+    $('#editOppPanel').hide();
+    $('#editOppPanel2').show();
+    getOpportunityEdit(opId);
     getDocTemplates(opId);
     $('#uploadDocTemplates').val(opId);
     $('.table').tablesorter();
+}
+
+function saveEditOpp(opId) {
+    var sortedIDs = $( "#docTemplatesBody" ).sortable( "toArray");
+    alert("Saving changes to opportunity number " + opId);
 }
 
 function showNewOpp() {
@@ -133,9 +160,9 @@ function showNewOpp() {
 }
 
 function showOppList(type) {
-    getOppList(type);  //refresh list everytime
     $('#newOppPanel1').hide();
     $('#editOppPanel').hide();
+    $('#editOppPanel2').hide();
     switch (type) {
         case 1:
             $('#listOppPanel').hide();
@@ -163,6 +190,9 @@ function showOppList(type) {
             break;
     }
 
+    getOppList(type);  //refresh list everytime
+
+
 }
 
 function getOpportunity(opId) {
@@ -188,6 +218,28 @@ var xhr = new XMLHttpRequest();
 xhr.send();
 }
 
+function getOpportunityEdit(opId) {
+    var xhr = new XMLHttpRequest();
+    var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php?OpportunityID="+opId;
+    xhr.open('POST', url);
+
+    xhr.onload = function () {
+        if (xhr.status == 200) {
+            var oppArray = JSON.parse(xhr.responseText);
+            var catName = categoryArray.Category[oppArray.CategoryID].Name;
+            $("#editoppNumber").text(oppArray.OpportunityID);
+            $("#editoppDate").text(oppArray.ClosingDate);
+            $("#editoppName").text(oppArray.Name);
+            $("#editoppType").text(catName);
+            $("#editoppDesc").html(oppArray.Description);
+            $("#editoppScore").html("<a href='http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/getScoringCriteria.php?OpportunityID="+opId+"'>" +
+                "View Scoring Criteria</a>");
+        } else {
+            alert('Unable to locate Opportunity '+ opId);
+        }
+    };
+    xhr.send();
+}
 
 function getDocTemplates(opId) {
     $('#docTemplatesBody').empty();
@@ -205,15 +257,46 @@ function getDocTemplates(opId) {
             for(var i = 0; i< size; i++) {
                 var template = docArray.doctemplate[i];
                 if (template.Url != null) {
-                    var row = "<tr><td>" + template.DocTitle + "</td><td>" + "<a href ='" + template.Url + "'>" +
+                    var row = "<tr id='" + template.DocTemplateID + "'><td class='changeable'>" + template.DocTitle + "</td><td>" + "<a href ='" + template.Url + "'>" +
                     template.DocTitle + "</a></td><td>" + "Posted Date" +
-                        "</td><td><a href onclick='editDoc(" + opId + "," + template.DocTemplateID + ")'" + "class='btn btn-primary btn-lg'>" +
-                        "<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>   Edit</a> " +
+                        "</td><td>" +
                         "<a onclick='deleteDoc(" + opId + "," + template.DocTemplateID + ")'" +
                         "class='btn btn-delete btn-lg'><span class='glyphicon glyphicon-remove'" +
                         "aria-hidden='true'></span> Delete </a></td></tr>";
                     $('#docTemplatesBody').append(row);
                     $("#docTempatesBody").trigger("update");
+                    $(".changeable").editable();
+                }
+            }
+
+        } else {
+            alert('Error retrieving Document Templates');
+        }
+    };
+    xhr.send();
+}
+
+
+function getDocTemplatesView(opId) {
+    $('#docTemplatesBodyView').empty();
+    var xhr = new XMLHttpRequest();
+    var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/getDocTemplates.php?OpportunityID="+opId;
+    xhr.open('GET',url);
+    xhr.onload = function () {
+        if (xhr.status == 200) {
+            var retval = xhr.responseText;
+            var failed = retval.includes('error');
+            if(failed)
+                return;
+            var docArray= JSON.parse(retval);
+            var size = docArray.doctemplate.length;
+            for(var i = 0; i< size; i++) {
+                var template = docArray.doctemplate[i];
+                if (template.Url != null) {
+                    var row = "<tr><td>" + template.DocTitle + "</td><td>" + "<a href ='" + template.Url + "'>" +
+                        template.DocTitle + "</a></td><td>" + "Posted Date" + "</td></tr>";
+                    $('#docTemplatesBodyView').append(row);
+                    $("#docTempatesBodyView").trigger("update");
                 }
             }
 
@@ -234,6 +317,13 @@ function deleteDoc(opId, templateId) {
 }
 
 function getOppList(type) {
+    /*
+    //Athena down 4.22.18
+    var oppArray = fakelist;
+    fillOppTable(oppArray,type);
+    return;
+    */
+
     $('#oppListTableBody').empty();
     var xhr = new XMLHttpRequest();
     var url = "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php";
@@ -287,7 +377,7 @@ function fillOppTable(oppArray,type) {
         var row = "<tr><td>" + catName + "</td></td><td>" + opp.OpportunityID + "</td><td>" + opp.Name +
             "</td><td>" + opp.ClosingDate + "</td><td>" + opp.LastEditDate + "</td><td>" + opp.Description + "</td><td>" +
             opp.StatusName + "</td><td>" +
-            "<button onclick='showEditOpp(\"" + opp.OpportunityID + "\")' id='editOppButton' value='" + opp.OpportunityID + "' type='button' class='btn btn-primary btn-lg'>" +
+            "<button onclick='showOppView(\"" + opp.OpportunityID + "\")' id='editOppButton' value='" + opp.OpportunityID + "' type='button' class='btn btn-primary btn-lg'>" +
             "<span class='glyphicon glyphicon-eye-open' aria-hidden='true'></span> View</button></td></tr>";
         //$('#oppListTableBody').append(row);
         //$("#oppListTableBody").trigger("update");
