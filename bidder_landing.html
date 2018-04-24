@@ -202,6 +202,9 @@ li,td,th {
                                 <a class="nav-link" data-toggle="tab" id="proposals-tab" href="#proposals-panel" role="tab">View Your Proposals</a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" id="subscriptions-tab" href="#subscriptions-panel" role="tab">Manage Your Subscriptions</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" id="messages-tab" href="#messages-panel" role="tab">View Your Messages <span id="num-unread-messages" class="badge badge-pill badge-primary">1</span></a>
                             </li>
                         </ul>
@@ -287,6 +290,7 @@ li,td,th {
                                 <h3 id="opportunity-title">TODO: Opportunity Title</h3>
                                 <h5 id="opportunity-countdown">Close Date and Time: TODO</h5>
                                 <h5 id="proposal-time-last-edit"></h5>
+                                <h5 id="proposal-time-remaining"></h5>
 
                                 <span>Please download, fill out, and upload all requested forms. You can come back and edit your documents at any time before the deadline for submissions, just press 'save and come back later'</span>
                                 <ul id="opp-doc-templates-list">
@@ -345,6 +349,13 @@ li,td,th {
                                         <a id="message-detail-back-btn" class="btn btn-primary" >Back to Messages</a>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="col-md-12" id="spa-manage-subscriptions">
+                                <h2>Please check all categories that you'd like to be notified of new opportunities</h2>
+                                <form id="subscriptions-form">
+                                    <!-- Category buttons will go here -->
+                                    <!-- Submit button will go here -->
+                                </form>
                             </div>
                         </div>
 				    </div>

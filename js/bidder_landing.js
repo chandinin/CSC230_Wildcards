@@ -7,6 +7,7 @@ $(document).ready(function(){
     $("#proposals-tab").click(function() { activateProposalsList(); });
     $("#opportunities-tab").click(function() { activateOpportunitiesList(); });
     $("#messages-tab").click(function() { activateMessageList(); });
+    $("#subscriptions-tab").click(function() {activateManageSubscriptions(); });
 
     $("#opportunities-list-table").tablesorter();
     $("#proposals-list-table").tablesorter();
@@ -23,10 +24,6 @@ $(document).ready(function(){
     // TODO: Figure out a good way to pass bidder ID around the site
     bidder_id = "1";
     activateOpportunitiesList();
-
-
-    d = new Date().setMonth(10);
-    timeRemainingCallback.start(function(date) { console.log(date); }, d);
 });
 
 
@@ -41,7 +38,8 @@ function router(div_to_show)
                     "#spa-proposals-list",
                     "#spa-edit-proposal",
                     "#spa-message-list",
-                    "#spa-message-detail"
+                    "#spa-message-detail",
+                    "#spa-manage-subscriptions"
                ];
 
     if(!(div_list.includes(div_to_show)))
@@ -200,6 +198,20 @@ function reasonableTimeRemaining(target_date)
     return millisecondsToReasonable(remaining);
 }
 
+function isReasonableTimeNegative(reasonable_time)
+{
+    SECONDS_PER_MINUTE = 60;
+    MINUTES_PER_HOUR = 60;
+    HOURS_PER_DAY = 24;
+
+    seconds = reasonable_time.seconds;
+    seconds += reasonable_time.minutes * SECONDS_PER_MINUTE;
+    seconds += reasonable_time.hours * MINUTES_PER_HOUR * SECONDS_PER_MINUTE;
+    seconds += reasonable_time.days * HOURS_PER_DAY * MINUTES_PER_HOUR * SECONDS_PER_MINUTE;
+
+    return seconds < 0;
+}
+
 // What have I done..
 // start method requires a callback that will take a "reasonableTime" json, and a Date object for the target date
 // - will then immediately start calling
@@ -207,17 +219,17 @@ function reasonableTimeRemaining(target_date)
 // Only one callback can be running at a given time
 function timeRemainingCallback(target_date)
 {
-    TIMEOUT_mSEC = 5000; 
+    TIMEOUT_mSEC = 1000; 
     if(timeRemainingCallback.stop_flag)
         return;
     else 
     {
         timeRemainingCallback.callback(reasonableTimeRemaining(target_date));
-        window.setTimeout(timeRemainingCallback, TIMEOUT_mSEC, target_date);
+        timeRemainingCallback.timeout =  window.setTimeout(timeRemainingCallback, TIMEOUT_mSEC, target_date);
     }
 }
 
-timeRemainingCallback.stop = function() { timeRemainingCallback.stop_flag = true; };
+timeRemainingCallback.stop = function() { clearTimeout(timeRemainingCallback.timeout); timeRemainingCallback.stop_flag = true; };
 timeRemainingCallback.start = function(cb, target_date)
 { 
     timeRemainingCallback.stop_flag = false; 
@@ -416,6 +428,7 @@ function activateCreateProposal(opportunity_id)
 
 function initializeCreateProposal(opportunity_id)
 {
+    $("#proposal-save-btn").show();
     // Probably want to make this synchronous, so that we can populate the doc list then do other things
     $.ajax({
         url: "php/api/opportunity/getDocTemplates.php?opportunityid="+opportunity_id, 
@@ -428,7 +441,8 @@ function initializeCreateProposal(opportunity_id)
         url: "php/api/opportunity/read.php", 
         type: "POST",
         data: {"OpportunityID": opportunity_id},
-        success: populateOppTitle
+        success: populateOppTitle,
+        async: false
     });
 
     $("#proposal-back-list-btn").off();
@@ -436,6 +450,8 @@ function initializeCreateProposal(opportunity_id)
 
     $("#proposal-back-list-btn").click(function() { router("#spa-opportunities-list"); });
     $("#proposal-save-btn").click(function() { console.log("Pressed proposal-save-btn"); saveNewProposal(opportunity_id); });
+
+
 }
 
 function saveNewProposal(opportunity_id)
@@ -568,8 +584,34 @@ function getUniqueProposalID()
 
 function populateOppTitle(opportunity)
 {
+    current_opportunity_json = opportunity;
     $("#opportunity-title").text("Title: " + opportunity["Name"]);
     $("#opportunity-countdown").text("Closing Date and Time: " + opportunity["ClosingDate"]);
+
+    // Setup our lovely countdown timer...
+    //{"days":597,"hours":15,"minutes":44,"seconds":11}
+    timeRemainingCallback.stop();
+    timeRemainingCallback.start(
+        function(reasonable_time_remaining) {
+            if(isReasonableTimeNegative(reasonable_time_remaining))
+            {
+                timeRemainingCallback.stop();
+                time_remaining_text = "Time Remaining: This opportunity has expired";
+                $("#proposal-save-btn").hide();
+                $("#proposal-time-remaining").text(time_remaining_text);
+            }
+            else
+            {
+                time_remaining_text = "Time Remaining on this opportunity";
+                time_remaining_text += " Days: " + reasonable_time_remaining.days;
+                time_remaining_text += " Hours: " + reasonable_time_remaining.hours;
+                time_remaining_text += " Minutes: " + reasonable_time_remaining.minutes;
+                time_remaining_text += " Seconds: " + reasonable_time_remaining.seconds;
+                $("#proposal-time-remaining").text(time_remaining_text);
+            }
+        },
+        parseCustomDateStringToDate(opportunity["ClosingDate"])
+    );
 }
 
 
@@ -699,8 +741,11 @@ function populateProposalList(proposals_json)
 /********************
  * spa-edit-proposal*
  ********************/
-// Gonna be a little sneaky and reuse the create-opportunity spa
+// In the spirit of lazyness, this is set by create-opportunity, so that
+// I don't have to fetch it again...
+var current_opportunity_json = null;
 
+// Gonna be a little sneaky and reuse the create-opportunity spa
 function activateEditProposal(proposal_id)
 {
     $.ajax({
@@ -719,6 +764,7 @@ function activateEditProposal(proposal_id)
 function initializeEditProposal(proposal_json)
 {
     console.log("In initializeEditProposal");
+
     $("#create-proposal-header").text("Edit proposal");
     $("#proposal-time-last-edit").text("Time last edit: " + proposal_json.LastEditDate);
     $("#proposal-back-list-btn").off();
@@ -726,6 +772,31 @@ function initializeEditProposal(proposal_json)
 
     $("#proposal-back-list-btn").click(function() { router("#spa-proposals-list"); });
     $("#proposal-save-btn").click(function() { saveProposal(proposal_json); });
+
+    // Setup our lovely countdown timer...
+    //{"days":597,"hours":15,"minutes":44,"seconds":11}
+    timeRemainingCallback.stop();
+    timeRemainingCallback.start(
+        function(reasonable_time_remaining) {
+            if(isReasonableTimeNegative(reasonable_time_remaining))
+            {
+                timeRemainingCallback.stop();
+                time_remaining_text = "Time Remaining: This opportunity has expired, your proposal will be evaluated soon";
+                $("#proposal-save-btn").hide();
+                $("#proposal-time-remaining").text(time_remaining_text);
+            }
+            else
+            {
+                time_remaining_text = "Time Remaining on this opportunity";
+                time_remaining_text += " Days: " + reasonable_time_remaining.days;
+                time_remaining_text += " Hours: " + reasonable_time_remaining.hours;
+                time_remaining_text += " Minutes: " + reasonable_time_remaining.minutes;
+                time_remaining_text += " Seconds: " + reasonable_time_remaining.seconds;
+                $("#proposal-time-remaining").text(time_remaining_text);
+            }
+        },
+        parseCustomDateStringToDate(current_opportunity_json["ClosingDate"])
+    );
 
 
     doc_list = document.getElementById("opp-doc-templates-list");
@@ -890,7 +961,7 @@ function fillCategoryDropdown(jsonArray){
 /********************
  * spa-message-list *
  ********************/
- // Caution: Super sjank!
+ // Caution: Super sank!
 
 function activateMessageList()
 {
@@ -958,7 +1029,6 @@ function populateMessageList()
 /**********************
  * spa-message-detail *
  **********************/
-
 function activateMessageDetail(message_id)
 {
     initializeMessageDetail(message_id);
@@ -970,7 +1040,6 @@ function initializeMessageDetail(message_id)
 
     // Ajax to get the specific message
     populateMessageDetail(null);
-
 }
 
 // <h2>Message Type: <span id="message-detail-type">Message type placeholder</span></h2>
@@ -1017,6 +1086,83 @@ function populateMessageDetail(message)
     // Populate all fields
 
 }
+
+
+/****************************
+ * spa-manage-subscriptions *
+ ****************************/ 
+
+
+
+function activateManageSubscriptions()
+{
+    initializeManageSubscriptions();
+    router("#spa-manage-subscriptions");
+}
+
+
+function initializeManageSubscriptions()
+{
+    //get all categories
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/getOppCategoryList.php',true);
+    xhr.onload = function() {
+        if (xhr.status == 200) {
+            var jsonArray = JSON.parse(xhr.responseText);
+            populateManageSubscriptions(jsonArray);
+        } else {
+            alert("Error getting categories");
+        }
+    };
+    xhr.send();
+}
+
+
+// Todo: how to use the form data effectively...
+function populateManageSubscriptions(jsonArray)
+{
+    // Clear what we already have
+    $('#subscriptions-form').empty();
+
+    for(var i = jsonArray.Category.length-1; i >= 0 ; i--) {
+        div_form_check = $("<div>", {
+            class: 'form-check'
+        });
+
+        input_checkbox = $('<input>', {
+            class: 'form-check-input',
+            type: 'checkbox',
+            id: i
+        });
+
+        label = $("<label>", {
+            class: "form-check-label",
+            for: i,
+            text: jsonArray.Category[i].Name
+        });
+
+        input_checkbox.appendTo(div_form_check);
+        label.appendTo(div_form_check);
+        div_form_check.prependTo($('#subscriptions-form'));
+
+    }
+    submit_button = $("<button>",{
+        // type: "submit",
+        class: "btn btn-primary",
+        text: "Submit"
+    });
+
+    submit_button.appendTo($("#subscriptions-form"));
+}
+
+
+
+
+
+
+
+
+
 
 
 
