@@ -1,6 +1,15 @@
 $(document).ready(
     function () {
         initNewOppForm(0);
+        //turn to inline mode
+        $.fn.editable.defaults.mode = 'inline';
+        $('#editoppName').editable();
+        $('#editoppDate').editable();
+        $('#editoppDesc').editable();
+        $('#editoppSave').click(function() {
+            saveEditOpp($("#editoppNumber").text());
+        });
+
        $('#editOppPanel').hide();
         $('#editOppPanel2').hide();
         $('#newOppPanel1').hide();
@@ -140,6 +149,7 @@ function showEditOpp(opId) {
 
 function saveEditOpp(opId) {
     var sortedIDs = $( "#docTemplatesBody" ).sortable( "toArray");
+    alert("Saving changes to opportunity number " + opId);
 }
 
 function showNewOpp() {
@@ -187,7 +197,7 @@ function showOppList(type) {
 
 function getOpportunity(opId) {
 var xhr = new XMLHttpRequest();
-    var url= "http://athena.ecs.csus.edu/~mackeys/php/api/opportunity/read.php?OpportunityID="+opId;
+    var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php?OpportunityID="+opId;
     xhr.open('POST', url);
 
     xhr.onload = function () {
@@ -199,7 +209,7 @@ var xhr = new XMLHttpRequest();
         $("#oppName").text(oppArray.Name);
         $("#oppType").text(catName);
         $("#oppDesc").html(oppArray.Description);
-        $("#oppScore").html("<a href='http://athena.ecs.csus.edu/~mackeys/php/api/opportunity/getScoringCriteria.php?OpportunityID="+opId+"'>" +
+        $("#oppScore").html("<a href='http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/getScoringCriteria.php?OpportunityID="+opId+"'>" +
             "View Scoring Criteria</a>");
     } else {
         alert('Unable to locate Opportunity '+ opId);
@@ -210,7 +220,7 @@ xhr.send();
 
 function getOpportunityEdit(opId) {
     var xhr = new XMLHttpRequest();
-    var url= "http://athena.ecs.csus.edu/~mackeys/php/api/opportunity/read.php?OpportunityID="+opId;
+    var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php?OpportunityID="+opId;
     xhr.open('POST', url);
 
     xhr.onload = function () {
@@ -222,7 +232,7 @@ function getOpportunityEdit(opId) {
             $("#editoppName").text(oppArray.Name);
             $("#editoppType").text(catName);
             $("#editoppDesc").html(oppArray.Description);
-            $("#editoppScore").html("<a href='http://athena.ecs.csus.edu/~mackeys/php/api/opportunity/getScoringCriteria.php?OpportunityID="+opId+"'>" +
+            $("#editoppScore").html("<a href='http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/getScoringCriteria.php?OpportunityID="+opId+"'>" +
                 "View Scoring Criteria</a>");
         } else {
             alert('Unable to locate Opportunity '+ opId);
@@ -234,7 +244,7 @@ function getOpportunityEdit(opId) {
 function getDocTemplates(opId) {
     $('#docTemplatesBody').empty();
     var xhr = new XMLHttpRequest();
-    var url= "http://athena.ecs.csus.edu/~mackeys/php/api/opportunity/getDocTemplates.php?OpportunityID="+opId;
+    var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/getDocTemplates.php?OpportunityID="+opId;
     xhr.open('GET',url);
     xhr.onload = function () {
         if (xhr.status == 200) {
@@ -247,15 +257,15 @@ function getDocTemplates(opId) {
             for(var i = 0; i< size; i++) {
                 var template = docArray.doctemplate[i];
                 if (template.Url != null) {
-                    var row = "<tr id='" + template.DocTemplateID + "'><td>" + template.DocTitle + "</td><td>" + "<a href ='" + template.Url + "'>" +
+                    var row = "<tr id='" + template.DocTemplateID + "'><td class='changeable'>" + template.DocTitle + "</td><td>" + "<a href ='" + template.Url + "'>" +
                     template.DocTitle + "</a></td><td>" + "Posted Date" +
-                        "</td><td><a href onclick='editDoc(" + opId + "," + template.DocTemplateID + ")'" + "class='btn btn-primary btn-lg'>" +
-                        "<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>   Edit</a> " +
+                        "</td><td>" +
                         "<a onclick='deleteDoc(" + opId + "," + template.DocTemplateID + ")'" +
                         "class='btn btn-delete btn-lg'><span class='glyphicon glyphicon-remove'" +
                         "aria-hidden='true'></span> Delete </a></td></tr>";
                     $('#docTemplatesBody').append(row);
                     $("#docTempatesBody").trigger("update");
+                    $(".changeable").editable();
                 }
             }
 
@@ -270,7 +280,7 @@ function getDocTemplates(opId) {
 function getDocTemplatesView(opId) {
     $('#docTemplatesBodyView').empty();
     var xhr = new XMLHttpRequest();
-    var url= "http://athena.ecs.csus.edu/~mackeys/php/api/opportunity/getDocTemplates.php?OpportunityID="+opId;
+    var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/getDocTemplates.php?OpportunityID="+opId;
     xhr.open('GET',url);
     xhr.onload = function () {
         if (xhr.status == 200) {
@@ -316,7 +326,7 @@ function getOppList(type) {
 
     $('#oppListTableBody').empty();
     var xhr = new XMLHttpRequest();
-    var url = "http://athena.ecs.csus.edu/~mackeys/php/api/opportunity/read.php";
+    var url = "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php";
     switch (type)  {
         case 1:
             url = url + "?status=1";
@@ -378,7 +388,7 @@ function fillOppTable(oppArray,type) {
 }
 
 function getOppListbyCategory(category) {
-    url = 'http://athena.ecs.csus.edu/~mackeys/php/api/opportunity/read.php';
+    url = 'http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php';
     if(category !=="0")
         url = url + '?CategoryID='+category;
     $('#oppListTableBody').empty();
@@ -410,7 +420,7 @@ function uploadScoring(file, opId) {
     formData.append('OpportunityID', opId);
     formData.append('filename', file, file.name);
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://athena.ecs.csus.edu/~mackeys/php/api/opportunity/uploadScoringCriteria.php');
+    xhr.open('POST', 'http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/uploadScoringCriteria.php');
     //xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.onload = function () {
         if (xhr.status == 200) {
@@ -434,7 +444,7 @@ function uploadDocTemplates(opId) {
     formData.append('OpportunityID',opId);
     formData.append('submit','Upload Image');
     var xhr = new XMLHttpRequest();
-    xhr.open('POST','http://athena.ecs.csus.edu/~mackeys/php/api/opportunity/uploadDocArray.php');
+    xhr.open('POST','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/uploadDocArray.php');
     xhr.onload = function() {
         if(xhr.status == 200) {
             alert('File uploaded');
@@ -449,7 +459,7 @@ function uploadDocTemplates(opId) {
 
 function getLeadEvals() {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://athena.ecs.csus.edu/~mackeys/php/api/employee/read.php', true);
+    xhr.open('GET', 'http://athena.ecs.csus.edu/~wildcard/php/api/employee/read.php', true);
     xhr.onload = function () {
         if (xhr.status == 200) {
             var evalArray = JSON.parse(xhr.responseText);
@@ -486,7 +496,7 @@ function saveOpportunity() {
         };
 
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://athena.ecs.csus.edu/~mackeys/php/api/opportunity/create.php', true);
+    xhr.open('POST', 'http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/create.php', true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=utf-8');  //Creates an  error
     xhr.onload = function () {
         if (xhr.status == 200) {
@@ -510,7 +520,7 @@ function saveOpportunity() {
 //get all categories to populate dropdown
 function getCategories(select){
     var xhr = new XMLHttpRequest();
-    xhr.open('GET','http://athena.ecs.csus.edu/~mackeys/php/api/opportunity/getOppCategoryList.php',true);
+    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/getOppCategoryList.php',true);
     xhr.onload = function() {
         if (xhr.status == 200) {
             var catArray = JSON.parse(xhr.responseText);
@@ -541,7 +551,7 @@ function fillCategoryDropdown(catArray, select){
 
 function processOpportunity(opId) {
     var xhr = new XMLHttpRequest();
-    var url= "http://athena.ecs.csus.edu/~mackeys/php/api/opportunity/update.php"
+    var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/update.php"
     xhr.open('POST', url);
     var formData = new FormData();
     formData.append('OpportunityID', opId);
