@@ -59,7 +59,7 @@ class Proposal
   // select one by ID
   function selectByOppID($id)
   {
-    $query = "SELECT ProposalID, OpportunityID, BidderID, Status, ps.Name as StatusName, TechnicalScore, FeeScore, FinalTotalScore, CreatedDate, LastEditDate FROM Proposal p LEFT JOIN ProposalStatus ps ON ps.StatusID = p.Status FROM Proposal WHERE OpportunityID = ? ;";
+    $query = "SELECT ProposalID, OpportunityID, BidderID, Status, ps.Name as StatusName, TechnicalScore, FeeScore, FinalTotalScore, CreatedDate, LastEditDate FROM Proposal p LEFT JOIN ProposalStatus ps ON ps.StatusID = p.Status WHERE OpportunityID = ? ;";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
@@ -148,7 +148,7 @@ class Proposal
       $query = $query . ", FeeScore = " . $this->FeeScore . " ";      
     }
 
-    if(isset($this->TechnicalScore))
+    if(isset($this->FinalTotalScore))
     {
       $query = $query . ", FinalTotalScore = " . $this->FinalTotalScore . " ";      
     }
@@ -164,6 +164,20 @@ class Proposal
     //$stmt->bindParam(':TechnicalScore', $this->TechnicalScore);
    // $stmt->bindParam(':FeeScore', $this->FeeScore);
     //$stmt->bindParam(':FinalTotalScore', $this->FinalTotalScore);
+
+    if($stmt->execute())
+      return true;
+    else
+      return false;
+  }
+
+  function reject($ProposalID)
+  {
+    $query = "UPDATE Proposal set Status=0 WHERE ProposalID = :ProposalID;";
+    $stmt = $this->conn->prepare( $query );
+
+    // bind parameters
+    $stmt->bindParam(':ProposalID', $ProposalID);
 
     if($stmt->execute())
       return true;
@@ -382,6 +396,34 @@ class Proposal
     $stmt->execute();
 
     return $stmt;
+  }
+
+  // Upload Document Template
+  function getMinumumOppScore($OpportunityID)
+  {
+    $MinScore = 0;
+    try
+    {
+      $query = "SELECT MinimumScore FROM Opportunity WHERE OpportunityID = ? ; ";
+
+
+      $stmt = $this->conn->prepare( $query );
+
+      // bind parameters
+      $stmt->bindParam(1, $OpportunityID);
+
+      if($stmt->execute())
+      {
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $MinScore = $row['MinimumScore'];
+      }
+    }
+    catch (PDOException $e)
+    {
+      echo 'Connection failed: ' . $e->getMessage();
+    }
+
+    return $MinScore;
   }
 }
 ?>
