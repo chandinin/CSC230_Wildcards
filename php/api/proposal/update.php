@@ -19,6 +19,9 @@ $data = json_decode(file_get_contents("php://input"));
 if(json_last_error() === JSON_ERROR_NONE)
 {
   $proposal->ProposalID = $data->ProposalID;
+  
+  $proposal->selectByID($proposal->ProposalID);
+
   if(isset($data->OpportunityID) and !is_null($data->OpportunityID))
   {
     $proposal->OpportunityID = $data->OpportunityID;
@@ -34,27 +37,44 @@ if(json_last_error() === JSON_ERROR_NONE)
   if(isset($data->FinalTotalScore) and !is_null($data->FinalTotalScore))
     $proposal->FinalTotalScore = $data->FinalTotalScore;
 
-
-  //$proposal->ProposalID = $data->ProposalID;
-  //$proposal->OpportunityID = $data->OpportunityID;
-  //$proposal->BidderID = $data->BidderID;
-  //$proposal->Status = $data->Status;
-  //$proposal->TechnicalScore = $data->TechnicalScore;
-  //$proposal->FeeScore = $data->FeeScore;
-  //$proposal->FinalTotalScore = $data->FinalTotalScore;
-
   if($proposal->update())
   {  
-   // http_response_code(200); 
-   // echo "SUCCESS";
-    //echo '{';
-    //   echo ' message : "Update suceeded. "';
-    //echo '}';
+      if(isset($proposal->OpportunityID))
+        $OpportunityID = $proposal->OpportunityID;
+      else
+        $OpportunityID = $proposal->getOpportunityIDByProposalID($proposal->ProposalID);
+
+      if(isset($proposal->OpportunityID) && isset($proposal->FinalTotalScore))
+      {
+        $MinScore = 0;
+        $MinScore = $proposal->getMinumumOppScore($OpportunityID);
+        
+        $FinalTotalScore = $proposal->FinalTotalScore;
+
+        if($FinalTotalScore < $MinScore)
+        {
+          //Automatically Reject Proposal
+          $proposal->reject($proposal->ProposalID);
+          //echo '{';
+          //echo ' "Action" : "Reject",';
+          //echo ' "MinScore" : "'.$MinScore.'",';
+          //echo ' "FinalTotalScore" : "'.$FinalTotalScore.'"';
+          //echo '}';
+        }
+        else
+        {
+          //echo '{';
+          //echo ' "Action" : "Do Not Reject",';
+          //echo ' "MinScore" : "'.$MinScore.'",';
+          //echo ' "FinalTotalScore" : "'.$FinalTotalScore.'"';
+          //echo '}';
+        }
+      }
   }
   else
   {
     echo '{';
-       echo ' message : "Update failed."';
+    echo ' message : "Update failed."';
     echo '}';
   }
 }
@@ -115,11 +135,37 @@ else
 
     if($proposal->update())
     {  
-      //http_response_code(200); 
-      //echo "SUCCESS";
-      //echo '{';
-      //echo ' message : "Update suceeded. (' . $proposalID .')"';
-      //echo '}';
+      if(isset($proposal->OpportunityID))
+        $OpportunityID = $proposal->OpportunityID;
+      else
+        $OpportunityID = $proposal->getOpportunityIDByProposalID($proposal->ProposalID);
+
+      if(isset($proposal->OpportunityID) && isset($proposal->FinalTotalScore))
+      {
+        $MinScore = 0;
+        $MinScore = $proposal->getMinumumOppScore($OpportunityID);
+        
+        $FinalTotalScore = $proposal->FinalTotalScore;
+
+        if($FinalTotalScore < $MinScore)
+        {
+          //Automatically Reject Proposal
+          $proposal->reject($proposal->ProposalID);
+          //echo '{';
+          //echo ' "Action" : "Reject",';
+          //echo ' "MinScore" : "'.$MinScore.'",';
+          //echo ' "FinalTotalScore" : "'.$FinalTotalScore.'"';
+          //echo '}';
+        }
+        else
+        {
+          //echo '{';
+          //echo ' "Action" : "Do Not Reject",';
+          //echo ' "MinScore" : "'.$MinScore.'",';
+          //echo ' "FinalTotalScore" : "'.$FinalTotalScore.'"';
+          //echo '}';
+        }
+      }
     }
     else
     {
