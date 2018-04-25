@@ -55,7 +55,7 @@ function fillOppTable(jsonArray){
             var opp = jsonArray.opportunity[i];
             var row ="<tr>"+"</td><td>" + opp.OpportunityID+ "</td><td>" + "<a href='javascript:showOppDetails(\"" + opp.OpportunityID + "\")'>" +
                 opp.Name + "</a></td><td>"
-                + opp.ClosingDate + "<td>"+ opp.Status + " <td>" +  "<button onclick='completeOpportunityEval(\"" +
+                + opp.ClosingDate + "<td>"+ opp.StatusName + " <td>" +  "<button onclick='completeOpportunityEval(\"" +
                 opp.OpportunityID + "\")' id='editOppButton' value='\" + opp.OpportunityID + \"' type='button' " +
                 "class='btn btn-primary btn-sm'>" +
                 "Complete</button></td>";
