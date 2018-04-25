@@ -67,19 +67,16 @@ create table ProposalStatus
   PRIMARY KEY (StatusID)
 );
 
-INSERT INTO ProposalStatus (StatusID, `Name`) VALUES (0, 'Evaluation 1 Rejected');
-INSERT INTO ProposalStatus (StatusID, `Name`) VALUES (1, 'Evaluation 1 Accepted');
-/*
-UPDATE ProposalStatus SET `Name` = 'Evaluation 1 Rejected' WHERE StatusID = 0;
-UPDATE ProposalStatus SET `Name` = 'Evaluation 1 Accepted' WHERE StatusID = 1;
-*/
-INSERT INTO ProposalStatus (StatusID, `Name`) VALUES (2, 'Seeking Clarification');
-INSERT INTO ProposalStatus (StatusID, `Name`) VALUES (3, 'In Progress');
-INSERT INTO ProposalStatus (StatusID, `Name`) VALUES (4, 'Open');
-INSERT INTO ProposalStatus (StatusID, `Name`) VALUES (5, 'Clarification Received');
-
-INSERT INTO ProposalStatus (StatusID, `Name`) VALUES (6, 'Evaluation 2 Rejected');
-INSERT INTO ProposalStatus (StatusID, `Name`) VALUES (7, 'Evaluation 2 Accepted');
+INSERT INTO ProposalStatus (StatusID, `Name`) VALUES (10, 'Evaluation 1 Rejected');
+INSERT INTO ProposalStatus (StatusID, `Name`) VALUES (15, 'Evaluation 1 Accepted');
+INSERT INTO ProposalStatus (StatusID, `Name`) VALUES (20, 'Seeking Clarification 1');
+INSERT INTO ProposalStatus (StatusID, `Name`) VALUES (25, 'Seeking Clarification 2');
+INSERT INTO ProposalStatus (StatusID, `Name`) VALUES (30, 'In Progress');
+INSERT INTO ProposalStatus (StatusID, `Name`) VALUES (40, 'Open');
+INSERT INTO ProposalStatus (StatusID, `Name`) VALUES (50, 'Clarification Received 1');
+INSERT INTO ProposalStatus (StatusID, `Name`) VALUES (50, 'Clarification Received 2');
+INSERT INTO ProposalStatus (StatusID, `Name`) VALUES (60, 'Evaluation 2 Rejected');
+INSERT INTO ProposalStatus (StatusID, `Name`) VALUES (65, 'Evaluation 2 Accepted');
 
 create table Roles
 (
@@ -214,6 +211,7 @@ create table DocTemplate
   LastEditDate datetime null,
   PostedDate datetime null,
   DisplayTitle varchar(255),
+  SortOrder int null,
   PRIMARY KEY (DocTemplateID)
 );
 
@@ -312,6 +310,14 @@ create table DocBlob
   LastEditDate datetime null,
   PRIMARY KEY (DocID)
 );
+
+create table Subscription
+(
+  ID varchar(255) not null,
+  CategoryID int not null,
+  PRIMARY KEY (ID,CategoryID)
+);
+
 
 create user wilddb_user identified by 'wilddb_db';
 
