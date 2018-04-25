@@ -65,7 +65,7 @@ class Opportunity
   function selectByCategoryID($CategoryID)
   {
     $query = "select OpportunityID, ClosingDate, LeadEvaluatorID, O.Name, LowestBid, Description, O.Status, OS.Name as StatusName, CategoryID, CreatedDate, LastEditDate from Opportunity O
-  left join OppStatus OS on OS.StatusID = O.`Status` FROM Opportunity WHERE CategoryID = ? ;";
+  left join OppStatus OS on OS.StatusID = O.`Status` WHERE CategoryID = ? ;";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
@@ -99,7 +99,7 @@ class Opportunity
   function selectAll()
   {
     $query = "select OpportunityID, ClosingDate, LeadEvaluatorID, O.Name, LowestBid, Description, O.Status, OS.Name as StatusName, CategoryID, CreatedDate, LastEditDate from Opportunity O
-  left join OppStatus OS on OS.StatusID = O.`Status` FROM Opportunity;";
+  left join OppStatus OS on OS.StatusID = O.`Status`;";
     $stmt = $this->conn->prepare( $query );
 
     // execute query
@@ -345,7 +345,7 @@ class Opportunity
   { 
     try
     {
-      $query = "SELECT DocTemplateID, DocTitle, Path, Url FROM DocTemplate WHERE DocTemplateID in (SELECT DocTemplateID FROM OppDocTemplate WHERE OpportunityID = :OpportunityID) ";
+      $query = "SELECT DocTemplateID, DocTitle, Path, Url FROM DocTemplate WHERE DocTemplateID in (SELECT DocTemplateID FROM OppDocTemplate WHERE OpportunityID = :OpportunityID) Order By SortOrder;";
       
 
       $stmt = $this->conn->prepare( $query );
