@@ -34,9 +34,9 @@ if(json_last_error() === JSON_ERROR_NONE)
 
   if($opportunity->create())
   {
-    echo '{';
-       echo ' message : "Create suceeded. "';
-    echo '}';
+//    echo '{';
+//       echo ' message : "Create suceeded. "';
+//    echo '}';
   }
   else
   {

@@ -14,6 +14,7 @@ class Proposal
   public $OpportunityID;
   public $BidderID;
   public $Status;
+  public $StatusName;
   public $TechnicalScore;
   public $FeeScore;
   public $FinalTotalScore;
@@ -30,7 +31,7 @@ class Proposal
   // select one by ID
   function selectByID($id)
   {
-    $query = "SELECT ProposalID, OpportunityID, BidderID, Status, TechnicalScore, FeeScore, FinalTotalScore, CreatedDate, LastEditDate FROM Proposal WHERE ProposalID = ? ;";
+    $query = "SELECT ProposalID, OpportunityID, BidderID, Status, ps.Name as StatusName, TechnicalScore, FeeScore, FinalTotalScore, CreatedDate, LastEditDate FROM Proposal p LEFT JOIN ProposalStatus ps ON ps.StatusID = p.Status WHERE ProposalID = ? ;";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
@@ -47,6 +48,7 @@ class Proposal
     $this->OpportunityID = $row['OpportunityID'];
     $this->BidderID = $row['BidderID'];
     $this->Status = $row['Status'];
+    $this->StatusName = $row['StatusName'];
     $this->TechnicalScore = $row['TechnicalScore'];
     $this->FeeScore = $row['FeeScore'];
     $this->FinalTotalScore = $row['FinalTotalScore'];
@@ -57,7 +59,7 @@ class Proposal
   // select one by ID
   function selectByOppID($id)
   {
-    $query = "SELECT ProposalID, OpportunityID, BidderID, Status, TechnicalScore, FeeScore, FinalTotalScore, CreatedDate, LastEditDate FROM Proposal WHERE OpportunityID = ? ;";
+    $query = "SELECT ProposalID, OpportunityID, BidderID, Status, ps.Name as StatusName, TechnicalScore, FeeScore, FinalTotalScore, CreatedDate, LastEditDate FROM Proposal p LEFT JOIN ProposalStatus ps ON ps.StatusID = p.Status FROM Proposal WHERE OpportunityID = ? ;";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
@@ -69,10 +71,44 @@ class Proposal
     return $stmt;
   }
 
+  // select one by ID
+  function AllPropsAcceptRejectByOppID($id)
+  {
+    $query = "select count(*) as total from Proposal where ((`Status` is null) OR (`Status` <> 0 AND `Status` <> 1)) AND OpportunityID = :ID ;";
+    $stmt = $this->conn->prepare( $query );
+
+    // bind parameters
+    $stmt->bindParam(':ID', $id);
+
+    // execute query
+    $stmt->execute();
+
+    // get retrieved row
+    $rowCount = $stmt->rowCount();
+    $proposalCount = 0;
+    if($rowCount > 0)
+    {
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+      $proposalCount = $row['total'];
+    }
+
+    //echo '{';
+    //echo ' "id" : "' . $id . '",';
+    //echo ' "itemcount" : "' . $rowCount . ',"';
+    //echo ' "total" : "' . $proposalCount . ',"';
+    //echo ' "query" : "' . $query . '"';
+    //echo '}';   
+
+    if($proposalCount > 0)
+      return false;
+    else
+      return true;
+  }
+
   // select All in the table
   function selectAll()
   {
-    $query = "SELECT ProposalID, OpportunityID, BidderID, Status, TechnicalScore, FeeScore, FinalTotalScore, CreatedDate, LastEditDate FROM Proposal;";
+    $query = "SELECT ProposalID, OpportunityID, BidderID, Status, ps.Name as StatusName, TechnicalScore, FeeScore, FinalTotalScore, CreatedDate, LastEditDate FROM Proposal p LEFT JOIN ProposalStatus ps ON ps.StatusID = p.Status;";
     $stmt = $this->conn->prepare( $query );
 
     // execute query
@@ -99,7 +135,7 @@ class Proposal
 
     if(isset($this->Status))
     {
-      $query = $query . ", Status = '" . $this->Status . "'";      
+      $query = $query . ", Status = " . $this->Status . "";      
     }
 
     if(isset($this->TechnicalScore))
@@ -112,7 +148,7 @@ class Proposal
       $query = $query . ", FeeScore = " . $this->FeeScore . " ";      
     }
 
-    if(isset($this->TechnicalScore))
+    if(isset($this->FinalTotalScore))
     {
       $query = $query . ", FinalTotalScore = " . $this->FinalTotalScore . " ";      
     }
@@ -128,6 +164,20 @@ class Proposal
     //$stmt->bindParam(':TechnicalScore', $this->TechnicalScore);
    // $stmt->bindParam(':FeeScore', $this->FeeScore);
     //$stmt->bindParam(':FinalTotalScore', $this->FinalTotalScore);
+
+    if($stmt->execute())
+      return true;
+    else
+      return false;
+  }
+
+  function reject($ProposalID)
+  {
+    $query = "UPDATE Proposal set Status=0 WHERE ProposalID = :ProposalID;";
+    $stmt = $this->conn->prepare( $query );
+
+    // bind parameters
+    $stmt->bindParam(':ProposalID', $ProposalID);
 
     if($stmt->execute())
       return true;
@@ -228,8 +278,8 @@ class Proposal
   {
     try
     {
-      $query = "SELECT DocID, DocTitle, Description, Path, Url FROM Docs WHERE DocID in (SELECT DocID FROM ProposalDocs WHERE ProposalID = '".$ProposalID."') ";
-      $query = "SELECT ProposalDocs.DocTemplateID, Docs.DocID, Docs.DocTitle, Docs.Description, Docs.Path, Docs.Url FROM Docs JOIN ProposalDocs ON Docs.DocID=ProposalDocs.DocID WHERE ProposalDocs.ProposalID='".$ProposalID."' ";
+      //$query = "SELECT DocID, DocTitle, Description, Path, Url FROM Docs WHERE DocID in (SELECT DocID FROM ProposalDocs WHERE ProposalID = '".$ProposalID."') ";
+      $query = "SELECT ProposalDocs.DocTemplateID, Docs.DocID, Docs.DocTitle, Docs.Description, Docs.Path, Docs.Url FROM Docs INNER JOIN ProposalDocs ON Docs.DocID=ProposalDocs.DocID WHERE ProposalDocs.ProposalID='".$ProposalID."' ";
 
 
       $stmt = $this->conn->prepare( $query );
@@ -335,7 +385,46 @@ class Proposal
 
     return $OpportunityID;
   }
+
+  // Get Dropdown List Data for Opportunity Status
+  function getProposalStatusList()
+  {
+    $query = "SELECT StatusID, Name FROM ProposalStatus;";
+    $stmt = $this->conn->prepare( $query );
+
+    // execute query
+    $stmt->execute();
+
+    return $stmt;
+  }
+
+  // Upload Document Template
+  function getMinumumOppScore($OpportunityID)
+  {
+    $MinScore = 0;
+    try
+    {
+      $query = "SELECT MinimumScore FROM Opportunity WHERE OpportunityID = ? ; ";
+
+
+      $stmt = $this->conn->prepare( $query );
+
+      // bind parameters
+      $stmt->bindParam(1, $OpportunityID);
+
+      if($stmt->execute())
+      {
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $MinScore = $row['MinimumScore'];
+      }
+    }
+    catch (PDOException $e)
+    {
+      echo 'Connection failed: ' . $e->getMessage();
+    }
+
+    return $MinScore;
+  }
 }
 ?>
-
 

@@ -297,7 +297,7 @@ function populateOpportunitiesList(opportunities_json) {
     for(var i = 0; i < opportunities.length; i++)
     {
         // Skip and do not add any opportunities that don't match our selected category, if we have selected one
-        if(selected_categoryID != undefined && opportunities[i].CategoryID != selected_categoryID)
+        if((selected_categoryID != undefined && opportunities[i].CategoryID != selected_categoryID ) || opportunities[i].StatusName != "New")
         {
             continue;
         }
@@ -687,8 +687,56 @@ function initializeProposalsList()
         url: "php/api/proposal/read.php", 
         success: function(proposals_json) {
             // TODO: If time, learn about promises
-            num_proposal_callbacks_left = proposals_json["proposal"].length;
+            num_proposal_callbacks_left = proposals_json["proposal"].length * 3; // x3 because we have to get num docs for opportunity and prop
 
+            // For each, get number of proposal docs
+            proposals_json["proposal"].forEach( function (proposal_json)
+            {
+                $.ajax({
+                    url: "php/api/proposal/getDocsList.php?proposalid="+proposal_json.ProposalID, 
+                    type: "GET",
+                    success: function(proposal_docs_json)
+                    {
+                        docs = proposal_docs_json.doc;
+                        proposal_json.NumProposalDocs = (docs == null ? 0 : docs.length);
+
+                        num_proposal_callbacks_left--;
+                        if(num_proposal_callbacks_left == 0)
+                        {
+                            // Filter down all proposals till we get just ours
+                            populateProposalList(proposals_json["proposal"].filter(proposal => proposal["BidderID"] == bidder_id)); 
+                        }
+                    }
+                });
+            });
+
+            // For each, get number of opportunity docs
+            proposals_json["proposal"].forEach( function (proposal_json)
+            {
+                $.ajax({
+                    url: "php/api/opportunity/getDocTemplates.php?opportunityid="+proposal_json.OpportunityID, 
+                    type: "GET",
+                    success: function(opp_doc_templates)
+                    {
+                        if(!("doctemplate" in opp_doc_templates))
+                        {
+                            console.log("Got no doc templates, returning...");
+                            return;
+                        }
+                        doc_templates = opp_doc_templates["doctemplate"];
+                        proposal_json.NumOpportunityDocs = doc_templates.length;
+                        num_proposal_callbacks_left--;
+                        if(num_proposal_callbacks_left == 0)
+                        {
+                            // Filter down all proposals till we get just ours
+                            populateProposalList(proposals_json["proposal"].filter(proposal => proposal["BidderID"] == bidder_id)); 
+                        }
+                    }
+                });
+            });
+
+
+            // For each, get OpportunityName
             proposals_json["proposal"].forEach( function (proposal_json)
             {
                 $.ajax({
@@ -710,6 +758,7 @@ function initializeProposalsList()
     });
 }
 
+
 function populateProposalList(proposals_json)
 {
     proposals_table = document.getElementById("proposals-list-table");
@@ -719,7 +768,25 @@ function populateProposalList(proposals_json)
 
     for(var i = 0; i < proposals_json.length; i++)
     {
-        prop_status = document.createTextNode(proposals_json[i].Status);
+        // Replace Status name with something appropriate for the frontend
+        status_name = proposals_json[i].StatusName;
+        if(status_name == "Evaluation 1 Rejected") { status_name = "Rejected"; }
+        else if(status_name == "Evaluation 1 Accepted") { status_name = "Closed for edits, Under Evaluation"; }
+        else if(status_name == "Seeking Clarification 1") { status_name = "clarification requested"; }
+        else if(status_name == "Seeking Clarification 2") { status_name = "clarification requested"; }
+        else if(status_name == "Clarification Received ") { status_name = "Closed for edits, Under Evaluation"; }
+        else if(status_name == "Clarification Received ") { status_name = "Closed for edits, Under Evaluation"; }
+        else if(status_name == "Evaluation 2 Rejected") { status_name = "Rejected"; }
+        else if(status_name == "Evaluation 2 Accepted") { status_name = "Closed for edits, Under Evaluation"; }
+        else if(status_name == "In Progress" || status_name == "Open") 
+        { 
+            status_name = proposals_json[i].NumProposalDocs >= proposals_json[i].NumOpportunityDocs ? 
+                "Open For Edits, pending close date" : "Open For Edits, missing documents"; 
+        }
+        else {status_name = "UNKNOWN STATUS MAPPING"; }
+        
+
+        prop_status = document.createTextNode(status_name);
         closingDate = document.createTextNode(proposals_json[i].ClosingDate);
 
         anchor = document.createElement("a");
@@ -961,7 +1028,7 @@ function fillCategoryDropdown(jsonArray){
 /********************
  * spa-message-list *
  ********************/
- // Caution: Super sank!
+ // Caution: Super jank!
 
 function activateMessageList()
 {
@@ -976,52 +1043,61 @@ function initializeMessageList()
     populateMessageList();
 }
 
+m0 = {"type":"NewOpportunity", "time_received":getFormattedCurrentDate(), "status":"read",
+"body":"Hello, this is an automated message. There is a new opportunity available"};
 
-function populateMessageList()
+m1 = {"type":"Clarification", "time_received":getFormattedCurrentDate(), "status":"unread",
+"body":"Hello, this is an official request for clarification on your proposal for AnOpportunity. Please re-upload your documents."};
+
+demo_messages = [m0,m1];
+
+function populateMessageList(messages_json)
 {
     PREVIEW_LENGTH = 40; // Number of characters in the message preview
+    messages_json = demo_messages;
+    table_array = [];
 
-    message_type = document.createElement("a");
-    message_type.appendChild(document.createTextNode("New Opportunity Available") );
+    for(i = 0; i < messages_json.length; i++)
+    {
+        message_type = document.createElement("a");
+        message_type.appendChild(document.createTextNode(messages_json[i].type));
 
-    time_sent = document.createElement("a");
-    time_sent.appendChild(document.createTextNode(getFormattedCurrentDate()) );
+        time_received = document.createElement("a");
+        time_received.appendChild(document.createTextNode(messages_json[i].time_received) );
 
-    // This will be clipped
-    preview_text = "Hello, this is an automated message. There is a new opportunity available in blah...";
-
-    preview = document.createElement("a");
-    preview.appendChild(document.createTextNode(preview_text.substring(0,PREVIEW_LENGTH)+"...") );
-
-
-    message_status = document.createElement("a");
-    message_status.appendChild(document.createTextNode("Unread") );
+        // This will be clipped
+        preview = document.createElement("a");
+        preview.appendChild(document.createTextNode(messages_json[i].body.substring(0,PREVIEW_LENGTH)+"...") );
 
 
+        message_status = document.createElement("a");
+        message_status.appendChild(document.createTextNode(messages_json[i].status) );
 
-    // Set onclick for each item in the table to activateMessageDetail for that item
-    message_type.onclick = (function() {
-        var ID = "0";
-        return function() { activateMessageDetail(ID); };
-    })();
+        // Set onclick for each item in the table to activateMessageDetail for that item
+        message_type.onclick = (function() {
+            var ID = String(i);
+            return function() { activateMessageDetail(ID); };
+        })();
 
-    time_sent.onclick = (function() {
-        var ID = "0";
-        return function() { activateMessageDetail(ID); };
-    })();
+        time_received.onclick = (function() {
+            var ID = String(i);
+            return function() { activateMessageDetail(ID); };
+        })();
 
-    preview.onclick = (function() {
-        var ID = "0";
-        return function() { activateMessageDetail(ID); };
-    })();
+        preview.onclick = (function() {
+            var ID = String(i);
+            return function() { activateMessageDetail(ID); };
+        })();
 
-    message_status.onclick = (function() {
-        var ID = "0";
-        return function() { activateMessageDetail(ID); };
-    })();
+        message_status.onclick = (function() {
+            var ID = String(i);
+            return function() { activateMessageDetail(ID); };
+        })();
 
-    // Stick it in the table message-list-table!
-    table_array = [[message_type, time_sent, preview, message_status]];
+        // Stick it in the table message-list-table!
+        table_array.push([message_type, time_received, preview, message_status]);
+    }
+
     insertTableRows(table_array, document.getElementById("messages-list-table"));
 }
 
@@ -1039,7 +1115,7 @@ function initializeMessageDetail(message_id)
 {
 
     // Ajax to get the specific message
-    populateMessageDetail(null);
+    populateMessageDetail(demo_messages[parseInt(message_id)]);
 }
 
 // <h2>Message Type: <span id="message-detail-type">Message type placeholder</span></h2>
@@ -1052,14 +1128,11 @@ function initializeMessageDetail(message_id)
 
 function populateMessageDetail(message)
 {
-    message_was_responded_to = true;
-    message = {};
-    message.body = "Jejejejjej"
 
     
     $("#message-detail-body").text(message.body);
 
-    if(message_was_responded_to)
+    if(message.status == "read")
     {
         // Hide these
         $("#send-message-btn").hide();
@@ -1070,7 +1143,7 @@ function populateMessageDetail(message)
         $("#message-detail-back-btn").show();
 
         // Set these
-        $("#message-response-editor").text("this was your response")
+        // $("#message-response-editor").text("Enter you")
     }
     else
     {
@@ -1083,7 +1156,18 @@ function populateMessageDetail(message)
         $("#message-detail-back-btn").hide();
     }
 
+    if(message.type != "Clarification")
+    {
+        $("#message-detail-response").hide();
+    }
+    else
+    {
+        $("#message-detail-response").show();
+    }
+
     // Populate all fields
+    $("#message-detail-time-received").text(message.time_received);
+    $("#message-detail-type").text(message.type);
 
 }
 

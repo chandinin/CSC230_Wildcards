@@ -19,6 +19,7 @@ class Opportunity
   public $LowestBid;
   public $Description;
   public $Status;
+  public $StatusName;
   public $CategoryID;
   public $CreatedDate;
   public $LastEditDate;
@@ -33,7 +34,8 @@ class Opportunity
   // select one by ID
   function selectByID($id)
   {
-    $query = "SELECT OpportunityID, ClosingDate, LeadEvaluatorID, Name, LowestBid, Description, Status, CategoryID, CreatedDate, LastEditDate FROM Opportunity WHERE OpportunityID = ? ;";
+    $query = "select OpportunityID, ClosingDate, LeadEvaluatorID, O.Name, LowestBid, Description, O.Status, OS.Name as StatusName, CategoryID, CreatedDate, LastEditDate from Opportunity O
+  left join OppStatus OS on OS.StatusID = O.`Status` WHERE OpportunityID = ? ;";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
@@ -53,16 +55,17 @@ class Opportunity
     $this->LowestBid = $row['LowestBid'];
     $this->Description = $row['Description'];
     $this->Status = $row['Status'];
+    $this->StatusName = $row['StatusName'];
     $this->CategoryID = $row['CategoryID'];
     $this->CreatedDate = $row['CreatedDate']; 
     $this->LastEditDate = $row['LastEditDate'];
   }
 
-
   // select one by ID
   function selectByCategoryID($CategoryID)
   {
-    $query = "SELECT OpportunityID, ClosingDate, LeadEvaluatorID, Name, LowestBid, Description, Status, CategoryID, CreatedDate, LastEditDate FROM Opportunity WHERE CategoryID = ? ;";
+    $query = "select OpportunityID, ClosingDate, LeadEvaluatorID, O.Name, LowestBid, Description, O.Status, OS.Name as StatusName, CategoryID, CreatedDate, LastEditDate from Opportunity O
+  left join OppStatus OS on OS.StatusID = O.`Status` FROM Opportunity WHERE CategoryID = ? ;";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
@@ -74,10 +77,29 @@ class Opportunity
     return $stmt;
   }
 
+  // select one by ID
+  function selectByStatusID($StatusID)
+  {
+    $query = "select OpportunityID, ClosingDate, LeadEvaluatorID, O.Name, LowestBid, Description, O.Status, OS.Name as StatusName, CategoryID, CreatedDate, LastEditDate from Opportunity O
+  left join OppStatus OS on OS.StatusID = O.`Status` WHERE `Status` = ? ;";
+    $stmt = $this->conn->prepare( $query );
+
+    //echo "query = " . $query;
+
+    // bind parameters
+    $stmt->bindParam(1, $StatusID);
+
+    // execute query
+    $stmt->execute();
+
+    return $stmt;
+  }
+
   // select All in the table
   function selectAll()
   {
-    $query = "SELECT OpportunityID, ClosingDate, LeadEvaluatorID, Name, LowestBid, Description, Status, CategoryID, CreatedDate, LastEditDate FROM Opportunity;";
+    $query = "select OpportunityID, ClosingDate, LeadEvaluatorID, O.Name, LowestBid, Description, O.Status, OS.Name as StatusName, CategoryID, CreatedDate, LastEditDate from Opportunity O
+  left join OppStatus OS on OS.StatusID = O.`Status`;";
     $stmt = $this->conn->prepare( $query );
 
     // execute query
@@ -401,6 +423,18 @@ class Opportunity
 
     // bind parameters
     $stmt->bindParam(1, $CategoryID);
+
+    // execute query
+    $stmt->execute();
+
+    return $stmt;
+  }
+
+  // Get Dropdown List Data for Opportunity Status
+  function getOppStatusList()
+  {
+    $query = "SELECT StatusID, Name FROM OppStatus;";
+    $stmt = $this->conn->prepare( $query );
 
     // execute query
     $stmt->execute();
