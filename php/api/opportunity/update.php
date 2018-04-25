@@ -49,9 +49,6 @@ if(json_last_error() === JSON_ERROR_NONE)
 
   if($opportunity->update())
   {  
-    echo '{';
-       echo ' message : "Update suceeded. "';
-    echo '}';
   }
   else
   {
@@ -130,9 +127,6 @@ else
 
     if($opportunity->update())
     {  
-      echo '{';
-      echo ' message : "Update suceeded. (' .$opportunityID.')"';
-      echo '}';
     }
     else
     {
