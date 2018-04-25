@@ -205,6 +205,22 @@ class DocTemplate
       return false;
     }
   }
+
+  function SetOrder($DocTemplateID, $Index)
+  {
+    $query = "UPDATE DocTemplate set SortOrder = :SortOrder WHERE DocTemplateID = :DocTemplateID;";
+
+    $stmt = $this->conn->prepare( $query );
+
+    // bind parameters
+    $stmt->bindParam(':DocTemplateID', $DocTemplateID);
+    $stmt->bindParam(':SortOrder', $Index);
+
+    if($stmt->execute())
+      return true;
+    else
+      return false;
+  }
 }
 ?>
 
