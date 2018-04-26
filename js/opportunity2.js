@@ -9,6 +9,9 @@ $(document).ready(
         $('#editoppSave').click(function() {
             saveEditOpp($("#editoppNumber").text());
         });
+        $('#oppReadyButton').click(function() {
+           markReadyforReview($('#oppNumber').text());
+        });
 
        $('#editOppPanel').hide();
         $('#editOppPanel2').hide();
@@ -125,6 +128,31 @@ $(document).ready(
 
         $('#docTemplatesBody').sortable();
     });
+
+
+function markReadyforReview(opId) {
+    var xhr = new XMLHttpRequest();
+    var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/update.php"
+    xhr.open('POST', url);
+    var formData = new FormData();
+    formData.append("OpportunityID", opId);
+    formData.append("Status", 7);
+    xhr.onload = function () {
+        if (xhr.status == 200) {
+            var retval = xhr.responseText;
+            console.log("processOp: " +  retval);
+            var failed = retval.includes('failed');
+            if (failed)
+                return;
+            else
+                alert("Status changed to 'Ready for Review'");
+        } else {
+            alert('Unable update Opportunity ' + opId);
+        }
+        //alert("processed: " + opId);
+    }
+    xhr.send(formData);
+}
 
 function showOppView(opId) {
     $('#listOppPanel').hide();
@@ -337,6 +365,8 @@ function getOppList(type) {
         case 10:
             url = url + "?status=10";
             break;
+        default:
+            url= url + "?status=0";
     }
     xhr.open('GET', url, true);
     xhr.onload = function () {

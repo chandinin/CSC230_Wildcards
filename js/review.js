@@ -118,9 +118,9 @@ function getDocTemplates(opId) {
             for(var i = 0; i< size; i++) {
                 var template = docArray.doctemplate[i];
                 if (template.Url != null) {
-                    var row = "<tr><td>" + template.DocTitle + "</td><td>" + template.DocTitle + "</td><td>" + opId +
-                        "</td><td><a class='btn btn-primary btn-lg' href='" + template.Url +
-                        "'><span class='glyphicon glyphicon-circle-arrow-down' aria-hidden='true'></span>   Download</a> " + "</td></tr>";
+                    var row = "<tr><td>" + template.DocTitle + "</td><td><a href ='" + template.Url + "'>" +
+                    template.DocTitle + "</a></td><td>" + opId +
+                        "</td></tr>";
                     $('#docTemplatesBody').append(row);
                     $("#docTempatesBody").trigger("update");
                 }
