@@ -35,6 +35,7 @@ if(isSet($_POST_LowerCase["opportunityid"])
     "LowestBid" =>  $opportunity->LowestBid,
     "Description" =>  $opportunity->Description,
     "Status" =>  $opportunity->Status,
+    "StatusName" =>  $opportunity->StatusName,
     "CategoryID" =>  $opportunity->CategoryID,
     "CreatedDate" =>  $opportunity->CreatedDate,
     "LastEditDate" =>  $opportunity->LastEditDate
@@ -42,6 +43,45 @@ if(isSet($_POST_LowerCase["opportunityid"])
 
   // make it json format
   print_r(json_encode($opportunity_arr));
+}
+else if(isSet($_POST_LowerCase["status"])
+|| isSet($_GET_LowerCase["status"]))
+{
+  $status = isSet($_GET_LowerCase["status"]) ?
+     $_GET_LowerCase["status"] : $_POST_LowerCase["status"];
+
+  //Search
+  $stmt = $opportunity->selectByStatusID($status);
+  $rowCount = $stmt->rowCount();
+
+  $opportunities_arr = array();
+  $opportunities_arr["opportunity"] = array();
+
+  if($rowCount > 0)
+  {
+
+    while($row = $stmt->fetch(PDO::FETCH_ASSOC))
+    {
+      $opportunity_arr = array(
+          "OpportunityID" => $row['OpportunityID'],
+          "ClosingDate" => $row['ClosingDate'],
+          "LeadEvaluatorID" => $row['LeadEvaluatorID'],
+          "Name" => $row['Name'],
+          "LowestBid" => $row['LowestBid'],
+          "Description" => $row['Description'],
+          "Status" => $row['Status'],
+          "StatusName" => $row['StatusName'],
+          "CategoryID" => $row['CategoryID'],
+          "CreatedDate" => $row['CreatedDate'],
+          "LastEditDate" => $row['LastEditDate']
+      );
+
+      array_push($opportunities_arr["opportunity"], $opportunity_arr);
+    }
+  }
+
+  // make it json format
+  print_r(json_encode($opportunities_arr));
 }
 else if(isSet($_POST_LowerCase["categoryid"])
 || isSet($_GET_LowerCase["categoryid"]))
@@ -70,6 +110,7 @@ else if(isSet($_POST_LowerCase["categoryid"])
           "LowestBid" => $row['LowestBid'],
           "Description" => $row['Description'],
           "Status" => $row['Status'],
+          "StatusName" => $row['StatusName'],
           "CategoryID" => $row['CategoryID'],
           "CreatedDate" => $row['CreatedDate'],
           "LastEditDate" => $row['LastEditDate']
@@ -104,6 +145,7 @@ else
           "LowestBid" => $row['LowestBid'],
           "Description" => $row['Description'],
           "Status" => $row['Status'],
+          "StatusName" => $row['StatusName'],
           "CategoryID" => $row['CategoryID'],
           "CreatedDate" => $row['CreatedDate'],
           "LastEditDate" => $row['LastEditDate']

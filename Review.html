@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Review Opportunities</title>
+    <link rel="stylesheet" href="js/MDB Free/css/bootstrap.css">
+    <link rel="stylesheet" href="js/MDB Free/css/mdb.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/bootstrap-datepicker.css">
+    <link rel="stylesheet" type="text/css" href="css/tablesorter-style.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/bootstrap3-wysihtml5.css">
+    <link rel="stylesheet" href="css/opportunity.css">
+    <link rel="stylesheet" href="bootstrap-editable1.5.1.js/bootstrap3-editable/css/bootstrap-editable.css">
+    <link rel="stylesheet" href="jqueryui-editable-1.5.1/jqueryui-editable/css/jqueryui-editable.css">
+
+    <!--
+-->
+</head>
+<body>
+
+
+<!-- Main Tabs Navigation -->
+<!-- Mobile version -->
+
+<!-- END HEADER -->
+
+<!-- ==========================CONTENT STARTS HERE ========================== -->
+
+<div id="main" role="main">
+    <div class="custom-app">
+        <div class="container content">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs nav-justified indigo" role="tablist">
+                <li class="nav-item">
+                    <a id="oppTab" class="nav-link active" data-toggle="tab" href="#panel1" role="tab" >
+                        <i class="fa fa-user"></i>Opportunities Ready for Review</a>
+                </li>
+            </ul>
+            <!-- Nav tabs -->
+            <!-- Tab panels -->
+            <div class="tab-content">
+                <!--Opportunity Panel 1-->
+                <div class="tab-pane fade in active" id="panel1" role="tabpanel">
+                    <!-- Nav tabs -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="listOppPanel" class="tab-content vertical">
+                                <!--List Panel 1-->
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h3 class="my-2 h3">Opportunities Ready for Review</h3>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <select id="selectFilterCategory" name="category" required style="width: 325px">
+                                            <option id = "id" value="default">Category</option>
+                                        </select><br>
+                                        <table id="oppListTable" class="table table-responsive table-bordered table-striped table-hover tablesorter">
+                                            <thead class="">
+                                            <th class="">Category</th>
+                                            <th>Opportunity Id</th>
+                                            <th>Opportunity Name</th>
+                                            <th>Closing Date</th>
+                                            <th>Last Updated</th>
+                                            <th>Opportunity Description</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                            </thead>
+                                            <tbody id="oppListTableBody">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--/.List Panel 1-->
+
+
+                            <!-- Edit Panel 3 -->
+                            <div class="col-md-8 clearfix bid-opportunities" id="editOppPanel">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h3 class="my-2 h3">Opportunity Details</h3>
+                                    </div>
+                                    <div class="col-md-3" >
+                                        <button type="button" class="btn btn-success btn-lg oppListButton">
+                                            <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Back to List
+                                        </button>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button type="button" class="btn btn-outline-success waves-effect" id="oppReviewedButton">
+                                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Mark as Reviewed
+                                        </button>
+                                    </div>
+                                </div>
+                            <br>
+                                <div class="row">
+                                <div class="col-md-12">
+                                    <span class="opportunity-property">Category: </span>
+                                    <span class="opportunity-detail" id="oppType">1</span>
+                                </div>
+                                <div class="col-md-6">
+                                    <span class="opportunity-property">Opportunity Number: </span>
+                                    <span class="opportunity-detail" id="oppNumber">1</span>
+                                </div>
+                                <div class="col-md-6">
+                                    <span class="opportunity-property">Opportunity Name: </span>
+                                    <span class="opportunity-detail" id="oppName">1</span>
+                                </div>
+                                <div class="col-md-6">
+                                    <span class="opportunity-property">Final Filing Date: </span>
+                                    <span class="opportunity-detail" id="oppDate">1</span>
+                                </div>
+                                <div class="col-md-12">
+                                    <span class="opportunity-property">Description: </span>
+                                    <span class="opportunity-detail" id="oppDesc">1</span>
+                                </div>
+                                <div class="col-md-12">
+                                    <span class="opportunity-property">Scoring Criteria: </span>
+                                    <span class="opportunity-detail" id="oppScore">1</span>
+                                </div>
+                                <hr>
+                                </div>
+                                <div class="col-12">
+                                    <h4>Documents attached to this opportunity.</h4>
+                                    <form>
+                                        <table id="listDocTemplates" class="table table-responsive">
+                                            <thead>
+                                            <th scope="col">Title</th>
+                                            <th scope="col">File Name</th>
+                                            <th scope="col">Posted Date</th>
+                                            </thead>
+                                            <tbody id="docTemplatesBody" class="table table-bordered table-striped table-hover" >
+
+                                            </tbody>
+                                        </table>
+                                    </form>
+                                </div>
+                                </div>
+                            </div>
+                    </div>
+                    </div>
+                <!--/.Opportunity Panel 1-->
+            </div>
+            <!-- Tab panels -->
+        </div> <!--Container -->
+    </div>
+</div>
+
+<!-- ==========================CONTENT ENDS HERE ========================== -->
+
+
+<!-- FOOTER -->
+
+<div class="footer text-center">
+    <div class="container">
+        <p><span class="tagline">We serve those who serve California.</span><br>
+            � Copyright 2018 California Public Employees' Retirement System (CalPERS) | <span class="state-ca"><a href="http://www.ca.gov" target="_blank" title="Opens in a new window">State of California</a></span></p>
+        <!-- Global Footer Links -->
+    </div>
+</div>
+<!-- END FOOTER -->
+
+<script src="js/MDB Free/js/jquery-3.2.1.min.js"></script>
+<script src="js/MDB Free/js/bootstrap.js"></script>
+<script src="js/MDB Free/js/popper.min.js"></script>
+<script src="js/widgets.js"></script>
+<script src="js/review.js"></script>
+<script src="js/bootstrap-datepicker.js"></script>
+<script src="js/MDB Free/js/mdb.js"></script>
+<script src="js/jquery.tablesorter.js"></script>
+<script src="js/widget-storage.js"></script>
+<script src="js/widget-filter.js"></script>
+<script src="js/bootstrap3-wysihtml5.all.min.js"></script>
+</body>
+
+</html>

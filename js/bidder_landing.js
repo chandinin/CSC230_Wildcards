@@ -5,14 +5,23 @@ $(document).ready(function(){
     $("#show-list-btn").click(function() { router("#spa-opportunities-list"); });
 
     $("#proposals-tab").click(function() { activateProposalsList(); });
-    $("#opportunities-tab").click(function() { activateOpportunitiesList(); }); 
+    $("#opportunities-tab").click(function() { activateOpportunitiesList(); });
+    $("#messages-tab").click(function() { activateMessageList(); });
+    $("#subscriptions-tab").click(function() {activateManageSubscriptions(); });
 
     $("#opportunities-list-table").tablesorter();
     $("#proposals-list-table").tablesorter();
+    $("#messages-list-table").tablesorter();
 
     // Set the tab to active, because I don't know what I'm doing...
     $('#opportunities-tab').trigger('click');
 
+    // init the category picker
+    getCategories();
+
+    $("#selectCategory").change(function(change) { activateOpportunitiesList(); });
+
+    // TODO: Figure out a good way to pass bidder ID around the site
     bidder_id = "1";
     activateOpportunitiesList();
 });
@@ -27,7 +36,10 @@ function router(div_to_show)
                     "#spa-opportunity-detail",
                     "#spa-create-proposal",
                     "#spa-proposals-list",
-                    "#spa-edit-proposal"
+                    "#spa-edit-proposal",
+                    "#spa-message-list",
+                    "#spa-message-detail",
+                    "#spa-manage-subscriptions"
                ];
 
     if(!(div_list.includes(div_to_show)))
@@ -106,13 +118,124 @@ function insertTableRows(rows_array, table_node)
     $("#"+table_node.id).trigger("update");
 }
 
-// ( YYYY-MM-DD HH:MM:SS )
-function getFormattedDate() {
-    var date = new Date();
+/******************
+ * Date Utilities *
+ ******************/
+ 
+// returns string in format "YYYY-MM-DD HH:MM:SS"
+function getCustomDateStringFromDate(date_object)
+{
+    date = date_object;
     var str = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " +  date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
 
     return str;
 }
+
+// returns string in format "YYYY-MM-DD HH:MM:SS"
+function getFormattedCurrentDate() {
+    var date = new Date();
+
+    return getCustomDateStringFromDate(date);
+}
+
+// Returns standard Date object
+function parseCustomDateStringToDate(date_string)
+{
+    reg = /(.{4})-(.{0,2})-(.{0,2}) (.{0,2}):(.{0,2}):(.{0,4})/g;
+    match = reg.exec(date_string);
+
+    year = match[1];
+    month = match[2];
+    day = match[3];
+    hour = match[4];
+    minute = match[5];
+    second = match[6];
+
+    date = new Date();
+
+    date.setYear(year);
+    date.setMonth(month-1); // Month is 0 based lol wtf
+    date.setDate(day);
+    date.setHours(hour);
+    date.setMinutes(minute);
+    date.setSeconds(second);
+
+    return date;
+}
+
+
+// Returns json with keys Days, hours, minutes, seconds
+function millisecondsToReasonable(ms)
+{
+    floor = Math.floor;
+
+    if(ms == undefined)
+        ms = new Date() - new Date(1979,0);
+
+    MS_PER_SECOND = 1000;
+    SECONDS_PER_MINUTE = 60;
+    MINUTES_PER_HOUR = 60;
+    HOURS_PER_DAY = 24;
+
+    seconds = floor(ms/MS_PER_SECOND);
+
+    days = floor(seconds/(SECONDS_PER_MINUTE*MINUTES_PER_HOUR*HOURS_PER_DAY));
+    seconds = seconds % (SECONDS_PER_MINUTE*MINUTES_PER_HOUR*HOURS_PER_DAY);
+
+    hours = floor(seconds/(SECONDS_PER_MINUTE*MINUTES_PER_HOUR));
+    seconds = seconds % (SECONDS_PER_MINUTE*MINUTES_PER_HOUR);
+
+    minutes = floor(seconds/SECONDS_PER_MINUTE);
+    seconds = seconds % SECONDS_PER_MINUTE;
+
+    return {"days":days, "hours": hours, "minutes": minutes, "seconds": seconds};
+}
+
+// Returns json with keys Days, hours, minutes, seconds
+function reasonableTimeRemaining(target_date)
+{
+    remaining = target_date - new Date();
+    return millisecondsToReasonable(remaining);
+}
+
+function isReasonableTimeNegative(reasonable_time)
+{
+    SECONDS_PER_MINUTE = 60;
+    MINUTES_PER_HOUR = 60;
+    HOURS_PER_DAY = 24;
+
+    seconds = reasonable_time.seconds;
+    seconds += reasonable_time.minutes * SECONDS_PER_MINUTE;
+    seconds += reasonable_time.hours * MINUTES_PER_HOUR * SECONDS_PER_MINUTE;
+    seconds += reasonable_time.days * HOURS_PER_DAY * MINUTES_PER_HOUR * SECONDS_PER_MINUTE;
+
+    return seconds < 0;
+}
+
+// What have I done..
+// start method requires a callback that will take a "reasonableTime" json, and a Date object for the target date
+// - will then immediately start calling
+// stop method will stop the chain...
+// Only one callback can be running at a given time
+function timeRemainingCallback(target_date)
+{
+    TIMEOUT_mSEC = 1000; 
+    if(timeRemainingCallback.stop_flag)
+        return;
+    else 
+    {
+        timeRemainingCallback.callback(reasonableTimeRemaining(target_date));
+        timeRemainingCallback.timeout =  window.setTimeout(timeRemainingCallback, TIMEOUT_mSEC, target_date);
+    }
+}
+
+timeRemainingCallback.stop = function() { clearTimeout(timeRemainingCallback.timeout); timeRemainingCallback.stop_flag = true; };
+timeRemainingCallback.start = function(cb, target_date)
+{ 
+    timeRemainingCallback.stop_flag = false; 
+    timeRemainingCallback.callback = cb;
+    timeRemainingCallback(target_date);
+};
 
 /**************************
  * spa-opportunities-list *
@@ -127,11 +250,6 @@ function activateOpportunitiesList()
 
 function initializeOpportunitiesList()
 {
-    // $.ajax({
-    //     url: "php/api/opportunity/read.php", 
-    //     success: populateOpportunitiesList
-    // });
-
     $.ajax({
         url: "php/api/opportunity/read.php", 
         success: function(opportunities_json)
@@ -139,6 +257,7 @@ function initializeOpportunitiesList()
             opportunities = opportunities_json["opportunity"];
             num_opportunity_callbacks_left = opportunities.length;
 
+            // We need to get the category name for each opportunity, via the categoryID
             opportunities.forEach(function(opportunity)
             {
                 $.ajax({
@@ -161,8 +280,14 @@ function initializeOpportunitiesList()
 
 
 function populateOpportunitiesList(opportunities_json) {
+    console.log(opportunities_json);
+
     opportunities = opportunities_json["opportunity"];
     console.log("Length of opportunity array: " + opportunities.length.toString());
+
+    // Get which category we should be showing
+    selected_categoryID = $('#selectCategory option:selected').attr('categoryID');
+    console.log("selected categoryID: " + selected_categoryID + ", Name: " + $('#selectCategory option:selected').attr('Name'));
 
     opportunities_table = document.getElementById("opportunities-list-table");
     removeAllTableElements(opportunities_table); // Clear what we might already have there
@@ -171,6 +296,12 @@ function populateOpportunitiesList(opportunities_json) {
 
     for(var i = 0; i < opportunities.length; i++)
     {
+        // Skip and do not add any opportunities that don't match our selected category, if we have selected one
+        if((selected_categoryID != undefined && opportunities[i].CategoryID != selected_categoryID ) || opportunities[i].StatusName != "New")
+        {
+            continue;
+        }
+        opportunityID_textNode = document.createTextNode(opportunities[i].OpportunityID);
         closingDate_textNode = document.createTextNode(opportunities[i].ClosingDate);
         category_textNode = document.createTextNode(opportunities[i].CategoryName);
         anchor   = document.createElement("a");
@@ -181,7 +312,7 @@ function populateOpportunitiesList(opportunities_json) {
             return function() { activateOpportunityDetail(ID); };
         })();
 
-        table_array.push([anchor, category_textNode, closingDate_textNode]);
+        table_array.push([opportunityID_textNode, anchor, category_textNode, closingDate_textNode]);
     }
 
     insertTableRows(table_array, opportunities_table);
@@ -297,6 +428,7 @@ function activateCreateProposal(opportunity_id)
 
 function initializeCreateProposal(opportunity_id)
 {
+    $("#proposal-save-btn").show();
     // Probably want to make this synchronous, so that we can populate the doc list then do other things
     $.ajax({
         url: "php/api/opportunity/getDocTemplates.php?opportunityid="+opportunity_id, 
@@ -309,7 +441,8 @@ function initializeCreateProposal(opportunity_id)
         url: "php/api/opportunity/read.php", 
         type: "POST",
         data: {"OpportunityID": opportunity_id},
-        success: populateOppTitle
+        success: populateOppTitle,
+        async: false
     });
 
     $("#proposal-back-list-btn").off();
@@ -317,6 +450,8 @@ function initializeCreateProposal(opportunity_id)
 
     $("#proposal-back-list-btn").click(function() { router("#spa-opportunities-list"); });
     $("#proposal-save-btn").click(function() { console.log("Pressed proposal-save-btn"); saveNewProposal(opportunity_id); });
+
+
 }
 
 function saveNewProposal(opportunity_id)
@@ -335,8 +470,8 @@ function saveNewProposal(opportunity_id)
         "TechnicalScore": -1,
         "FeeScore": -1,
         "FinalTotalScore": -1,
-        "CreatedDate": getFormattedDate(),
-        "LastEditDate": getFormattedDate()
+        "CreatedDate": getFormattedCurrentDate(),
+        "LastEditDate": getFormattedCurrentDate()
     }
 
     console.log(new_proposal_json);
@@ -449,8 +584,34 @@ function getUniqueProposalID()
 
 function populateOppTitle(opportunity)
 {
+    current_opportunity_json = opportunity;
     $("#opportunity-title").text("Title: " + opportunity["Name"]);
     $("#opportunity-countdown").text("Closing Date and Time: " + opportunity["ClosingDate"]);
+
+    // Setup our lovely countdown timer...
+    //{"days":597,"hours":15,"minutes":44,"seconds":11}
+    timeRemainingCallback.stop();
+    timeRemainingCallback.start(
+        function(reasonable_time_remaining) {
+            if(isReasonableTimeNegative(reasonable_time_remaining))
+            {
+                timeRemainingCallback.stop();
+                time_remaining_text = "Time Remaining: This opportunity has expired";
+                $("#proposal-save-btn").hide();
+                $("#proposal-time-remaining").text(time_remaining_text);
+            }
+            else
+            {
+                time_remaining_text = "Time Remaining on this opportunity";
+                time_remaining_text += " Days: " + reasonable_time_remaining.days;
+                time_remaining_text += " Hours: " + reasonable_time_remaining.hours;
+                time_remaining_text += " Minutes: " + reasonable_time_remaining.minutes;
+                time_remaining_text += " Seconds: " + reasonable_time_remaining.seconds;
+                $("#proposal-time-remaining").text(time_remaining_text);
+            }
+        },
+        parseCustomDateStringToDate(opportunity["ClosingDate"])
+    );
 }
 
 
@@ -526,8 +687,56 @@ function initializeProposalsList()
         url: "php/api/proposal/read.php", 
         success: function(proposals_json) {
             // TODO: If time, learn about promises
-            num_proposal_callbacks_left = proposals_json["proposal"].length;
+            num_proposal_callbacks_left = proposals_json["proposal"].length * 3; // x3 because we have to get num docs for opportunity and prop
 
+            // For each, get number of proposal docs
+            proposals_json["proposal"].forEach( function (proposal_json)
+            {
+                $.ajax({
+                    url: "php/api/proposal/getDocsList.php?proposalid="+proposal_json.ProposalID, 
+                    type: "GET",
+                    success: function(proposal_docs_json)
+                    {
+                        docs = proposal_docs_json.doc;
+                        proposal_json.NumProposalDocs = (docs == null ? 0 : docs.length);
+
+                        num_proposal_callbacks_left--;
+                        if(num_proposal_callbacks_left == 0)
+                        {
+                            // Filter down all proposals till we get just ours
+                            populateProposalList(proposals_json["proposal"].filter(proposal => proposal["BidderID"] == bidder_id)); 
+                        }
+                    }
+                });
+            });
+
+            // For each, get number of opportunity docs
+            proposals_json["proposal"].forEach( function (proposal_json)
+            {
+                $.ajax({
+                    url: "php/api/opportunity/getDocTemplates.php?opportunityid="+proposal_json.OpportunityID, 
+                    type: "GET",
+                    success: function(opp_doc_templates)
+                    {
+                        if(!("doctemplate" in opp_doc_templates))
+                        {
+                            console.log("Got no doc templates, returning...");
+                            return;
+                        }
+                        doc_templates = opp_doc_templates["doctemplate"];
+                        proposal_json.NumOpportunityDocs = doc_templates.length;
+                        num_proposal_callbacks_left--;
+                        if(num_proposal_callbacks_left == 0)
+                        {
+                            // Filter down all proposals till we get just ours
+                            populateProposalList(proposals_json["proposal"].filter(proposal => proposal["BidderID"] == bidder_id)); 
+                        }
+                    }
+                });
+            });
+
+
+            // For each, get OpportunityName
             proposals_json["proposal"].forEach( function (proposal_json)
             {
                 $.ajax({
@@ -549,6 +758,7 @@ function initializeProposalsList()
     });
 }
 
+
 function populateProposalList(proposals_json)
 {
     proposals_table = document.getElementById("proposals-list-table");
@@ -558,7 +768,25 @@ function populateProposalList(proposals_json)
 
     for(var i = 0; i < proposals_json.length; i++)
     {
-        prop_status = document.createTextNode(proposals_json[i].Status);
+        // Replace Status name with something appropriate for the frontend
+        status_name = proposals_json[i].StatusName;
+        if(status_name == "Evaluation 1 Rejected") { status_name = "Rejected"; }
+        else if(status_name == "Evaluation 1 Accepted") { status_name = "Closed for edits, Under Evaluation"; }
+        else if(status_name == "Seeking Clarification 1") { status_name = "clarification requested"; }
+        else if(status_name == "Seeking Clarification 2") { status_name = "clarification requested"; }
+        else if(status_name == "Clarification Received ") { status_name = "Closed for edits, Under Evaluation"; }
+        else if(status_name == "Clarification Received ") { status_name = "Closed for edits, Under Evaluation"; }
+        else if(status_name == "Evaluation 2 Rejected") { status_name = "Rejected"; }
+        else if(status_name == "Evaluation 2 Accepted") { status_name = "Closed for edits, Under Evaluation"; }
+        else if(status_name == "In Progress" || status_name == "Open") 
+        { 
+            status_name = proposals_json[i].NumProposalDocs >= proposals_json[i].NumOpportunityDocs ? 
+                "Open For Edits, pending close date" : "Open For Edits, missing documents"; 
+        }
+        else {status_name = "UNKNOWN STATUS MAPPING"; }
+        
+
+        prop_status = document.createTextNode(status_name);
         closingDate = document.createTextNode(proposals_json[i].ClosingDate);
 
         anchor = document.createElement("a");
@@ -580,8 +808,11 @@ function populateProposalList(proposals_json)
 /********************
  * spa-edit-proposal*
  ********************/
-// Gonna be a little sneaky and reuse the create-opportunity spa
+// In the spirit of lazyness, this is set by create-opportunity, so that
+// I don't have to fetch it again...
+var current_opportunity_json = null;
 
+// Gonna be a little sneaky and reuse the create-opportunity spa
 function activateEditProposal(proposal_id)
 {
     $.ajax({
@@ -600,6 +831,7 @@ function activateEditProposal(proposal_id)
 function initializeEditProposal(proposal_json)
 {
     console.log("In initializeEditProposal");
+
     $("#create-proposal-header").text("Edit proposal");
     $("#proposal-time-last-edit").text("Time last edit: " + proposal_json.LastEditDate);
     $("#proposal-back-list-btn").off();
@@ -607,6 +839,31 @@ function initializeEditProposal(proposal_json)
 
     $("#proposal-back-list-btn").click(function() { router("#spa-proposals-list"); });
     $("#proposal-save-btn").click(function() { saveProposal(proposal_json); });
+
+    // Setup our lovely countdown timer...
+    //{"days":597,"hours":15,"minutes":44,"seconds":11}
+    timeRemainingCallback.stop();
+    timeRemainingCallback.start(
+        function(reasonable_time_remaining) {
+            if(isReasonableTimeNegative(reasonable_time_remaining))
+            {
+                timeRemainingCallback.stop();
+                time_remaining_text = "Time Remaining: This opportunity has expired, your proposal will be evaluated soon";
+                $("#proposal-save-btn").hide();
+                $("#proposal-time-remaining").text(time_remaining_text);
+            }
+            else
+            {
+                time_remaining_text = "Time Remaining on this opportunity";
+                time_remaining_text += " Days: " + reasonable_time_remaining.days;
+                time_remaining_text += " Hours: " + reasonable_time_remaining.hours;
+                time_remaining_text += " Minutes: " + reasonable_time_remaining.minutes;
+                time_remaining_text += " Seconds: " + reasonable_time_remaining.seconds;
+                $("#proposal-time-remaining").text(time_remaining_text);
+            }
+        },
+        parseCustomDateStringToDate(current_opportunity_json["ClosingDate"])
+    );
 
 
     doc_list = document.getElementById("opp-doc-templates-list");
@@ -729,3 +986,268 @@ function saveProposal(proposal_json)
     alert("Your proposal was succesfully saved");
     activateProposalsList();
 }
+
+
+/********************************
+ * Category picker related code *
+ ********************************/
+
+//get all categories to populate dropdown
+function getCategories(){
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/getOppCategoryList.php',true);
+    xhr.onload = function() {
+        if (xhr.status == 200) {
+            var jsonArray = JSON.parse(xhr.responseText);
+            fillCategoryDropdown(jsonArray);
+        } else {
+            alert("Error response");
+        }
+    };
+    xhr.send();
+}
+
+//Fill dropdown with categories
+function fillCategoryDropdown(jsonArray){
+    var start = 0;
+    var select = document.getElementById("selectCategory")
+    var size = jsonArray.Category.length;
+
+    for(var i=start;i<size;i++) {
+        var option = document.createElement("OPTION");
+        txt = document.createTextNode(jsonArray.Category[i].Name);
+        option.appendChild(txt);
+        option.setAttribute("Name", jsonArray.Category[i].Name)
+        option.setAttribute("categoryID", jsonArray.Category[i].CategoryID)
+        select.insertBefore(option, select.lastChild);
+    }
+}
+
+
+
+/********************
+ * spa-message-list *
+ ********************/
+ // Caution: Super jank!
+
+function activateMessageList()
+{
+    initializeMessageList();
+    router("#spa-message-list");
+}
+
+function initializeMessageList()
+{
+    removeAllTableElements(document.getElementById("messages-list-table"));
+    // Ajax call for messages associated with bidderID will go here
+    populateMessageList();
+}
+
+m0 = {"type":"NewOpportunity", "time_received":getFormattedCurrentDate(), "status":"read",
+"body":"Hello, this is an automated message. There is a new opportunity available"};
+
+m1 = {"type":"Clarification", "time_received":getFormattedCurrentDate(), "status":"unread",
+"body":"Hello, this is an official request for clarification on your proposal for AnOpportunity. Please re-upload your documents."};
+
+demo_messages = [m0,m1];
+
+function populateMessageList(messages_json)
+{
+    PREVIEW_LENGTH = 40; // Number of characters in the message preview
+    messages_json = demo_messages;
+    table_array = [];
+
+    for(i = 0; i < messages_json.length; i++)
+    {
+        message_type = document.createElement("a");
+        message_type.appendChild(document.createTextNode(messages_json[i].type));
+
+        time_received = document.createElement("a");
+        time_received.appendChild(document.createTextNode(messages_json[i].time_received) );
+
+        // This will be clipped
+        preview = document.createElement("a");
+        preview.appendChild(document.createTextNode(messages_json[i].body.substring(0,PREVIEW_LENGTH)+"...") );
+
+
+        message_status = document.createElement("a");
+        message_status.appendChild(document.createTextNode(messages_json[i].status) );
+
+        // Set onclick for each item in the table to activateMessageDetail for that item
+        message_type.onclick = (function() {
+            var ID = String(i);
+            return function() { activateMessageDetail(ID); };
+        })();
+
+        time_received.onclick = (function() {
+            var ID = String(i);
+            return function() { activateMessageDetail(ID); };
+        })();
+
+        preview.onclick = (function() {
+            var ID = String(i);
+            return function() { activateMessageDetail(ID); };
+        })();
+
+        message_status.onclick = (function() {
+            var ID = String(i);
+            return function() { activateMessageDetail(ID); };
+        })();
+
+        // Stick it in the table message-list-table!
+        table_array.push([message_type, time_received, preview, message_status]);
+    }
+
+    insertTableRows(table_array, document.getElementById("messages-list-table"));
+}
+
+
+/**********************
+ * spa-message-detail *
+ **********************/
+function activateMessageDetail(message_id)
+{
+    initializeMessageDetail(message_id);
+    router("#spa-message-detail");
+}
+
+function initializeMessageDetail(message_id)
+{
+
+    // Ajax to get the specific message
+    populateMessageDetail(demo_messages[parseInt(message_id)]);
+}
+
+// <h2>Message Type: <span id="message-detail-type">Message type placeholder</span></h2>
+// <h2>Time Received: <span id="message-detail-time-received">Message time received placeholder</span></h2>
+// <h2 id="message-detail-time-responded-header" class="hidden">Time Responded: <span id="message-detail-time-responded">Message time response placeholder</span></h2>
+// <a id="send-message-btn" class="btn btn-primary hidden">Send Message</a>
+// <a id="discard-message-btn" class="btn btn-primary  hidden">Discard Message</a>
+// <a id="message-detail-back-btn" class="btn btn-primary hidden" >Back to Messages</a>
+
+
+function populateMessageDetail(message)
+{
+
+    
+    $("#message-detail-body").text(message.body);
+
+    if(message.status == "read")
+    {
+        // Hide these
+        $("#send-message-btn").hide();
+        $("#discard-message-btn").hide();
+
+        //Unhide these
+        $("#message-detail-time-responded-header").show();
+        $("#message-detail-back-btn").show();
+
+        // Set these
+        // $("#message-response-editor").text("Enter you")
+    }
+    else
+    {
+        // Show these
+        $("#send-message-btn").show();
+        $("#discard-message-btn").show();
+
+        // Hide these
+        $("#message-detail-time-responded-header").hide();
+        $("#message-detail-back-btn").hide();
+    }
+
+    if(message.type != "Clarification")
+    {
+        $("#message-detail-response").hide();
+    }
+    else
+    {
+        $("#message-detail-response").show();
+    }
+
+    // Populate all fields
+    $("#message-detail-time-received").text(message.time_received);
+    $("#message-detail-type").text(message.type);
+
+}
+
+
+/****************************
+ * spa-manage-subscriptions *
+ ****************************/ 
+
+
+
+function activateManageSubscriptions()
+{
+    initializeManageSubscriptions();
+    router("#spa-manage-subscriptions");
+}
+
+
+function initializeManageSubscriptions()
+{
+    //get all categories
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/getOppCategoryList.php',true);
+    xhr.onload = function() {
+        if (xhr.status == 200) {
+            var jsonArray = JSON.parse(xhr.responseText);
+            populateManageSubscriptions(jsonArray);
+        } else {
+            alert("Error getting categories");
+        }
+    };
+    xhr.send();
+}
+
+
+// Todo: how to use the form data effectively...
+function populateManageSubscriptions(jsonArray)
+{
+    // Clear what we already have
+    $('#subscriptions-form').empty();
+
+    for(var i = jsonArray.Category.length-1; i >= 0 ; i--) {
+        div_form_check = $("<div>", {
+            class: 'form-check'
+        });
+
+        input_checkbox = $('<input>', {
+            class: 'form-check-input',
+            type: 'checkbox',
+            id: i
+        });
+
+        label = $("<label>", {
+            class: "form-check-label",
+            for: i,
+            text: jsonArray.Category[i].Name
+        });
+
+        input_checkbox.appendTo(div_form_check);
+        label.appendTo(div_form_check);
+        div_form_check.prependTo($('#subscriptions-form'));
+
+    }
+    submit_button = $("<button>",{
+        // type: "submit",
+        class: "btn btn-primary",
+        text: "Submit"
+    });
+
+    submit_button.appendTo($("#subscriptions-form"));
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

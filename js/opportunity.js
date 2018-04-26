@@ -1,59 +1,26 @@
-$(document).ready(
-    function () {
-        initNewOppForm();
-        $('#formdatetimepicker2').datetimepicker();
-        $('#editOpp').hide();
-        $('#newOpp').hide();
-        $('#oppList').show();
-        $('#showNewOpp').click(function (){
-            $('#newOpp').show();
-            $('#oppButtons').hide();
-            $('#docListTable').tablesorter();
-        });
-
-        $('#manageOpp').click(function() {
-            getOppList();
-            $('#oppListTable').tablesorter();
-            $("#oppsMenu option[id='opplist']").attr("selected", "selected");
-        });
 
 
-        $('clearFile').click(function() {
 
-        });
 
-        $('#saveNewOpp').click(function() {
-            saveOpportunity();
-        });
 
-        $('#exitNewOpp').click(function() {
-            $('#newOpp').hide();
-            $('#oppButtons').show();
-        });
-
-      //  $('#showEditOpp').hide();  //hiding for 1st pass through
-        $('#showEditOpp').click(function() {
-            $('#editOpp').show();
-            $('#oppButtons').hide();
-        });
-
-        $('.table').tablesorter();
-    });
-
-function getOppList() {
+function getBidderList() {
+    $('#bidListTableBody').empty();
     var xhr = new XMLHttpRequest();
-    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php',true);
-    xhr.onload = function() {
+    xhr.open('GET', 'http://athena.ecs.csus.edu/~wildcard/php/api/bidder/read.php', true);
+    xhr.onload = function () {
         if (xhr.status == 200) {
-            var jsonArray = JSON.parse(xhr.responseText);
-            var size = jsonArray.opportunity.length;
-            for(var i=0;i<size;i++) {
-                var opp = jsonArray.opportunity[i];
-                var row = "<tr><td>" + opp.OpportunityID + "</td><td>" + "<a href='javascript:showOpp()'>" + opp.Name +
-                    "</a></td><td>" + opp.ClosingDate + "</td><td>" + opp.Description + "</td><td>" +
-                    "<button id='showNewOpp' value='" + opp.OpportunityID + "' type='button' class='btn btn-primary btn-lg'>" +
-                    "<span class='glyphicon glyphicon-plus' aria-hidden='true'></span>Edit</button></td></tr>";
-                $('#oppListTable').append(row);
+            //var bidArray = fakedata;
+            var bidArray = JSON.parse(xhr.responseText);
+            var size = bidArray.bidder.length;
+            for (var i = 0; i < size; i++) {
+                var bidder = bidArray.bidder[i];
+                var row = "<tr><td>" + bidder.user_name + "</td><td>" + bidder.bidopsid + "</td><td>" + bidder.first_name + " " + bidder.middle_init + "</td><td>" + bidder.last_name +
+                    "</td><td>" + bidder.email + "</td><td>" + bidder.phone + "</td><td>" + bidder.address + "</td><td>" +
+                "<button class='btn btn-primary btn-lg'><span class='glyphicon glyphicon-eye-open'" +
+                "aria-hidden='true'></span> Details </button></td></tr>";
+                $('#bidListTableBody').append(row);
+                $("#bidListTableBody").trigger("update");
+
             }
         } else {
             alert("Error response");
@@ -63,121 +30,34 @@ function getOppList() {
 
 }
 
-function initNewOppForm() {
-    getLeadEvals()	;
+function editEmployee(eid) {
+    alert('Editing employee');
 }
 
-function uploadAllDocs() {
-    /* Upload scoring criteria*/
-
-        var file = $('#criteriaFile')[0].files[0];
-        var opid = $('#formIdInput').val();
-        console.log(file.name);
-        var formData=new FormData();
-        formData.append('ScoringCategoryBlob',file,file.name);
-        formData.append('OpportunityID', opid);
-        formData.append('filename', file.name);
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/uploadScoringCriteria.php');
-        //xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.onload = function() {
-            if(xhr.status == 200) {
-                alert('Scoring File uploaded');
-            } else {
-                alert('Error uploading scoring file');
-            }
-        };
-        xhr.send(formData);
-
-        /*upload other documents
-        var numfiles =  $('#uploadMFileName')[0].files.length;
-        var file;
-        var formData=new FormData();
-        for(i=0;i<numfiles;i++){
-            file = $('#uploadMFileName')[0].files[i];
-            formData.append('upload[]', file,file.name);
-            console.log(file.name);
-        }
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/update.php');
-        xhr.onload = function() {
-            if(xhr.status == 200) {
-                alert('File uploaded');
-            } else {
-            alert('Error uploading file');
-            }
-        };
-        xhr.send(formData);
-
-        */
-}
-
-function getLeadEvals() {
-	var xhr = new XMLHttpRequest();
-	xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/employee/read.php',true);
-	xhr.onload = function() {
-		if (xhr.status == 200) {
-			var jsonArray = JSON.parse(xhr.responseText);
-			var size = jsonArray.employee.length;
-			for(var i=0;i<size;i++) {
-				var lead = jsonArray.employee[i];
-				var name = lead.first_name + " " + lead.last_name;
-                $('select').append($('<option>', {value:lead.id, text:name }));
-            }
-		} else {
-            alert("Error response");
-		}
-	};
-	xhr.send();
-}
-
-function saveOpportunity() {
-    var scoreFile = $('#criteriaFile')[0].files[0];
-    var opId = $('#formIdInput').val();
-    var name = $('#formNameInput').val();
-    var desc = $('#formDescriptionInput').val();
-    var close = $('#formdatetimepicker2').data("DateTimePicker").viewDate().toString();
-    var lead = parseInt($('#selectLead').val());
-    var senddate = convertDate(close);
-    var jsonRecord =
-			{"OpportunityID":opId,
-                "Name":name,
-				"ClosingDate":close,
-				"LeadEvaluatorID":lead,
-				"LowestBid":10000,
-				"Description":desc};
+function getEmployeeList() {
+    $('#employeeListTableBody').empty();
     var xhr = new XMLHttpRequest();
-    xhr.open('POST','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/create.php',true);
-    xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded; charset=utf-8');  //Creates an  error
-    xhr.onload = function() {
+    xhr.open('GET', 'http://athena.ecs.csus.edu/~wildcard/php/api/employee/read.php', true);
+    xhr.onload = function () {
         if (xhr.status == 200) {
-            alert(xhr.responseText);
-            uploadAllDocs();
+            //var bidArray = fakedata;
+            var empArray = JSON.parse(xhr.responseText);
+            var size = empArray.employee.length;
+            for (var i = 0; i < size; i++) {
+                var employee = empArray.employee[i];
+                var editlink = "'editEmployee("+employee.id + ")'";
+                var row = "<tr><td>" + employee.user_name + "</td><td>" + employee.id + "</td><td>" + employee.first_name +  "</td><td>" + employee.last_name +
+                    "</td><td>" + employee.email + "</td><td>" + employee.phone + "</td><td>" + employee.address + "</td><td>" +
+                    "<button onclick="+ editlink + " class='btn btn-success btn-lg'><span class='glyphicon glyphicon-pencil'" +
+                    "aria-hidden='true'></span> Edit </button></td></tr>";
+                $('#employeeListTableBody').append(row);
+                $("#employeeListTableBody").trigger("update");
+
+            }
         } else {
-        	alert("Error saving opportunity");
+            alert("Error response");
         }
     };
-    var jsonString = JSON.stringify(jsonRecord);
-    xhr.send(jsonString);
-    console.log("Wrote Json: " + jsonString);
-}
-
-function submitDocList() {
+    xhr.send();
 
 }
-
-
-function getDocList() {
-
-}
-
-function convertDate(dateString) {
-    var thedate = new Date(dateString);
-    var newdate = thedate.getFullYear() + "-" + (thedate.getMonth()+1) + "-" + thedate.getDay() +
-                    " " + thedate.getHours() + ":" + thedate.getMinutes() + ":" + thedate.getSeconds();
-    return newdate;
-}
-
-
-
-
