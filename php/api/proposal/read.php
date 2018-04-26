@@ -7,6 +7,7 @@ header('Content-Type: application/json');
 
 include_once '../config/Database.php';
 include_once '../objects/proposal.php';
+include_once '../objects/bidder.php';
 
 $database = new Database();
 $db = $database->Connect();
@@ -24,14 +25,32 @@ if(isSet($_POST_LowerCase["proposalid"])
   $proposalID = isSet($_GET_LowerCase["proposalid"]) ?
      $_GET_LowerCase["proposalid"] : $_POST_LowerCase["proposalid"];
 
-
-//  echo '{';
-//  echo ' message : "ProposalID.  Record(ProposalID='.$proposalID.')"';
-//  echo '}';
-
-
   //Search
   $proposal->selectByID($proposalID);
+
+  $bidder_arr = array();
+  $bidderName = "";
+  if(isset($proposal->BidderID))
+  {
+    $BidderID = $proposal->BidderID;
+    $bidder = new Bidder($db);
+    $bidder->selectByBidderID($BidderID);
+
+    //$bidder_arr = array(
+    //  "id" =>  $bidder->id,
+    //  "bidopsid" =>  $bidder->bidopsid,
+    //  "first_name" =>  $bidder->first_name,
+    //  "last_name" =>  $bidder->last_name,
+    //  "email" =>  $bidder->email,
+    //  //"password" =>  $bidder->password,
+    //  "phone" =>  $bidder->phone,
+    //  "middle_init" => $bidder->middle_init,
+    //  "address" => $bidder->address,
+    //  "user_name" => $bidder->user_name
+    //);
+    
+    $bidderName = $bidder->first_name . " " . $bidder->last_name;
+  }
 
   $proposal_arr = array(
     "ProposalID" =>  $proposal->ProposalID,
@@ -43,7 +62,8 @@ if(isSet($_POST_LowerCase["proposalid"])
     "FeeScore" =>  $proposal->FeeScore,
     "FinalTotalScore" =>  $proposal->FinalTotalScore,
     "CreatedDate" =>  $proposal->CreatedDate,
-    "LastEditDate" =>  $proposal->LastEditDate
+    "LastEditDate" =>  $proposal->LastEditDate,
+    "BidderName" =>  $bidderName
   );
 
   // make it json format
@@ -66,6 +86,30 @@ else if(isSet($_POST_LowerCase["opportunityid"])
   {
     while($row = $stmt->fetch(PDO::FETCH_ASSOC))
     {
+      $BidderID = $row['BidderID'];
+
+      $bidder_arr = array();
+      $bidderName = "";
+      if(isset($BidderID))
+      {
+        $bidder = new Bidder($db);
+        $bidder->selectByBidderID($BidderID);
+
+        //$bidder_arr = array(
+        //  "id" =>  $bidder->id,
+        //  "bidopsid" =>  $bidder->bidopsid,
+        //  "first_name" =>  $bidder->first_name,
+        //  "last_name" =>  $bidder->last_name,
+        //  "email" =>  $bidder->email,
+          //"password" =>  $bidder->password,
+        //  "phone" =>  $bidder->phone,
+        //  "middle_init" => $bidder->middle_init,
+        //  "address" => $bidder->address,
+        //  "user_name" => $bidder->user_name
+        //);
+        $bidderName = $bidder->first_name . " " . $bidder->last_name;
+      }
+
       $proposal_arr = array(
         "ProposalID" =>  $row['ProposalID'],
         "OpportunityID" =>  $row['OpportunityID'],
@@ -76,7 +120,8 @@ else if(isSet($_POST_LowerCase["opportunityid"])
         "FeeScore" =>  $row['FeeScore'],
         "FinalTotalScore" =>  $row['FinalTotalScore'],
         "CreatedDate" =>  $row['CreatedDate'],
-        "LastEditDate" =>  $row['LastEditDate']
+        "LastEditDate" =>  $row['LastEditDate'],
+        "BidderName" =>  $bidderName
         );
 
       array_push($proposals_arr["proposal"], $proposal_arr);
@@ -100,6 +145,30 @@ else
 
     while($row = $stmt->fetch(PDO::FETCH_ASSOC))
     {
+      $bidder_arr = array();
+
+      $BidderID = $row['BidderID'];
+      $bidderName = "";
+      if(isset($BidderID))
+      {
+        $bidder = new Bidder($db);
+        $bidder->selectByBidderID($BidderID);
+
+        //$bidder_arr = array(
+        //  "id" =>  $bidder->id,
+        //  "bidopsid" =>  $bidder->bidopsid,
+        //  "first_name" =>  $bidder->first_name,
+        //  "last_name" =>  $bidder->last_name,
+        //  "email" =>  $bidder->email,
+        //  //"password" =>  $bidder->password,
+        //  "phone" =>  $bidder->phone,
+        //  "middle_init" => $bidder->middle_init,
+        //  "address" => $bidder->address,
+        //  "user_name" => $bidder->user_name
+        //);
+        $bidderName = $bidder->first_name . " " . $bidder->last_name;
+      }
+
       $proposal_arr = array(
         "ProposalID" =>  $row['ProposalID'],
         "OpportunityID" =>  $row['OpportunityID'],
@@ -110,7 +179,8 @@ else
         "FeeScore" =>  $row['FeeScore'],
         "FinalTotalScore" =>  $row['FinalTotalScore'],
         "CreatedDate" =>  $row['CreatedDate'],
-        "LastEditDate" =>  $row['LastEditDate']
+        "LastEditDate" =>  $row['LastEditDate'],
+        "BidderName" =>  $bidderName
         );
      
       array_push($proposals_arr["proposal"], $proposal_arr);
