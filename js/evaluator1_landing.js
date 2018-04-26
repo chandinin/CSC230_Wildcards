@@ -1,7 +1,9 @@
+var employeeName = localStorage.getItem("employeeName");
 var opportunityName;
 //Onstart
 $(document).ready(
     function () {
+        document.getElementById("employeeName").innerHTML = employeeName;
         getOppList();
         getCategories();
         $('#manageOpp').click(function() {
@@ -56,7 +58,7 @@ function fillOppTable(jsonArray){
             var opp = jsonArray.opportunity[i];
             var row ="<tr>"+"</td><td>" + opp.OpportunityID+ "</td><td>"
                 + "<a href='javascript:showOppDetails(\"" + opp.OpportunityID + '","' + opp.Name + "\")'>" +
-                opp.Name + "</a></td><td>"+ "5" + "<td>"+ new Date(opp.ClosingDate).toDateString()+ "<td>"
+                opp.Name + "</a></td><td>"+ opp.ProposalCount + "<td>"+ new Date(opp.ClosingDate).toDateString()+ "<td>"
                 + opp.StatusName + " <td>" +  "<button onclick='completeOpportunityEval(\"" +
                 opp.OpportunityID + "\")' id='editOppButton' value='\" + opp.OpportunityID + \"' type='button' " +
                 "class='btn btn-primary btn-sm'>" +

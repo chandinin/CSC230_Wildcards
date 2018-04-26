@@ -59,20 +59,20 @@ function EmployeeLoginAction() {
         //read username and password from the HTML form
         var params = {
             "UserName": username,
-            "PASSWORD": password,
-            "Role" : employeeRoleid
+            "PASSWORD": password
         };
 
         //Convert HTML form value to json
         var myJSON = JSON.stringify(params);
         var xhttp = new XMLHttpRequest();
 
-        xhttp.open("POST", "http://athena.ecs.csus.edu/~mackeys/php/api/employee/authentication.php", true);
+        xhttp.open("POST", "http://athena.ecs.csus.edu/~wildcard/php/api/employee/authentication.php", true);
         //Async call
         xhttp.onload = function () {
             var response = JSON.parse(xhttp.responseText);
             var status = JSON.parse(xhttp.status);
             if (status == 200 && response.authenticated == true) {
+                localStorage.setItem("employeeName",response.FullName);
                 //IF the authentication successful go to the landing page, NOTE: Need to change to the correct URL
                 switch (employeeRoleid) {
                     case "0": //Author

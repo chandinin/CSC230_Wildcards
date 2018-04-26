@@ -1,11 +1,12 @@
 //proposal id passes from the previous page where a specific proposal is selected
+var bidderName = localStorage.getItem("bidderName");
 var proposalID = localStorage.getItem("proposalId");
 
 
 //On Start
 $(document).ready(
     function () {
-
+        document.getElementById("bidderName").innerHTML = bidderName;
         document.getElementById("proposalid").innerHTML = proposalID;
     });
 
