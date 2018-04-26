@@ -298,6 +298,7 @@ create table ProposalDocs
   DocTemplateID int null,
   CreatedDate datetime null,
   LastEditDate datetime null,
+  FeeDoc boolean not null default 0,
   PRIMARY KEY (ProposalID,DocID)
 );
 
