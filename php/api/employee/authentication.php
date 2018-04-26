@@ -35,25 +35,27 @@ else
 }
 
 // Query database for our user with ID
-$query = "SELECT PASSWORD FROM EMPLOYEE  WHERE UserName = ?;";
+$query = "SELECT PASSWORD, FIRST_NAME, LAST_NAME FROM EMPLOYEE  WHERE UserName = ?;";
 
 // prepare query statement
 $stmt = $conn->prepare($query);
- 
+
 // bind id of product to be updated
 $stmt->bindParam(1, $UserName);
- 
+
 // execute query
 $stmt->execute();
 
 // get retrieved row
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
+$FullName = $row["FIRST_NAME"] . " " . $row["LAST_NAME"];
 
 $resp = array(
     "authenticated" =>  $row["PASSWORD"] == $PASSWORD,
     "method" => $Method,
-    "UserName" => $UserName
+    "UserName" => $UserName,
+    "FullName" => $FullName
 
 );
 
@@ -62,4 +64,3 @@ print_r(json_encode($resp));
 //$conn->close();
 http_response_code(200);
 ?>
-
