@@ -128,6 +128,66 @@ class Bidder
     else
       return false;
   }
+
+  // select All Subscriptions by Bidder
+  function getAllSubscriptions($bidderID)
+  {
+    $query = "SELECT ID, CategoryID FROM Subscription WHERE ID = :ID;";
+    $stmt = $this->conn->prepare( $query );
+
+    // bind parameters
+    $stmt->bindParam(':ID', $bidderID);
+
+    // execute query
+    $stmt->execute();
+
+    return $stmt;
+  }
+
+  // select All Subscriptions by Category.
+  function getAllSubscriptionsByCategory($CategoryID)
+  {
+    $query = "SELECT ID, CategoryID FROM Subscription WHERE CategoryID = :CategoryID;";
+    $stmt = $this->conn->prepare( $query );
+
+    // bind parameters
+    $stmt->bindParam(':CategoryID', $CategoryID);
+
+    // execute query
+    $stmt->execute();
+
+    return $stmt;
+  }
+
+  function Subscribe($ID, $CategoryID)
+  {
+    $query = "INSERT INTO Subscription (ID, CategoryID) " .
+             "VALUES(:ID, :CategoryID);";
+    $stmt = $this->conn->prepare( $query );
+
+    // bind parameters
+    $stmt->bindParam(':ID', $ID);
+    $stmt->bindParam(':CategoryID', $CategoryID);
+
+    if($stmt->execute())
+      return true;
+    else
+      return false;
+  }
+
+  function DeleteAllSubscriptions($BidderID)
+  {
+    $query = "DELETE FROM Subscription WHERE ID = :ID;";
+    $stmt = $this->conn->prepare( $query );
+
+    // bind parameters
+    $stmt->bindParam(':ID', $BidderID);
+
+    if($stmt->execute())
+      return true;
+    else
+      return false;
+  }
 }
 ?>
 

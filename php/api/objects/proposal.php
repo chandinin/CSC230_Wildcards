@@ -74,7 +74,7 @@ class Proposal
   // select one by ID
   function AllPropsAcceptRejectByOppID($id)
   {
-    $query = "select count(*) as total from Proposal where ((`Status` is null) OR (`Status` <> 0 AND `Status` <> 1)) AND OpportunityID = :ID ;";
+    $query = "select count(*) as total from Proposal where ((`Status` is null) OR (`Status` not in (10,15,60,65))) AND OpportunityID = :ID ;";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
@@ -91,13 +91,6 @@ class Proposal
       $row = $stmt->fetch(PDO::FETCH_ASSOC);
       $proposalCount = $row['total'];
     }
-
-    //echo '{';
-    //echo ' "id" : "' . $id . '",';
-    //echo ' "itemcount" : "' . $rowCount . ',"';
-    //echo ' "total" : "' . $proposalCount . ',"';
-    //echo ' "query" : "' . $query . '"';
-    //echo '}';   
 
     if($proposalCount > 0)
       return false;
@@ -173,7 +166,7 @@ class Proposal
 
   function reject($ProposalID)
   {
-    $query = "UPDATE Proposal set Status=0 WHERE ProposalID = :ProposalID;";
+    $query = "UPDATE Proposal set Status=60 WHERE ProposalID = :ProposalID;";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
@@ -296,6 +289,49 @@ class Proposal
     }
   }
 
+  // Get Fee document for proposal
+  function getFeeDocByProposalID($ProposalID)
+  {
+    try
+    {
+      $query = "SELECT ProposalDocs.DocTemplateID, Docs.DocID, Docs.DocTitle, Docs.Description, Docs.Path, Docs.Url FROM Docs INNER JOIN ProposalDocs ON Docs.DocID=ProposalDocs.DocID WHERE ProposalDocs.FeeDoc = 1 AND ProposalDocs.ProposalID='".$ProposalID."' ";
+
+
+      $stmt = $this->conn->prepare( $query );
+
+      // bind parameters
+      //$stmt->bindParam(':ProposalID', $ProposalID);
+      $stmt->execute();
+
+      return $stmt;
+    }
+    catch (PDOException $e)
+    {
+      echo 'Connection failed: ' . $e->getMessage();
+    }
+  }
+
+  // Get Fee document for proposal
+  function removeFeeDocsByProposalID($ProposalID)
+  {
+    try
+    {
+      $query = "DELETE FROM ProposalDocs WHERE FeeDoc = 1 AND ProposalDocs.ProposalID='".$ProposalID."'; ";
+
+      $stmt = $this->conn->prepare( $query );
+
+      // bind parameters
+      //$stmt->bindParam(':ProposalID', $ProposalID);
+      $stmt->execute();
+
+      return $stmt;
+    }
+    catch (PDOException $e)
+    {
+      echo 'Connection failed: ' . $e->getMessage();
+    }
+  }
+
   // Upload Document Template
   function getNewDocID()
   {
@@ -352,6 +388,51 @@ class Proposal
     try
     {
       $query = "INSERT INTO ProposalDocs (ProposalID, DocID, ExpirationDate, OpportunityID, DocTemplateID, CreatedDate, LastEditDate) VALUES ('".$ProposalID."', ".$DocsID.", '".$ExpirationDate."', '".$OpportunityID."', ".$DocTemplateID.", NOW(), NOW()); ";
+      $stmt = $this->conn->prepare( $query );
+
+      if($stmt->execute())
+        return true;
+      else
+        return false;
+    }
+    catch (PDOException $e)
+    {
+      echo 'Connection failed: ' . $e->getMessage();
+      return false;
+    }
+  }
+
+  // Upload Document Template
+  function RelateFeeDocsToProposalID($ProposalID, $DocsID, $ExpirationDate)
+  {
+    try
+    {
+      $query = "INSERT INTO ProposalDocs (ProposalID, DocID, ExpirationDate, FeeDoc, CreatedDate, LastEditDate) VALUES ('".$ProposalID."', ".$DocsID.", '".$ExpirationDate."', 1, NOW(), NOW()); ";
+
+      $stmt = $this->conn->prepare( $query );
+
+      // bind parameters
+      //$stmt->bindParam(':ProposalID', $ProposalID);
+      //$stmt->bindParam(':DocID', $DocID);
+      //$stmt->bindParam(':ExpirationDate', $ExpirationDate);
+
+      if($stmt->execute())
+        return true;
+      else
+        return false;
+    }
+    catch (PDOException $e)
+    {
+      echo 'Connection failed: ' . $e->getMessage();
+      return false;
+    }
+  }
+
+  function RelateFeeDocsToProposalID2($ProposalID, $DocsID, $ExpirationDate, $OpportunityID, $DocTemplateID)
+  {
+    try
+    {
+      $query = "INSERT INTO ProposalDocs (ProposalID, DocID, ExpirationDate, OpportunityID, DocTemplateID, FeeDoc, CreatedDate, LastEditDate) VALUES ('".$ProposalID."', ".$DocsID.", '".$ExpirationDate."', '".$OpportunityID."', ".$DocTemplateID.", 1, NOW(), NOW()); ";
       $stmt = $this->conn->prepare( $query );
 
       if($stmt->execute())

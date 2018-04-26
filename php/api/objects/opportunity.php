@@ -441,6 +441,33 @@ class Opportunity
 
     return $stmt;
   }
+
+  // select one by ID
+  function getProposalCount($OpportunityID)
+  {
+    $Count = 0;
+    try
+    {
+      $query = "select count(*) as ProposalCount from Proposal where OpportunityID = ?;";
+      
+      $stmt = $this->conn->prepare( $query );
+   
+      // bind parameters
+      $stmt->bindParam(1, $OpportunityID);
+
+      if($stmt->execute())
+      {
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $Count = $row['ProposalCount'];
+      }
+    }
+    catch (PDOException $e) 
+    {
+      echo 'Connection failed: ' . $e->getMessage();
+    }
+
+    return $Count;
+  }
 }
 ?>
 
