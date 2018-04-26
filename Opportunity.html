@@ -129,10 +129,12 @@
                                             <option id = "id" value="default">Category</option>
                                         </optgroup>
                                     </select><br>
-                                    <div class="form-group">
-                                        <label for="formId">Opportunity Id</label>
-                                        <input type="text" size="10" class="form-control" id="formIdInput"
-                                               placeholder="Opportunity Id" required>
+                                    <div class="row col-xs-2">
+                                        <div class="form-group">
+                                            <label for="formId">Opportunity Id</label>
+                                            <input type="text" size="10" class="form-control" id="formIdInput"
+                                                   placeholder="Opportunity Id" required>
+                                        </div>
                                     </div>
 
                                     <div class="form-group">
@@ -140,13 +142,7 @@
                                         <input type="text" size="20" class="form-control" id="formNameInput"
                                                placeholder="Opportunity Name" required>
                                     </div>
-            <!--
-                                    <div class="form-group">
-                                        <label for="formDescription">Description</label>
-                                        <textarea class="form-control" id="formDescriptionInput editor" name="editor" rows="4"
-                                                  placeholder="Describe the opportunity." required></textarea>
-                                    </div>
-            -->
+
                                     <div id="" class="form-group">
                                         <label for="formDescription">Description</label>
                                         <textarea class="form-control" id="formDescriptionInput" rows="4"
@@ -172,7 +168,13 @@
                                                 </select>
                                             </label>
                                         </div>
-
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-2">
+                                            <label for="formMinScore">Minumum Score</label>
+                                            <input type="text" size="3" class="form-control" id="formScoreInput"
+                                                   placeholder="000" required>
+                                        </div>
                                         <div class="col-sm-8">
                                             <div class="form-group">
                                                 <div class="custom-file">
