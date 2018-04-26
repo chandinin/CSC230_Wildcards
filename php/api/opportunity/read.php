@@ -27,6 +27,8 @@ if(isSet($_POST_LowerCase["opportunityid"])
   //Search
   $opportunity->selectByID($opportunityID);
 
+  $ProposalCount = $opportunity->getProposalCount($opportunityID);
+
   $opportunity_arr = array(
     "OpportunityID" =>  $opportunity->OpportunityID,
     "ClosingDate" =>  $opportunity->ClosingDate,
@@ -38,7 +40,8 @@ if(isSet($_POST_LowerCase["opportunityid"])
     "StatusName" =>  $opportunity->StatusName,
     "CategoryID" =>  $opportunity->CategoryID,
     "CreatedDate" =>  $opportunity->CreatedDate,
-    "LastEditDate" =>  $opportunity->LastEditDate
+    "LastEditDate" =>  $opportunity->LastEditDate,
+    "ProposalCount" =>  $ProposalCount
   );
 
   // make it json format
@@ -62,6 +65,9 @@ else if(isSet($_POST_LowerCase["status"])
 
     while($row = $stmt->fetch(PDO::FETCH_ASSOC))
     {
+      $opportunityID = $row['OpportunityID'];
+      $ProposalCount = $opportunity->getProposalCount($opportunityID);
+
       $opportunity_arr = array(
           "OpportunityID" => $row['OpportunityID'],
           "ClosingDate" => $row['ClosingDate'],
@@ -73,7 +79,8 @@ else if(isSet($_POST_LowerCase["status"])
           "StatusName" => $row['StatusName'],
           "CategoryID" => $row['CategoryID'],
           "CreatedDate" => $row['CreatedDate'],
-          "LastEditDate" => $row['LastEditDate']
+          "LastEditDate" => $row['LastEditDate'],
+          "ProposalCount" => $ProposalCount
       );
 
       array_push($opportunities_arr["opportunity"], $opportunity_arr);
@@ -102,6 +109,9 @@ else if(isSet($_POST_LowerCase["categoryid"])
 
     while($row = $stmt->fetch(PDO::FETCH_ASSOC))
     {
+      $opportunityID = $row['OpportunityID'];
+      $ProposalCount = $opportunity->getProposalCount($opportunityID);
+
       $opportunity_arr = array(
           "OpportunityID" => $row['OpportunityID'],
           "ClosingDate" => $row['ClosingDate'],
@@ -113,7 +123,8 @@ else if(isSet($_POST_LowerCase["categoryid"])
           "StatusName" => $row['StatusName'],
           "CategoryID" => $row['CategoryID'],
           "CreatedDate" => $row['CreatedDate'],
-          "LastEditDate" => $row['LastEditDate']
+          "LastEditDate" => $row['LastEditDate'],
+          "ProposalCount" => $ProposalCount
       );
 
       array_push($opportunities_arr["opportunity"], $opportunity_arr);
@@ -137,6 +148,9 @@ else
 
     while($row = $stmt->fetch(PDO::FETCH_ASSOC))
     {
+      $opportunityID = $row['OpportunityID'];
+      $ProposalCount = $opportunity->getProposalCount($opportunityID);
+
       $opportunity_arr = array(
           "OpportunityID" => $row['OpportunityID'],
           "ClosingDate" => $row['ClosingDate'],
@@ -148,7 +162,8 @@ else
           "StatusName" => $row['StatusName'],
           "CategoryID" => $row['CategoryID'],
           "CreatedDate" => $row['CreatedDate'],
-          "LastEditDate" => $row['LastEditDate']
+          "LastEditDate" => $row['LastEditDate'],
+          "ProposalCount" => $ProposalCount
       );
      
       array_push($opportunities_arr["opportunity"], $opportunity_arr);
