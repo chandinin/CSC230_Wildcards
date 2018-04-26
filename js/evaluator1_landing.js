@@ -1,4 +1,5 @@
-//Onstart?
+var opportunityName;
+//Onstart
 $(document).ready(
     function () {
         getOppList();
@@ -53,9 +54,9 @@ function fillOppTable(jsonArray){
     function fillOppTable(start, limit){
         for(var i=start;i<limit;i++) {
             var opp = jsonArray.opportunity[i];
-            var row ="<tr>"+"</td><td>" + opp.OpportunityID+ "</td><td>" + "<a href='javascript:showOppDetails(\"" + opp.OpportunityID + "\")'>" +
+            var row ="<tr>"+"</td><td>" + opp.OpportunityID+ "</td><td>" + "<a href='javascript:showOppDetails(\"" + opp.OpportunityID + '","' + opp.Name + "\")'>" +
                 opp.Name + "</a></td><td>"
-                + opp.ClosingDate + "<td>"+ opp.StatusName + " <td>" +  "<button onclick='completeOpportunityEval(\"" +
+                + new Date(opp.ClosingDate).toDateString()+ "<td>"+ opp.StatusName + " <td>" +  "<button onclick='completeOpportunityEval(\"" +
                 opp.OpportunityID + "\")' id='editOppButton' value='\" + opp.OpportunityID + \"' type='button' " +
                 "class='btn btn-primary btn-sm'>" +
                 "Complete</button></td>";
@@ -123,7 +124,8 @@ $(document).ready(function () {
 });
 
 //Show opportunity detail page
-function showOppDetails(opId) {
+function showOppDetails(opId, oppName) {
+    localStorage.setItem("opportunityName",oppName);
     localStorage.setItem("opportunityID",opId);
     window.location.replace("list_proposals.html");
 }
@@ -142,20 +144,4 @@ function completeOpportunityEval(opId) {
     //Write logic to update opportunity status to complete.
 }
 
-//table sorter logic
-/*$(document).ready(function()
-    {
-        $("#listOppPanel").tablesorter();
-    }
-);*/
 
-//Click on the headers and you'll see that your table is now sortable!
-// You can also pass in configuration options when you initialize the table.
-// This tells tablesorter to sort on the first and second column in ascending order.
-/*
-$(document).ready(function()
-    {
-        $("#listOppPanel").tablesorter( {sortList: [[0,0], [1,0]]} );
-    }
-);
-*/

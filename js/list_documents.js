@@ -4,6 +4,7 @@ var proposalID = localStorage.getItem("proposalId");
 //onstart?
 $(document).ready(
     function () {
+        document.getElementById("proposalid").innerHTML = proposalID;
         getDocumentList();
         $('#manageOpp').click(function() {
             getDocumentList();
@@ -83,4 +84,13 @@ function updateProposalStatus(status) {
     }
     xhttp.send(myJson);
 }
+
+//Function to seek clarification
+//TODO get the right endpoint to use
+function SeekClarificationButton() {
+    localStorage.setItem("proposalId",proposalID);
+    window.location.replace("seek_clarification.html")
+}
+
+
 

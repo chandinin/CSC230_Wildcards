@@ -1,9 +1,10 @@
 //On Start
 $(document).ready(
     function () {
+        var oppName = localStorage.getItem("opportunityName");
+        document.getElementById("opportunityName").innerHTML = oppName;
         getProposalList();
         $('#listOppPanel').show();
-
         $('#proposalListTable tr').click(function() {
             showOpp();
         });
@@ -37,8 +38,8 @@ function fillProposalTable(jsonArray){
     function fillOppTable(start, limit){
         for(var i=0;i<size;i++) {
             var proposal = jsonArray.proposal[i];
-            var row ="<tr>"+"</td><td>" + proposal.OpportunityID+ "</td><td>" + "<a href='javascript:showProposalDetails(\"" + proposal.ProposalID + "\")'>" +  proposal.ProposalID + "</a></td><td>"
-                + proposal.Status + "</td>";
+            var row ="<tr>"+"</td><td>" + "<a href='javascript:showProposalDetails(\"" + proposal.ProposalID + "\")'>" +  proposal.ProposalID + "</a></td><td>"
+                + proposal.StatusName + "</td>";
                 "Complete</button></td>";
             $('#proposalListTableBody').append(row);
             $("#proposalListTableBody").trigger("update");

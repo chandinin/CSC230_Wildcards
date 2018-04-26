@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Documents</title>
+    <title>Clarification</title>
 
     <!-- CSS Includes -->
     <link rel="stylesheet" type="text/css" href="css/ept/menu2.css"/>
@@ -46,7 +46,7 @@
     <link rel="stylesheet" type="text/css" href="css/ept/login.css"/>
     <script type="text/javascript" src="js/ept/jquery.cookie.js"></script>
     <script src="js/bidder_login.js"></script>
-    <script src="js/list_documents.js"></script>
+    <script src="js/seek_clarification.js"></script>
 </head>
 <body>
 <!--Contents of the whole page-->
@@ -120,6 +120,7 @@
                     <li class=""><a href="home_page.html"><span class="glyphicon glyphicon-home hidden-xs"
                                                                 aria-hidden="true"> </span> Home</a>
                 </ul>
+
                 <ul class="nav navbar-nav navbar-right">
                     <li class=""><a href="employee_login.html"><span class="glyphicon glyphicon-log-out hidden-xs"
                                                                      aria-hidden="true"> </span> Logout</a>
@@ -134,68 +135,40 @@
             <li><a href="home_page.html">Home</a></li>
             <li><a href="evaluator1_landing.html">Preliminary Evaluation</a></li>
             <li><a href="list_proposals.html">Proposals</a></li>
-            <li class="active">Documents</li>
+            <li><a href="list_documents.html">Documents</a></li>
+            <li class="active">Clarification</li>
         </ul>
     </div>
 
-    <!--Proposalid and bidder name-->
+    <!-- Proposal id bidder name-->
     <div class="container navbar-right">
         <div align="left">
         <h2>Proposal: <span id="proposalid"></span></h2>
         <h2>Bidder: <span id="bidderName"></span></h2>
-            <br>
-            <br>
-        </div>
-    </div>
+        <br>
+        <br>
 
-    <!--Seek clarification button-->
-    <div class="container navbar-right">
+        <!--textbox-->
+        <div id="clarificationMessage" class="form-group">
+            <label>Clarification Question</label>
+            <textarea class="form-control" id="clarificationRequest" rows="6"
+                      placeholder="Enter your clarification question here." required></textarea>
+        </div>
+
+        <!--Buttons for text message-->
         <div align="left">
-            <button type="button" class="btn btn-openportal btn-sm" onclick="SeekClarificationButton()">
-                <span class="glyphicon glyphicon-open-file"></span> Seek Clarification
+
+            <button type="button" class="btn btn-accept btn-sm" onclick="SeekClarification()">
+                <span class="glyphicon glyphicon-ok-sign"></span> Seek Clarification
+            </button>
+
+            <button type="button" class="btn btn-reject btn-sm" onclick="DiscardMessage()">
+                <span class="glyphicon glyphicon-remove-sign"></span> Discard Message
             </button>
         </div>
-    </div>
-
-    <!--Table contents-->
-    <div class="container navbar-right">
-        <div id="listOppPanel" class="tab-content vertical">
-            <div class="row ">
-                <div class="col-md-20">
-                    <table id="documentsTable" class="table table-bordered table-striped table-hover">
-                        <thead>
-                        <th>Document title</th>
-                        <th></th>
-                        </thead>
-                        <tbody id="documentsTableBody">
-                        </tbody>
-                    </table>
-                </div>
-            </div>
         </div>
-    </div>
-
-    <!--Accept and reject buttons-->
-    <div align="right">
-
-        <button type="button" class="btn btn-accept btn-sm" onclick="updateProposalStatus('Accept')">
-            <span class="glyphicon glyphicon-ok-sign"></span> Accept Proposal
-        </button>
-
-        <button type="button" class="btn btn-reject btn-sm" onclick="updateProposalStatus('Reject')">
-            <span class="glyphicon glyphicon-remove-sign"></span> Reject Proposal
-        </button>
-    </div>
-
-    <!--Pagination-->
-    <div class="container navbar-right">
-        <ul class="pagination">
-            <li class="page-item"><a id="prev" class="page-link" href="#">Previous</a></li>
-            <li class="page-item"><a id="next" class="page-link" href="#">Next</a></li>
-        </ul>
     </div>
 
 </div>
-
 </body>
 </html>

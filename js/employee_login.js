@@ -59,7 +59,8 @@ function EmployeeLoginAction() {
         //read username and password from the HTML form
         var params = {
             "UserName": username,
-            "PASSWORD": password
+            "PASSWORD": password,
+            "Role" : employeeRoleid
         };
 
         //Convert HTML form value to json
