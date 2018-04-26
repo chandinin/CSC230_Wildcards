@@ -136,13 +136,17 @@
             <li><a href="list_proposals.html">Proposals</a></li>
             <li class="active">Documents</li>
         </ul>
+
+        <div  style="color: #000000;" align="center">
+            <h2>DOCUMENTS</h2>
+        </div>
     </div>
 
     <!--Proposalid and bidder name-->
     <div class="container navbar-right">
         <div align="left">
-        <h2>Proposal: <span id="proposalid"></span></h2>
-        <h2>Bidder: <span id="bidderName"></span></h2>
+        <h1>Proposal: <span id="proposalid"></span></h1>
+        <h1>Bidder: <span id="bidderName"></span></h1>
             <br>
             <br>
         </div>
@@ -165,7 +169,7 @@
                     <table id="documentsTable" class="table table-bordered table-striped table-hover">
                         <thead>
                         <th>Document title</th>
-                        <th></th>
+                        <th>Download</th>
                         </thead>
                         <tbody id="documentsTableBody">
                         </tbody>
@@ -178,11 +182,11 @@
     <!--Accept and reject buttons-->
     <div align="right">
 
-        <button type="button" class="btn btn-accept btn-sm" onclick="updateProposalStatus('Accept')">
+        <button type="button" class="btn btn-accept btn-sm" onclick="updateProposalStatus(15)">
             <span class="glyphicon glyphicon-ok-sign"></span> Accept Proposal
         </button>
 
-        <button type="button" class="btn btn-reject btn-sm" onclick="updateProposalStatus('Reject')">
+        <button type="button" class="btn btn-reject btn-sm" onclick="updateProposalStatus(10)">
             <span class="glyphicon glyphicon-remove-sign"></span> Reject Proposal
         </button>
     </div>

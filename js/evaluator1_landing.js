@@ -54,9 +54,10 @@ function fillOppTable(jsonArray){
     function fillOppTable(start, limit){
         for(var i=start;i<limit;i++) {
             var opp = jsonArray.opportunity[i];
-            var row ="<tr>"+"</td><td>" + opp.OpportunityID+ "</td><td>" + "<a href='javascript:showOppDetails(\"" + opp.OpportunityID + '","' + opp.Name + "\")'>" +
-                opp.Name + "</a></td><td>"
-                + new Date(opp.ClosingDate).toDateString()+ "<td>"+ opp.StatusName + " <td>" +  "<button onclick='completeOpportunityEval(\"" +
+            var row ="<tr>"+"</td><td>" + opp.OpportunityID+ "</td><td>"
+                + "<a href='javascript:showOppDetails(\"" + opp.OpportunityID + '","' + opp.Name + "\")'>" +
+                opp.Name + "</a></td><td>"+ "5" + "<td>"+ new Date(opp.ClosingDate).toDateString()+ "<td>"
+                + opp.StatusName + " <td>" +  "<button onclick='completeOpportunityEval(\"" +
                 opp.OpportunityID + "\")' id='editOppButton' value='\" + opp.OpportunityID + \"' type='button' " +
                 "class='btn btn-primary btn-sm'>" +
                 "Complete</button></td>";
@@ -133,15 +134,22 @@ function showOppDetails(opId, oppName) {
 //Function to update opportunity status
 //Start by telling tablesorter to sort your table when the document is loaded:
 function completeOpportunityEval(opId) {
-    if(opId == 1){
-        alert("Cannot complete this opportunity. Please complete processing all Proposals for this Opportunity");
-    }
-    else{
-        alert("Processing opportunity completed!");
-    }
-
-    //TODO write logic to update opportunity status
-    //Write logic to update opportunity status to complete.
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/proposal/AllPropsAcceptRejectByOpp.php?opportunityID='+opId,true);
+    xhr.onload = function() {
+        if (xhr.status == 200) {
+            var jsonArray = JSON.parse(xhr.responseText);
+            if(jsonArray.result == true){
+                alert("update successful");
+            }
+            else{
+                alert("Unable to update opportunity status, please try again!");
+            }
+        } else {
+            alert("Error response");
+        }
+    };
+    xhr.send();
 }
 
 
