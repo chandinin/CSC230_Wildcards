@@ -1,4 +1,5 @@
 //On Start
+var opportunityID;
 $(document).ready(
     function () {
         var oppName = localStorage.getItem("opportunityName");
@@ -12,10 +13,10 @@ $(document).ready(
 
 //get proposal list based on opportunity id
 function getProposalList() {
-    var oppID = localStorage.getItem("opportunityID");
+    opportunityID = localStorage.getItem("opportunityID");
     $('#proposalListTableBody').empty();
     var xhr = new XMLHttpRequest();
-    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/proposal/read.php?OpportunityID='+oppID,true);
+    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/proposal/read.php?OpportunityID='+opportunityID,true);
     xhr.onload = function() {
         if (xhr.status == 200) {
             var jsonArray = JSON.parse(xhr.responseText);
@@ -73,4 +74,24 @@ function fillProposalTable(jsonArray){
 function showProposalDetails(id) {
     localStorage.setItem("proposalId",id);
     window.location.replace("list_documents.html");
+}
+
+//function to complete processing opportunity
+function completeOpportunityEval() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/proposal/AllPropsAcceptRejectByOpp.php?opportunityID='+opportunityID,true);
+    xhr.onload = function() {
+        if (xhr.status == 200) {
+            var jsonArray = JSON.parse(xhr.responseText);
+            if(jsonArray.result == true){
+                alert("update successful");
+            }
+            else{
+                alert("Unable to update opportunity status, please try again!");
+            }
+        } else {
+            alert("Error response");
+        }
+    };
+    xhr.send();
 }
