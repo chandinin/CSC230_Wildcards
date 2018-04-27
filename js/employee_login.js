@@ -79,7 +79,7 @@ function EmployeeLoginAction() {
                         window.location.replace("Opportunity.html")
                         break;
                     case "1": //Reviewer
-                        window.location.replace("Opportunity.html")
+                        window.location.replace("Review.html")
                         break;
                     case "2": //Approver
                         alert("Opportunity.html");
