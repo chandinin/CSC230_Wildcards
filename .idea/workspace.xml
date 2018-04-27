@@ -119,10 +119,10 @@
     </include_path>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-8" />
+    <option name="x" value="-1928" />
     <option name="y" value="-8" />
-    <option name="width" value="1479" />
-    <option name="height" value="890" />
+    <option name="width" value="1936" />
+    <option name="height" value="1066" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -184,42 +184,39 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="PHP Script.ProposalStatus.php">
+  <component name="RunManager" selected="JavaScript Debug.bidder_register.html (1)">
     <configuration name="Opportunity.html" type="JavascriptDebugType" factoryName="JavaScript Debug" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/Opportunity.html" />
     <configuration name="bidder_landing.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/bidder_landing.html" />
     <configuration name="bidder_login.html" type="JavascriptDebugType" factoryName="JavaScript Debug" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/bidder_login.html" />
     <configuration name="bidder_login.html" type="JavascriptDebugType" factoryName="JavaScript Debug" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/bidder_login.html" />
+    <configuration name="bidder_register.html (1)" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/CSC230_Wildcards/bidder_register.html" />
     <configuration name="bidder_register.html" type="JavascriptDebugType" factoryName="JavaScript Debug" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/bidder_register.html" />
     <configuration name="bidops_template.html" type="JavascriptDebugType" factoryName="JavaScript Debug" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/bidops_template.html" />
     <configuration name="employee_login.html" type="JavascriptDebugType" factoryName="JavaScript Debug" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/employee_login.html" />
-    <configuration name="example.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/example.html" />
     <configuration name="home_page.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/home_page.html" />
-    <configuration name="mytemplate.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/mytemplate.html" />
+    <configuration name="seek_clarification.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/CSC230_Wildcards/CSC230_Wildcards/seek_clarification.html" />
     <configuration name="ProposalStatus.php" type="PhpLocalRunConfigurationType" factoryName="PHP Console" temporary="true" path="$PROJECT_DIR$/php/Tables/ProposalStatus.php" />
-    <list size="10">
-      <item index="0" class="java.lang.String" itemvalue="JavaScript Debug.bidder_login.html" />
-      <item index="1" class="java.lang.String" itemvalue="JavaScript Debug.bidder_register.html" />
-      <item index="2" class="java.lang.String" itemvalue="JavaScript Debug.Opportunity.html" />
-      <item index="3" class="java.lang.String" itemvalue="JavaScript Debug.bidops_template.html" />
-      <item index="4" class="java.lang.String" itemvalue="JavaScript Debug.employee_login.html" />
-      <item index="5" class="java.lang.String" itemvalue="JavaScript Debug.mytemplate.html" />
-      <item index="6" class="java.lang.String" itemvalue="JavaScript Debug.example.html" />
-      <item index="7" class="java.lang.String" itemvalue="JavaScript Debug.bidder_landing.html" />
-      <item index="8" class="java.lang.String" itemvalue="JavaScript Debug.home_page.html" />
-      <item index="9" class="java.lang.String" itemvalue="PHP Script.ProposalStatus.php" />
+    <list>
+      <item itemvalue="JavaScript Debug.bidder_login.html" />
+      <item itemvalue="JavaScript Debug.bidder_register.html" />
+      <item itemvalue="JavaScript Debug.Opportunity.html" />
+      <item itemvalue="JavaScript Debug.bidops_template.html" />
+      <item itemvalue="JavaScript Debug.employee_login.html" />
+      <item itemvalue="JavaScript Debug.bidder_landing.html" />
+      <item itemvalue="JavaScript Debug.home_page.html" />
+      <item itemvalue="PHP Script.ProposalStatus.php" />
+      <item itemvalue="JavaScript Debug.seek_clarification.html" />
+      <item itemvalue="JavaScript Debug.bidder_register.html (1)" />
     </list>
     <recent_temporary>
-      <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="PHP Script.ProposalStatus.php" />
-        <item index="1" class="java.lang.String" itemvalue="JavaScript Debug.bidder_landing.html" />
-        <item index="2" class="java.lang.String" itemvalue="JavaScript Debug.home_page.html" />
-        <item index="3" class="java.lang.String" itemvalue="JavaScript Debug.example.html" />
-        <item index="4" class="java.lang.String" itemvalue="JavaScript Debug.mytemplate.html" />
+      <list>
+        <item itemvalue="JavaScript Debug.bidder_register.html (1)" />
+        <item itemvalue="JavaScript Debug.seek_clarification.html" />
+        <item itemvalue="PHP Script.ProposalStatus.php" />
+        <item itemvalue="JavaScript Debug.bidder_landing.html" />
+        <item itemvalue="JavaScript Debug.home_page.html" />
       </list>
     </recent_temporary>
-  </component>
-  <component name="ShelveChangesManager" show_recycled="false">
-    <option name="remove_strategy" value="false" />
   </component>
   <component name="SvnConfiguration">
     <configuration />
