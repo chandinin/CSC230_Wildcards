@@ -103,10 +103,6 @@ a:hover {
     text-decoration: underline;
 }
 
-/*a:visited {
-	color: #715192;
-}*/
-
 .navbar-tab .btn-primary {
     color: #ffffff;
     background: #a3582d;
@@ -115,11 +111,6 @@ a:hover {
 .navbar-tab .btn-primary:focus {
     outline: 3px solid #fff;
 }
-
-/*
-.btn:visited {
-	color: #ffffff;
-}*/
 
 .subscribe-social .fa-3x {
     color: #00659e;
@@ -139,6 +130,23 @@ a:hover {
     color: #587f3b;
 }
 
+/*sticky footer*/
+
+html, body {
+    height: 98%;
+    margin: 0;
+}
+.content {
+    min-height: 100%;
+}
+.content-inside {
+    padding: 20px;
+    padding-bottom: 50px;
+}
+.footer {
+    height: 50px;
+    margin-top: -50px;
+}
 /*------------------------------------------------*/
 
 /* HEADER NAVIGATION */
