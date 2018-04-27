@@ -3083,11 +3083,6 @@ span.video-duration {
 
 th {text-align:center}
 
-<<<<<<< HEAD
-/*Chan styles---*/
-
-
-=======
 /* filter row */
 .tablesorter-filter-row td {
     background: #eee;
@@ -3144,4 +3139,4 @@ th {text-align:center}
     -o-transition: height 0.1s ease;
     transition: height 0.1s ease;
 }
->>>>>>> c9b5a5ee7fa65339ad5669988f1ebed7edd75230
+

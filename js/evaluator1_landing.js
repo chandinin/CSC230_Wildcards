@@ -133,8 +133,7 @@ function showOppDetails(opId, oppName) {
     window.location.replace("list_proposals.html");
 }
 
-//Function to update opportunity status
-//Start by telling tablesorter to sort your table when the document is loaded:
+//function to complete processing opportunity
 function completeOpportunityEval(opId) {
     var xhr = new XMLHttpRequest();
     xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/proposal/AllPropsAcceptRejectByOpp.php?opportunityID='+opId,true);

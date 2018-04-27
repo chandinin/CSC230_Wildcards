@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Secondary Evaluation</title>
+    <title>Preliminary Evaluation</title>
     <!-- CSS Includes -->
     <link rel="stylesheet" type="text/css" href="css/ept/menu2.css"/>
     <link rel="stylesheet" type="text/css" href="css/ept/style.css"/>
@@ -38,6 +38,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
+    <!--For table sorter-->
+    <script type="text/javascript" src="/path/to/jquery-latest.js"></script>
+    <script type="text/javascript" src="/path/to/jquery.tablesorter.js"></script>
+
     <!-- Page Specific JS/CSS -->
     <link rel="stylesheet" type="text/css" href="css/ept/login.css"/>
     <script type="text/javascript" src="js/ept/jquery.cookie.js"></script>
@@ -50,7 +54,7 @@
 <div id = "page" class="single">
 
     <!-- Logo-->
-    <div class="navbar navbar-default navbar-static-top navbar-global">
+    <div class="navbar navbar-default navbar-static-top navbar-right">
         <div class="container relative">
             <!-- Skip to content link for Screen readers and keyboard users only -->
             <a href="#main" style="position:absolute; font-size:.8em;" class="sr-only sr-only-focusable"
@@ -113,6 +117,7 @@
     <div class="navbar navbar-inverse navbar-static-top navbar-tab navbar-right">
         <div class="container">
             <div class="navbar-collapse collapse">
+
                 <ul class="nav navbar-nav">
                     <li class=""><a href="home_page.html"><span class="glyphicon glyphicon-home hidden-xs"
                                                                 aria-hidden="true"> </span> Home</a>
@@ -121,16 +126,26 @@
                     <li class=""><a href="employee_login.html"><span class="glyphicon glyphicon-log-out hidden-xs"
                                                                      aria-hidden="true"> </span> Logout</a>
                 </ul>
+                <!--<h2 style="color: #eee;" align="center">OPPORTUNITIES</h2>-->
+
             </div>
         </div>
     </div>
+
 
     <!--breadcrumb-->
     <div class="container navbar-right">
         <ul class="breadcrumb">
             <li><a href="home_page.html">Home</a></li>
-            <li class="active">Secondary Evaluation</li>
+            <li class="active">Preliminary Evaluation</li>
         </ul>
+        <div  style="color: #000000;" align="center">
+            <h2>Hi <span id="employeeName"></span>!</h2>
+            <h3>OPPORTUNITIES</h3>
+        </div>
+        <br>
+        <br>
+
     </div>
 
     <!--Category dropdown-->
@@ -144,18 +159,19 @@
 
     <!--Table contents-->
     <div class="container navbar-right">
-        <div id="secondarylistOppPanel" class="tab-content vertical">
+        <div id="listOppPanel" class="tab-content vertical">
             <div class="row ">
                 <div class="col-md-20">
-                    <table id="secondaryOppListTable" class="table table-bordered table-striped table-hover">
+                    <table id="oppListTable" class="table table-bordered table-striped table-hover">
                         <thead>
                         <th>OpportunityID</th>
                         <th>Opportunity</th>
-                        <th>Closing Date/Time</th>
+                        <th># of Proposals</th>
+                        <th>Closing Date</th>
                         <th>Status</th>
-                        <th></th>
+                        <th>Action</th>
                         </thead>
-                        <tbody id="secondaryOppListTableBody">
+                        <tbody id="oppListTableBody">
                         </tbody>
                     </table>
                 </div>
@@ -170,7 +186,10 @@
             <li class="page-item"><a id="next" class="page-link" href="#">Next</a></li>
         </ul>
     </div>
+
+
 </div>
+
 
 </body>
 </html>

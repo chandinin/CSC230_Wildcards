@@ -1,6 +1,9 @@
-//Onstart?
+var employeeName = localStorage.getItem("employeeName");
+var opportunityName;
+//Onstart
 $(document).ready(
     function () {
+        document.getElementById("employeeName").innerHTML = employeeName;
         getOppList();
         getCategories();
         $('#manageOpp').click(function() {
@@ -12,7 +15,7 @@ $(document).ready(
 
 //Get all opportunity list from server
 function getOppList() {
-    $('#secondaryOppListTableBody').empty();
+    $('#oppListTableBody').empty();
     var xhr = new XMLHttpRequest();
     xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php',true);
     xhr.onload = function() {
@@ -26,9 +29,9 @@ function getOppList() {
     xhr.send();
 }
 
-//Get opportunity list given an id
+//Get opportunity list given an categoryid
 function getOppListbyID(id) {
-    $('#secondaryOppListTableBody').empty();
+    $('#oppListTableBody').empty();
     var xhr = new XMLHttpRequest();
     xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php?CategoryID='+id,true);
     xhr.onload = function() {
@@ -53,21 +56,22 @@ function fillOppTable(jsonArray){
     function fillOppTable(start, limit){
         for(var i=start;i<limit;i++) {
             var opp = jsonArray.opportunity[i];
-            var row ="<tr>"+"</td><td>" + opp.OpportunityID+ "</td><td>" + "<a href='javascript:showOppDetails(\"" + opp.OpportunityID + "\")'>" +
-                opp.Name + "</a></td><td>"
-                + opp.ClosingDate + "<td>"+ opp.Status + " <td>" +  "<button onclick='completeOpportunityEval(\"" +
+            var row ="<tr>"+"</td><td>" + opp.OpportunityID+ "</td><td>"
+                + "<a href='javascript:showOppDetails(\"" + opp.OpportunityID + '","' + opp.Name + "\")'>" +
+                opp.Name + "</a></td><td>"+ opp.ProposalCount + "<td>"+ new Date(opp.ClosingDate).toDateString()+ "<td>"
+                + opp.StatusName + " <td>" +  "<button onclick='completeOpportunityEval(\"" +
                 opp.OpportunityID + "\")' id='editOppButton' value='\" + opp.OpportunityID + \"' type='button' " +
                 "class='btn btn-primary btn-sm'>" +
                 "Complete</button></td>";
-            $('#secondaryOppListTableBody').append(row);
-            $("#secondaryOppListTableBody").trigger("update");
+            $('#oppListTableBody').append(row);
+            $("#oppListTableBody").trigger("update");
         }
     }
     $('#next').click(function(){
         var next = limit;
         if(size>next) {
             limit = limit + elements_per_page;
-            $('#secondaryOppListTableBody').empty();
+            $('#oppListTableBody').empty();
             fillOppTable(next,limit);
         }
     });
@@ -76,7 +80,7 @@ function fillOppTable(jsonArray){
         var pre = limit-(2*elements_per_page);
         if(pre >= 0) {
             limit = limit - elements_per_page;
-            $('#secondaryOppListTableBody').empty();
+            $('#oppListTableBody').empty();
             fillOppTable(pre,limit);
         }
     });
@@ -117,20 +121,37 @@ function fillCategoryDropdown(jsonArray){
 $(document).ready(function () {
     $("#selectCategory").change(function () {
         //Storing the dropdown selection in category variable
-        category= $('#selectCategory option:selected').attr('id');
+        var category= $('#selectCategory option:selected').attr('id');
         getOppListbyID(category);
     });
 });
 
 //Show opportunity detail page
-function showOppDetails(opId) {
+function showOppDetails(opId, oppName) {
+    localStorage.setItem("opportunityName",oppName);
     localStorage.setItem("opportunityID",opId);
     window.location.replace("list_proposals.html");
 }
 
 //Function to update opportunity status
+//Start by telling tablesorter to sort your table when the document is loaded:
 function completeOpportunityEval(opId) {
-    alert(opId);
-    //TODO write logic to update opportunity status
-    //Write logic to update opportunity status to complete.
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/proposal/AllPropsAcceptRejectByOpp.php?opportunityID='+opId,true);
+    xhr.onload = function() {
+        if (xhr.status == 200) {
+            var jsonArray = JSON.parse(xhr.responseText);
+            if(jsonArray.result == true){
+                alert("update successful");
+            }
+            else{
+                alert("Unable to update opportunity status, please try again!");
+            }
+        } else {
+            alert("Error response");
+        }
+    };
+    xhr.send();
 }
+
+
