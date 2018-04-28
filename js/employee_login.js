@@ -1,4 +1,4 @@
-var employeeRoleid;
+var employeeRoleid = -1;
 
 $(document).ready(
     function () {
@@ -55,11 +55,15 @@ function EmployeeLoginAction() {
     else if (password == "") {
         alert("Please enter your password ")
     }
+    else if(employeeRoleid == -1){
+        alert("Please pick a role!");
+    }
     else {
         //read username and password from the HTML form
         var params = {
             "UserName": username,
-            "PASSWORD": password
+            "PASSWORD": password,
+            "Role" : employeeRoleid
         };
 
         //Convert HTML form value to json
@@ -68,10 +72,10 @@ function EmployeeLoginAction() {
 
         xhttp.open("POST", "http://athena.ecs.csus.edu/~wildcard/php/api/employee/authentication.php", true);
         //Async call
-        xhttp.onload = function () {
+        xhttp.onreadystatechange = function () {
             var response = JSON.parse(xhttp.responseText);
             var status = JSON.parse(xhttp.status);
-            if (status == 200 && response.authenticated == true) {
+            if (xhttp.status == 200 && response.authenticated == true) {
                 localStorage.setItem("employeeName",response.FullName);
                 //IF the authentication successful go to the landing page, NOTE: Need to change to the correct URL
                 switch (employeeRoleid) {
@@ -85,13 +89,13 @@ function EmployeeLoginAction() {
                         alert("Opportunity.html");
                         break;
                     case "3": //Lead Evaluator
-                        alert("Evaluator 2 is under construction, Coming soon!");
+                        window.location.replace("evaluator2_landing.html");
                         break;
                     case "4": // Preliminary Evaluator
                         window.location.replace("evaluator1_landing.html");
                         break;
                     case "5": // Secondary Evaluator
-                        alert("Evaluator 2 is under construction, Coming soon!");
+                        window.location.replace("evaluator2_landing.html");
                         break;
                     default:
                         alert("Please pick a role!");

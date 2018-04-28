@@ -152,16 +152,7 @@
         </div>
     </div>
 
-    <!--Seek clarification button-->
-    <div class="container navbar-right">
-        <div align="left">
-            <button type="button" class="btn btn-openportal btn-sm" onclick="SeekClarificationButton()">
-                <span class="glyphicon glyphicon-open-file"></span> Seek Clarification
-            </button>
-        </div>
-    </div>
-
-    <!--Table contents-->
+     <!--Table contents-->
     <div class="container navbar-right">
         <div id="listOppPanel" class="tab-content vertical">
             <div class="row ">
@@ -179,7 +170,7 @@
         </div>
     </div>
 
-    <!--Accept and reject buttons-->
+    <!--Accept, reject buttons and Seek clarification button-->
     <div align="right">
 
         <button type="button" class="btn btn-accept btn-sm" onclick="updateProposalStatus(15)">
@@ -188,6 +179,10 @@
 
         <button type="button" class="btn btn-reject btn-sm" onclick="updateProposalStatus(10)">
             <span class="glyphicon glyphicon-remove-sign"></span> Reject Proposal
+        </button>
+
+        <button type="button" class="btn btn-openportal btn-sm" onclick="SeekClarificationButton()">
+            <span class="glyphicon glyphicon-open-file"></span> Seek Clarification
         </button>
     </div>
 

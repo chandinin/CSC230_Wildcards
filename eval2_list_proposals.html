@@ -37,6 +37,7 @@
     <script type="text/javascript" src="js/ept/jquery.cookie.js"></script>
     <script src="js/bidder_login.js"></script>
     <script src="js/eval2_list_proposals.js"></script>
+
 </head>
 <body>
 
@@ -127,23 +128,45 @@
     <div class="container navbar-right">
         <ul class="breadcrumb">
             <li><a href="home_page.html">Home</a></li>
-            <li><a href="evaluator1_landing.html">Preliminary Evaluation</a></li>
+            <li><a href="evaluator2_landing.html">Secondary Evaluation</a></li>
             <li class="active">Proposals</li>
         </ul>
     </div>
 
-    <!-- Opportunity Name bidder name-->
+    <!--Tabs-->
     <div class="container navbar-right">
-        <div align="left">
-            <h2>Opportunity: <span id="opportunityName"></span></h2>
-            <br>
-            <br>
-        </div>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs nav-justified indigo" role="tablist">
+            <li class="nav-item">
+                <a id="proposalTab" class="nav-link active" data-toggle="tab" href="#panel1" role="tab" >
+                    <i class="fa fa-user"></i> Proposals</a>
+            </li>
+            <li class="nav-item">
+                <a id="feeTab" class="nav-link" data-toggle="tab" href="#panel2" role="tab">
+                    <i class="fa fa-heart"></i> Fee Calculation</a>
+            </li>
+        </ul>
     </div>
 
-    <!-- Table and contents-->
+    <!--tab1-->
+    <div class="tab-content">
+        <div class="tab-pane fade in active" id="panel1" role="tabpanel">
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="listProposalPanel1" >
+
+    <!--table, opportunity name and bidder name-->
     <div class="container navbar-right">
-        <div id="listOppPanel" class="tab-content vertical">
+        <br>
+        <br>
+
+        <!-- Opportunity Name bidder name-->
+        <div align="left">
+            <h2>Opportunity: <span id="opportunityName"></span></h2>
+        </div>
+
+        <!-- Table and contents-->
+        <div class="tab-content vertical">
             <div class="row ">
                 <div class="col-md-9">
                     <table id="proposalListTable" class="table table-bordered table-striped table-hover">
@@ -170,6 +193,63 @@
         </div>
     </div>
 
+    </div>
+        </div>
+            </div>
+                </div>
+                    </div>
+
+    <!--tab2-->
+    <div class="tab-content">
+        <div class="tab-pane fade in active" id="panel2" role="tabpanel">
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="listProposalPanel2" >
+
+                        <!--table, opportunity name and bidder name-->
+                        <div class="container navbar-right">
+                            <br>
+                            <br>
+
+                            <!-- Opportunity Name bidder name-->
+                            <div align="left">
+                                <h2>Opportunity: <span id="oppName"></span></h2>
+                            </div>
+
+                            <!-- Table and contents-->
+                            <div class="tab-content vertical">
+                                <div class="row ">
+                                    <div class="col-md-9">
+                                        <table id="proposalListFeeTable" class="table table-bordered table-striped table-hover">
+                                            <thead>
+                                            <th>Bidder</th>
+                                            <th>Proposal</th>
+                                            <th>Fee Proposal Score</th>
+                                            <th>Action</th>
+                                            </thead>
+                                            <tbody id="proposalListFeeTableBody">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--Buttons for text message-->
+                            <div align="right">
+
+                                <button type="button" class="btn btn-accept btn-sm" onclick="calculateFee()">
+                                    <span class="glyphicon glyphicon-ok-sign"></span> Calculate Fee
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <!--Pagination-->
     <div class="container navbar-right">
         <ul class="pagination">
@@ -179,7 +259,7 @@
 
     </div>
 
-</div>
+    </div>
 </div>
 <!--footer -->
 <div id="footer" >

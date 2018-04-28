@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="content-type" content="text/xhtml; charset=utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <title>Bidops - Log In</title>
+    <meta charset="UTF-8">
+    <title>Seek Clarification</title>
 
     <!-- CSS Includes -->
     <link rel="stylesheet" type="text/css" href="css/ept/menu2.css"/>
@@ -13,7 +12,6 @@
     <!-- Basic Styles -->
     <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
-    <link rel="stylesheet" type="text/css" href="css/login.css">
 
     <!-- Latest compiled and minified JavaScript -->
     <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
@@ -35,27 +33,37 @@
     <script src="js/jquery.validate.js"></script>
     <script src="js/youtube.js?ver=1.9"></script>
     <script src="http://malsup.github.com/jquery.form.js"></script>
+
+    <!--Button with glyphicon-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!--For breadcrumb-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
     <!-- Page Specific JS/CSS -->
     <link rel="stylesheet" type="text/css" href="css/ept/login.css"/>
     <script type="text/javascript" src="js/ept/jquery.cookie.js"></script>
-    <script src="js/employee_login.js"></script>
+    <script src="js/bidder_login.js"></script>
+    <script src="js/seek_clarification.js"></script>
 </head>
 <body>
 <!--Contents of the whole page-->
 <div class="content">
-<div id="page" class="single">
+    <div id = "page" class="single">
 
-    <!-- Logo-->
-    <div class="navbar navbar-default navbar-static-top navbar-right">
-        <div class="container relative">
-            <!-- Skip to content link for Screen readers and keyboard users only -->
-            <a href="#main" style="position:absolute; font-size:.8em;" class="sr-only sr-only-focusable"
-               aria-label="Skip to main content">Skip to main content</a>
-            <div class="row">
-                <div class="col-lg-3 col-md-3 col-sm-12 logoContainer">
-                    <div class="navbar-header display-flex"><a class="navbar-brand" href="home_page.html">
-                        <div class="logoMain logo">
-                            <svg version="1.1" id="CalPERS_Logo" role="img" aria-label="CalPERS Logo" aria-labelledby="title" aria-describedby="desc" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 436.9 108.6" xml:space="preserve" focusable="false">
+        <!-- Logo-->
+        <div class="navbar navbar-default navbar-static-top navbar-right">
+            <div class="container relative">
+                <!-- Skip to content link for Screen readers and keyboard users only -->
+                <a href="#main" style="position:absolute; font-size:.8em;" class="sr-only sr-only-focusable"
+                   aria-label="Skip to main content">Skip to main content</a>
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-12 logoContainer">
+                        <div class="navbar-header display-flex"><a class="navbar-brand" href="home_page.html">
+                            <div class="logoMain logo">
+                                <svg version="1.1" id="CalPERS_Logo" role="img" aria-label="CalPERS Logo" aria-labelledby="title" aria-describedby="desc" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 436.9 108.6" xml:space="preserve" focusable="false">
 																<title id="title">CalPERS Logo</title>
 																<desc id="desc">CalPERS Logo</desc>
 																<g class="calpersFill">
@@ -89,97 +97,83 @@
 																	</g>
 																</g>
 															</svg>
+                            </div>
+
+
+                        </a>
+
                         </div>
+                    </div>
+                    <div class="col-lg-9 col-md-9 col-sm-12 hidden-xs print-hidden">
+                        <div class="navbar-collapse collapse flexEndCenter">
 
-
-                    </a>
-
+                        </div>
                     </div>
                 </div>
-                <div class="col-lg-9 col-md-9 col-sm-12 hidden-xs print-hidden">
-                    <div class="navbar-collapse collapse flexEndCenter">
+            </div>
+        </div>
 
-                    </div>
+        <!--Glyphicon home-->
+        <div class="navbar navbar-inverse navbar-static-top navbar-tab navbar-right">
+            <div class="container">
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li class=""><a href="home_page.html"><span class="glyphicon glyphicon-home hidden-xs"
+                                                                    aria-hidden="true"> </span> Home</a>
+                    </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class=""><a href="employee_login.html"><span class="glyphicon glyphicon-log-out hidden-xs"
+                                                                         aria-hidden="true"> </span> Logout</a>
+                    </ul>
+
+                    <!--Heading-->
+                    <p style="color: #eee; font-size: x-large"  align="center">SEEK CLARIFICATION</p>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!--Glyphicon home-->
-    <div class="navbar navbar-inverse navbar-static-top navbar-tab navbar-right">
-        <div class="container">
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li class=""><a href="home_page.html"><span class="glyphicon glyphicon-home hidden-xs"
-                                                                aria-hidden="true"> </span> Home</a>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li class=""><a href="employee_login.html"><span class="glyphicon glyphicon-log-out hidden-xs"
-                                                                     aria-hidden="true"> </span> Logout</a>
-                </ul>
+        <!--breadcrumb-->
+        <div class="container navbar-right">
+            <ul class="breadcrumb">
+                <li><a href="home_page.html">Home</a></li>
+                <li><a href="evaluator2_landing.html">Secondary Evaluation</a></li>
+                <li><a href="eval2_list_proposals.html">Proposals</a></li>
+                <li><a href="eval2_list_documents.html">Documents</a></li>
+                <li class="active">Seek Clarification</li>
+            </ul>
+        </div>
 
-                <!--Heading-->
-                <p style="color: #eee; font-size: x-large"  align="center">BIDOPS LOGIN</p>
+        <!-- Proposal id bidder name-->
+        <div class="container navbar-right">
+            <div align="left">
+                <h2>Proposal: <span id="proposalid"></span></h2>
+                <h2>Bidder: <span id="bidderName"></span></h2>
+                <br>
+                <br>
+
+                <!--textbox-->
+                <div id="clarificationMessage" class="form-group">
+                    <label>Clarification Question</label>
+                    <textarea class="form-control" id="clarificationRequest" rows="6"
+                              placeholder="Enter your clarification question here." required></textarea>
+                </div>
+
+                <!--Buttons for text message-->
+                <div align="left">
+
+                    <button type="button" class="btn btn-accept btn-sm" onclick="SeekClarification()">
+                        <span class="glyphicon glyphicon-ok-sign"></span> Seek Clarification
+                    </button>
+
+                    <button type="button" class="btn btn-reject btn-sm" onclick="DiscardMessage()">
+                        <span class="glyphicon glyphicon-remove-sign"></span> Discard Message
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
-
-    <!--Loginform-->
-    <div class="container navbar-right">
-    <form action="#" method="post" id="employeelogin_formid" name="employeelogin_formname"  autocomplete="off">
-
-                    <div align = "center">
-                        <br>
-                        <br>
-                        <br>
-                        <label align ="left" for="username" id="usernameLbl">Username <span
-                                class="required">(required)</span></label><br>
-                        <input id="username" name="username" type="text" value="" size="24" maxlength="35"/>
-                        <p></p>
-                        <br>
-                            <!--Role dropdown-->
-                                <label class="my-1 mr-2" for="selectRole">Employee Role <span
-                                        class="required">(required)</span></label>
-                        <br>
-                                <select id="selectRole" name="role" required style="width: 200px">
-                                    <option id = "id" value="default">Role</option>
-                                </select>
-
-
-                        <p></p>
-                        <br>
-                        <label for="password" id="passwordLbl">Password <span
-                                class="required">(required)</span></label><br>
-                        <input id="password" name="password" type="password" value="" size="24" maxlength="35"/>
-                        </div>
-                    <br>
-            <div align="center">
-                <input type="button" name="submit_id" id="btn_id" value="Continue" class="mainButton" onclick="EmployeeLoginAction()"/>
-                <div class="clear"></div>
-            </div>
-    </form>
-        <br/>
-        <br/>
-    </div>
-
-    <!--Loginform-->
-<!--    <div class="container navbar-right">
-    <div class="login-page">
-        <div class="form">
-            <form class="login-form">
-                <input id="username" name="username" type="text" placeholder="username"/>
-                <select id="selectRole" name="role" required>
-                    <option id = "id" value="-1">Role</option>
-                </select>
-                <input id="password" name="password" type="password" placeholder="password"/>
-                <button onclick="EmployeeLoginAction()">login</button>
-               &lt;!&ndash; <p class="message">Not registered? <a href="#">Create an account</a></p>&ndash;&gt;
-            </form>
-        </div>
-    </div>
     </div>
 </div>
-</div>-->
 
 <!--footer -->
 <div id="footer" >
@@ -189,4 +183,3 @@
 </div>
 </body>
 </html>
-

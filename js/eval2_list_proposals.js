@@ -5,9 +5,30 @@ $(document).ready(
         var oppName = localStorage.getItem("opportunityName");
         document.getElementById("opportunityName").innerHTML = oppName;
         getProposalList();
-        $('#listOppPanel').show();
+        $('#listProposalPanel1').show();
+        $('#listProposalPanel2').hide();
         $('#proposalListTable tr').click(function() {
             showOpp();
+        });
+
+        //Proposal tab click
+        $('#proposalTab').click(function () {
+            var oppName = localStorage.getItem("opportunityName");
+            document.getElementById("opportunityName").innerHTML = oppName;
+            getProposalList();
+            $('#listProposalPanel1').show();
+            $('#listProposalPanel2').hide();
+            $('#proposalListTable tr').click(function() {
+                showOpp();
+            });
+        });
+
+        //Fee calculation tab click
+        $('#feeTab').click(function () {
+            var oppName = localStorage.getItem("opportunityName");
+            document.getElementById("oppName").innerHTML = oppName;
+            $('#listProposalPanel1').hide();
+            $('#listProposalPanel2').show();
         });
     });
 
@@ -73,7 +94,7 @@ function fillProposalTable(jsonArray){
 //Store proposal id to pass to next screen to get a list of documents
 function showProposalDetails(id) {
     localStorage.setItem("proposalId",id);
-    window.location.replace("list_documents.html");
+    window.location.replace("eval2_list_documents.html");
 }
 
 //function to complete processing opportunity
@@ -94,4 +115,9 @@ function completeOpportunityEval() {
         }
     };
     xhr.send();
+}
+
+//calculate fee using lowest fee proposal, proposer's fee proposal and total possible points
+function calculateFee(){
+    window.location.replace("fee_calculation.html")
 }
