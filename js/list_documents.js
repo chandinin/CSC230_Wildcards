@@ -1,9 +1,12 @@
 //proposal id passes from the previous page where a specific proposal is selected
 var proposalID = localStorage.getItem("proposalId");
+var bidderName;
 
 //onstart?
 $(document).ready(
     function () {
+        document.getElementById("proposalid").innerHTML = proposalID;
+        getBidderDetails()
         getDocumentList();
         $('#manageOpp').click(function() {
             getDocumentList();
@@ -28,6 +31,23 @@ function getDocumentList() {
     xhr.send();
 }
 
+//get bidder details based on proposal id
+//Get all Documents for the proposal from server
+function getBidderDetails() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/proposal/getBidder.php?ProposalID='+proposalID,true);
+    xhr.onload = function() {
+        if (xhr.status == 200) {
+            var bidderDetails = JSON.parse(xhr.responseText);
+            bidderName = bidderDetails.first_name +" " + bidderDetails.last_name;
+            document.getElementById("bidderName").innerHTML = bidderName;
+        } else {
+            alert("Error response");
+        }
+    };
+    xhr.send();
+}
+
 //Fill table with all the documents belonging to proposal and pagination logic
 function fillDocumentTable(jsonArray){
     var start = 0;
@@ -40,7 +60,7 @@ function fillDocumentTable(jsonArray){
         for(var i=start;i<limit;i++) {
             var doc = jsonArray.doc[i];
             var row = "<tr><td>" + doc.DocTitle+ "</td><td><a class='btn btn-primary btn-sm' href='" + doc.Url  +
-                "'><span class='glyphicon glyphicon-circle-arrow-down' aria-hidden='true'></span>   Download</a> ";
+                "'><span class='glyphicon glyphicon-circle-arrow-down' aria-hidden='true'></span>Download</a> ";
             $('#documentsTableBody').append(row);
             $("#documentsTableBody").trigger("update");
         }
@@ -83,4 +103,14 @@ function updateProposalStatus(status) {
     }
     xhttp.send(myJson);
 }
+
+//Function to seek clarification
+//TODO get the right endpoint to use
+function SeekClarificationButton() {
+    localStorage.setItem("bidderName",bidderName);
+    localStorage.setItem("proposalId",proposalID);
+    window.location.replace("seek_clarification.html")
+}
+
+
 

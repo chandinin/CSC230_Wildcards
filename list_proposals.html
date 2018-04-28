@@ -40,6 +40,8 @@
 </head>
 <body>
 
+<!--Contents of the whole page-->
+<div class="content">
 <div id = "page" class="single">
 
     <!-- Logo-->
@@ -114,6 +116,9 @@
                     <li class=""><a href="employee_login.html"><span class="glyphicon glyphicon-log-out hidden-xs"
                                                                      aria-hidden="true"> </span> Logout</a>
                 </ul>
+
+                <!--Heading-->
+                <p style="color: #eee; font-size: x-large"  align="center">PROPOSALS</p>
             </div>
         </div>
     </div>
@@ -127,6 +132,15 @@
         </ul>
     </div>
 
+    <!-- Opportunity Name bidder name-->
+    <div class="container navbar-right">
+        <div align="left">
+            <h2>Opportunity: <span id="opportunityName"></span></h2>
+            <br>
+            <br>
+        </div>
+    </div>
+
     <!-- Table and contents-->
     <div class="container navbar-right">
         <div id="listOppPanel" class="tab-content vertical">
@@ -134,9 +148,11 @@
                 <div class="col-md-9">
                     <table id="proposalListTable" class="table table-bordered table-striped table-hover">
                         <thead>
-                        <th>Opportunity</th>
+                        <th>Bidder</th>
                         <th>Proposal</th>
+                        <th>Creation Date</th>
                         <th>Status</th>
+                        <th>Action</th>
                         </thead>
                         <tbody id="proposalListTableBody">
                         </tbody>
@@ -144,8 +160,15 @@
                 </div>
             </div>
         </div>
-    </div>
 
+        <!--Buttons for text message-->
+        <div align="right">
+
+            <button type="button" class="btn btn-accept btn-sm" onclick="completeOpportunityEval()">
+                <span class="glyphicon glyphicon-ok-sign"></span> Complete Evaluation
+            </button>
+        </div>
+    </div>
 
     <!--Pagination-->
     <div class="container navbar-right">
@@ -153,7 +176,15 @@
             <li class="page-item"><a id="prev" class="page-link" href="#">Previous</a></li>
             <li class="page-item"><a id="next" class="page-link" href="#">Next</a></li>
         </ul>
+
     </div>
+
+</div>
+</div>
+<!--footer -->
+<div id="footer" >
+    <span>Copyright 2018 CalPERS</span>  |
+    <span>Powered by WildCards</span>
 
 </div>
 </body>

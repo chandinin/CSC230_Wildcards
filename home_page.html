@@ -1,13 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-
-<html lang="en-us">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta http-equiv="content-type" content="text/xhtml; charset=utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <title>Bidder - Log In</title>
-
+    <meta charset="UTF-8">
+    <title>Preliminary Evaluation</title>
     <!-- CSS Includes -->
     <link rel="stylesheet" type="text/css" href="css/ept/menu2.css"/>
     <link rel="stylesheet" type="text/css" href="css/ept/style.css"/>
@@ -37,24 +32,39 @@
     <script src="js/jquery.validate.js"></script>
     <script src="js/youtube.js?ver=1.9"></script>
     <script src="http://malsup.github.com/jquery.form.js"></script>
+
+    <!--For breadcrumb-->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!--For table sorter-->
+    <script type="text/javascript" src="/path/to/jquery-latest.js"></script>
+    <script type="text/javascript" src="/path/to/jquery.tablesorter.js"></script>
+
     <!-- Page Specific JS/CSS -->
     <link rel="stylesheet" type="text/css" href="css/ept/login.css"/>
     <script type="text/javascript" src="js/ept/jquery.cookie.js"></script>
-    <script type="text/javascript" src="js/bidder_login.js"></script>
+    <script src="js/bidder_login.js"></script>
+    <script src="js/evaluator1_landing.js"></script>
 </head>
 <body>
 
-<div id="page" class="single">
-    <div class="navbar navbar-default navbar-static-top navbar-global">
-        <div class="container relative">
-            <!-- Skip to content link for Screen readers and keyboard users only -->
-            <a href="#main" style="position:absolute; font-size:.8em;" class="sr-only sr-only-focusable"
-               aria-label="Skip to main content">Skip to main content</a>
-            <div class="row">
-                <div class="col-lg-3 col-md-3 col-sm-12 logoContainer">
-                    <div class="navbar-header display-flex"><a class="navbar-brand" href="home_page.html">
-                        <div class="logoMain logo">
-                            <svg version="1.1" id="CalPERS_Logo" role="img" aria-label="CalPERS Logo" aria-labelledby="title" aria-describedby="desc" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 436.9 108.6" xml:space="preserve" focusable="false">
+<!--Contents of the whole page-->
+<div class="content">
+    <div id = "page" class="single">
+
+        <!-- Logo-->
+        <div class="navbar navbar-default navbar-static-top navbar-right">
+            <div class="container relative">
+                <!-- Skip to content link for Screen readers and keyboard users only -->
+                <a href="#main" style="position:absolute; font-size:.8em;" class="sr-only sr-only-focusable"
+                   aria-label="Skip to main content">Skip to main content</a>
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-12 logoContainer">
+                        <div class="navbar-header display-flex"><a class="navbar-brand" href="home_page.html">
+                            <div class="logoMain logo">
+                                <svg version="1.1" id="CalPERS_Logo" role="img" aria-label="CalPERS Logo" aria-labelledby="title" aria-describedby="desc" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 436.9 108.6" xml:space="preserve" focusable="false">
 																<title id="title">CalPERS Logo</title>
 																<desc id="desc">CalPERS Logo</desc>
 																<g class="calpersFill">
@@ -88,96 +98,53 @@
 																	</g>
 																</g>
 															</svg>
+                            </div>
+
+
+                        </a>
+
                         </div>
-
-
-                    </a>
-
                     </div>
-                </div>
-                <div class="col-lg-9 col-md-9 col-sm-12 hidden-xs print-hidden">
-                    <div class="navbar-collapse collapse flexEndCenter">
+                    <div class="col-lg-9 col-md-9 col-sm-12 hidden-xs print-hidden">
+                        <div class="navbar-collapse collapse flexEndCenter">
 
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div id="header"><!-- start header -->
-        <div id="skipTo">
-            Skip to:
-            <a href="#content">Content</a> |
-            <a href="#footer">Footer</a>
-        </div>
-        <div id="controls">
-            <div>
-                <a href="https://www.calpers.ca.gov/page/contact" title="Opens in a new window" target="_blank">Contact
-                    Us</a> |
-                <a href="http://www.calpers.ca.gov" title="Opens in a new window" target="_blank">CalPERS</a>
+
+        <!--Glyphicon home-->
+        <div class="navbar navbar-inverse navbar-static-top navbar-tab navbar-right">
+            <div class="container">
+
+                <div class="navbar-collapse collapse">
+
+                    <ul class="nav navbar-nav">
+                        <li class=""><a href="home_page.html"><span class="glyphicon glyphicon-home hidden-xs"
+                                                                    aria-hidden="true"> </span> Home</a>
+                    </ul>
+                    <ul class="nav navbar-nav">
+                        <li class=""><a href="bidder_login.html"><span class="glyphicon glyphicon-log-in hidden-xs"
+                                                                    aria-hidden="true"> </span> BidOps SignIn</a>
+                    </ul>
+                    <ul class="nav navbar-nav">
+                        <li class=""><a href="employee_login.html"><span class="glyphicon glyphicon-log-in hidden-xs"
+                                                                    aria-hidden="true"> </span> Bidder SignIn</a>
+                    </ul>
+                </div>
             </div>
         </div>
 
-    </div><!-- end header -->
-
-    <div class="navbar navbar-inverse navbar-static-top navbar-tab">
-        <div class="container">
-            <div class="navbar-header">
-                <!-- end comment out to hide search form -->
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li class=""><a href="home_page.html"><span class="glyphicon glyphicon-home hidden-xs"
-                                                                   aria-hidden="true"> </span> Home</a>
-                    <li class=""><a href="employee_login.html" id="staff" aria-expanded="false">Bidops Login</a>
-                    </li>
-                    <li class=""><a href="bidder_login.html" id="bidders" aria-expanded="false">Bidders Login</a>
-                    </li>
-
-                </ul>
-            </div>
-        </div>
     </div>
 
-    <form id="loginForm" name="loginForm" onSubmit="return BidderLoginAction(this)" autocomplete="off">
-        <div id="rightLogin">
-            <div class="grid10 grid gridbr ">
-            </div>
-            <hr/>
-            <div class="grid ">
-                <h2 class="text-center" style="display: inline">Welcome to CalPERS!</h2>
-                <span class="text-center">
-					</span>
-                <br/><br/>
-                <br/><br/>
-                <br/><br/>
-                <br/><br/>
-            </div>
-        </div>
-    </form>
 </div>
+<!--footer -->
+<div id="footer" >
+    <span>Copyright 2018 CalPERS</span>  |
+    <span>Powered by WildCards</span>
 
 </div>
-</div>
-</div>
-</div>
-<div class="clear"></div>
-<div id="footer"><!-- start footer -->
-
-
-    <span>Copyright 2018 CalPERS</span> |
-    <span><a href="https://www.calpers.ca.gov/page/privacy-policy" title="Opens in a new window" target="_blank">Privacy Policy</a></span>
-    |
-    <span><a href="https://www.calpers.ca.gov/page/conditions-of-use" title="Opens in a new window" target="_blank">Conditions of Use</a></span>
-    |
-    <span><a href="https://www.calpers.ca.gov/page/accessibility" title="Opens in a new window" target="_blank">Accessibility</a></span>
-
-    <br/>
-
-</div><!--  end footer -->
-
-
-</div>
-
+</body>
 </body>
 </html>
-

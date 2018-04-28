@@ -1,6 +1,9 @@
-//Onstart?
+var employeeName = localStorage.getItem("employeeName");
+var opportunityName;
+//Onstart
 $(document).ready(
     function () {
+        document.getElementById("employeeName").innerHTML = employeeName;
         getOppList();
         getCategories();
         $('#manageOpp').click(function() {
@@ -53,12 +56,13 @@ function fillOppTable(jsonArray){
     function fillOppTable(start, limit){
         for(var i=start;i<limit;i++) {
             var opp = jsonArray.opportunity[i];
-            var row ="<tr>"+"</td><td>" + opp.OpportunityID+ "</td><td>" + "<a href='javascript:showOppDetails(\"" + opp.OpportunityID + "\")'>" +
-                opp.Name + "</a></td><td>"
-                + opp.ClosingDate + "<td>"+ opp.Status + " <td>" +  "<button onclick='completeOpportunityEval(\"" +
-                opp.OpportunityID + "\")' id='editOppButton' value='\" + opp.OpportunityID + \"' type='button' " +
+            var row ="<tr>"+"</td><td>" + opp.OpportunityID+ "</td><td>"
+                + "<a href='javascript:showOppDetails(\"" + opp.OpportunityID + '","' + opp.Name + "\")'>" +
+                opp.Name + "</a></td><td>"+ opp.ProposalCount + "<td>"+ new Date(opp.ClosingDate).toDateString()+ "<td>"
+                + opp.StatusName + " <td>" +  "<button onclick='showOppDetails(\"" +
+                opp.OpportunityID + '","'+ opp.Name+ "\")' id='editOppButton' value='\" + opp.OpportunityID + \"' type='button' " +
                 "class='btn btn-primary btn-sm'>" +
-                "Complete</button></td>";
+                "View</button></td>";
             $('#oppListTableBody').append(row);
             $("#oppListTableBody").trigger("update");
         }
@@ -117,45 +121,17 @@ function fillCategoryDropdown(jsonArray){
 $(document).ready(function () {
     $("#selectCategory").change(function () {
         //Storing the dropdown selection in category variable
-        category= $('#selectCategory option:selected').attr('id');
+         var category= $('#selectCategory option:selected').attr('id');
         getOppListbyID(category);
     });
 });
 
 //Show opportunity detail page
-function showOppDetails(opId) {
+function showOppDetails(opId, oppName) {
+    localStorage.setItem("opportunityName",oppName);
     localStorage.setItem("opportunityID",opId);
     window.location.replace("list_proposals.html");
 }
 
-//Function to update opportunity status
-//Start by telling tablesorter to sort your table when the document is loaded:
-function completeOpportunityEval(opId) {
-    if(opId == 1){
-        alert("Cannot complete this opportunity. Please complete processing all Proposals for this Opportunity");
-    }
-    else{
-        alert("Processing opportunity completed!");
-    }
 
-    //TODO write logic to update opportunity status
-    //Write logic to update opportunity status to complete.
-}
 
-//table sorter logic
-/*$(document).ready(function()
-    {
-        $("#listOppPanel").tablesorter();
-    }
-);*/
-
-//Click on the headers and you'll see that your table is now sortable!
-// You can also pass in configuration options when you initialize the table.
-// This tells tablesorter to sort on the first and second column in ascending order.
-/*
-$(document).ready(function()
-    {
-        $("#listOppPanel").tablesorter( {sortList: [[0,0], [1,0]]} );
-    }
-);
-*/
