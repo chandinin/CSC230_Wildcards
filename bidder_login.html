@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
     <meta http-equiv="content-type" content="text/xhtml; charset=utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -9,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="css/ept/menu2.css"/>
     <link rel="stylesheet" type="text/css" href="css/ept/style.css"/>
     <link rel="stylesheet" type="text/css" href="css/ept/dialog.css"/>
+    <link rel="stylesheet" type="text/css" href="css/login.css">
 
     <!-- Basic Styles -->
     <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
@@ -43,18 +42,18 @@
 
 <!--Contents of the whole page-->
 <div class="content">
-<div id="page" class="single">
-    <!--logo-->
-    <div class="navbar navbar-default navbar-static-top navbar-global">
-        <div class="container relative">
-            <!-- Skip to content link for Screen readers and keyboard users only -->
-            <a href="#main" style="position:absolute; font-size:.8em;" class="sr-only sr-only-focusable"
-               aria-label="Skip to main content">Skip to main content</a>
-            <div class="row">
-                <div class="col-lg-3 col-md-3 col-sm-12 logoContainer">
-                    <div class="navbar-header display-flex"><a class="navbar-brand" href="home_page.html">
-                        <div class="logoMain logo">
-                            <svg version="1.1" id="CalPERS_Logo" role="img" aria-label="CalPERS Logo" aria-labelledby="title" aria-describedby="desc" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 436.9 108.6" xml:space="preserve" focusable="false">
+    <div id="page" class="single">
+        <!--logo-->
+        <div class="navbar navbar-default navbar-static-top navbar-global">
+            <div class="container relative">
+                <!-- Skip to content link for Screen readers and keyboard users only -->
+                <a href="#main" style="position:absolute; font-size:.8em;" class="sr-only sr-only-focusable"
+                   aria-label="Skip to main content">Skip to main content</a>
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-12 logoContainer">
+                        <div class="navbar-header display-flex"><a class="navbar-brand" href="home_page.html">
+                            <div class="logoMain logo">
+                                <svg version="1.1" id="CalPERS_Logo" role="img" aria-label="CalPERS Logo" aria-labelledby="title" aria-describedby="desc" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 436.9 108.6" xml:space="preserve" focusable="false">
 																<title id="title">CalPERS Logo</title>
 																<desc id="desc">CalPERS Logo</desc>
 																<g class="calpersFill">
@@ -88,70 +87,53 @@
 																	</g>
 																</g>
 															</svg>
+                            </div>
+
+
+                        </a>
+
                         </div>
-
-
-                    </a>
-
                     </div>
-                </div>
-                <div class="col-lg-9 col-md-9 col-sm-12 hidden-xs print-hidden">
-                    <div class="navbar-collapse collapse flexEndCenter">
+                    <div class="col-lg-9 col-md-9 col-sm-12 hidden-xs print-hidden">
+                        <div class="navbar-collapse collapse flexEndCenter">
 
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!--glyphicon list-->
-    <div class="navbar navbar-inverse navbar-static-top navbar-tab">
-        <div class="container">
-            <div class="navbar-header">
-                <!-- end comment out to hide search form -->
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li class=""><a href="home_page.html"><span class="glyphicon glyphicon-home hidden-xs"
-                                                            aria-hidden="true"> </span> Home</a>
+        <!--glyphicon list-->
+        <div class="navbar navbar-inverse navbar-static-top navbar-tab">
+            <div class="container">
+                <div class="navbar-header">
+                    <!-- end comment out to hide search form -->
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li class=""><a href="home_page.html"><span class="glyphicon glyphicon-home hidden-xs"
+                                                                    aria-hidden="true"> </span> Home</a>
 
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <form action="#" method="post" id="bidderlogin_formid" name="bidderlogin_formname" class="bidderlogin_formclass" autocomplete="off">
-        <div>
-            <div>
-                    <div align="center">
-                    <div id="newUser"><h1>Bidder Log In</h1></div>
-                    <br/>
-                    <label for="username" id="usernameLbl">Username <span
-                            class="required">(required)</span></label><br>
-                    <input id="username" name="username" type="text" value="" size="24" maxlength="35"/>
-                    <p></p>
-                    <label for="password" id="passwordLbl">Password <span
-                            class="required">(required)</span></label><br>
-                    <input id="password" name="password" type="password" value="" size="24" maxlength="35"/>
-                    </div>
-            <br>
-            </div>
-            <div align="center">
-                <input type="button" name="submit_id" id="btn_id" value="Continue" class="mainButton" onclick="BidderLoginAction()"/>
-                <div class="clear"></div>
+                    </ul>
+                </div>
             </div>
         </div>
-    </form>
 
-    <div>
-<hr>
-        <h2 class="question" style="display: inline">New to CalPERS?</h2>
-        <span class="question">
-						<a href="bidder_register.html">Register now.</a>
-					</span>
-        <br/><br/>
+        <!--Login-->
+        <div class="container navbar-right">
+            <div class="login-page">
+                <div class="form">
+                    <form class="login-form">
+                        <input id="username" name="username" type="text" placeholder="username"/>
+                        <input id="password" name="password" type="password" placeholder="password"/>
+                        <input type="button" name="submit_id" id="btn_id" value="Continue" class="mainButton" onclick="BidderLoginAction()"/>
+                        <p class="message">New to CalPERS? <a href="bidder_register.html">Register now</a></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+
     </div>
-</div>
 </div>
 
 <!--footer -->

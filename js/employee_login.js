@@ -72,7 +72,7 @@ function EmployeeLoginAction() {
 
         xhttp.open("POST", "http://athena.ecs.csus.edu/~wildcard/php/api/employee/authentication.php", true);
         //Async call
-        xhttp.onreadystatechange = function () {
+        xhttp.onload = function () {
             var response = JSON.parse(xhttp.responseText);
             var status = JSON.parse(xhttp.status);
             if (xhttp.status == 200 && response.authenticated == true) {
