@@ -4,8 +4,8 @@
  * Description: This is the database wrapper for retrieving the
  *              Proposal record from the database.
  */
-ini_set('display_errors', 'On');
-error_reporting(E_ALL);
+//ini_set('display_errors', 'On');
+//error_reporting(E_ALL);
 
 class Proposal
 {
@@ -72,9 +72,68 @@ class Proposal
   }
 
   // select one by ID
+  function selectByStatus($Status)
+  {
+    $query = "SELECT ProposalID, OpportunityID, BidderID, Status, ps.Name as StatusName, TechnicalScore, FeeScore, FinalTotalScore, CreatedDate, LastEditDate FROM Proposal p INNER JOIN ProposalStatus ps ON ps.StatusID = p.Status WHERE p.Status = ? ;";
+    $stmt = $this->conn->prepare( $query );
+
+    // bind parameters
+    $stmt->bindParam(1, $Status);
+
+    // execute query
+    $stmt->execute();
+
+    return $stmt;
+  }
+
+  // select one by ID
   function AllPropsAcceptRejectByOppID($id)
   {
+    $AllRejectedAccepted = false;
+
+    if($this->AllPropsAcceptRejectByOppIDEval2($id))
+    {
+      $AllRejectedAccepted = true;
+    }
+    else if($this->AllPropsAcceptRejectByOppIDEval1($id))
+    {
+      $AllRejectedAccepted = true;
+    }
+
+    return $AllRejectedAccepted;
+  }
+
+  // select one by ID
+  function AllPropsAcceptRejectByOppIDEval1($id)
+  {
     $query = "select count(*) as total from Proposal where ((`Status` is null) OR (`Status` not in (10,15,60,65))) AND OpportunityID = :ID ;";
+    $stmt = $this->conn->prepare( $query );
+
+    // bind parameters
+    $stmt->bindParam(':ID', $id);
+
+    // execute query
+    $stmt->execute();
+
+    // get retrieved row
+    $rowCount = $stmt->rowCount();
+    $proposalCount = 0;
+    if($rowCount > 0)
+    {
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+      $proposalCount = $row['total'];
+    }
+
+    if($proposalCount > 0)
+      return false;
+    else
+      return true;
+  }
+
+  // select one by ID
+  function AllPropsAcceptRejectByOppIDEval2($id)
+  {
+    $query = "select count(*) as total from Proposal where ((`Status` is null) OR (`Status` not in (60,65))) AND OpportunityID = :ID ;";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
@@ -508,5 +567,3 @@ class Proposal
   }
 }
 ?>
-
-
