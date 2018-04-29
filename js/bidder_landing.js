@@ -21,6 +21,9 @@ $(document).ready(function(){
 
     $("#selectCategory").change(function(change) { activateOpportunitiesList(); });
 
+    // Init the save category subscriptions button
+    $("#subscriptions-save-btn").click(function() { saveCategorySubscriptions(); });
+
     // TODO: Figure out a good way to pass bidder ID around the site
     g_bidder_id = "1";
     activateOpportunitiesList();
@@ -599,7 +602,7 @@ function populateOppTitle(opportunity)
             if(isReasonableTimeNegative(reasonable_time_remaining))
             {
                 timeRemainingCallback.stop();
-                time_remaining_text = "Time Remaining: This opportunity has expired";
+                time_remaining_text = "Time Remaining: This opportunity has closed";
                 $("#proposal-save-btn").hide();
                 $("#proposal-time-remaining").text(time_remaining_text);
             }
@@ -938,7 +941,7 @@ function initializeEditProposal(proposal_json)
             if(isReasonableTimeNegative(reasonable_time_remaining))
             {
                 timeRemainingCallback.stop();
-                time_remaining_text = "Time Remaining: This opportunity has expired, your proposal will be evaluated soon";
+                time_remaining_text = "Time Remaining: This opportunity has closed, your proposal will be evaluated soon";
                 $("#proposal-save-btn").hide();
                 $("#proposal-time-remaining").text(time_remaining_text);
             }
@@ -1286,11 +1289,22 @@ function initializeManageSubscriptions()
 {
     //get all categories
     var xhr = new XMLHttpRequest();
-    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/getOppCategoryList.php',true);
+    xhr.open('GET','php/api/opportunity/getOppCategoryList.php',true);
     xhr.onload = function() {
         if (xhr.status == 200) {
             var jsonArray = JSON.parse(xhr.responseText);
-            populateManageSubscriptions(jsonArray);
+            console.log("Attempting");
+            $.ajax({
+                url: "php/api/bidder/getSubscriptions.php",
+                type: "POST",
+                data: {"bidderID": g_bidder_id},
+                success: function(subscriptions)
+                {
+                    console.log(subscriptions);
+                    populateManageSubscriptions(jsonArray);
+                },
+                error: function(err) { console.log("Error getting your subscriptions"); populateManageSubscriptions(jsonArray);}
+            });
         } else {
             alert("Error getting categories");
         }
@@ -1313,7 +1327,7 @@ function populateManageSubscriptions(jsonArray)
         input_checkbox = $('<input>', {
             class: 'form-check-input',
             type: 'checkbox',
-            id: i
+            id: jsonArray.Category[i].CategoryID
         });
 
         label = $("<label>", {
@@ -1327,12 +1341,28 @@ function populateManageSubscriptions(jsonArray)
         div_form_check.prependTo($('#subscriptions-form'));
 
     }
-    submit_button = $("<button>",{
-        // type: "submit",
-        class: "btn btn-primary",
-        text: "Submit"
-    });
-
-    submit_button.appendTo($("#subscriptions-form"));
 }
 
+
+function saveCategorySubscriptions()
+{
+    checked_category_ids = getCheckedCategorySubscriptions();
+
+    // Ajax it to endpoint for updating subscriptions
+
+    alert("Your subscriptions have been IGNORED, congrats :p" + String(checked_category_ids));
+
+}
+
+
+function getCheckedCategorySubscriptions()
+{
+    selected_categories = [];
+    $('#subscriptions-form input').each( function(key, input)
+    {
+        if(input.checked)
+            selected_categories.push(input.id);
+    })
+
+    return selected_categories;
+}
