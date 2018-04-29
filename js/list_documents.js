@@ -66,6 +66,24 @@ function fillDocumentTable(jsonArray){
         }
     }
 
+/*
+    function fillDocTable(start, limit){
+        for(var i=start;i<limit;i++) {
+            var doc = jsonArray.doc[i];
+            var row ="<tr>"+"</td><td>" + doc.DocTitle+ "</td><td>"
+                + " <td>" +  "<button onclick='preview(\"" +
+                doc.Url+ "\")' id='editOppButton' value='\" + opp.OpportunityID + \"' type='button' " +
+                "class='btn btn-primary btn-sm'>" +
+                "View</button></td>";
+            $('#documentsTableBody').append(row);
+            $("#documentsTableBody").trigger("update");
+        }
+    }
+*/
+
+
+
+
     $('#next').click(function(){
         var next = limit;
         if(size>next) {
@@ -112,5 +130,11 @@ function SeekClarificationButton() {
     window.location.replace("seek_clarification.html")
 }
 
-
+/*
+function preview(url){
+    var x = document.createElement("IFRAME");
+    x.setAttribute("src", "http://athena.ecs.csus.edu/~mackeys/bidder_login.html");
+    document.body.appendChild(x);
+}
+*/
 
