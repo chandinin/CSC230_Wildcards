@@ -1,5 +1,5 @@
 // TODO: Figure out a good way to pass bidder ID around the site
-var bidder_id;
+var g_bidder_id;
 
 $(document).ready(function(){
     $("#show-list-btn").click(function() { router("#spa-opportunities-list"); });
@@ -22,7 +22,7 @@ $(document).ready(function(){
     $("#selectCategory").change(function(change) { activateOpportunitiesList(); });
 
     // TODO: Figure out a good way to pass bidder ID around the site
-    bidder_id = "1";
+    g_bidder_id = "1";
     activateOpportunitiesList();
 });
 
@@ -451,6 +451,9 @@ function initializeCreateProposal(opportunity_id)
     $("#proposal-back-list-btn").click(function() { router("#spa-opportunities-list"); });
     $("#proposal-save-btn").click(function() { console.log("Pressed proposal-save-btn"); saveNewProposal(opportunity_id); });
 
+    // Because edit-proposal can change this
+    $("#proposal-instructions-span").text("Please download, fill out, and upload all requested forms. You can come back and edit your documents at any time before the deadline for submissions, just press 'save and come back later");
+
 
 }
 
@@ -465,7 +468,7 @@ function saveNewProposal(opportunity_id)
     new_proposal_json = {
         "ProposalID": proposal_id,
         "OpportunityID": opportunity_id,
-        "BidderID": bidder_id,
+        "BidderID": g_bidder_id,
         "Status": "saved, still open",
         "TechnicalScore": -1,
         "FeeScore": -1,
@@ -683,11 +686,11 @@ function initializeProposalsList()
 {
     // Fuck yeah, take that, readability!
     // Just gets all of the proposals, and then attaches the associated OpportunityName to it
+    // Christ, this operates on every single proposal...
     $.ajax({
-        url: "php/api/proposal/read.php", 
+        url: "php/api/proposal/read.php?bidderID="+String(g_bidder_id), 
         success: function(proposals_json) {
-            // TODO: If time, learn about promises
-            num_proposal_callbacks_left = proposals_json["proposal"].length * 3; // x3 because we have to get num docs for opportunity and prop
+            num_proposal_callbacks_left = proposals_json["proposal"].length * 4; // x4 because we have to get num docs for opportunity and prop
 
             // For each, get number of proposal docs
             proposals_json["proposal"].forEach( function (proposal_json)
@@ -697,14 +700,15 @@ function initializeProposalsList()
                     type: "GET",
                     success: function(proposal_docs_json)
                     {
+                        num_proposal_callbacks_left--; console.log("Remaining Callbacks: " +String(num_proposal_callbacks_left));
                         docs = proposal_docs_json.doc;
                         proposal_json.NumProposalDocs = (docs == null ? 0 : docs.length);
 
-                        num_proposal_callbacks_left--;
+                        
                         if(num_proposal_callbacks_left == 0)
                         {
                             // Filter down all proposals till we get just ours
-                            populateProposalList(proposals_json["proposal"].filter(proposal => proposal["BidderID"] == bidder_id)); 
+                            populateProposalList(proposals_json["proposal"].filter(proposal => proposal["BidderID"] == g_bidder_id)); 
                         }
                     }
                 });
@@ -718,6 +722,7 @@ function initializeProposalsList()
                     type: "GET",
                     success: function(opp_doc_templates)
                     {
+                        num_proposal_callbacks_left--; console.log("Remaining Callbacks: " +String(num_proposal_callbacks_left));
                         if(!("doctemplate" in opp_doc_templates))
                         {
                             console.log("Got no doc templates, returning...");
@@ -725,15 +730,59 @@ function initializeProposalsList()
                         }
                         doc_templates = opp_doc_templates["doctemplate"];
                         proposal_json.NumOpportunityDocs = doc_templates.length;
-                        num_proposal_callbacks_left--;
+                        
                         if(num_proposal_callbacks_left == 0)
                         {
                             // Filter down all proposals till we get just ours
-                            populateProposalList(proposals_json["proposal"].filter(proposal => proposal["BidderID"] == bidder_id)); 
+                            populateProposalList(proposals_json["proposal"].filter(proposal => proposal["BidderID"] == g_bidder_id)); 
                         }
                     }
                 });
             });
+
+            // For each proposal, get all requests for clarification, then select the only valid one for each proposal
+            proposals_json["proposal"].forEach( function (proposal_json)
+            {
+                $.ajax({
+                    url: "php/api/proposal/getClarifications.php?proposalID="+proposal_json.ProposalID, 
+                    type: "GET",
+                    success: function(clarifications)
+                    {
+                        num_proposal_callbacks_left--; console.log("Remaining Callbacks: " +String(num_proposal_callbacks_left));
+                        if(!("clarification" in clarifications))
+                        {
+                            console.log("Got no Clarifications, returning...");
+                            return;
+                        }
+
+                        found_open_clarification = false; // flag to check after loop
+                        clarifications.clarification.forEach( function(clarification)
+                        {
+                            // PUT Selection criteria for clarification here
+                            if(clarification.answer == null && !found_open_clarification)
+                            {
+                                console.log(proposal_json.ProposalID + " has an open clarification: " + clarification.ClarificationID);
+                                proposal_json.ClarificationClosingDate = clarification.ClosingDate;
+                                found_open_clarification = true;
+                            }
+                        });
+
+                        if(!found_open_clarification)
+                        {
+                            console.log("An open clarification was not found for " + proposal_json.ProposalID);
+                        }
+
+                        
+                        if(num_proposal_callbacks_left == 0)
+                        {
+                            // Filter down all proposals till we get just ours
+                            populateProposalList(proposals_json["proposal"].filter(proposal => proposal["BidderID"] == g_bidder_id)); 
+                        }
+                    }
+                });
+            });
+
+
 
 
             // For each, get OpportunityName
@@ -744,12 +793,12 @@ function initializeProposalsList()
                     success: function(opportunity_json) {
                         proposal_json["OpportunityName"] = opportunity_json["Name"];
                         proposal_json["ClosingDate"] = opportunity_json["ClosingDate"];
-                        num_proposal_callbacks_left--;
+                        num_proposal_callbacks_left--; console.log("Remaining Callbacks: " +String(num_proposal_callbacks_left));
 
                         if(num_proposal_callbacks_left == 0)
                         {
                             // Filter down all proposals till we get just ours
-                            populateProposalList(proposals_json["proposal"].filter(proposal => proposal["BidderID"] == bidder_id)); 
+                            populateProposalList(proposals_json["proposal"].filter(proposal => proposal["BidderID"] == g_bidder_id)); 
                         }
                     }
                 });
@@ -783,11 +832,16 @@ function populateProposalList(proposals_json)
             status_name = proposals_json[i].NumProposalDocs >= proposals_json[i].NumOpportunityDocs ? 
                 "Open For Edits, pending close date" : "Open For Edits, missing documents"; 
         }
-        else {status_name = "UNKNOWN STATUS MAPPING"; }
+        else {status_name = "UNKNOWN STATUS MAPPING: " + status_name; }
         
 
         prop_status = document.createTextNode(status_name);
-        closingDate = document.createTextNode(proposals_json[i].ClosingDate);
+
+        closingDate = null;
+        if("ClarificationClosingDate" in proposals_json[i])
+            closingDate = document.createTextNode(proposals_json[i].ClarificationClosingDate);
+        else
+            closingDate = document.createTextNode(proposals_json[i].ClosingDate);
 
         anchor = document.createElement("a");
         anchor.appendChild(document.createTextNode(proposals_json[i].OpportunityName));
@@ -820,12 +874,41 @@ function activateEditProposal(proposal_id)
         type: "GET",
         success: function(proposal_json)
         {
-            initializeCreateProposal(proposal_json.OpportunityID);
-            initializeEditProposal(proposal_json);
-            router("#spa-create-proposal");    
+            $.ajax({
+                url: "php/api/proposal/getClarifications.php?proposalID="+proposal_json.ProposalID, 
+                type: "GET",
+                success: function(clarifications)
+                {
+                    if(!("clarification" in clarifications))
+                    {
+                        console.log("Got no Clarifications, returning...");
+                        return;
+                    }
+
+                    found_open_clarification = false; // flag to check after loop
+                    clarifications.clarification.forEach( function(clarification)
+                    {
+                        // PUT Selection criteria for clarification here
+                        if(clarification.answer == null && !found_open_clarification)
+                        {
+                            console.log(proposal_json.ProposalID + " has an open clarification: " + clarification.ClarificationID);
+                            proposal_json.ClarificationClosingDate = clarification.ClosingDate;
+                            found_open_clarification = true;
+                        }
+                    });
+
+                    if(!found_open_clarification)
+                    {
+                        console.log("An open clarification was not found for " + proposal_json.ProposalID);
+                    }
+
+                    initializeCreateProposal(proposal_json.OpportunityID);
+                    initializeEditProposal(proposal_json);
+                    router("#spa-create-proposal");    
+                }
+            });
         }
     });
-
 }
 
 function initializeEditProposal(proposal_json)
@@ -839,6 +922,13 @@ function initializeEditProposal(proposal_json)
 
     $("#proposal-back-list-btn").click(function() { router("#spa-proposals-list"); });
     $("#proposal-save-btn").click(function() { saveProposal(proposal_json); });
+
+    if("ClarificationClosingDate" in proposal_json)
+    {
+        console.log("OK, we found a clarification...");
+        current_opportunity_json["ClosingDate"] = proposal_json.ClarificationClosingDate;
+        $("#opportunity-countdown").text("Closing Date and Time for Clarifications: " + current_opportunity_json["ClosingDate"]); // Overwrite what create proposal had
+    }
 
     // Setup our lovely countdown timer...
     //{"days":597,"hours":15,"minutes":44,"seconds":11}
@@ -854,7 +944,14 @@ function initializeEditProposal(proposal_json)
             }
             else
             {
-                time_remaining_text = "Time Remaining on this opportunity";
+                time_remaining_text = "Time remaining on this opportunity: ";
+                // We override this if there is a correction. proposals=instructions-span is reset in the create-proposal-spa init
+                if("ClarificationClosingDate" in proposal_json)
+                {
+                    time_remaining_text = "Time remaining to make clarifications: "; 
+                    $("#proposal-instructions-span").text("Clarification(s) have been requested for your proposal. Please check your email and update the requested document(s).")
+                }
+
                 time_remaining_text += " Days: " + reasonable_time_remaining.days;
                 time_remaining_text += " Hours: " + reasonable_time_remaining.hours;
                 time_remaining_text += " Minutes: " + reasonable_time_remaining.minutes;
@@ -1238,16 +1335,4 @@ function populateManageSubscriptions(jsonArray)
 
     submit_button.appendTo($("#subscriptions-form"));
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
