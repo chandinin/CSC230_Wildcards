@@ -17,10 +17,11 @@
 -->
 </head>
 <body>
-
+<div class="content">
 <div id="page" class="single">
 
 <!-- Main Tabs Navigation -->
+
 <!-- Mobile version -->
 
 <!-- END HEADER -->
@@ -74,54 +75,63 @@
                     </div>
 
                     <!-- New Employee --->
-                    <div id="empNew" class="col-md-12">
+                    <div id="empNew">
                         <div class="row">
-                             <div class="col-xs-2">
-                                <div class="form-group">
-                                    <label for="formEmpIdInput">Employee Id</label>
-                                    <input type="text" size="10" class="form-control" id="formEmpIdInput"
-                                           placeholder="Employee Id" required>
+                            <div class="col-md-6">
+                                <h3 class="my-2 h3">Create Employee Account</h3>
+                            </div>
+                        </div>
+                        <div>
+                        <form id="newEmpForm">
+                            <div class="row">
+                                <div class="col-xs-2">
+                                    <div class="form-group">
+                                        <label for="formEmpIdInput">Employee Id</label>
+                                        <input type="text" size="10" class="form-control" id="formEmpIdInput"
+                                               placeholder="Employee Id" required>
+                                    </div>
                                 </div>
-                             </div>
-                            <div class="col-xs-6">
-                                <div class="form-group">
-                                    <label for="formEmpEmailInput">Employee Email</label>
-                                    <input type="text" size="20" class="form-control" id="formEmpEmailInput"
-                                           placeholder="Employee Email" required>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label for="formEmpEmailInput">Employee Email</label>
+                                        <input type="text" size="20" class="form-control" id="formEmpEmailInput"
+                                               placeholder="Employee Email" required>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-6">
-                            <div class="form-group">
-                                <label for="formEmpFNameInput">Employee First Name</label>
-                                <input type="text" size="20" class="form-control" id="formEmpFNameInput"
-                                       placeholder="Employee First Name" required>
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label for="formEmpFNameInput">Employee First Name</label>
+                                        <input type="text" size="20" class="form-control" id="formEmpFNameInput"
+                                               placeholder="Employee First Name" required>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label for="formEmpLNameInput">Employee Last Name</label>
+                                        <input type="text" size="20" class="form-control" id="formEmpLNameInput"
+                                               placeholder="Employee Last Name" required>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                            <div class="col-xs-6">
-                            <div class="form-group">
-                                <label for="formEmpLNameInput">Employee Last Name</label>
-                                <input type="text" size="20" class="form-control" id="formEmpLNameInput"
-                                       placeholder="Employee Last Name" required>
-                            </div>
-                            </div>
-                        </div>
 
 
-                        <div class="row col-xs-6">
-                            <div class="form-group">
-                                <label for="formPwdInput">Employee Password</label>
-                                <input type="text" size="20" class="form-control" id="formPwdInput"
-                                       placeholder="Employee Password" required>
+                            <div class="row col-xs-6">
+                                <div class="form-group">
+                                    <label for="formPwdInput">Employee Password</label>
+                                    <input type="text" size="20" class="form-control" id="formPwdInput"
+                                           placeholder="Employee Password" required>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row col-md-12">
-                            <div class="form-group">
-                                <button id="saveNewEmp" type="button" class="btn btn-openportal">Save</button>
-                                <button id="clearNewEmp" type="button" class="btn btn-openportal">Clear Form</button>
-                                <button id="exitNewEmp" type="button" class="btn btn-openportal">Exit</button>
+                            <div class="row col-md-12">
+                                <div class="form-group">
+                                    <button id="saveNewEmp" type="button" class="btn btn-openportal">Save</button>
+                                    <button id="clearNewEmp" type="button" class="btn btn-openportal">Clear Form</button>
+                                    <button id="exitNewEmp" type="button" class="btn btn-openportal">Exit</button>
+                                </div>
                             </div>
+                        </form>
                         </div>
                     </div>
                     <!-- ./New Employee -->
@@ -159,7 +169,7 @@
     </div>
 </div>
 </div>
-
+</div>
 <!-- ==========================CONTENT ENDS HERE ========================== -->
 
 

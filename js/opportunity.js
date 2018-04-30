@@ -53,7 +53,7 @@ function getEmployeeList() {
             var size = empArray.employee.length;
             for (var i = 0; i < size; i++) {
                 var employee = empArray.employee[i];
-                var editlink = "'editEmployee("+employee.id + ")'";
+                var editlink = "'editEmployee("+employee.ID + ")'";
                 var row = "<tr><td>" + employee.UserName + "</td><td>" + employee.ID + "</td><td>" + employee.FirstName +  "</td><td>" + employee.LastName +
                     "</td><td>" + employee.Email + "</td><td>" + employee.Phone + "</td><td>" + employee.Address + "</td><td>" +
                     "<button onclick="+ editlink + " class='btn btn-success btn-lg'><span class='glyphicon glyphicon-pencil'" +
