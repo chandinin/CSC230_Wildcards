@@ -1,9 +1,46 @@
-var employeeRole;
+var employeeRoleid;
 
+$(document).ready(
+    function () {
+        getRoles();
+    });
+
+//get all Roles to populate dropdown
+function getRoles(){
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/employee/getRoles.php',true);
+    xhr.onload = function() {
+        if (xhr.status == 200) {
+            var jsonArray = JSON.parse(xhr.responseText);
+            fillRolesDropdown(jsonArray);
+        } else {
+            alert("Error response");
+        }
+    };
+    xhr.send();
+}
+
+//Fill dropdown with roles
+function fillRolesDropdown(jsonArray){
+    var start = 0;
+    var select = document.getElementById("selectRole")
+    var size = jsonArray.role.length;
+
+    for(var i=start;i<size;i++) {
+        var option = document.createElement("OPTION");
+        txt = document.createTextNode(jsonArray.role[i].Name);
+        option.appendChild(txt);
+        option.setAttribute("value", jsonArray.role[i].Name)
+        option.setAttribute("id", jsonArray.role[i].RoleID)
+        select.insertBefore(option, select.lastChild);
+    }
+}
+
+//Capture the role id of the selection from user
 $(document).ready(function () {
     $("#selectRole").change(function () {
-        //Storing the dropdown selection in employeerole variable
-        employeeRole= $('#selectRole option:selected').html();
+        //Storing the dropdown selection in category variable
+        employeeRoleid = $('#selectRole option:selected').attr('id');
     });
 });
 
@@ -29,22 +66,31 @@ function EmployeeLoginAction() {
         var myJSON = JSON.stringify(params);
         var xhttp = new XMLHttpRequest();
 
-        xhttp.open("POST", "http://athena.ecs.csus.edu/~mackeys/php/api/employee/authentication.php", true);
+        xhttp.open("POST", "http://athena.ecs.csus.edu/~wildcard/php/api/employee/authentication.php", true);
         //Async call
-
         xhttp.onload = function () {
             var response = JSON.parse(xhttp.responseText);
             var status = JSON.parse(xhttp.status);
             if (status == 200 && response.authenticated == true) {
+                localStorage.setItem("employeeName",response.FullName);
                 //IF the authentication successful go to the landing page, NOTE: Need to change to the correct URL
-                switch (employeeRole) {
-                    case 'Author':
+                switch (employeeRoleid) {
+                    case "0": //Author
                         window.location.replace("Opportunity.html")
                         break;
-                    case 'Preliminary Evaluator':
-                        window.location.replace("evaluator1_landing.html")
+                    case "1": //Reviewer
+                        window.location.replace("Review.html")
                         break;
-                    case 'Secondary Evaluator':
+                    case "2": //Approver
+                        alert("Opportunity.html");
+                        break;
+                    case "3": //Lead Evaluator
+                        alert("Evaluator 2 is under construction, Coming soon!");
+                        break;
+                    case "4": // Preliminary Evaluator
+                        window.location.replace("evaluator1_landing.html");
+                        break;
+                    case "5": // Secondary Evaluator
                         alert("Evaluator 2 is under construction, Coming soon!");
                         break;
                     default:
