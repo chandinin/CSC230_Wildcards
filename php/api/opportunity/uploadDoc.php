@@ -8,6 +8,8 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Credentials: true");
 header('Content-Type: application/json');
 
+date_default_timezone_set('America/Tijuana');
+
 include_once '../config/Database.php';
 include_once '../objects/opportunity.php';
 
@@ -18,8 +20,8 @@ $db = $database->Connect();
 $opportunity = new Opportunity($db);
 
 $temp_base_dir = "../../../data/files/";
-//$base_url = "https://athena.ecs.csus.edu/~wildcard/php/api/";
-$base_url = "http://localhost/PHP_TEST/api/";
+//$base_url = "https://athena.ecs.csus.edu/~wildcard/data/files/";
+$base_url = "http://localhost/data/files/";
 
 //
 //
@@ -58,7 +60,8 @@ if(isset($_POST["submit"]))
 
     if (move_uploaded_file($_FILES["filename"]["tmp_name"], $tempFilePath)) 
     {
-      $url = $base_url . "doctemplate/getFile.php?doctemplateid=" . $OpportunityID . "_" . $DocTemplateID;
+      //$url = $base_url . "doctemplate/getFile.php?doctemplateid=" . $OpportunityID . "_" . $DocTemplateID;
+      $url = $base_url . "O" .$OpportunityID . "_" . $DocTemplateID . "_" . $filename;
       if($opportunity->UploadDocTemplate($DocTemplateID, $filename, $tempFilePath, $url))
       {
         $opportunity->RelateDocTemplateToOppID($OpportunityID, $DocTemplateID, $ExpirationDate);
