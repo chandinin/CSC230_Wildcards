@@ -265,7 +265,7 @@ class Opportunity
   { 
     try
     {
-      $query = "INSERT INTO DocTemplate (DocTemplateID, DocTitle, Path, Url) VALUES (:DocTemplateID, :DocTitle, :Path, :Url)";
+      $query = "INSERT INTO DocTemplate (DocTemplateID, DocTitle, Path, Url, CreatedDate, LastEditDate, PostedDate) VALUES (:DocTemplateID, :DocTitle, :Path, :Url, NOW(), NOW(), NOW())";
       
 
       $stmt = $this->conn->prepare( $query );
