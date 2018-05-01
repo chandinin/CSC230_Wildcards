@@ -63,7 +63,8 @@ if(isSet($_POST_LowerCase["proposalid"])
     "FinalTotalScore" =>  $proposal->FinalTotalScore,
     "CreatedDate" =>  $proposal->CreatedDate,
     "LastEditDate" =>  $proposal->LastEditDate,
-    "BidderName" =>  $bidderName
+    "BidderName" =>  $bidderName,
+    "ContractAwarded" => $ContractAwarded
   );
 
   // make it json format
@@ -75,54 +76,107 @@ else if(isSet($_POST_LowerCase["opportunityid"])
   $opportunityid = isSet($_GET_LowerCase["opportunityid"]) ?
      $_GET_LowerCase["opportunityid"] : $_POST_LowerCase["opportunityid"];
 
-  //Search
-  $stmt = $proposal->selectByOppID($opportunityid);
-  $rowCount = $stmt->rowCount();
-
-  $proposals_arr = array();
-  $proposals_arr["proposal"] = array();
-
-  if($rowCount > 0)
+  if(isSet($_POST_LowerCase["status"]) || isSet($_GET_LowerCase["status"]))
   {
-    while($row = $stmt->fetch(PDO::FETCH_ASSOC))
+    $status = isSet($_GET_LowerCase["status"]) ?
+         $_GET_LowerCase["status"] : $_POST_LowerCase["status"];
+
+    //Search
+    $stmt = $proposal->selectByOppIDStatus($opportunityid, $status);
+    $rowCount = $stmt->rowCount();
+
+    $proposals_arr = array();
+    $proposals_arr["proposal"] = array();
+
+    if($rowCount > 0)
     {
-      $BidderID = $row['BidderID'];
-
-      $bidder_arr = array();
-      $bidderName = "";
-      if(isset($BidderID))
+      while($row = $stmt->fetch(PDO::FETCH_ASSOC))
       {
-        $bidder = new Bidder($db);
-        $bidder->selectByBidderID($BidderID);
-        $bidderName = $bidder->first_name . " " . $bidder->last_name;
+        $BidderID = $row['BidderID'];
+  
+        $bidder_arr = array();
+        $bidderName = "";
+        if(isset($BidderID))
+        {
+          $bidder = new Bidder($db);
+          $bidder->selectByBidderID($BidderID);
+          $bidderName = $bidder->first_name . " " . $bidder->last_name;
+        }
+
+        $proposal_arr = array(
+          "ProposalID" =>  $row['ProposalID'],
+          "OpportunityID" =>  $row['OpportunityID'],
+          "BidderID" =>  $row['BidderID'],
+          "Status" =>  $row['Status'],
+          "StatusName" =>  $row['StatusName'],
+          "TechnicalScore" =>  $row['TechnicalScore'],
+          "FeeScore" =>  $row['FeeScore'],
+          "FinalTotalScore" =>  $row['FinalTotalScore'],
+          "CreatedDate" =>  $row['CreatedDate'],
+          "LastEditDate" =>  $row['LastEditDate'],
+          "BidderName" =>  $bidderName,
+          "ContractAwarded" => $row['ContractAwarded']
+          );
+
+        array_push($proposals_arr["proposal"], $proposal_arr);
       }
-
-      $proposal_arr = array(
-        "ProposalID" =>  $row['ProposalID'],
-        "OpportunityID" =>  $row['OpportunityID'],
-        "BidderID" =>  $row['BidderID'],
-        "Status" =>  $row['Status'],
-        "StatusName" =>  $row['StatusName'],
-        "TechnicalScore" =>  $row['TechnicalScore'],
-        "FeeScore" =>  $row['FeeScore'],
-        "FinalTotalScore" =>  $row['FinalTotalScore'],
-        "CreatedDate" =>  $row['CreatedDate'],
-        "LastEditDate" =>  $row['LastEditDate'],
-        "BidderName" =>  $bidderName
-        );
-
-      array_push($proposals_arr["proposal"], $proposal_arr);
     }
-  }
 
-  // make it json format
-  print_r(trim(json_encode($proposals_arr)));
+    // make it json format
+    print_r(trim(json_encode($proposals_arr)));
+  }
+  else
+  {
+    //Search
+    $stmt = $proposal->selectByOppID($opportunityid);
+    $rowCount = $stmt->rowCount();
+
+    $proposals_arr = array();
+    $proposals_arr["proposal"] = array();
+
+    if($rowCount > 0)
+    {
+      while($row = $stmt->fetch(PDO::FETCH_ASSOC))
+      {
+        $BidderID = $row['BidderID'];
+
+        $bidder_arr = array();
+        $bidderName = "";
+        if(isset($BidderID))
+        {
+          $bidder = new Bidder($db);
+          $bidder->selectByBidderID($BidderID);
+          $bidderName = $bidder->first_name . " " . $bidder->last_name;
+         }
+
+        $proposal_arr = array(
+          "ProposalID" =>  $row['ProposalID'],
+          "OpportunityID" =>  $row['OpportunityID'],
+          "BidderID" =>  $row['BidderID'],
+          "Status" =>  $row['Status'],
+          "StatusName" =>  $row['StatusName'],
+          "TechnicalScore" =>  $row['TechnicalScore'],
+          "FeeScore" =>  $row['FeeScore'],
+          "FinalTotalScore" =>  $row['FinalTotalScore'],
+          "CreatedDate" =>  $row['CreatedDate'],
+          "LastEditDate" =>  $row['LastEditDate'],
+          "BidderName" =>  $bidderName,
+          "ContractAwarded" => $row['ContractAwarded']
+          );
+
+        array_push($proposals_arr["proposal"], $proposal_arr);
+      }
+    }
+
+    // make it json format
+    print_r(trim(json_encode($proposals_arr)));    
+  }
 }
 else if(isSet($_POST_LowerCase["status"])
 || isSet($_GET_LowerCase["status"]))
 {
   $status = isSet($_GET_LowerCase["status"]) ?
-     $_GET_LowerCase["opportunityid"] : $_POST_LowerCase["status"];
+     $_GET_LowerCase["status"] : $_POST_LowerCase["status"];
 
   //Search
   $stmt = $proposal->selectByStatus($status);
@@ -157,7 +211,8 @@ else if(isSet($_POST_LowerCase["status"])
         "FinalTotalScore" =>  $row['FinalTotalScore'],
         "CreatedDate" =>  $row['CreatedDate'],
         "LastEditDate" =>  $row['LastEditDate'],
-        "BidderName" =>  $bidderName
+        "BidderName" =>  $bidderName,
+        "ContractAwarded" => $row['ContractAwarded']
         );
 
       array_push($proposals_arr["proposal"], $proposal_arr);
@@ -203,7 +258,8 @@ else
         "FinalTotalScore" =>  $row['FinalTotalScore'],
         "CreatedDate" =>  $row['CreatedDate'],
         "LastEditDate" =>  $row['LastEditDate'],
-        "BidderName" =>  $bidderName
+        "BidderName" =>  $bidderName,
+        "ContractAwarded" => $row['ContractAwarded']
         );
      
       array_push($proposals_arr["proposal"], $proposal_arr);
