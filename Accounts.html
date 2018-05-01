@@ -87,7 +87,7 @@
                             <div class="col-md-6">
                                 <h3 class="my-2 h3">Create Employee Account</h3>
                             </div>
-                        </div>
+                        </div><br>
                         <div>
                         <form id="newEmpForm">
                             <div class="row">
@@ -124,13 +124,48 @@
                             </div>
 
 
-                            <div class="row col-xs-6">
-                                <div class="form-group">
-                                    <label for="formPwdInput">Employee Password</label>
-                                    <input type="text" size="20" class="form-control" id="formPwdInput"
+                            <div class="row">
+                                <div class="form-group col-xs-6">
+                                   <label for="formPwdInput">Employee Password</label>
+                                    <input type="text" size="20" class="form-control" id="formEmpPwdInput"
                                            placeholder="Employee Password" required>
                                 </div>
+                                    <div class="form-group col-xs-6">
+                                        <label for="formEmpPhoneInput">Employee Phone</label>
+                                        <input type="text" size="20" class="form-control" id="formEmpPhoneInput"
+                                               placeholder="Employee Phone" required>
+                                    </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="inlineCheckbox1">Employee Roles</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="Checkbox0" value="0">
+                                    <label class="form-check-label-calpers" for="Checkbox0">Author</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="Checkbox1" value="1">
+                                    <label class="form-check-label-calpers" for="Checkbox1">Reviewer</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="Checkbox4" value="4">
+                                    <label class="form-check-label-calpers" for="Checkbox4">Preliminary Evaluator</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="Checkbox5" value="5">
+                                    <label class="form-check-label-calpers" for="Checkbox5">Secondary Evaluator</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="Checkbox3" value="3">
+                                    <label class="form-check-label-calpers" for="Checkbox3">Lead Evaluator</label>
+                                </div>
+                                </div>
+                            </div>
+
                             <div class="row col-md-12">
                                 <div class="form-group">
                                     <button id="saveNewEmp" type="button" class="btn btn-openportal">Save</button>

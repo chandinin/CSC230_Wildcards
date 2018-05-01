@@ -379,6 +379,9 @@ function getOppList(type) {
         case 10:
             url = url + "?status=10";
             break;
+        case 11:
+            url = url + "?status=11";
+            break;
         default:
             url= url + "?status=0";
     }
@@ -393,7 +396,6 @@ function getOppList(type) {
         }
     };
     xhr.send();
-
 }
 
 function fillOppTable(oppArray,type) {
