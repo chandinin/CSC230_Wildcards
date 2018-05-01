@@ -3148,3 +3148,8 @@ th {text-align:center}
     transition: height 0.1s ease;
 }
 
+.form-check-label-calpers {
+    margin-bottom: 0;
+    font-size: small;
+}
+
