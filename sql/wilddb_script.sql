@@ -258,6 +258,7 @@ create table Proposal
   FinalTotalScore decimal,
   CreatedDate datetime null,
   LastEditDate datetime null,
+  ContractAwarded boolean not null default 0,
   PRIMARY KEY (ProposalID)
 );
 
