@@ -11,31 +11,41 @@ include_once '../objects/employee.php';
 $database = new Database();
 $db = $database->Connect();
 
-// prepare to retrieve bidder data by instantiate the Bidder.
+// prepare to retrieve employee data by instantiate the employee.
 $employee = new Employee($db);
 
-// get employeeID from POST
+$result = array("result" => "false");
+
 $_POST_LowerCase = array_change_key_case($_POST, CASE_LOWER);
 if(isSet($_POST_LowerCase["employeeid"]) || isSet($_POST_LowerCase["id"]))
 {
+  $employeeID = $_POST_LowerCase["employeeid"];
   if(isSet($_POST_LowerCase["employeeid"]))
     $employeeID = $_POST_LowerCase["employeeid"];
   else if(isSet($_POST_LowerCase["id"]))
     $employeeID = $_POST_LowerCase["id"];
 
-  //Search
-  $employee->id = $employeeID;
+  $Role = $_POST_LowerCase["role"];
 
-  //delete bidder.
-  if($employee->delete())
-  {  
-    $employee->removeEmployeeAllRoles($employeeID);
+  if($employee->IsRoleExists($employeeID,$Role))
+  {
+    $result = array("result" => "true");
+
+    //$result = true;
+    //echo '{ "result" : "true" }';    
   }
   else
   {
-    echo '{';
-    echo ' message : "Delete failed.  Record(EmployeeID='.$employeeID.')"';
-    echo '}';
+    //echo '{ "result" : "false" }';       
   }
+
+  print_r(json_encode($result));
+}
+else
+{
+  echo '{';
+  echo ' "Message" : "Employee not found!"';
+  echo '}';       
 }
 ?>
+

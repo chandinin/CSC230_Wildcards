@@ -27,6 +27,8 @@ if(isSet($_POST_LowerCase["opportunityid"])
   //Search
   $opportunity->selectByID($opportunityID);
 
+  $ProposalCount = $opportunity->getProposalCount($opportunityID);
+
   $opportunity_arr = array(
     "OpportunityID" =>  $opportunity->OpportunityID,
     "ClosingDate" =>  $opportunity->ClosingDate,
@@ -38,11 +40,13 @@ if(isSet($_POST_LowerCase["opportunityid"])
     "StatusName" =>  $opportunity->StatusName,
     "CategoryID" =>  $opportunity->CategoryID,
     "CreatedDate" =>  $opportunity->CreatedDate,
-    "LastEditDate" =>  $opportunity->LastEditDate
+    "LastEditDate" =>  $opportunity->LastEditDate,
+    "ProposalCount" =>  $ProposalCount,
+    "MinimumScore" =>  $opportunity->MinimumScore
   );
 
   // make it json format
-  print_r(json_encode($opportunity_arr));
+  print_r(trim(json_encode($opportunity_arr)));
 }
 else if(isSet($_POST_LowerCase["status"])
 || isSet($_GET_LowerCase["status"]))
@@ -62,6 +66,9 @@ else if(isSet($_POST_LowerCase["status"])
 
     while($row = $stmt->fetch(PDO::FETCH_ASSOC))
     {
+      $opportunityID = $row['OpportunityID'];
+      $ProposalCount = $opportunity->getProposalCount($opportunityID);
+
       $opportunity_arr = array(
           "OpportunityID" => $row['OpportunityID'],
           "ClosingDate" => $row['ClosingDate'],
@@ -73,7 +80,9 @@ else if(isSet($_POST_LowerCase["status"])
           "StatusName" => $row['StatusName'],
           "CategoryID" => $row['CategoryID'],
           "CreatedDate" => $row['CreatedDate'],
-          "LastEditDate" => $row['LastEditDate']
+          "LastEditDate" => $row['LastEditDate'],
+          "ProposalCount" => $ProposalCount,
+          "MinimumScore" =>  $row['MinimumScore']
       );
 
       array_push($opportunities_arr["opportunity"], $opportunity_arr);
@@ -81,7 +90,7 @@ else if(isSet($_POST_LowerCase["status"])
   }
 
   // make it json format
-  print_r(json_encode($opportunities_arr));
+  print_r(trim(json_encode($opportunities_arr)));
 }
 else if(isSet($_POST_LowerCase["categoryid"])
 || isSet($_GET_LowerCase["categoryid"]))
@@ -102,6 +111,9 @@ else if(isSet($_POST_LowerCase["categoryid"])
 
     while($row = $stmt->fetch(PDO::FETCH_ASSOC))
     {
+      $opportunityID = $row['OpportunityID'];
+      $ProposalCount = $opportunity->getProposalCount($opportunityID);
+
       $opportunity_arr = array(
           "OpportunityID" => $row['OpportunityID'],
           "ClosingDate" => $row['ClosingDate'],
@@ -113,7 +125,9 @@ else if(isSet($_POST_LowerCase["categoryid"])
           "StatusName" => $row['StatusName'],
           "CategoryID" => $row['CategoryID'],
           "CreatedDate" => $row['CreatedDate'],
-          "LastEditDate" => $row['LastEditDate']
+          "LastEditDate" => $row['LastEditDate'],
+          "ProposalCount" => $ProposalCount,
+          "MinimumScore" =>  $row['MinimumScore']
       );
 
       array_push($opportunities_arr["opportunity"], $opportunity_arr);
@@ -121,7 +135,7 @@ else if(isSet($_POST_LowerCase["categoryid"])
   }
 
   // make it json format
-  print_r(json_encode($opportunities_arr));
+  print_r(trim(json_encode($opportunities_arr)));
 }
 else
 {
@@ -137,6 +151,9 @@ else
 
     while($row = $stmt->fetch(PDO::FETCH_ASSOC))
     {
+      $opportunityID = $row['OpportunityID'];
+      $ProposalCount = $opportunity->getProposalCount($opportunityID);
+
       $opportunity_arr = array(
           "OpportunityID" => $row['OpportunityID'],
           "ClosingDate" => $row['ClosingDate'],
@@ -148,14 +165,15 @@ else
           "StatusName" => $row['StatusName'],
           "CategoryID" => $row['CategoryID'],
           "CreatedDate" => $row['CreatedDate'],
-          "LastEditDate" => $row['LastEditDate']
+          "LastEditDate" => $row['LastEditDate'],
+          "ProposalCount" => $ProposalCount,
+          "MinimumScore" =>  $row['MinimumScore']
       );
      
       array_push($opportunities_arr["opportunity"], $opportunity_arr);
     }
   }
   // make it json format
-  print_r(json_encode($opportunities_arr));
+  print_r(trim(json_encode($opportunities_arr)));
 }
 ?>
-

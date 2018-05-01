@@ -9,25 +9,27 @@ if(isSet($_POST_LowerCase["doctemplateid"]) || isSet($_GET_LowerCase["doctemplat
 {
   $DocTemplateID = isSet($_GET_LowerCase["doctemplateid"]) ? $_GET_LowerCase["doctemplateid"] : $_POST_LowerCase["doctemplateid"];
 
+  $DocTemplateIDArr = explode("_", $DocTemplateID);
+
   $database = new Database();
   $db = $database->Connect();
 
   $doctemplate = new DocTemplate($db);
-  $doctemplate->selectByDocTemplateID($DocTemplateID);
+  $doctemplate->selectByDocTemplateID($DocTemplateIDArr[1]);
 
   $Path = $doctemplate->Path;
   $DocTitle = $doctemplate->DocTitle;
 
-  //$myfile = fopen($Path, "r") or die("Unable to open file!");
   $size = filesize($Path);
   $MimeType = strtolower(pathinfo($Path,PATHINFO_EXTENSION));
-  //$file_content = fread($myfile,$size);
-  //$file_content = bin2hex($file_content);
 
   header("Content-length: $size");
   header("Content-type: $MimeType");
   header("Content-Disposition: attachment; filename='" . $DocTitle . "." . "'");
 
+
   readfile($Path);
 }
+
 ?>
+

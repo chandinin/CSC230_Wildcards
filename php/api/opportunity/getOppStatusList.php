@@ -6,32 +6,32 @@ header("Access-Control-Allow-Credentials: true");
 header('Content-Type: application/json');
 
 include_once '../config/Database.php';
-include_once '../objects/proposal.php';
+include_once '../objects/opportunity.php';
 
 $database = new Database();
 $db = $database->Connect();
 
-// prepare to retrieve proposal data by instantiate the proposal.
-$proposal = new Proposal($db);
-$stmt = $proposal->getProposalStatusList();
+// prepare to retrieve opportunity data by instantiate the opportunity.
+$opportunity = new Opportunity($db);
+$stmt = $opportunity->getOppStatusList();
 $rowCount = $stmt->rowCount();
 
-$ProposalStatusList_arr = array();
-$ProposalStatusList_arr["ProposalStatus"] = array();
+$OppStatusList_arr = array();
+$OppStatusList_arr["OppStatus"] = array();
 
 if($rowCount > 0)
 {
   while($row = $stmt->fetch(PDO::FETCH_ASSOC))
   {
-    $ProposalStatus_arr = array(
+    $OppStatus_arr = array(
           "StatusID" => $row['StatusID'],
           "Name" => $row['Name']
       );
 
-    array_push($ProposalStatusList_arr["ProposalStatus"], $ProposalStatus_arr);
+    array_push($OppStatusList_arr["OppStatus"], $OppStatus_arr);
   }
 }
 
 // make it json format
-print_r(json_encode($ProposalStatusList_arr));
+print_r(json_encode($OppStatusList_arr));
 ?>
