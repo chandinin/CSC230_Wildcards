@@ -24,14 +24,6 @@ $(document).ready(
             $("#oppsMenu option[id='opplist']").attr("selected", "selected");
         });
 
-        $('#bidTab').click(function() {
-            getBidderList();
-            getCategories($('#selectBidBiddderCategory'));
-        });
-
-        $('#empTab').click(function() {
-            getEmployeeList();
-        });
 
         $('#saveNewOpp').click(function () {
             saveOpportunity();
@@ -108,11 +100,6 @@ $(document).ready(
             //getOppListbyCategory(id);
         });
 
-        $("#selectBidderCategory").change(function () {
-            //Storing the dropdown selection in category variable
-            category= $('#selectBidderCategory option:selected').attr('id');
-            //getOppListbyCategory(id);
-        });
 
 
         $('#formDescriptionInput').wysihtml5({
@@ -535,14 +522,14 @@ function uploadDocTemplates(opId) {
 
 function getLeadEvals() {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://athena.ecs.csus.edu/~wildcard/php/api/employee/read.php', true);
+    xhr.open('GET', 'http://athena.ecs.csus.edu/~wildcard/php/api/employee/read.php?Role=3', true);
     xhr.onload = function () {
         if (xhr.status == 200) {
             var evalArray = JSON.parse(xhr.responseText);
             var size = evalArray.employee.length;
             for (var i = 0; i < size; i++) {
                 var lead = evalArray.employee[i];
-                var name = lead.first_name + " " + lead.last_name;
+                var name = lead.FirstName + " " + lead.LastName;
                 $('#selectLead').append($('<option>', {value: lead.id, text: name}));
             }
         } else {
