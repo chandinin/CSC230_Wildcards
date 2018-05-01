@@ -2,13 +2,64 @@ $(document).ready(function() {
     $("#empNew").hide();
     $("#showNewEmp").click(function() {
         showNewEmp();
-    })
+    });
+    $('#bidTab').click(function() {
+        makeEmpBreadcrumb(3);
+        getBidderList();
+        getCategories($('#selectBidBiddderCategory'));
+    });
+
+    $('#empTab').click(function() {
+        showEmpList();
+    });
+
+
+    $('#empTab').click(function() {
+        getEmployeeList();
+    });
+    $("#selectBidderCategory").change(function () {
+        //Storing the dropdown selection in category variable
+        category= $('#selectBidderCategory option:selected').attr('id');
+        //getOppListbyCategory(id);
+    });
 
 });
 
 function showNewEmp() {
    $('#empNew').show();
    $('#empList').hide();
+   makeEmpBreadcrumb(2);
+}
+
+function showEmpList() {
+    getEmployeeList();
+    $('#empNew').hide();
+    $('#empList').show();
+    makeEmpBreadcrumb(1);
+}
+
+function showBidderList() {
+
+}
+
+function makeEmpBreadcrumb(type) {
+    $('#breadcrumb_emp').empty();
+    $('#breadcrumb_emp').append(staticBreadcrumb);
+    switch (type) {
+        case 1:
+            $("#breadcrumb_emp").append("<li><a onclick='showEmpList()'>List Employee Accounts</a></li>");
+            break;
+        case 2:
+            $("#breadcrumb_emp").append("<li><a onclick='showEmpList()'>List Employee Accounts</a></li>");
+            $("#breadcrumb_emp").append("<li class='active'>Create Employee Account</li>")
+            break;
+        case 3:
+            $("#breadcrumb_emp").append("<li><a onclick='showBidderList()'>List Bidder Accounts</a></li>");
+            break;
+        default:
+            $("#breadcrumb_emp").append("<li class=\"active\">List Employee Accounts</li>");
+            break;
+    }
 }
 
 function getBidderList() {

@@ -24,14 +24,6 @@ $(document).ready(
             $("#oppsMenu option[id='opplist']").attr("selected", "selected");
         });
 
-        $('#bidTab').click(function() {
-            getBidderList();
-            getCategories($('#selectBidBiddderCategory'));
-        });
-
-        $('#empTab').click(function() {
-            getEmployeeList();
-        });
 
         $('#saveNewOpp').click(function () {
             saveOpportunity();
@@ -108,11 +100,6 @@ $(document).ready(
             //getOppListbyCategory(id);
         });
 
-        $("#selectBidderCategory").change(function () {
-            //Storing the dropdown selection in category variable
-            category= $('#selectBidderCategory option:selected').attr('id');
-            //getOppListbyCategory(id);
-        });
 
 
         $('#formDescriptionInput').wysihtml5({
