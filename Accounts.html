@@ -45,13 +45,19 @@
             <!-- Tab panels -->
             <div class="tab-content">
 
-                <!--Accounts Panel 1-->
+                <!--Employee Panel 1-->
                 <div class="tab-pane fade" id="panel1" role="tabpanel">
+
+                    <div id="empList" class="row">
+                        <div class="col-md-6">
+                            <h3 class="">Employee Accounts</h3>
+                        </div>
+                        <div class="col-md-6">
+                                <button id="showNewEmp" type="button" class="btn btn-accept">
+                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Create New
+                                </button>
+                        </div>
                     <br>
-                    <div class="col-md-6">
-                        <h3 class="my-2 h3">Employee Accounts</h3>
-                    </div>
-                    <div class="col-md-12">
                         <table id="employeeListTable" class="table table-responsive table-bordered table-striped table-hover tablesorter">
                             <thead>
                             <th>Username</th>
@@ -66,8 +72,61 @@
                             <tbody id="employeeListTableBody"></tbody>
                         </table>
                     </div>
+
+                    <!-- New Employee --->
+                    <div id="empNew" class="col-md-12">
+                        <div class="row">
+                             <div class="col-xs-2">
+                                <div class="form-group">
+                                    <label for="formEmpIdInput">Employee Id</label>
+                                    <input type="text" size="10" class="form-control" id="formEmpIdInput"
+                                           placeholder="Employee Id" required>
+                                </div>
+                             </div>
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label for="formEmpEmailInput">Employee Email</label>
+                                    <input type="text" size="20" class="form-control" id="formEmpEmailInput"
+                                           placeholder="Employee Email" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6">
+                            <div class="form-group">
+                                <label for="formEmpFNameInput">Employee First Name</label>
+                                <input type="text" size="20" class="form-control" id="formEmpFNameInput"
+                                       placeholder="Employee First Name" required>
+                            </div>
+                        </div>
+                            <div class="col-xs-6">
+                            <div class="form-group">
+                                <label for="formEmpLNameInput">Employee Last Name</label>
+                                <input type="text" size="20" class="form-control" id="formEmpLNameInput"
+                                       placeholder="Employee Last Name" required>
+                            </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row col-xs-6">
+                            <div class="form-group">
+                                <label for="formPwdInput">Employee Password</label>
+                                <input type="text" size="20" class="form-control" id="formPwdInput"
+                                       placeholder="Employee Password" required>
+                            </div>
+                        </div>
+                        <div class="row col-md-12">
+                            <div class="form-group">
+                                <button id="saveNewEmp" type="button" class="btn btn-openportal">Save</button>
+                                <button id="clearNewEmp" type="button" class="btn btn-openportal">Clear Form</button>
+                                <button id="exitNewEmp" type="button" class="btn btn-openportal">Exit</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ./New Employee -->
                 </div>
-                <!--/.Accounts Panel 1-->
+                <!--/.Employee Panel 1-->
 
                 <!--Bidders Panel 2-->
                 <div class="tab-pane fade" id="panel2" role="tabpanel">

@@ -168,10 +168,12 @@ a {
     cursor: pointer;
 }
 
+/*
 li,td,th {
   font: 200 20px/1.5 Helvetica, Verdana, sans-serif;
   border-bottom: 1px solid #ccc;
 }
+*/
 
 .opportunity-property {
     font: 200 20px/1.5 Helvetica, Verdana, sans-serif;
@@ -209,7 +211,8 @@ li,td,th {
                             </li>
                         </ul>
                     </div>
-                    <div class="tab-content card">
+                    <br>
+                    <!--<div class="tab-content card"> -->
                         <div class="col-md-12 clearfix bid-opportunities" id="view-opporunities">
 
 
@@ -292,7 +295,7 @@ li,td,th {
                                 <h5 id="proposal-time-last-edit"></h5>
                                 <h5 id="proposal-time-remaining"></h5>
 
-                                <span>Please download, fill out, and upload all requested forms. You can come back and edit your documents at any time before the deadline for submissions, just press 'save and come back later'</span>
+                                <span id="proposal-instructions-span">Please download, fill out, and upload all requested forms. You can come back and edit your documents at any time before the deadline for submissions, just press 'save and come back later'</span>
                                 <ul id="opp-doc-templates-list">
                                 </ul>
                                 <br>
@@ -354,8 +357,8 @@ li,td,th {
                                 <h2>Please check all categories that you'd like to be notified of new opportunities</h2>
                                 <form id="subscriptions-form">
                                     <!-- Category buttons will go here -->
-                                    <!-- Submit button will go here -->
                                 </form>
+                                <a id="subscriptions-save-btn" class="btn btn-primary">Update Subscriptions</a>
                             </div>
                         </div>
 				    </div>
