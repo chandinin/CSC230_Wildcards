@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Review Opportunities</title>
+    <title>Approve Opportunities</title>
 
     <link rel="stylesheet" href="js/MDB Free/css/bootstrap.css">
     <link rel="stylesheet" href="js/MDB Free/css/mdb.css">
@@ -64,7 +64,7 @@
     <script src="js/MDB Free/js/bootstrap.js"></script>
     <script src="js/MDB Free/js/popper.min.js"></script>
     <script src="js/widgets.js"></script>
-    <script src="js/review.js"></script>
+    <script src="js/approve.js"></script>
     <script src="js/bootstrap-datepicker.js"></script>
     <script src="js/MDB Free/js/mdb.js"></script>
     <script src="js/jquery.tablesorter.js"></script>
@@ -140,7 +140,6 @@
         <!--Glyphicon home-->
         <div class="navbar navbar-inverse navbar-static-top navbar-tab navbar-right">
             <div class="container">
-
                 <div class="navbar-collapse collapse">
 
                     <ul class="nav navbar-nav">
@@ -151,6 +150,8 @@
                         <li class=""><a href="employee_login.html"><span class="glyphicon glyphicon-log-out hidden-xs"
                                                                          aria-hidden="true"> </span> Logout</a>
                     </ul>
+
+
                 </div>
             </div>
         </div>
@@ -175,11 +176,10 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div id="listOppPanel" class="tab-content vertical">
-
                                         <!--Heading-->
                                         <div class="row">
                                         <div class="col-md-6">
-                                            <h3 class="my-2 h3">Opportunities Ready for Review</h3>
+                                            <h3 class="my-2 h3">Opportunities Ready for Approval</h3>
                                         </div>
                                         </div>
                                         <br>
@@ -217,8 +217,8 @@
                                                 <h3 class="my-2 h3">Opportunity Details</h3>
                                             </div>
                                             <div class="col-md-3">
-                                                <button type="button" class="btn btn-accept waves-effect" id="oppReviewedButton">
-                                                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Mark as Reviewed
+                                                <button type="button" class="btn btn-accept waves-effect" id="oppApprovedButton">
+                                                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>Approve
                                                 </button>
                                             </div>
                                         </div>
@@ -276,8 +276,9 @@
             </div>
         </div>
 
-    </div>
+        </div>
 
+    </div>
 </div>
 
 <!--footer -->
