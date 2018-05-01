@@ -75,7 +75,7 @@ function EmployeeLoginAction() {
         xhttp.onload = function () {
             var response = JSON.parse(xhttp.responseText);
             var status = JSON.parse(xhttp.status);
-            if (xhttp.status == 200 && response.authenticated == true) {
+            if (xhttp.status == 200 && response.authenticated) {
                 localStorage.setItem("employeeName",response.FullName);
                 //IF the authentication successful go to the landing page, NOTE: Need to change to the correct URL
                 switch (employeeRoleid) {
@@ -86,7 +86,7 @@ function EmployeeLoginAction() {
                         window.location.replace("Review.html")
                         break;
                     case "2": //Approver
-                        alert("Opportunity.html");
+                        window.location.replace("Approve.html")
                         break;
                     case "3": //Lead Evaluator
                         window.location.replace("evaluator2_landing.html");

@@ -104,7 +104,27 @@ function updateProposalStatus(status) {
     xhttp.send(myJson);
 }
 
-//Function to seek clarification
+function UpdateTechnicalscore(){
+    var technicalScore = document.getElementById("score").value;
+    var params = {"ProposalID":proposalID,
+        "TechnicalScore":technicalScore};
+    var myJson = JSON.stringify(params);
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "http://athena.ecs.csus.edu/~wildcard/php/api/proposal/update.php",true);
+    xhttp.onload = function () {
+        if (xhttp.status == 200) {
+            alert(proposalID+" Update successful");
+
+            //TODO add an end point here to accept reject proposal automatically based on min score
+            window.location.replace("eval2_list_proposals.html")
+        } else {
+            alert("Error updating status of " +proposalID);
+        }
+    }
+    xhttp.send(myJson);
+
+}
+
 //TODO get the right endpoint to use
 function SeekClarificationButton() {
     localStorage.setItem("bidderName",bidderName);
