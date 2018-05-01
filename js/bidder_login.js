@@ -23,7 +23,7 @@ function BidderLoginAction() {
         xhttp.onload = function () {
             var response = JSON.parse(xhttp.responseText);
             var status = JSON.parse(xhttp.status);
-            if (status == 200 && response.authenticated == true) {
+            if (status == 200 && response.authenticated) {
                 window.location.replace("bidder_landing.html")
             }
             else{
