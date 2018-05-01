@@ -23,6 +23,7 @@ class Opportunity
   public $CategoryID;
   public $CreatedDate;
   public $LastEditDate;
+  public $MinimumScore;
 
   // Constructor
   // Note: Must pass connection as a parameter.
@@ -34,7 +35,7 @@ class Opportunity
   // select one by ID
   function selectByID($id)
   {
-    $query = "select OpportunityID, ClosingDate, LeadEvaluatorID, O.Name, LowestBid, Description, O.Status, OS.Name as StatusName, CategoryID, CreatedDate, LastEditDate from Opportunity O
+    $query = "select OpportunityID, ClosingDate, LeadEvaluatorID, O.Name, LowestBid, Description, O.Status, OS.Name as StatusName, CategoryID, CreatedDate, LastEditDate, MinimumScore from Opportunity O
   left join OppStatus OS on OS.StatusID = O.`Status` WHERE OpportunityID = ? ;";
     $stmt = $this->conn->prepare( $query );
 
@@ -59,12 +60,13 @@ class Opportunity
     $this->CategoryID = $row['CategoryID'];
     $this->CreatedDate = $row['CreatedDate']; 
     $this->LastEditDate = $row['LastEditDate'];
+    $this->MinimumScore = $row['MinimumScore'];
   }
 
   // select one by ID
   function selectByCategoryID($CategoryID)
   {
-    $query = "select OpportunityID, ClosingDate, LeadEvaluatorID, O.Name, LowestBid, Description, O.Status, OS.Name as StatusName, CategoryID, CreatedDate, LastEditDate from Opportunity O
+    $query = "select OpportunityID, ClosingDate, LeadEvaluatorID, O.Name, LowestBid, Description, O.Status, OS.Name as StatusName, CategoryID, CreatedDate, LastEditDate, MinimumScore from Opportunity O
   left join OppStatus OS on OS.StatusID = O.`Status` WHERE CategoryID = ? ;";
     $stmt = $this->conn->prepare( $query );
 
@@ -80,7 +82,7 @@ class Opportunity
   // select one by ID
   function selectByStatusID($StatusID)
   {
-    $query = "select OpportunityID, ClosingDate, LeadEvaluatorID, O.Name, LowestBid, Description, O.Status, OS.Name as StatusName, CategoryID, CreatedDate, LastEditDate from Opportunity O
+    $query = "select OpportunityID, ClosingDate, LeadEvaluatorID, O.Name, LowestBid, Description, O.Status, OS.Name as StatusName, CategoryID, CreatedDate, LastEditDate, MinimumScore from Opportunity O
   left join OppStatus OS on OS.StatusID = O.`Status` WHERE `Status` = ? ;";
     $stmt = $this->conn->prepare( $query );
 
@@ -98,7 +100,7 @@ class Opportunity
   // select All in the table
   function selectAll()
   {
-    $query = "select OpportunityID, ClosingDate, LeadEvaluatorID, O.Name, LowestBid, Description, O.Status, OS.Name as StatusName, CategoryID, CreatedDate, LastEditDate from Opportunity O
+    $query = "select OpportunityID, ClosingDate, LeadEvaluatorID, O.Name, LowestBid, Description, O.Status, OS.Name as StatusName, CategoryID, CreatedDate, LastEditDate, MinimumScore from Opportunity O
   left join OppStatus OS on OS.StatusID = O.`Status`;";
     $stmt = $this->conn->prepare( $query );
 
@@ -110,29 +112,8 @@ class Opportunity
 
   function update()
   {
-    $query = "UPDATE Opportunity set ClosingDate = :ClosingDate, LeadEvaluatorID = :LeadEvaluatorID, Name = :Name, LowestBid = :LowestBid, Description = :Description, Status = :Status, LastEditDate = NOW() WHERE OpportunityID = :OpportunityID;";
+    $query = "UPDATE Opportunity set ClosingDate = :ClosingDate, LeadEvaluatorID = :LeadEvaluatorID, Name = :Name, LowestBid = :LowestBid, Description = :Description, Status = :Status, LastEditDate = NOW(), CategoryID = :CategoryID, MinimumScore = :MinimumScore  WHERE OpportunityID = :OpportunityID;";
 
-    $stmt = $this->conn->prepare( $query );
-
-    // bind parameters
-    $stmt->bindParam(':OpportunityID', $this->OpportunityID);
-    $stmt->bindParam(':ClosingDate', $this->ClosingDate);
-    $stmt->bindParam(':LeadEvaluatorID', $this->LeadEvaluatorID);
-    $stmt->bindParam(':Name', $this->Name);
-    $stmt->bindParam(':LowestBid', $this->LowestBid);
-    $stmt->bindParam(':Description', $this->Description);
-    $stmt->bindParam(':Status', $this->Status);
-
-    if($stmt->execute())
-      return true;
-    else
-      return false;
-  }
-
-  function create()
-  {
-    $query = "INSERT INTO Opportunity (OpportunityID, ClosingDate, LeadEvaluatorID, Name, LowestBid, Description, Status, CategoryID, CreatedDate, LastEditDate) " .
-             "VALUES(:OpportunityID, :ClosingDate, :LeadEvaluatorID, :Name, :LowestBid, :Description, :Status, :CategoryID, NOW(), NOW());";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
@@ -144,7 +125,29 @@ class Opportunity
     $stmt->bindParam(':Description', $this->Description);
     $stmt->bindParam(':Status', $this->Status);
     $stmt->bindParam(':CategoryID', $this->CategoryID);
+    $stmt->bindParam(':MinimumScore', $this->MinimumScore);
+    if($stmt->execute())
+      return true;
+    else
+      return false;
+  }
 
+  function create()
+  {
+    $query = "INSERT INTO Opportunity (OpportunityID, ClosingDate, LeadEvaluatorID, Name, LowestBid, Description, Status, CategoryID, CreatedDate, LastEditDate, MinimumScore) " .
+             "VALUES(:OpportunityID, :ClosingDate, :LeadEvaluatorID, :Name, :LowestBid, :Description, :Status, :CategoryID, NOW(), NOW(), :MinimumScore);";
+    $stmt = $this->conn->prepare( $query );
+
+    // bind parameters
+    $stmt->bindParam(':OpportunityID', $this->OpportunityID);
+    $stmt->bindParam(':ClosingDate', $this->ClosingDate);
+    $stmt->bindParam(':LeadEvaluatorID', $this->LeadEvaluatorID);
+    $stmt->bindParam(':Name', $this->Name);
+    $stmt->bindParam(':LowestBid', $this->LowestBid);
+    $stmt->bindParam(':Description', $this->Description);
+    $stmt->bindParam(':Status', $this->Status);
+    $stmt->bindParam(':CategoryID', $this->CategoryID);
+    $stmt->bindParam(':MinimumScore', $this->MinimumScore);
     //$date = new DateTime(date("Y-m-d H:i:s"));
     //$stmt->bindParam(':CreatedDate', $date->format('Y-m-d H:i:s'));
 
@@ -236,11 +239,7 @@ class Opportunity
   { 
     try
     {
-      $query = "SELECT OpportunityID,
- ScoringCategoryBlob,
-  MimeType,
-  size,
-  filename FROM ScoringCriteriaBlob WHERE OpportunityID = '" . $OpportunityID . "' ;";
+      $query = "SELECT OpportunityID, ScoringCategoryBlob, MimeType, size, filename FROM ScoringCriteriaBlob WHERE OpportunityID = '" . $OpportunityID . "' ;";
       
 
       //echo $query;

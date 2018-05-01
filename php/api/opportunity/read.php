@@ -41,11 +41,12 @@ if(isSet($_POST_LowerCase["opportunityid"])
     "CategoryID" =>  $opportunity->CategoryID,
     "CreatedDate" =>  $opportunity->CreatedDate,
     "LastEditDate" =>  $opportunity->LastEditDate,
-    "ProposalCount" =>  $ProposalCount
+    "ProposalCount" =>  $ProposalCount,
+    "MinimumScore" =>  $opportunity->MinimumScore
   );
 
   // make it json format
-  print_r(json_encode($opportunity_arr));
+  print_r(trim(json_encode($opportunity_arr)));
 }
 else if(isSet($_POST_LowerCase["status"])
 || isSet($_GET_LowerCase["status"]))
@@ -80,7 +81,8 @@ else if(isSet($_POST_LowerCase["status"])
           "CategoryID" => $row['CategoryID'],
           "CreatedDate" => $row['CreatedDate'],
           "LastEditDate" => $row['LastEditDate'],
-          "ProposalCount" => $ProposalCount
+          "ProposalCount" => $ProposalCount,
+          "MinimumScore" =>  $row['MinimumScore']
       );
 
       array_push($opportunities_arr["opportunity"], $opportunity_arr);
@@ -88,7 +90,7 @@ else if(isSet($_POST_LowerCase["status"])
   }
 
   // make it json format
-  print_r(json_encode($opportunities_arr));
+  print_r(trim(json_encode($opportunities_arr)));
 }
 else if(isSet($_POST_LowerCase["categoryid"])
 || isSet($_GET_LowerCase["categoryid"]))
@@ -124,7 +126,8 @@ else if(isSet($_POST_LowerCase["categoryid"])
           "CategoryID" => $row['CategoryID'],
           "CreatedDate" => $row['CreatedDate'],
           "LastEditDate" => $row['LastEditDate'],
-          "ProposalCount" => $ProposalCount
+          "ProposalCount" => $ProposalCount,
+          "MinimumScore" =>  $row['MinimumScore']
       );
 
       array_push($opportunities_arr["opportunity"], $opportunity_arr);
@@ -132,7 +135,7 @@ else if(isSet($_POST_LowerCase["categoryid"])
   }
 
   // make it json format
-  print_r(json_encode($opportunities_arr));
+  print_r(trim(json_encode($opportunities_arr)));
 }
 else
 {
@@ -163,14 +166,15 @@ else
           "CategoryID" => $row['CategoryID'],
           "CreatedDate" => $row['CreatedDate'],
           "LastEditDate" => $row['LastEditDate'],
-          "ProposalCount" => $ProposalCount
+          "ProposalCount" => $ProposalCount,
+          "MinimumScore" =>  $row['MinimumScore']
       );
      
       array_push($opportunities_arr["opportunity"], $opportunity_arr);
     }
   }
   // make it json format
-  print_r(json_encode($opportunities_arr));
+  print_r(trim(json_encode($opportunities_arr)));
 }
 ?>
 
