@@ -35,7 +35,7 @@ else
 }
 
 // Query database for our user with ID
-$query = "SELECT PASSWORD FROM BIDDER  WHERE UserName = ?;";
+$query = "SELECT ID,PASSWORD FROM BIDDER  WHERE UserName = ?;";
 
 // prepare query statement
 $stmt = $conn->prepare($query);
@@ -53,7 +53,8 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 $resp = array(
     "authenticated" =>  $row["PASSWORD"] == $PASSWORD,
     "method" => $Method,
-    "UserName" => $UserName
+    "UserName" => $UserName,
+    "ID" => $row["ID"]
 
 );
 
