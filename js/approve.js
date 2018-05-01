@@ -135,7 +135,7 @@ function getDocTemplates(opId) {
 function getOppList() {
     $('#oppListTableBody').empty();
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php?status=7', true);
+    xhr.open('GET', 'http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php?status=8', true);
     xhr.onload = function () {
         if (xhr.status == 200) {
             //var oppArray = fakedata;
