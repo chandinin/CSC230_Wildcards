@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/bootstrap3-wysihtml5.css">
     <link rel="stylesheet" href="css/opportunity.css">
-    <link rel="stylesheet" href="bootstrap-editable1.5.1.js/bootstrap3-editable/css/bootstrap-editable.css">
     <link rel="stylesheet" href="jqueryui-editable-1.5.1/jqueryui-editable/css/jqueryui-editable.css">
 
     <!--
@@ -30,6 +29,10 @@
 <div id="main" role="main">
     <div class="custom-app">
         <div class="container content">
+            <ol id="breadcrumb" class="breadcrumb hidden-xs">
+                <li><a href="home_page.html">Home</a></li>
+                <li class="active">List Opportunities</li>
+            </ol>
             <!-- Nav tabs -->
             <ul class="nav nav-tabs nav-justified indigo" role="tablist">
                 <li class="nav-item">
@@ -58,10 +61,6 @@
                     <div class="row">
 
                         <div class="col-md-12">
-                            <!-- Opportunity Tab panels -->
-                            <!--
-                            <button id="showNewOpp" type="button" class="btn btn-primary">Create New Opportunity</button>
-                            -->
                             <div id="listOppPanel" >
 
                                 <!--List Panel 1-->
@@ -71,7 +70,7 @@
                                         <h3 class="my-2 h3">Current Opportunities</h3>
                                     </div>
                                     <div class="col-md-3">
-                                        <button id="showNewOpp" type="button" class="btn btn-success btn-lg">
+                                        <button id="showNewOpp" type="button" class="btn btn-accept">
                                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Create New
                                         </button>
                                     </div>
@@ -87,7 +86,7 @@
 
                                         <select id="selectFilterCategory" name="category" required style="width: 325px">
                                             <option id = "id" value="default">Category</option>
-                                        </select><br>
+                                        </select><br><br>
 
                                         <table id="oppListTable" class="table table-responsive table-bordered table-striped table-hover tablesorter">
                                             <thead class="">
@@ -113,11 +112,6 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <h3 class="my-2 h3">Create Opportunity</h3>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <button type="button" class="btn btn-success btn-lg oppListButton">
-                                            <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Back to List
-                                        </button>
                                     </div>
 
                                 </div>
@@ -185,9 +179,9 @@
                                         </div>
                                     </div><br>
                                     <div class="form-group">
-                                        <button id="saveNewOpp" type="button" class="btn btn-primary">Save</button>
-                                        <button id="clearNewOpp" type="button" class="btn btn-primary">Clear Form</button>
-                                        <button id="exitNewOpp" type="button" class="btn btn-primary">Exit</button>
+                                        <button id="saveNewOpp" type="button" class="btn btn-openportal">Save</button>
+                                        <button id="clearNewOpp" type="button" class="btn btn-openportal">Clear Form</button>
+                                        <button id="exitNewOpp" type="button" class="btn btn-openportal">Exit</button>
                                     </div>
 
 
@@ -202,17 +196,14 @@
 
                                 <div class="row">
                                     <div class="col-md-3" >
-                                        <button type="button" class="btn btn-success btn-lg oppListButton">
-                                            <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Back to List
-                                        </button>
                                     </div>
                                     <div class="col-md-2">
-                                        <button id="oppEditButton" type="button" class="btn btn-primary btn-lg oppEditButton">
+                                        <button id="oppEditButton" type="button" class="btn btn-openportal">
                                             <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit
                                         </button>
                                     </div>
                                     <div class="col-md-2">
-                                        <button id="oppReadyButton" type="button" class="btn btn-outline-success waves-effect">
+                                        <button id="oppReadyButton" type="button" class="btn btn-accept">
                                             <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>Mark For Review
                                         </button>
                                     </div>
@@ -255,10 +246,11 @@
                                 <div class="col-12">
                                     <h4>Existing documents attached to this opportunity.</h4>
                                         <table id="listDocTemplatesView" class="table table-responsive">
-                                            <thead>
+                                            <thead class="header">
                                             <th scope="col">Title</th>
                                             <th scope="col">File Name</th>
                                             <th scope="col">Posted Date</th>
+                                            <th scope="col">temp</th>
                                             </thead>
                                             <tbody id="docTemplatesBodyView" class="table table-bordered table-striped table-hover" >
 
@@ -271,19 +263,19 @@
                             <!-- View Panel 3 -->
 
                             <!--Edit Panel 4-->
-                        <div class="col-md-8 clearfix bid-opportunities" id="editOppPanel2">
+                        <div class="col-md-12 clearfix bid-opportunities" id="editOppPanel2">
                             <div class="row">
                                 <div class="col-md-6">
                                     <h3 class="my-2 h3">Opportunity Details</h3>
                                 </div>
                                 <div class="col-md-3" >
-                                    <button id="editoppSave" type="button" class="btn btn-success btn-lg">
-                                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>Save
+                                    <button id="editoppSave" type="button" class="btn btn-success">
+                                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>Save Changes
                                     </button>
                                 </div>
                                 <div class="col-md-3" >
-                                    <button type="button" class="btn btn-primary btn-lg oppListButton">
-                                        <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>Back to List
+                                    <button onclick="showOppView($('#editoppNumber').text())" class="btn btn-openportal">
+                                        <span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span>Exit Edit
                                     </button>
                                 </div>
                             </div>
@@ -316,24 +308,22 @@
                                 <hr>
                                 </form>
                             </div>
-
-
                             <div class="col-12">
                                 <h4>Existing documents attached to this opportunity.</h4>
-                                <form>
-                                    <table id="listDocTemplates" class="table table-responsive">
-                                        <thead>
-                                        <th scope="col">Title</th>
-                                        <th scope="col">File Name</th>
-                                        <th scope="col">Posted Date</th>
-                                        <th scope="col">Action</th>
-                                        </thead>
-                                        <tbody id="docTemplatesBody" class="table table-bordered table-striped table-hover" >
+                                <table id="listDocTemplates" class="table table-responsive">
+                                    <thead class="header">
+                                    <th scope="col">Title</th>
+                                    <th scope="col">File Name</th>
+                                    <th scope="col">Posted Date</th>
+                                    <th scope="col">temp</th>
+                                    </thead>
+                                    <tbody id="docTemplatesBody" class="table table-bordered table-striped table-hover" >
 
-                                        </tbody>
-                                    </table>
-                                </form>
+                                    </tbody>
+                                </table>
                             </div>
+
+                            <form>
                             <div class="row">
                                 <form id="uploadDocTemplatesForm" >
                                     <div class="col-md-12">
@@ -347,8 +337,8 @@
 
                             <div class="col-12" >
                                 <div class="form-group">
-                                    <button id="uploadDocTemplates" value="" type="button" class="btn btn-primary">Upload</button>
-                                    <button id="clearDocTemplates" type="button" class="btn btn-primary">Clear</button>
+                                    <button id="uploadDocTemplates" value="" type="button" class="btn btn-openportal">Upload</button>
+                                    <button id="clearDocTemplates" type="button" class="btn btn-openportal">Clear</button>
                                 </div>
                             </div>
 
@@ -385,7 +375,7 @@
 
                                         <select id="selectFilterCategory" name="category" required style="width: 325px">
                                             <option id = "id" value="default">Category</option>
-                                        </select><br>
+                                        </select><br><br>
 
                                         <table id="oppAwListTable" class="table table-responsive table-bordered table-striped table-hover tablesorter">
                                             <thead class="">
@@ -434,7 +424,7 @@
 
                                         <select id="selectFilterCategory" name="category" required style="width: 325px">
                                             <option id = "id" value="default">Category</option>
-                                        </select><br>
+                                        </select><br><br>
 
                                         <table id="oppCListTable" class="table table-responsive table-bordered table-striped table-hover tablesorter">
                                             <thead class="">
@@ -484,7 +474,7 @@
 
                                         <select id="selectFilterCategory" name="category" required style="width: 325px">
                                             <option id = "id" value="default">Category</option>
-                                        </select><br>
+                                        </select><br><br>
 
                                         <table id="oppArListTable" class="table table-responsive table-bordered table-striped table-hover tablesorter">
                                             <thead class="">
@@ -533,7 +523,7 @@
 <script src="js/MDB Free/js/bootstrap.js"></script>
 <script src="js/widgets.js"></script>
 <script src="js/opportunity2.js"></script>
-<script src="js/opportunity.js"></script>
+<script src="js/accounts.js"></script>
 <script src="js/MDB Free/js/mdb.js"></script>
 <script src="js/jquery.tablesorter.js"></script>
 <script src="js/widget-storage.js"></script>

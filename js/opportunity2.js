@@ -24,14 +24,6 @@ $(document).ready(
             $("#oppsMenu option[id='opplist']").attr("selected", "selected");
         });
 
-        $('#bidTab').click(function() {
-            getBidderList();
-            getCategories($('#selectBidBiddderCategory'));
-        });
-
-        $('#empTab').click(function() {
-            getEmployeeList();
-        });
 
         $('#saveNewOpp').click(function () {
             saveOpportunity();
@@ -54,7 +46,7 @@ $(document).ready(
             showOpp();
         });
 */
-
+        $('#docTemplatesBody').sortable();
         $('#oppTab').click(function () {
             showOppList(0);
         });
@@ -108,11 +100,6 @@ $(document).ready(
             //getOppListbyCategory(id);
         });
 
-        $("#selectBidderCategory").change(function () {
-            //Storing the dropdown selection in category variable
-            category= $('#selectBidderCategory option:selected').attr('id');
-            //getOppListbyCategory(id);
-        });
 
 
         $('#formDescriptionInput').wysihtml5({
@@ -126,7 +113,6 @@ $(document).ready(
             "blockquote": true, //Blockquote
          });
 
-        $('#docTemplatesBody').sortable();
     });
 
 
@@ -157,11 +143,12 @@ function markReadyforReview(opId) {
 function showOppView(opId) {
     $('#listOppPanel').hide();
     $('#newOppPanel1').hide();
+    $('#editOppPanel2').hide();
     $('#editOppPanel').show();
     getOpportunity(opId);
     getDocTemplatesView(opId);
     $('#uploadDocTemplates').val(opId);
-    $('.table').tablesorter();
+    makeBreadcrumb(2);
 }
 
 function showEditOpp(opId) {
@@ -172,7 +159,7 @@ function showEditOpp(opId) {
     getOpportunityEdit(opId);
     getDocTemplates(opId);
     $('#uploadDocTemplates').val(opId);
-    $('.table').tablesorter();
+    makeBreadcrumb(3);
 }
 
 function saveEditOpp(opId) {
@@ -185,6 +172,7 @@ function showNewOpp() {
     getCategories($('#selectNewCategory'))
     $('#newOppPanel1').show();
     $('#listOppPanel').hide();
+    makeBreadcrumb(1);
 }
 
 function showOppList(type) {
@@ -219,7 +207,7 @@ function showOppList(type) {
     }
 
     getOppList(type);  //refresh list everytime
-
+    makeBreadcrumb();
 
 }
 
@@ -284,18 +272,27 @@ function getDocTemplates(opId) {
             var size = docArray.doctemplate.length;
             for(var i = 0; i< size; i++) {
                 var template = docArray.doctemplate[i];
+                var title = template.DocTitle;
+                var docid = template.DocTemplateID;
+                var name = template.DocTitle;
+                var tempUrl = "https://docs.google.com/viewer?url=http://athena.ecs.csus.edu/~wildcard/data/files/" + template.DocTitle;
                 if (template.Url != null) {
-                    var row = "<tr id='" + template.DocTemplateID + "'><td class='changeable'>" + template.DocTitle + "</td><td>" + "<a href ='" + template.Url + "'>" +
-                    template.DocTitle + "</a></td><td>" + "Posted Date" +
-                        "</td><td>" +
-                        "<a onclick='deleteDoc(" + opId + "," + template.DocTemplateID + ")'" +
-                        "class='btn btn-delete btn-lg'><span class='glyphicon glyphicon-remove'" +
-                        "aria-hidden='true'></span> Delete </a></td></tr>";
+                    /*
+                var row = "<tr><td>" + title + "</td><td>" + title + "</td><td>" + "Posted Date" + "</td><td>" +
+                    "Delete" + "</td></tr>";
+                    */
+                var row = "<tr id='" + template.DocTemplateID + "'><td class='changeable'>" + template.DocTitle + "</td><td>" + "<a href ='" + tempUrl + "'>" +
+                template.DocTitle + "</a></td><td>" + "Posted Date" +
+                    "</td><td>" +
+                    "<button onclick=\"deleteDoc(\'"+ opId + "\'," + "\'" + template.DocTemplateID + "\')\"" +
+                    " class='btn btn-delete'><span class='glyphicon glyphicon-remove'" +
+                    "aria-hidden='true'></span> Delete </button></td></tr>";
                     $('#docTemplatesBody').append(row);
-                    $("#docTempatesBody").trigger("update");
-                    $(".changeable").editable();
                 }
             }
+            $('#docTemplatesBody').tablesorter();
+            $("#docTempatesBody").trigger("update");
+            $(".changeable").editable();
 
         } else {
             alert('Error retrieving Document Templates');
@@ -320,13 +317,15 @@ function getDocTemplatesView(opId) {
             var size = docArray.doctemplate.length;
             for(var i = 0; i< size; i++) {
                 var template = docArray.doctemplate[i];
+                var tempUrl = "https://docs.google.com/viewer?url=http://athena.ecs.csus.edu/~wildcard/data/files/" + template.DocTitle;
                 if (template.Url != null) {
-                    var row = "<tr><td>" + template.DocTitle + "</td><td>" + "<a href ='" + template.Url + "'>" +
-                        template.DocTitle + "</a></td><td>" + "Posted Date" + "</td></tr>";
+                    var row = "<tr><td>" + template.DocTitle + "</td><td>" + "<a href ='" + tempUrl + "'>" +
+                        template.DocTitle + "</a></td><td>" + "Posted Date" + "</td><td>temp</td></tr>";
                     $('#docTemplatesBodyView').append(row);
-                    $("#docTempatesBodyView").trigger("update");
                 }
             }
+            $('#docTemplatesBodyView').tablesorter();
+            $("#docTempatesBodyView").trigger("update");
 
         } else {
             alert('Error retrieving Document Templates');
@@ -341,7 +340,22 @@ function editDoc(opId, templateId) {
 }
 function deleteDoc(opId, templateId) {
     event.preventDefault();
-    alert("Delete OpId: " + opId + " templateId: " + templateId);
+    var xhr = new XMLHttpRequest();
+    var url= "http://athena.ecs.csus.edu/~wildcard/php/api/doctemplate/delete.php";
+    var formData = new FormData();
+    formData.append('OpportunityID', opId);
+    formData.append('doctemplateid',templateId);
+    xhr.open("POST",url);
+    xhr.onload = function () {
+        if (xhr.status == 200) {
+            alert("Deleted OpId: " + opId + " templateId: " + templateId);
+        }
+        else {
+            alert("Failed to delete the document.");
+        }
+    }
+    xhr.send();
+
 }
 
 function getOppList(type) {
@@ -398,6 +412,9 @@ function fillOppTable(oppArray,type) {
     }
     for (var i = 0; i < size; i++) {
         var opp = oppArray.opportunity[i];
+        var oppDesc = opp.Description;
+        if (oppDesc.length > 100)
+            oppDesc = oppDesc.substr(1, 100) + "...";
         try {
             var catName = categoryArray.Category[opp.CategoryID].Name;
         }catch(err) {
@@ -405,16 +422,31 @@ function fillOppTable(oppArray,type) {
         }
 
         var row = "<tr><td>" + catName + "</td></td><td>" + opp.OpportunityID + "</td><td>" + opp.Name +
-            "</td><td>" + opp.ClosingDate + "</td><td>" + opp.LastEditDate + "</td><td>" + opp.Description + "</td><td>" +
+            "</td><td>" + opp.ClosingDate + "</td><td>" + opp.LastEditDate + "</td><td>" + oppDesc + "</td><td>" +
             opp.StatusName + "</td><td>" +
-            "<button onclick='showOppView(\"" + opp.OpportunityID + "\")' id='editOppButton' value='" + opp.OpportunityID + "' type='button' class='btn btn-primary btn-lg'>" +
+            "<button onclick='showOppView(\"" + opp.OpportunityID + "\")' id='editOppButton' value='" + opp.OpportunityID + "' type='button' class='btn btn-primary'>" +
             "<span class='glyphicon glyphicon-eye-open' aria-hidden='true'></span> View</button></td></tr>";
-        //$('#oppListTableBody').append(row);
-        //$("#oppListTableBody").trigger("update");
         $("#" + tablename).append(row);
         $("#" + tablename).trigger("update");
 
     }
+    $('#next').click(function(){
+        var next = limit;
+        if(size>next) {
+            limit = limit + elements_per_page;
+            $('#oppListTableBody').empty();
+            fillOppTable(next,limit);
+        }
+    });
+
+    $('#prev').click(function(){
+        var pre = limit-(2*elements_per_page);
+        if(pre >= 0) {
+            limit = limit - elements_per_page;
+            $('#oppListTableBody').empty();
+            fillOppTable(pre,limit);
+        }
+    });
 }
 
 function getOppListbyCategory(category) {
@@ -439,6 +471,7 @@ function getOppListbyCategory(category) {
 function initNewOppForm(type) {
     getOppList(type);
     getCategories($('#selectFilterCategory'));
+    makeBreadcrumb(0);
 }
 
 
@@ -489,14 +522,14 @@ function uploadDocTemplates(opId) {
 
 function getLeadEvals() {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://athena.ecs.csus.edu/~wildcard/php/api/employee/read.php', true);
+    xhr.open('GET', 'http://athena.ecs.csus.edu/~wildcard/php/api/employee/read.php?Role=3', true);
     xhr.onload = function () {
         if (xhr.status == 200) {
             var evalArray = JSON.parse(xhr.responseText);
             var size = evalArray.employee.length;
             for (var i = 0; i < size; i++) {
                 var lead = evalArray.employee[i];
-                var name = lead.first_name + " " + lead.last_name;
+                var name = lead.FirstName + " " + lead.LastName;
                 $('#selectLead').append($('<option>', {value: lead.id, text: name}));
             }
         } else {
@@ -602,6 +635,33 @@ function processOpportunity(opId) {
     xhr.send(formData);
 }
 
+
+function makeBreadcrumb(type) {
+    $('#breadcrumb').empty();
+    $('#breadcrumb').append(staticBreadcrumb);
+    switch (type) {
+        case 1:
+            $("#breadcrumb").append("<li><a onclick='showOppList()'>List Opportunities</a></li>");
+            $("#breadcrumb").append("<li class='active'>Create Opportunity</li>")
+            break;
+        case 2:
+            $("#breadcrumb").append("<li><a onclick='showOppList()'>List Opportunities</a></li>");
+            $("#breadcrumb").append("<li class='active'>View Opportunity</li>")
+            break;
+        case 3:
+            $("#breadcrumb").append("<li><a onclick='showOppList()'>List Opportunities</a></li>");
+            $("#breadcrumb").append("<li class='active'>Edit Opportunity</li>")
+            break;
+        case 4:
+            break;
+        default:
+            $("#breadcrumb").append("<li class=\"active\">List Opportunities</li>");
+            break;
+    }
+}
+
+
+var staticBreadcrumb = " <li><a href=\"home_page.html\">Home</a></li>\n";
 var fakelist = {
     "opportunity": [{
         "OpportunityID": "",
