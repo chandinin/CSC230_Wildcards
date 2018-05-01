@@ -42,7 +42,7 @@ function processOpportunity(opId) {
     xhr.open('POST', url);
     var formData = new FormData();
     formData.append("OpportunityID", opId);
-    formData.append("Status", 9);
+    formData.append("Status", 11);
     xhr.onload = function () {
         if (xhr.status == 200) {
             var retval = xhr.responseText;
