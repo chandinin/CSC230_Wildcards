@@ -91,20 +91,16 @@ input[type='radio']{
 }
 
 input[type='button'], input[type='submit'], .doSomething, .mainButton, .button {
-	font-family: arial, helvetica neue, helvetica, verdana,  san-serif;
-	color: #000;
-	border: 1px solid #bcbcbc;
-	position: relative;
-	background: -moz-linear-gradient(top, #fff 0%, #cecdcd 100%);
-	background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#cecdcd));
-	background: -ms-linear-gradient(top, #fff 0%, #cecdcd 100%);	
-	-pie-background: linear-gradient(top, #fff 0%, #cecdcd 100%);	
-	border-radius: 16px;	
+	font-family: "Roboto", sans-serif;
+	text-transform: uppercase;
+	outline: 0;
+	background: #4CAF50;
+	width: 100%;
+	border: 0;
+	padding: 15px;
+	color: #FFFFFF;
 	font-size: 14px;
-	line-height: 17px;
-	padding: 6px 20px;
-	text-decoration: none;
-	display: inline-block;
+	cursor: pointer;
 }
 
 input[type='button']:active, input[type='submit']:active, .button:active, input[type='button'].activeButton {
@@ -116,19 +112,29 @@ input[type='button']:active, input[type='submit']:active, .button:active, input[
 
 input[type='button'].mainButton, input[type='submit'].mainButton, input[type='button'].doSomething, input[type='submit'].doSomething,
 .doSomething, .mainButton  {
-	border: 1px solid #76992a;
-	color: #fff;
-	background: -moz-linear-gradient(top, #8ab331 0%, #5c7822 100%);
-	background: -webkit-gradient(linear, left top, left bottom, from(#8ab331), to(#5c7822));
-	-pie-background: linear-gradient(top, #8ab331 0%, #5c7822 100%);	
-	background: -ms-linear-gradient(top, #8ab331 0%, #5c7822 100%);
+	font-family: "Roboto", sans-serif;
+	text-transform: uppercase;
+	outline: 0;
+	background: #4CAF50;
+	width: 100%;
+	border: 0;
+	padding: 15px;
+	color: #FFFFFF;
+	font-size: 14px;
+	cursor: pointer;
 }
 
 input[type='button'].mainButton:active, input[type='submit'].mainButton:active, input[type='button'].doSomething:active, input[type='submit'].doSomething:active, .mainButton:active, .doSomething:active, .activeMainButton {
-	background: -moz-linear-gradient(top, #5c7822 0%, #8ab331 100%);
-	background: -webkit-gradient(linear, left top, left bottom, from(#5c7822), to(#8ab331));
-	-pie-background: linear-gradient(top, #5c7822 0%, #8ab331 100%);		
-	background: -ms-linear-gradient(top, #5c7822 0%, #8ab331 100%);
+	font-family: "Roboto", sans-serif;
+	text-transform: uppercase;
+	outline: 0;
+	background: #4CAF50;
+	width: 100%;
+	border: 0;
+	padding: 15px;
+	color: #FFFFFF;
+	font-size: 14px;
+	cursor: pointer;
 }
 
 input[type='button'], input[type='button'].mainButton, input[type='submit'].mainButton, input[type='button'].button, input[type='submit'].button {

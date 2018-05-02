@@ -13,6 +13,7 @@
     <!-- Basic Styles -->
     <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" type="text/css" href="css/login.css">
 
     <!-- Latest compiled and minified JavaScript -->
     <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
@@ -112,10 +113,6 @@
                     <li class=""><a href="home_page.html"><span class="glyphicon glyphicon-home hidden-xs"
                                                                 aria-hidden="true"> </span> Home</a>
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li class=""><a href="employee_login.html"><span class="glyphicon glyphicon-log-out hidden-xs"
-                                                                     aria-hidden="true"> </span> Logout</a>
-                </ul>
 
                 <!--Heading-->
                 <p style="color: #eee; font-size: x-large"  align="center">BIDOPS LOGIN</p>
@@ -123,42 +120,20 @@
         </div>
     </div>
 
-    <!--Loginform-->
+       <!--Loginform-->
     <div class="container navbar-right">
-    <form action="#" method="post" id="employeelogin_formid" name="employeelogin_formname"  autocomplete="off">
-
-                    <div align = "center">
-                        <br>
-                        <br>
-                        <br>
-                        <label align ="left" for="username" id="usernameLbl">Username <span
-                                class="required">(required)</span></label><br>
-                        <input id="username" name="username" type="text" value="" size="24" maxlength="35"/>
-                        <p></p>
-                        <br>
-                            <!--Role dropdown-->
-                                <label class="my-1 mr-2" for="selectRole">Employee Role <span
-                                        class="required">(required)</span></label>
-                        <br>
-                                <select id="selectRole" name="role" required style="width: 200px">
-                                    <option id = "id" value="default">Role</option>
-                                </select>
-
-
-                        <p></p>
-                        <br>
-                        <label for="password" id="passwordLbl">Password <span
-                                class="required">(required)</span></label><br>
-                        <input id="password" name="password" type="password" value="" size="24" maxlength="35"/>
-                        </div>
-                    <br>
-            <div align="center">
+    <div class="login-page" align="center">
+        <div class="form">
+            <form class="login-form" >
+                <input id="username" name="username" type="text" placeholder="username"/>
+                <select id="selectRole" name="role" required>
+                    <option id = "id" value="-1">role</option>
+                </select>
+                <input id="password" name="password" type="password" placeholder="password"/>
                 <input type="button" name="submit_id" id="btn_id" value="Continue" class="mainButton" onclick="EmployeeLoginAction()"/>
-                <div class="clear"></div>
-            </div>
-    </form>
-        <br/>
-        <br/>
+            </form>
+        </div>
+    </div>
     </div>
 </div>
 </div>

@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Preliminary Evaluation</title>
+    <title>Seek Clarification</title>
+
     <!-- CSS Includes -->
     <link rel="stylesheet" type="text/css" href="css/ept/menu2.css"/>
     <link rel="stylesheet" type="text/css" href="css/ept/style.css"/>
@@ -33,23 +34,21 @@
     <script src="js/youtube.js?ver=1.9"></script>
     <script src="http://malsup.github.com/jquery.form.js"></script>
 
-    <!--For breadcrumb-->
-
+    <!--Button with glyphicon-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-    <!--For table sorter-->
-    <script type="text/javascript" src="/path/to/jquery-latest.js"></script>
-    <script type="text/javascript" src="/path/to/jquery.tablesorter.js"></script>
+    <!--For breadcrumb-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <!-- Page Specific JS/CSS -->
     <link rel="stylesheet" type="text/css" href="css/ept/login.css"/>
     <script type="text/javascript" src="js/ept/jquery.cookie.js"></script>
     <script src="js/bidder_login.js"></script>
-    <script src="js/evaluator1_landing.js"></script>
+    <script src="js/seek_clarification.js"></script>
 </head>
 <body>
-
 <!--Contents of the whole page-->
 <div class="content">
     <div id = "page" class="single">
@@ -117,34 +116,70 @@
         <!--Glyphicon home-->
         <div class="navbar navbar-inverse navbar-static-top navbar-tab navbar-right">
             <div class="container">
-
                 <div class="navbar-collapse collapse">
-
                     <ul class="nav navbar-nav">
                         <li class=""><a href="home_page.html"><span class="glyphicon glyphicon-home hidden-xs"
                                                                     aria-hidden="true"> </span> Home</a>
                     </ul>
-                    <ul class="nav navbar-nav">
-                        <li class=""><a href="bidder_login.html"><span class="glyphicon glyphicon-log-in hidden-xs"
-                                                                    aria-hidden="true"> </span> Bidder SignIn</a>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class=""><a href="employee_login.html"><span class="glyphicon glyphicon-log-out hidden-xs"
+                                                                         aria-hidden="true"> </span> Logout</a>
                     </ul>
-                    <ul class="nav navbar-nav">
-                        <li class=""><a href="employee_login.html"><span class="glyphicon glyphicon-log-in hidden-xs"
-                                                                    aria-hidden="true"> </span> BidOps SignIn</a>
-                    </ul>
+
+                    <!--Heading-->
+                    <p style="color: #eee; font-size: x-large"  align="center">SEEK CLARIFICATION</p>
                 </div>
             </div>
         </div>
 
-    </div>
+        <!--breadcrumb-->
+        <div class="container navbar-right">
+            <ul class="breadcrumb">
+                <li><a href="home_page.html">Home</a></li>
+                <li><a href="evaluator2_landing.html">Secondary Evaluation</a></li>
+                <li><a href="eval2_list_proposals.html">Proposals</a></li>
+                <li><a href="eval2_list_documents.html">Documents</a></li>
+                <li class="active">Seek Clarification</li>
+            </ul>
+        </div>
 
+        <!-- Proposal id bidder name-->
+        <div class="container navbar-right">
+            <div align="left">
+                <h2>Proposal: <span id="proposalid"></span></h2>
+                <h2>Bidder: <span id="bidderName"></span></h2>
+                <br>
+                <br>
+
+                <!--textbox-->
+                <div id="clarificationMessage" class="form-group">
+                    <label>Clarification Question</label>
+                    <textarea class="form-control" id="clarificationRequest" rows="6"
+                              placeholder="Enter your clarification question here." required></textarea>
+                </div>
+
+                <!--Buttons for text message-->
+                <div align="left">
+
+                    <button type="button" class="btn btn-accept btn-sm" onclick="SeekClarification()">
+                        <span class="glyphicon glyphicon-ok-sign"></span> Seek Clarification
+                    </button>
+
+                    <button type="button" class="btn btn-reject btn-sm" onclick="DiscardMessage()">
+                        <span class="glyphicon glyphicon-remove-sign"></span> Discard Message
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
 <!--footer -->
 <div id="footer" >
     <span>Copyright 2018 CalPERS</span>  |
     <span>Powered by WildCards</span>
 
 </div>
-</body>
 </body>
 </html>

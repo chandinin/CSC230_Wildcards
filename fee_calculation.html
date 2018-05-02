@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Preliminary Evaluation</title>
+    <title>SCORE Calculation</title>
     <!-- CSS Includes -->
     <link rel="stylesheet" type="text/css" href="css/ept/menu2.css"/>
     <link rel="stylesheet" type="text/css" href="css/ept/style.css"/>
@@ -32,21 +32,11 @@
     <script src="js/jquery.validate.js"></script>
     <script src="js/youtube.js?ver=1.9"></script>
     <script src="http://malsup.github.com/jquery.form.js"></script>
-
-    <!--For breadcrumb-->
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-    <!--For table sorter-->
-    <script type="text/javascript" src="/path/to/jquery-latest.js"></script>
-    <script type="text/javascript" src="/path/to/jquery.tablesorter.js"></script>
-
     <!-- Page Specific JS/CSS -->
     <link rel="stylesheet" type="text/css" href="css/ept/login.css"/>
     <script type="text/javascript" src="js/ept/jquery.cookie.js"></script>
     <script src="js/bidder_login.js"></script>
-    <script src="js/evaluator1_landing.js"></script>
+    <script src="js/fee_calculation.js"></script>
 </head>
 <body>
 
@@ -117,27 +107,99 @@
         <!--Glyphicon home-->
         <div class="navbar navbar-inverse navbar-static-top navbar-tab navbar-right">
             <div class="container">
-
                 <div class="navbar-collapse collapse">
-
                     <ul class="nav navbar-nav">
                         <li class=""><a href="home_page.html"><span class="glyphicon glyphicon-home hidden-xs"
                                                                     aria-hidden="true"> </span> Home</a>
                     </ul>
-                    <ul class="nav navbar-nav">
-                        <li class=""><a href="bidder_login.html"><span class="glyphicon glyphicon-log-in hidden-xs"
-                                                                    aria-hidden="true"> </span> Bidder SignIn</a>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class=""><a href="employee_login.html"><span class="glyphicon glyphicon-log-out hidden-xs"
+                                                                         aria-hidden="true"> </span> Logout</a>
                     </ul>
-                    <ul class="nav navbar-nav">
-                        <li class=""><a href="employee_login.html"><span class="glyphicon glyphicon-log-in hidden-xs"
-                                                                    aria-hidden="true"> </span> BidOps SignIn</a>
-                    </ul>
+
+                    <!--Heading-->
+                    <p style="color: #eee; font-size: x-large"  align="center">SCORE CALCULATION</p>
                 </div>
             </div>
         </div>
 
-    </div>
+        <!--breadcrumb-->
+        <div class="container navbar-right">
+            <ul class="breadcrumb">
+                <li><a href="home_page.html">Home</a></li>
+                <li><a href="evaluator2_landing.html">Secondary Evaluation</a></li>
+                <li><a href="eval2_list_proposals.html">Proposal</a></li>
+                <li class="active">Score Calculation</li>
+            </ul>
+        </div>
 
+        <!-- Vertical Table and contents-->
+        <div class="container navbar-right">
+            <div class="tab-content vertical">
+                <div class="row ">
+                    <div class="col-md-6">
+            <table id="proposalListTable" class="table table-bordered table-striped table-hover">
+                <tr>
+                    <th style="background-color:  #00659e; color: white; width: 200px;">Proposal:</th>
+                    <td><span id="proposal"></span></td>
+                </tr>
+                <tr>
+                    <th style="background-color:  #00659e; color: white">Bidder:</th>
+                    <td ><span id="bidderName"></span></td>
+                </tr>
+                <tr>
+                    <th style="background-color:  #00659e; color: white">Fee:</th>
+                    <td><span id="feeDoc"></span></td>
+                </tr>
+                <tr>
+                    <th style="background-color:  #00659e; color: white">Scoring Criteria:</th>
+                    <td><span id="scorCriteriaDoc"></span></td>
+                </tr>
+                <tr>
+                    <th style="background-color:  #00659e; color: white">Fee Proposal Score:</th>
+                    <td><span id="feeProposalScore"></span></td>
+                </tr>
+            </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!--Score Calculation-->
+        <div class="container navbar-right">
+            <h3>
+                <b> Fee Proposal Score Calculation</b>
+            </h3>
+            <br>
+            <!--Lowest fee-->
+            <label align ="left" for="lowestFee" id="lowestFeeLbl">Lowest Fee Proposal:</label>
+            <br>
+            <input id="lowestFee" name="lowestFee" type="number" style="width: 100px;"> <span
+                class="required">(required)</span>
+            <p></p>
+            <br>
+            <!--Fee proposal-->
+            <label align ="left" for="feeProposal" id="feeProposalLbl">Proposer's Fee Proposal:</label>
+            <br>
+            <input id="feeProposal" name="feeProposal" type="number" style="width: 100px;"/> <span
+                class="required">(required)</span>
+            <p></p>
+            <br>
+            <!--Total Possible Points-->
+            <label align ="left" for="totalPossiblePoints" id="totalPossiblePointsLbl">Total Possible Points:</label>
+            <br>
+            <input id="totalPossiblePoints" name="totalPossiblePoints" type="number" style="width: 100px;"/> <span
+                class="required">(required)</span>
+            <p></p>
+            <br>
+
+            <button type="button" class="btn btn-accept btn-sm" onclick="calculateFee()">
+                <span class="glyphicon glyphicon-ok-sign"></span> Calculate Fee Proposal Score
+            </button>
+        </div>
+        </div>
+    </div>
 </div>
 <!--footer -->
 <div id="footer" >
@@ -145,6 +207,5 @@
     <span>Powered by WildCards</span>
 
 </div>
-</body>
 </body>
 </html>

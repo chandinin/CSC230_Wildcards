@@ -48,22 +48,19 @@ function fillProposalTable(jsonArray){
             $("#proposalListTableBody").trigger("update");
         }
     }
-    //next
     $('#next').click(function(){
         var next = limit;
         if(size>next) {
             limit = limit + elements_per_page;
             $('#proposalListTableBody').empty();
-            console.log(next +' -next- '+limit);
             fillOppTable(next,limit);
         }
     });
-//prev
+
     $('#prev').click(function(){
         var pre = limit-(2*elements_per_page);
         if(pre >= 0) {
             limit = limit - elements_per_page;
-            console.log(pre +' -pre- '+limit);
             $('#proposalListTableBody').empty();
             fillOppTable(pre,limit);
         }
@@ -83,7 +80,7 @@ function completeOpportunityEval() {
     xhr.onload = function() {
         if (xhr.status == 200) {
             var jsonArray = JSON.parse(xhr.responseText);
-            if(jsonArray.result == true){
+            if(jsonArray.result){
                 alert("update successful");
             }
             else{
