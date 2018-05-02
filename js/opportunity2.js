@@ -35,7 +35,7 @@ $(document).ready(
 
         $('#exitNewOpp').click(function () {
             $('#newOppForm')[0].reset();
-            showOppList();
+            showOppList(0);
         });
 
         $('#clearNewOpp').click(function () {
@@ -120,9 +120,12 @@ function markReadyforReview(opId) {
     var xhr = new XMLHttpRequest();
     var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/update.php"
     xhr.open('POST', url);
+    var formData = {"OpportunityID":"" + opId + "","Status":7};
+    /*
     var formData = new FormData();
     formData.append("OpportunityID", opId);
     formData.append("Status", 7);
+    */
     xhr.onload = function () {
         if (xhr.status == 200) {
             var retval = xhr.responseText;
@@ -137,7 +140,7 @@ function markReadyforReview(opId) {
         }
         //alert("processed: " + opId);
     }
-    xhr.send(formData);
+    xhr.send(JSON.stringify(formData));
 }
 
 function showOppView(opId) {
@@ -215,33 +218,37 @@ function showOppList(type) {
     $('#editOppPanel').hide();
     $('#editOppPanel2').hide();
     switch (type) {
-        case 1:
+        case 1: //Archived
             $('#listOppPanel').hide();
             $('#listAROppPanel').show();
             $('#listCOppPanel').hide();
             $('#listAWOppPanel').hide();
+            getOppList(type);  //refresh list everytime
             break;
-        case 2:
+        case 2: //Cancelled
             $('#listOppPanel').hide();
             $('#listAROppPanel').hide();
             $('#listCOppPanel').show();
             $('#listAWOppPanel').hide();
+            getOppList(type);  //refresh list everytime
             break;
-        case 10:
+        case 10: //Awarded
             $('#listOppPanel').hide();
             $('#listAROppPanel').hide();
             $('#listCOppPanel').hide();
             $('#listAWOppPanel').show();
+            getOppList(type);  //refresh list everytime
             break;
-        default:
+        default: //Current Listings Screen
             $('#listOppPanel').show();
             $('#listAROppPanel').hide();
             $('#listCOppPanel').hide();
             $('#listAWOppPanel').hide();
+            getOppList(0);  //refresh list everytime
+            getOppList(11); //show published everytime
             break;
     }
 
-    getOppList(type);  //refresh list everytime
     makeBreadcrumb();
 
 }
@@ -315,14 +322,15 @@ function getDocTemplates(opId) {
                 var title = template.DocTitle;
                 var docid = template.DocTemplateID;
                 var name = template.DocTitle;
-                var tempUrl = "https://docs.google.com/viewer?url=http://athena.ecs.csus.edu/~wildcard/data/files/" + template.DocTitle;
-                if (template.Url != null) {
+                //var tempUrl = "https://docs.google.com/viewer?url=http://athena.ecs.csus.edu/~wildcard/data/files/" + template.DocTitle;
+                var tempUrl = template.Url;
+                if (template.Url !== null) {
                     /*
                 var row = "<tr><td>" + title + "</td><td>" + title + "</td><td>" + "Posted Date" + "</td><td>" +
                     "Delete" + "</td></tr>";
                     */
-                var row = "<tr id='" + template.DocTemplateID + "'><td class='changeable'>" + template.DocTitle + "</td><td>" + "<a href ='" + tempUrl + "'target='_blank'>" +
-                template.DocTitle + "</a></td><td>" + "Posted Date" +
+                var row = "<tr id='" + template.DocTemplateID + "'><td class='changeable'>" + template.DisplayTitle + "</td><td>" + "<a href ='" + tempUrl + "'target='_blank'>" +
+                template.DocTitle + "</a></td><td>" + template.PostedDate +
                     "</td><td>" +
                     "<button onclick=\"deleteDoc(\'"+ opId + "\'," + "\'" + template.DocTemplateID + "\')\"" +
                     " class='btn btn-delete'><span class='glyphicon glyphicon-remove'" +
@@ -357,10 +365,11 @@ function getDocTemplatesView(opId) {
             var size = docArray.doctemplate.length;
             for(var i = 0; i< size; i++) {
                 var template = docArray.doctemplate[i];
-                var tempUrl = "https://docs.google.com/viewer?url=http://athena.ecs.csus.edu/~wildcard/data/files/" + template.DocTitle;
+                //var tempUrl = "https://docs.google.com/viewer?url=http://athena.ecs.csus.edu/~wildcard/data/files/" + template.DocTitle;
+                var tempUrl = template.Url;
                 if (template.Url != null) {
-                    var row = "<tr><td>" + template.DocTitle + "</td><td>" + "<a href ='" + tempUrl + "' target='_blank'>" +
-                        template.DocTitle + "</a></td><td>" + "Posted Date" + "</td></tr>";
+                    var row = "<tr><td>" + template.DisplayTitle + "</td><td>" + "<a href ='" + tempUrl + "' target='_blank'>" +
+                        template.DocTitle + "</a></td><td>" + template.PostedDate + "</td></tr>";
                     $('#docTemplatesBodyView').append(row);
                 }
             }
@@ -406,23 +415,32 @@ function getOppList(type) {
     return;
     */
 
-    $('#oppListTableBody').empty();
     var xhr = new XMLHttpRequest();
     var url = "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php";
     switch (type)  {
         case 1:
+            $('#oppListTableBody').empty();
             url = url + "?status=1";
             break;
         case 2:
+            $('#oppListTableBody').empty();
+            url = url + "?status=2";
+            break;
+        case 7:  //append Ready for Review
+            url = url + "?status=2";
+            break;
+        case 8: //append Ready for Approval
             url = url + "?status=2";
             break;
         case 10:
+            $('#oppListTableBody').empty();
             url = url + "?status=10";
             break;
         case 11:
-            url = url + "?status=11";
+            url = url + "?status=11"; //append this list to existing, don't empty
             break;
         default:
+            $('#oppListTableBody').empty();
             url= url + "?status=0";
     }
     xhr.open('GET', url, true);
@@ -460,14 +478,24 @@ function fillOppTable(oppArray,type) {
         try {
             var catName = categoryArray.Category[opp.CategoryID].Name;
         }catch(err) {
-            var catName  = "Undefined";
+            var catName  = "None";
         }
-
-        var row = "<tr><td>" + catName + "</td></td><td>" + opp.OpportunityID + "</td><td>" + opp.Name +
-            "</td><td>" + opp.ClosingDate + "</td><td>" + opp.LastEditDate + "</td><td>" + oppDesc + "</td><td>" +
-            opp.StatusName + "</td><td>" +
-            "<button onclick='showOppView(\"" + opp.OpportunityID + "\")' id='editOppButton' value='" + opp.OpportunityID + "' type='button' class='btn btn-primary'>" +
-            "<span class='glyphicon glyphicon-eye-open' aria-hidden='true'></span> View</button></td></tr>";
+        var row;
+        switch(type) {
+            case 11:
+                row = "<tr><td>" + catName + "</td></td><td>" + opp.OpportunityID + "</td><td><a onclick='showOppView(\"" +
+                    opp.OpportunityID + "\")'> " + opp.Name +
+                    "</a></td><td>" + opp.ClosingDate + "</td><td>" + opp.LastEditDate + "</td><td>" + oppDesc + "</td><td>" +
+                    opp.StatusName + "</td><td>" +
+                    "<button onclick='markPublishOpp(\"" + opp.OpportunityID + "\")' value='" + opp.OpportunityID + "' type='button' class='btn btn-primary'>" +
+                    "<span class='glyphicon glyphicon-globe' aria-hidden='true'></span> Publish</button></td></tr>";
+                break;
+            default:
+                row = "<tr><td>" + catName + "</td></td><td>" + opp.OpportunityID + "</td><td><a onclick='showOppView(\"" +
+                    opp.OpportunityID + "\")'> " + opp.Name +
+                    "</a></td><td>" + opp.ClosingDate + "</td><td>" + opp.LastEditDate + "</td><td>" + oppDesc + "</td><td>" +
+                    opp.StatusName + "</td><td></td></tr>";
+        }
         $("#" + tablename).append(row);
         $("#" + tablename).trigger("update");
 
@@ -491,6 +519,33 @@ function fillOppTable(oppArray,type) {
     });
 }
 
+
+function markPublishOpp(opId) {
+    var xhr = new XMLHttpRequest();
+    var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/update.php"
+    xhr.open('POST', url);
+    var formData = {"OpportunityID":"" + opId + "","Status":3};
+    /*
+    var formData = new FormData();
+    formData.append("OpportunityID", opId);
+    formData.append("Status", 7);
+    */
+    xhr.onload = function () {
+        if (xhr.status == 200) {
+            var retval = xhr.responseText;
+            console.log("publishedOp: " +  retval);
+            var failed = retval.includes('failed');
+            if (failed)
+                alert('Failed to publish Opportunity ' + opId);
+            else
+                alert("Opportunity " + opId + " Published!");
+        } else {
+            alert('Server error on publish Opportunity ' + opId);
+        }
+    }
+    xhr.send(JSON.stringify(formData));
+}
+
 function getOppListbyCategory(category) {
     url = 'http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php';
     if(category !=="0")
@@ -512,6 +567,7 @@ function getOppListbyCategory(category) {
 
 function initNewOppForm(type) {
     getOppList(type);
+    getOppList(11);
     getCategories($('#selectFilterCategory'));
     makeBreadcrumb(0);
 }
