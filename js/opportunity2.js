@@ -367,8 +367,11 @@ function getDocTemplatesView(opId) {
                 var template = docArray.doctemplate[i];
                 //var tempUrl = "https://docs.google.com/viewer?url=http://athena.ecs.csus.edu/~wildcard/data/files/" + template.DocTitle;
                 var tempUrl = template.Url;
+                var tempTitle = template.DocTitle;
+                if (typeof(template.DisplayTitle) != "undefined")
+                    tempTitle = template.DisplayTitle;
                 if (template.Url != null) {
-                    var row = "<tr><td>" + template.DisplayTitle + "</td><td>" + "<a href ='" + tempUrl + "' target='_blank'>" +
+                    var row = "<tr><td>" + tempTitle + "</td><td>" + "<a href ='" + tempUrl + "' target='_blank'>" +
                         template.DocTitle + "</a></td><td>" + template.PostedDate + "</td></tr>";
                     $('#docTemplatesBodyView').append(row);
                 }
@@ -480,12 +483,14 @@ function fillOppTable(oppArray,type) {
         }catch(err) {
             var catName  = "None";
         }
+        var tempEDate =new Date(opp.LastEditDate).toDateString();
+        var tempCDate =new Date(opp.ClosingDate).toDateString();
         var row;
         switch(type) {
             case 11:
                 row = "<tr><td>" + catName + "</td></td><td>" + opp.OpportunityID + "</td><td><a onclick='showOppView(\"" +
                     opp.OpportunityID + "\")'> " + opp.Name +
-                    "</a></td><td>" + opp.ClosingDate + "</td><td>" + opp.LastEditDate + "</td><td>" + oppDesc + "</td><td>" +
+                    "</a></td><td>" + tempCDate + "</td><td>" + tempEDate + "</td><td>" + oppDesc + "</td><td>" +
                     opp.StatusName + "</td><td>" +
                     "<button onclick='markPublishOpp(\"" + opp.OpportunityID + "\")' value='" + opp.OpportunityID + "' type='button' class='btn btn-primary'>" +
                     "<span class='glyphicon glyphicon-globe' aria-hidden='true'></span> Publish</button></td></tr>";
@@ -493,7 +498,7 @@ function fillOppTable(oppArray,type) {
             default:
                 row = "<tr><td>" + catName + "</td></td><td>" + opp.OpportunityID + "</td><td><a onclick='showOppView(\"" +
                     opp.OpportunityID + "\")'> " + opp.Name +
-                    "</a></td><td>" + opp.ClosingDate + "</td><td>" + opp.LastEditDate + "</td><td>" + oppDesc + "</td><td>" +
+                    "</a></td><td>" + tempCDate + "</td><td>" + tempEDate + "</td><td>" + oppDesc + "</td><td>" +
                     opp.StatusName + "</td><td></td></tr>";
         }
         $("#" + tablename).append(row);
@@ -643,6 +648,8 @@ function saveOpportunity() {
     var name = $('#formNameInput').val();
     var desc = $('#formDescriptionInput').val();
     var close = $('#close_date').val() + " " + $('#close_time').val();
+    var minscore = $('#close_date').val() + " " + $('#close_time').val();
+    var totpts = $('#close_date').val() + " " + $('#close_time').val();
     var lead = parseInt($('#selectLead').val());
     var category = $('#selectNewCategory option:selected').attr('id');
     var jsonRecord =
@@ -651,7 +658,8 @@ function saveOpportunity() {
             "LeadEvaluatorID":lead,
             "CategoryID": category,
             "Name":name,
-            "LowestBid":"0",
+            "MinimumScore":minscore,
+            "TotalPoints":totpts,
             "Description":desc,
             "Status":"New"
         };
@@ -664,7 +672,7 @@ function saveOpportunity() {
             var retval = xhr.responseText;
             var failed = retval.includes("failed");
             if(!failed) {
-                if (typeof scoreFile != "undefined")
+                if (typeof(scoreFile) != "undefined")
                     uploadScoring(scoreFile,opId);
                 showOppView(opId);
             }
