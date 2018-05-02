@@ -11,13 +11,15 @@ $(document).ready(
             $('.table').tablesorter();
             $("#oppsMenu option[id='opplist']").attr("selected", "selected");
         });
+
+        $('.table').tablesorter();
     });
 
-//Get all opportunity list from server
+//Get all opportunity list from server which are closed and ready for evaluators
 function getOppList() {
     $('#oppListTableBody').empty();
     var xhr = new XMLHttpRequest();
-    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php',true);
+    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php?Status=6',true);
     xhr.onload = function() {
         if (xhr.status == 200) {
             var jsonArray = JSON.parse(xhr.responseText);
