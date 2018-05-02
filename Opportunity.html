@@ -69,25 +69,23 @@
                                     <div class="col-md-6">
                                         <h3 class="my-2 h3">Current Opportunities</h3>
                                     </div>
-                                    <div class="col-md-3">
-                                        <button id="showNewOpp" type="button" class="btn btn-accept">
-                                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Create New
-                                        </button>
-                                    </div>
                                 </div>
                                 <br>
                                 <div class="row">
-
                                     <div class="col-md-12">
-
+                                        <div class="col-md-9">
+                                            <select id="selectFilterCategory" name="category" required style="width: 325px">
+                                                <option id = "id" value="default">Category</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <button id="showNewOpp" type="button" class="btn btn-accept">
+                                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Create New
+                                            </button>
+                                        </div>
                                     </div>
-
+                                </div>
                                     <div class="col-md-12">
-
-                                        <select id="selectFilterCategory" name="category" required style="width: 325px">
-                                            <option id = "id" value="default">Category</option>
-                                        </select><br><br>
-
                                         <table id="oppListTable" class="table table-responsive table-bordered table-striped table-hover tablesorter">
                                             <thead class="">
                                             <th class="">Category</th>
@@ -105,6 +103,7 @@
                                     </div>
                                 </div>
                             </div>
+                    </div>
 
                             <!--/.List Panel 1-->
                             <!--Create Panel 2-->
@@ -144,11 +143,11 @@
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-4">
                                             <label for="close_date">Closing Date</label>
                                             <input type="date" class="" id="close_date" placeholder="mm/dd/yyyy" name="close_date"/>
                                         </div>
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-4">
                                             <label for="close_time">Closing Time</label>
                                             <input type="time" class="" id="close_time" value="15:00" name="close_time"/>
                                         </div>
@@ -162,13 +161,6 @@
                                                 </select>
                                             </label>
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-xs-2">
-                                            <label for="formMinScore">Minumum Score</label>
-                                            <input type="text" size="3" class="form-control" id="formScoreInput"
-                                                   placeholder="000" required>
-                                        </div>
                                         <div class="col-sm-8">
                                             <div class="form-group">
                                                 <div class="custom-file">
@@ -176,6 +168,18 @@
                                                     <input id="criteriaFile" type="file" name="criteriaFile">
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-4">
+                                            <label for="formTotalPts">Total Points Possible</label>
+                                            <input type="text" size="3" class="form-control" id="formTotalPts"
+                                                   placeholder="000" required>
+                                        </div>
+                                        <div class="col-xs-4">
+                                            <label for="formMinScore">Minumum Score</label>
+                                            <input type="text" size="3" class="form-control" id="formScoreInput"
+                                                   placeholder="(enter 0 if no minimum)" required>
                                         </div>
                                     </div><br>
                                     <div class="form-group">
@@ -339,13 +343,11 @@
                                     <button id="clearDocTemplates" type="button" class="btn btn-openportal">Clear</button>
                                 </div>
                             </div>
-
+                            </form>
                         </div>
                             <!--/.Edit Panel 4-->
 
 
-                        </div>
-                </div>
                 <!--/.Opportunity Panel 1-->
 
                 <!--Awarded Panel 2-->
