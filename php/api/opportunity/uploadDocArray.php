@@ -11,9 +11,12 @@ header('Content-Type: application/json');
 date_default_timezone_set('America/Tijuana');
 
 include_once '../config/Database.php';
+include_once '../config/FileSystem.php';
 include_once '../objects/opportunity.php';
 
-$temp_base_dir = "../../../data/files/";
+$filesystem = new FileSystem();
+$temp_base_dir = $filesystem->base_dir;
+$base_url = $filesystem->base_url;
 
 $_POST_LowerCase = array_change_key_case($_POST, CASE_LOWER);
 //if(is_uploaded_file($tempFilePath))
@@ -30,8 +33,6 @@ if(isset($_POST_LowerCase["submit"]))
     $database = new Database();
     $db = $database->Connect();
     $opportunity = new Opportunity($db);
-    //$base_url = "https://athena.ecs.csus.edu/~wildcard/data/files/";
-    $base_url = "http://localhost/data/files/";
    
     foreach($_FILES['filename']['tmp_name'] as $key => $tmpName) 
     {
@@ -58,6 +59,7 @@ if(isset($_POST_LowerCase["submit"]))
 
     echo '{';
     echo ' "message" : "The files were successfully uploaded."';
+    echo ', "tempFilePath" : "'.$tempFilePath.'"';
     echo '}';
   }
   else 

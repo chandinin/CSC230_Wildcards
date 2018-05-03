@@ -13,6 +13,7 @@ class DocTemplate
   public $Blob;
   public $DisplayTitle; 
   public $PostedDate;
+  public $SortOrder;
 
   // Constructor
   // Note: Must pass connection as a parameter.
@@ -24,9 +25,9 @@ class DocTemplate
   // select one by ID
   function selectByOppID($opportunityID)
   {
-    $query = "select DocTemplateID, DocTitle, `Path`, `Blob`, PostedDate from DocTemplate where DocTemplateID in (select DocTemplateID from OppDocTemplate where OpportunityID = ? );";
+    $query = "select DocTemplateID, DocTitle, `Path`, `Blob`, DisplayTitle, SortOrder, PostedDate from DocTemplate where DocTemplateID in (select DocTemplateID from OppDocTemplate where OpportunityID = ? );";
 
-//echo $query;
+    //echo $query;
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
@@ -40,7 +41,7 @@ class DocTemplate
   // select one by ID
   function selectByDocTemplateID($DocTemplateID)
   {
-    $query = "SELECT DocTemplateID, DocTitle, `Path`, `Blob`, DisplayTitle, PostedDate FROM DocTemplate WHERE DocTemplateID = ? ;";
+    $query = "SELECT DocTemplateID, DocTitle, `Path`, `Blob`, DisplayTitle, SortOrder, PostedDate FROM DocTemplate WHERE DocTemplateID = ? ;";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
@@ -64,7 +65,7 @@ class DocTemplate
   // select one by ID
   function searchByTitle($DocTitle)
   {   
-    $query = "SELECT DocTemplateID, DocTitle, `Path`, `Blob`, DisplayTitle, PostedDate FROM DocTemplate WHERE DocTitle like '%".$DocTitle."%' ;";    
+    $query = "SELECT DocTemplateID, DocTitle, `Path`, `Blob`, DisplayTitle, SortOrder, PostedDate FROM DocTemplate WHERE DocTitle like '%".$DocTitle."%' ;";    
     $stmt = $this->conn->prepare( $query );
 
     // execute query
@@ -75,7 +76,7 @@ class DocTemplate
   // select All in the table
   function selectAll()
   {
-    $query = "SELECT DocTemplateID, DocTitle, `Path`, `Blob`, DisplayTitle, PostedDate FROM DocTemplate;";
+    $query = "SELECT DocTemplateID, DocTitle, `Path`, `Blob`, DisplayTitle, SortOrder, PostedDate FROM DocTemplate;";
     $stmt = $this->conn->prepare( $query );
 
     // execute query
@@ -85,17 +86,6 @@ class DocTemplate
 
   function update()
   {
-    //$query = "UPDATE DocTemplate set DocTitle = :DocTitle, `Path` = :Path, `Blob` = :Blob, DisplayTitle = :DisplayTitle, LastEditDate=NOW() WHERE DocTemplateID = :DocTemplateID;";
-
-    //$stmt = $this->conn->prepare( $query );
-
-    // bind parameters
-    //$stmt->bindParam(':DocTemplateID', $this->DocTemplateID);
-    //$stmt->bindParam(':DocTitle', $this->DocTitle);
-    //$stmt->bindParam(':Path', $this->Path);
-    //$stmt->bindParam(':Blob', $this->Blob);
-    //$stmt->bindParam(':DisplayTitle', $this->DisplayTitle);
-
     $query = "LastEditDate = NOW()";
     if(isset($this->DocTitle))
     {
@@ -125,6 +115,13 @@ class DocTemplate
       $query = $query . "DisplayTitle = '" . $this->DisplayTitle . "'";      
     }
 
+    if(isset($this->SortOrder))
+    {
+      if(strlen($query) > 0)
+        $query = $query . ", ";
+      $query = $query . "SortOrder = '" . $this->SortOrder . "'";      
+    }
+
     $query = "UPDATE DocTemplate set " . $query .  " WHERE DocTemplateID = " . $this->DocTemplateID . ";";
 
 
@@ -139,12 +136,10 @@ class DocTemplate
 
   function create()
   {
-    //$query = "INSERT INTO DocTemplate (DocTemplateID, DocTitle, `Path`, `Blob`) " .
-    //         "VALUES(:DocTemplateID, :DocTitle, :Path, :Blob);";
-    $query = "INSERT INTO DocTemplate (DocTemplateID, DocTitle, `Path`, `Blob`, DisplayTitle, CreatedDate,
+    $query = "INSERT INTO DocTemplate (DocTemplateID, DocTitle, `Path`, `Blob`, DisplayTitle, SortOrder, CreatedDate,
  LastEditDate,
  PostedDate) " .
-             "VALUES(:DocTemplateID, :DocTitle, :Path, :Blob, :DisplayTitle, NOW(), NOW(), NOW());";
+             "VALUES(:DocTemplateID, :DocTitle, :Path, :Blob, :DisplayTitle, :SortOrder, NOW(), NOW(), NOW());";
 
     $stmt = $this->conn->prepare( $query );
 
@@ -153,7 +148,8 @@ class DocTemplate
     $stmt->bindParam(':DocTitle', $this->DocTitle);
     $stmt->bindParam(':Path', $this->Path);
     $stmt->bindParam(':Blob', $this->Blob);
-    //$stmt->bindParam(':DisplayTitle', $this->DisplayTitle);
+    $stmt->bindParam(':DisplayTitle', $this->DisplayTitle);
+    $stmt->bindParam(':SortOrder', $this->SortOrder);
 
     if($stmt->execute())
       return true;
