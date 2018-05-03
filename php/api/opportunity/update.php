@@ -52,6 +52,9 @@ if(json_last_error() === JSON_ERROR_NONE)
   if(isset($data->MinimumScore) and !is_null($data->MinimumScore))
     $opportunity->MinimumScore = $data->MinimumScore;
 
+  if(isset($data->TotalScore) and !is_null($data->TotalScore))
+    $opportunity->TotalScore = $data->TotalScore;
+
   if($opportunity->update())
   {  
   }
@@ -135,6 +138,13 @@ else
       $MinimumScore = $_POST_LowerCase["minimumscore"];
       $MinimumScore = htmlspecialchars(strip_tags($MinimumScore));
       $opportunity->MinimumScore = $MinimumScore;
+    }
+
+    if(isSet($_POST_LowerCase["totalscore"]))
+    {
+      $TotalScore = $_POST_LowerCase["totalscore"];
+      $TotalScore = htmlspecialchars(strip_tags($TotalScore));
+      $opportunity->TotalScore = $TotalScore;
     }
 
     if($opportunity->update())

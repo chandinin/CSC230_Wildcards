@@ -24,6 +24,7 @@ class Opportunity
   public $CreatedDate;
   public $LastEditDate;
   public $MinimumScore;
+  public $TotalScore;
 
   // Constructor
   // Note: Must pass connection as a parameter.
@@ -35,7 +36,7 @@ class Opportunity
   // select one by ID
   function selectByID($id)
   {
-    $query = "select OpportunityID, ClosingDate, LeadEvaluatorID, O.Name, LowestBid, Description, O.Status, OS.Name as StatusName, CategoryID, CreatedDate, LastEditDate, MinimumScore from Opportunity O
+    $query = "select OpportunityID, ClosingDate, LeadEvaluatorID, O.Name, LowestBid, Description, O.Status, OS.Name as StatusName, CategoryID, CreatedDate, LastEditDate, MinimumScore, TotalScore from Opportunity O
   left join OppStatus OS on OS.StatusID = O.`Status` WHERE OpportunityID = ? ;";
     $stmt = $this->conn->prepare( $query );
 
@@ -61,12 +62,13 @@ class Opportunity
     $this->CreatedDate = $row['CreatedDate']; 
     $this->LastEditDate = $row['LastEditDate'];
     $this->MinimumScore = $row['MinimumScore'];
+    $this->TotalScore = $row['TotalScore'];
   }
 
   // select one by ID
   function selectByCategoryID($CategoryID)
   {
-    $query = "select OpportunityID, ClosingDate, LeadEvaluatorID, O.Name, LowestBid, Description, O.Status, OS.Name as StatusName, CategoryID, CreatedDate, LastEditDate, MinimumScore from Opportunity O
+    $query = "select OpportunityID, ClosingDate, LeadEvaluatorID, O.Name, LowestBid, Description, O.Status, OS.Name as StatusName, CategoryID, CreatedDate, LastEditDate, MinimumScore, TotalScore from Opportunity O
   left join OppStatus OS on OS.StatusID = O.`Status` WHERE CategoryID = ? ;";
     $stmt = $this->conn->prepare( $query );
 
@@ -82,7 +84,7 @@ class Opportunity
   // select one by ID
   function selectByStatusID($StatusID)
   {
-    $query = "select OpportunityID, ClosingDate, LeadEvaluatorID, O.Name, LowestBid, Description, O.Status, OS.Name as StatusName, CategoryID, CreatedDate, LastEditDate, MinimumScore from Opportunity O
+    $query = "select OpportunityID, ClosingDate, LeadEvaluatorID, O.Name, LowestBid, Description, O.Status, OS.Name as StatusName, CategoryID, CreatedDate, LastEditDate, MinimumScore, TotalScore from Opportunity O
   left join OppStatus OS on OS.StatusID = O.`Status` WHERE `Status` = ? ;";
     $stmt = $this->conn->prepare( $query );
 
@@ -100,7 +102,7 @@ class Opportunity
   // select All in the table
   function selectAll()
   {
-    $query = "select OpportunityID, ClosingDate, LeadEvaluatorID, O.Name, LowestBid, Description, O.Status, OS.Name as StatusName, CategoryID, CreatedDate, LastEditDate, MinimumScore from Opportunity O
+    $query = "select OpportunityID, ClosingDate, LeadEvaluatorID, O.Name, LowestBid, Description, O.Status, OS.Name as StatusName, CategoryID, CreatedDate, LastEditDate, MinimumScore, TotalScore from Opportunity O
   left join OppStatus OS on OS.StatusID = O.`Status`;";
     $stmt = $this->conn->prepare( $query );
 
@@ -112,7 +114,7 @@ class Opportunity
 
   function update()
   {
-    $query = "UPDATE Opportunity set ClosingDate = :ClosingDate, LeadEvaluatorID = :LeadEvaluatorID, Name = :Name, LowestBid = :LowestBid, Description = :Description, Status = :Status, LastEditDate = NOW(), CategoryID = :CategoryID, MinimumScore = :MinimumScore  WHERE OpportunityID = :OpportunityID;";
+    $query = "UPDATE Opportunity set ClosingDate = :ClosingDate, LeadEvaluatorID = :LeadEvaluatorID, Name = :Name, LowestBid = :LowestBid, Description = :Description, Status = :Status, LastEditDate = NOW(), CategoryID = :CategoryID, MinimumScore = :MinimumScore, TotalScore = :TotalScore  WHERE OpportunityID = :OpportunityID;";
 
     $stmt = $this->conn->prepare( $query );
 
@@ -126,6 +128,8 @@ class Opportunity
     $stmt->bindParam(':Status', $this->Status);
     $stmt->bindParam(':CategoryID', $this->CategoryID);
     $stmt->bindParam(':MinimumScore', $this->MinimumScore);
+    $stmt->bindParam(':TotalScore', $this->TotalScore);
+
     if($stmt->execute())
       return true;
     else
@@ -134,8 +138,8 @@ class Opportunity
 
   function create()
   {
-    $query = "INSERT INTO Opportunity (OpportunityID, ClosingDate, LeadEvaluatorID, Name, LowestBid, Description, Status, CategoryID, CreatedDate, LastEditDate, MinimumScore) " .
-             "VALUES(:OpportunityID, :ClosingDate, :LeadEvaluatorID, :Name, :LowestBid, :Description, :Status, :CategoryID, NOW(), NOW(), :MinimumScore);";
+    $query = "INSERT INTO Opportunity (OpportunityID, ClosingDate, LeadEvaluatorID, Name, LowestBid, Description, Status, CategoryID, CreatedDate, LastEditDate, MinimumScore, TotalScore) " .
+             "VALUES(:OpportunityID, :ClosingDate, :LeadEvaluatorID, :Name, :LowestBid, :Description, :Status, :CategoryID, NOW(), NOW(), :MinimumScore, :TotalScore);";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
@@ -148,6 +152,7 @@ class Opportunity
     $stmt->bindParam(':Status', $this->Status);
     $stmt->bindParam(':CategoryID', $this->CategoryID);
     $stmt->bindParam(':MinimumScore', $this->MinimumScore);
+    $stmt->bindParam(':TotalScore', $this->TotalScore);
     //$date = new DateTime(date("Y-m-d H:i:s"));
     //$stmt->bindParam(':CreatedDate', $date->format('Y-m-d H:i:s'));
 

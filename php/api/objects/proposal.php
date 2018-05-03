@@ -346,7 +346,7 @@ class Proposal
   {
     try
     {
-      $query = "INSERT INTO Docs (DocID, DocTitle, Path, Url, CreatedDate, LastEditDate) VALUES (:DocID, :DocTitle, :Path, :Url, NOW(), NOW())";
+      $query = "INSERT INTO Docs (DocID, DocTitle, Path, Url, Description, SortOrder, CreatedDate, LastEditDate) VALUES (:DocID, :DocTitle, :Path, :Url, :Description, 0, NOW(), NOW())";
 
 
       $stmt = $this->conn->prepare( $query );
@@ -354,6 +354,7 @@ class Proposal
       // bind parameters
       $stmt->bindParam(':DocID', $DocID);
       $stmt->bindParam(':DocTitle', $DocTitle);
+      $stmt->bindParam(':Description', $DocTitle);
       $stmt->bindParam(':Path', $Path);
       $stmt->bindParam(':Url', $Url);
 
@@ -399,8 +400,7 @@ class Proposal
   {
     try
     {
-      //$query = "SELECT DocID, DocTitle, Description, Path, Url FROM Docs WHERE DocID in (SELECT DocID FROM ProposalDocs WHERE ProposalID = '".$ProposalID."') ";
-      $query = "SELECT ProposalDocs.DocTemplateID, Docs.DocID, Docs.DocTitle, Docs.Description, Docs.Path, Docs.Url FROM Docs INNER JOIN ProposalDocs ON Docs.DocID=ProposalDocs.DocID WHERE ProposalDocs.ProposalID='".$ProposalID."' ";
+      $query = "SELECT ProposalDocs.DocTemplateID, Docs.DocID, Docs.DocTitle, Docs.Description, Docs.CreatedDate, Docs.LastEditDate, Docs.Path, Docs.Url, Docs.SortOrder FROM Docs INNER JOIN ProposalDocs ON Docs.DocID=ProposalDocs.DocID WHERE ProposalDocs.ProposalID='".$ProposalID."' ; ";
 
 
       $stmt = $this->conn->prepare( $query );
@@ -422,7 +422,7 @@ class Proposal
   {
     try
     {
-      $query = "SELECT ProposalDocs.DocTemplateID, Docs.DocID, Docs.DocTitle, Docs.Description, Docs.Path, Docs.Url FROM Docs INNER JOIN ProposalDocs ON Docs.DocID=ProposalDocs.DocID WHERE ProposalDocs.FeeDoc = 1 AND ProposalDocs.ProposalID='".$ProposalID."' ";
+      $query = "SELECT ProposalDocs.DocTemplateID, Docs.DocID, Docs.DocTitle, Docs.Description, Docs.Path, Docs.Url, Docs.CreatedDate, Docs.LastEditDate, Docs.SortOrder FROM Docs INNER JOIN ProposalDocs ON Docs.DocID=ProposalDocs.DocID WHERE ProposalDocs.FeeDoc = 1 AND ProposalDocs.ProposalID='".$ProposalID."' ";
 
 
       $stmt = $this->conn->prepare( $query );

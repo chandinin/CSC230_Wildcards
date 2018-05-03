@@ -11,6 +11,11 @@ class Doc
   public $DocTitle;
   public $Path;
   public $Blob;
+  public $Url;
+  public $Description;
+  public $CreatedDate;
+  public $LastEditDate;
+  public $SortOrder;
 
   // Constructor
   // Note: Must pass connection as a parameter.
@@ -22,7 +27,7 @@ class Doc
   // select one by ID
   function selectByOppID($opportunityID)
   {
-    $query = "select DocID, DocTitle, `Path`, `Blob` from Docs where DocID in (select DocID from ProposalDoc where ProposalID = ? );";
+    $query = "select DocID, DocTitle, `Path`, `Blob`, Url, Description, CreatedDate, LastEditDate, SortOrder from Docs where DocID in (select DocID from ProposalDoc where ProposalID = ? );";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
@@ -36,7 +41,7 @@ class Doc
   // select one by ID
   function selectByDocID($DocID)
   {
-    $query = "SELECT DocID, DocTitle, `Path`, `Blob` FROM Docs WHERE DocID = ? ;";
+    $query = "SELECT DocID, DocTitle, `Path`, `Blob`, Url, Description, CreatedDate, LastEditDate, SortOrder FROM Docs WHERE DocID = ? ;";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
@@ -53,6 +58,11 @@ class Doc
     $this->DocTitle = $row['DocTitle'];
     $this->Path = $row['Path'];
     $this->Blob = $row['Blob'];
+    $this->Url = $row['Url'];
+    $this->Description = $row['Description'];
+    $this->CreatedDate = $row['CreatedDate'];
+    $this->LastEditDate = $row['LastEditDate'];
+    $this->SortOrder = $row['SortOrder'];
   }
 
   // Upload Document Template 
@@ -100,7 +110,7 @@ class Doc
   // select one by ID
   function searchByTitle($DocTitle)
   {   
-    $query = "SELECT DocID, DocTitle, `Path`, `Blob` FROM Docs WHERE DocTitle like '%".$DocTitle."%' ;";    
+    $query = "SELECT DocID, DocTitle, `Path`, `Blob`, Url, Description, CreatedDate, LastEditDate, SortOrder FROM Docs WHERE DocTitle like '%".$DocTitle."%' ;";    
     $stmt = $this->conn->prepare( $query );
 
     // execute query
@@ -121,7 +131,7 @@ class Doc
 
   function update()
   {
-    $query = "UPDATE Docs set DocTitle = :DocTitle, `Path` = :Path, `Blob` = :Blob WHERE DocID = :DocID;";
+    $query = "UPDATE Docs set DocTitle = :DocTitle, `Path` = :Path, `Blob` = :Blob, Url = :Url, Description = :Description, SortOrder = :SortOrder, LastEditDate = NOW() WHERE DocID = :DocID;";
 
     $stmt = $this->conn->prepare( $query );
 
@@ -130,6 +140,9 @@ class Doc
     $stmt->bindParam(':DocTitle', $this->DocTitle);
     $stmt->bindParam(':Path', $this->Path);
     $stmt->bindParam(':Blob', $this->Blob);
+    $stmt->bindParam(':Url', $this->Url);
+    $stmt->bindParam(':Description', $this->Description);
+    $stmt->bindParam(':SortOrder', $this->SortOrder);
 
     if($stmt->execute())
       return true;
@@ -139,8 +152,8 @@ class Doc
 
   function create()
   {
-    $query = "INSERT INTO Docs (DocID, DocTitle, `Path`, `Blob`) " .
-             "VALUES(:DocID, :DocTitle, :Path, :Blob);";
+    $query = "INSERT INTO Docs (DocID, DocTitle, `Path`, `Blob`, Description, Url, CreatedDate, LastEditDate, SortOrder) " .
+             "VALUES(:DocID, :DocTitle, :Path, :Blob, :Description, :Url, NOW(), NOW(), 0);";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
@@ -148,6 +161,8 @@ class Doc
     $stmt->bindParam(':DocTitle', $this->DocTitle);
     $stmt->bindParam(':Path', $this->Path);
     $stmt->bindParam(':Blob', $this->Blob);
+    $stmt->bindParam(':Url', $this->Url);
+    $stmt->bindParam(':Description', $this->Description);
 
     if($stmt->execute())
       return true;
