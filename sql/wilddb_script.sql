@@ -11,8 +11,9 @@ create table Opportunity
   `Name` varchar(255) null,
   LowestBid decimal null,
   MinimumScore decimal null,
+  TotalScore decimal null,
   `Status` varchar(255) null,
-  Description varchar(255) null,
+  Description varchar(1000) null,
   CategoryID int null,
   CreatedDate datetime null,
   LastEditDate datetime null,
@@ -59,6 +60,7 @@ INSERT INTO OppStatus (StatusID, `Name`) VALUES (6, 'Closed');
 INSERT INTO OppStatus (StatusID, `Name`) VALUES (7, 'Ready for Review'); /* Add new Statuses */
 INSERT INTO OppStatus (StatusID, `Name`) VALUES (8, 'Ready for Approval'); /* Add new Statuses */
 INSERT INTO OppStatus (StatusID, `Name`) VALUES (9, 'Modify'); /* Add new Statuses */
+INSERT INTO OppStatus (StatusID, `Name`) VALUES (11, 'Approved'); /* Add new Statuses */
 
 create table ProposalStatus
 (
@@ -286,7 +288,24 @@ create table Docs
   `Url` varchar(255),
   CreatedDate datetime null,
   LastEditDate datetime null,
+  SortOrder int null,
   PRIMARY KEY (DocID)
+);
+
+create table ScoringCriteria
+(
+  SCID int not null,
+  OpportunityID varchar(255) not null,
+  DocTitle varchar(255),
+  Description varchar(500),
+  `Path` varchar(255),
+  `Blob` bool,
+  `Url` varchar(255),
+  PostedDate datetime null,
+  DisplayTitle varchar(255) null,
+  CreatedDate datetime null,
+  LastEditDate datetime null,
+  PRIMARY KEY (SCID)
 );
 
 create table ProposalDocs
