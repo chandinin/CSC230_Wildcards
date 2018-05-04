@@ -585,6 +585,7 @@ function uploadScoring(file, opId) {
     var formData = new FormData();
     formData.append('OpportunityID', opId);
     formData.append('filename', file, file.name);
+    formData.append('submit',1);
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/uploadScoringCriteria.php');
     //xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
