@@ -171,4 +171,3 @@ else
   print_r(json_encode($employees_arr));
 }
 ?>
-
