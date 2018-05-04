@@ -21,6 +21,8 @@ $data = json_decode(file_get_contents("php://input"));
 if(json_last_error() === JSON_ERROR_NONE)
 {
   $opportunity->OpportunityID = $data->OpportunityID;
+  $OpportunityID = $opportunity->OpportunityID;
+  $opportunity->selectByID($OpportunityID);
 
   if(isset($data->ClosingDate) and !is_null($data->ClosingDate))
   {
@@ -46,6 +48,12 @@ if(json_last_error() === JSON_ERROR_NONE)
 
   if(isset($data->CategoryID) and !is_null($data->CategoryID))
     $opportunity->CategoryID = $data->CategoryID;
+
+  if(isset($data->MinimumScore) and !is_null($data->MinimumScore))
+    $opportunity->MinimumScore = $data->MinimumScore;
+
+  if(isset($data->TotalScore) and !is_null($data->TotalScore))
+    $opportunity->TotalScore = $data->TotalScore;
 
   if($opportunity->update())
   {  
@@ -123,6 +131,20 @@ else
       $CategoryID = $_POST_LowerCase["categoryid"];
       $CategoryID = htmlspecialchars(strip_tags($CategoryID));
       $opportunity->CategoryID = $CategoryID;
+    }
+
+    if(isSet($_POST_LowerCase["minimumscore"]))
+    {
+      $MinimumScore = $_POST_LowerCase["minimumscore"];
+      $MinimumScore = htmlspecialchars(strip_tags($MinimumScore));
+      $opportunity->MinimumScore = $MinimumScore;
+    }
+
+    if(isSet($_POST_LowerCase["totalscore"]))
+    {
+      $TotalScore = $_POST_LowerCase["totalscore"];
+      $TotalScore = htmlspecialchars(strip_tags($TotalScore));
+      $opportunity->TotalScore = $TotalScore;
     }
 
     if($opportunity->update())
