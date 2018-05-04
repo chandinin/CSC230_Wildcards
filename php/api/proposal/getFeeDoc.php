@@ -31,7 +31,7 @@ if(isSet($_POST_LowerCase["proposalid"]) || isSet($_GET_LowerCase["proposalid"])
   //  echo ' "message" : "$ProposalID = ' . $ProposalID . '"';
   //  echo '}';
   
-  $stmt = $proposal->getDocByProposalID($ProposalID);
+  $stmt = $proposal->getFeeDocByProposalID($ProposalID);
   $rowCount = $stmt->rowCount();
     
   if($rowCount > 0)
@@ -48,7 +48,6 @@ if(isSet($_POST_LowerCase["proposalid"]) || isSet($_GET_LowerCase["proposalid"])
           "Url" => $row['Url'],
           "CreatedDate" => $row['CreatedDate'],
           "LastEditDate" => $row['LastEditDate'],
-          "SortOrder" => $row['SortOrder'],
           "DocTemplateID" => $row['DocTemplateID']
       );
      

@@ -39,7 +39,6 @@ $Exists = "";
 //if(is_uploaded_file($tempFilePath))
 if(isset($_POST["submit"]))
 {
-
   $_POST_LowerCase = array_change_key_case($_POST, CASE_LOWER);
   if(isSet($_POST_LowerCase["proposalid"]))
   {
@@ -62,30 +61,33 @@ if(isset($_POST["submit"]))
 
     if (move_uploaded_file($_FILES["filename"]["tmp_name"], $tempFilePath)) 
     {
+      //$url = $base_url . "docs/getFile.php?docid=" . $proposalID . "_" . $DocID;
       $url = $base_url . $proposalID . "_" . $DocID . "_" . $filename;
       if($proposal->UploadDoc($DocID, $filename, $tempFilePath, $url))
       {
+        $proposal->removeFeeDocsByProposalID($proposalID);
+
         if(isSet($_POST_LowerCase["doctemplateid"]))
         {
           $DocTemplateID = $_POST_LowerCase["doctemplateid"];
           $OpportunityID = $proposal->getOpportunityIDByProposalID($proposalID);
 
-          $proposal->RelateDocsToProposalID2($proposalID, $DocID, $ExpirationDate, $OpportunityID, $DocTemplateID);
+          $proposal->RelateFeeDocsToProposalID2($proposalID, $DocID, $ExpirationDate, $OpportunityID, $DocTemplateID);
           $Exists = "Uploaded Document (" . $proposalID . ", " . $DocID . ", " . $ExpirationDate.", ".$OpportunityID.", ".$DocTemplateID.") ";        
         }
         else
         {
-          $proposal->RelateDocsToProposalID($proposalID, $DocID, $ExpirationDate);
+          $proposal->RelateFeeDocsToProposalID($proposalID, $DocID, $ExpirationDate);
           $Exists = "Uploaded Document (" . $proposalID . ", " . $DocID . ", " . $ExpirationDate.") ";        
         }
       }
-
-      echo '{';
-      echo ' "message" : "Uploading Successful."';
-      echo ', "DocID" : "'. $DocID .'"';
-      echo ', "message3" : "Exists = '. $Exists .'"';
-      echo ', "message4" : "URL = '. $url .'"';
-      echo '}';
+      
+      //echo '{';
+      //echo ' "message" : "Uploading Successful."';
+      //echo ', "DocID" : "'. $DocID .'"';
+      //echo ', "message3" : "Exists = '. $Exists .'"';
+      //echo ', "message4" : "URL = '. $url .'"';
+      //echo '}';
     } 
     else 
     {
@@ -94,6 +96,12 @@ if(isset($_POST["submit"]))
       echo '}';
     }
   }
+}
+else
+{
+  echo '{';
+  echo ' "message" : "Submit Failed."';
+  echo '}';
 }
 ?>
 
