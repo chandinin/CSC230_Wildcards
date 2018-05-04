@@ -31,9 +31,27 @@ if(json_last_error() === JSON_ERROR_NONE)
 
   if($bidder->create())
   {  
-    echo '{';
-       echo ' message : "Create suceeded. "';
-    echo '}';
+    if(isset($data->subscription) and !is_null($data->subscription))
+    {
+      $Index = 0;
+      $Subscriptions = $data->subscription;
+      foreach($Subscriptions as $Subscription)
+      { 
+        $ID=$Subscription->ID;
+        $CategoryID=$Subscription->CategoryID;
+        if($bidder->Subscribe($ID, $CategoryID))
+        {
+        }
+        else
+        {
+          echo '{';
+          echo ' "ID" : "'.$ID.'"';
+          echo ' "CategoryID" : "'.$CategoryID.'"';
+          echo '}';
+        }
+        $Index = $Index + 1; 
+      }
+    }    
   }
   else
   {
