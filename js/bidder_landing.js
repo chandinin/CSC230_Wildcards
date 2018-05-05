@@ -261,21 +261,29 @@ function initializeOpportunitiesList()
             num_opportunity_callbacks_left = opportunities.length;
 
             // We need to get the category name for each opportunity, via the categoryID
-            opportunities.forEach(function(opportunity)
-            {
-                $.ajax({
-                    url: "php/api/opportunity/categoryName.php?CategoryID="+opportunity.CategoryID, 
-                    success: function(category_json)
-                    {
-                        opportunity.CategoryName = category_json.Name;
-                        num_opportunity_callbacks_left--;
-
-                        if(num_opportunity_callbacks_left == 0)
-                        {
-                            populateOpportunitiesList(opportunities_json);
-                        }
+            categories = {}
+            $.ajax({
+                url: "php/api/opportunity/categoryName.php", 
+                success: function(category_json)
+                {
+                    console.log(category_json);
+                    for (i = 0; i < category_json.length; i++) {
+                        categories[category_json[i].CategoryID] = category_json[i].Name;
                     }
-                });
+
+                    console.log(categories);
+
+                    for(i = 0; i < opportunities_json["opportunity"].length; i++)
+                    {
+                        opportunities_json["opportunity"][i].CategoryName = categories[opportunities_json["opportunity"][i].CategoryID];
+                    }
+
+                    populateOpportunitiesList(opportunities_json);
+                },
+                error: function(error)
+                {
+                    console.log(error);
+                }
             });
         }
     });
@@ -693,7 +701,7 @@ function initializeProposalsList()
     $.ajax({
         url: "php/api/proposal/read.php?bidderID="+String(g_bidder_id), 
         success: function(proposals_json) {
-            num_proposal_callbacks_left = proposals_json["proposal"].length * 4; // x4 because we have to get num docs for opportunity and prop
+            num_proposal_callbacks_left = proposals_json["proposal"].length * 3; // x3 because we have to get num docs for opportunity and prop
 
             // For each, get number of proposal docs
             proposals_json["proposal"].forEach( function (proposal_json)
@@ -742,50 +750,6 @@ function initializeProposalsList()
                     }
                 });
             });
-
-            // For each proposal, get all requests for clarification, then select the only valid one for each proposal
-            proposals_json["proposal"].forEach( function (proposal_json)
-            {
-                $.ajax({
-                    url: "php/api/proposal/getClarifications.php?proposalID="+proposal_json.ProposalID, 
-                    type: "GET",
-                    success: function(clarifications)
-                    {
-                        num_proposal_callbacks_left--; console.log("Remaining Callbacks: " +String(num_proposal_callbacks_left));
-                        if(!("clarification" in clarifications))
-                        {
-                            console.log("Got no Clarifications, returning...");
-                            return;
-                        }
-
-                        found_open_clarification = false; // flag to check after loop
-                        clarifications.clarification.forEach( function(clarification)
-                        {
-                            // PUT Selection criteria for clarification here
-                            if(clarification.answer == null && !found_open_clarification)
-                            {
-                                console.log(proposal_json.ProposalID + " has an open clarification: " + clarification.ClarificationID);
-                                proposal_json.ClarificationClosingDate = clarification.ClosingDate;
-                                found_open_clarification = true;
-                            }
-                        });
-
-                        if(!found_open_clarification)
-                        {
-                            console.log("An open clarification was not found for " + proposal_json.ProposalID);
-                        }
-
-                        
-                        if(num_proposal_callbacks_left == 0)
-                        {
-                            // Filter down all proposals till we get just ours
-                            populateProposalList(proposals_json["proposal"].filter(proposal => proposal["BidderID"] == g_bidder_id)); 
-                        }
-                    }
-                });
-            });
-
-
 
 
             // For each, get OpportunityName
