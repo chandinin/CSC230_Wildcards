@@ -392,7 +392,7 @@ function parseOpportunity(opportunity) {
     console.log("Parsing...");
     $("#Title").text(opportunity["Name"]);
     $("#ClosingDate").text(convert_db_date_to_custom(opportunity["ClosingDate"]));
-    $("#Description").text(opportunity["Description"]);
+    document.getElementById("Description").innerHTML = opportunity["Description"];
     $("#Category").text(opportunity.CategoryName);
 
     $("#create-proposal-btn").off();
