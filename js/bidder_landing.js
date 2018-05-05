@@ -672,6 +672,10 @@ function populateOppDocTemplates(opp_doc_templates)
     doc_templates = opp_doc_templates["doctemplate"];
     console.log("Retrieved " + doc_templates.length.toString() + " doc templates");
 
+    // Will be using these to calculate how many doc links need to have files in their inputs to allow a submit
+    g_current_opportunity_json.num_opp_docs = doc_templates.length;
+    g_current_opportunity_json.num_docs_uploaded = 0;
+    g_current_opportunity_json.num_docs_pending = 0; // How many docs we have in the input bins, which don't already have docs
 
     for(i = 0; i < doc_templates.length; i++)
     {
@@ -680,6 +684,8 @@ function populateOppDocTemplates(opp_doc_templates)
         // Will undoubtedly bite me in the ass down the road...
         list_item.dataset.DocTemplateID = doc_templates[i].DocTemplateID;
         list_item.dataset.hasDocUploaded = false;
+        list_item.dataset.hasDocPending  = false;
+        list_item.id = "doc_li_" + doc_templates[i].DocTemplateID;
 
         // Create Template download anchor
         anchor = document.createElement("a");
@@ -692,8 +698,8 @@ function populateOppDocTemplates(opp_doc_templates)
         // Create file upload element
         file_upload = document.createElement("INPUT");
         file_upload.setAttribute("type", "file");
-        file_upload.dataset.parent_list_item = list_item;
-        file_upload.addEventListener("change", function(){alert("Selected a file?"); });
+        file_upload.dataset.parent_list_item_id = list_item.id;
+        file_upload.addEventListener("change", allDocsSatisfied);
         
         // Create submit button
         // file_upload_button = document.createElement("a");
@@ -709,6 +715,30 @@ function populateOppDocTemplates(opp_doc_templates)
 
         doc_list.appendChild(list_item);
     }
+}
+
+// Will be called whenever a file is selected to be uploaded in order to determine if we can show the submit button...
+// Here we go!
+function allDocsSatisfied(current_event)
+{
+    console.log("Setting this inputs parent as hasDocPending");
+    console.log(current_event);
+    document.getElementById(current_event.target.dataset.parent_list_item_id).dataset.hasDocPending = true;
+
+    console.log("Checking if we have all docs potentially satisfied");
+    doc_list = document.getElementById("opp-doc-templates-list");
+
+    has_all_docs = true;
+
+    for(i = 0; i < doc_list.children.length; i++)
+    {
+        li = doc_list.children[i];
+        has_all_docs = has_all_docs & (li.dataset.hasDocUploaded == "true" || li.dataset.hasDocPending == "true");
+    }
+
+    console.log("Has all docs: " + String(has_all_docs));
+    if(has_all_docs)
+        $("#proposal-submit-btn").show();
 }
 
 
@@ -917,7 +947,11 @@ function initializeEditProposal(proposal_json)
     $("#proposal-save-btn").off();
 
     $("#proposal-back-list-btn").click(function() { router("#spa-proposals-list"); });
-    $("#proposal-save-btn").click(function() { saveProposal(proposal_json); });
+    $("#proposal-save-btn").click(function() { saveProposal(proposal_json, false); }); // the false is that this is not a final submit
+
+
+    $("#proposal-submit-btn").off();
+    $("#proposal-submit-btn").click(function() { saveProposal(proposal_json, true); }); // True for this is a final submission
 
     if("ClarificationClosingDate" in proposal_json)
     {
@@ -1010,8 +1044,11 @@ function initializeEditProposal(proposal_json)
     });
 }
 
-function saveProposal(proposal_json)
+function saveProposal(proposal_json, is_this_submit)
 {
+
+    if(is_this_submit)
+        console.log("This is a final submission!");
 
     /************************
      * Upload the documents *
@@ -1072,6 +1109,7 @@ function saveProposal(proposal_json)
         formData.append("OpportunityID", proposal_json.OpportunityID);
         formData.append("DocTemplateID", current_child.dataset.DocTemplateID);
         formData.append('submit', "Lol this needs to be filled");
+        formData.append('final_submission', is_this_submit);
 
         var xhr = new XMLHttpRequest();
         xhr.open('POST','php/api/proposal/uploadDoc.php');
