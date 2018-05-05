@@ -840,11 +840,7 @@ function populateProposalList(proposals_json)
 
         prop_status = document.createTextNode(status_name);
 
-        closingDate = null;
-        if("ClarificationClosingDate" in proposals_json[i])
-            closingDate = document.createTextNode(proposals_json[i].ClarificationClosingDate);
-        else
-            closingDate = document.createTextNode(proposals_json[i].ClosingDate);
+        closingDate = document.createTextNode(proposals_json[i].ClosingDate);
 
         anchor = document.createElement("a");
         anchor.appendChild(document.createTextNode(proposals_json[i].OpportunityName));
@@ -929,8 +925,7 @@ function initializeEditProposal(proposal_json)
     if("ClarificationClosingDate" in proposal_json)
     {
         console.log("OK, we found a clarification...");
-        current_opportunity_json["ClosingDate"] = proposal_json.ClarificationClosingDate;
-        $("#opportunity-countdown").text("Closing Date and Time for Clarifications: " + current_opportunity_json["ClosingDate"]); // Overwrite what create proposal had
+        console.log("But we're gonan ignore it");
     }
 
     // Setup our lovely countdown timer...
@@ -948,13 +943,6 @@ function initializeEditProposal(proposal_json)
             else
             {
                 time_remaining_text = "Time remaining on this opportunity: ";
-                // We override this if there is a correction. proposals=instructions-span is reset in the create-proposal-spa init
-                if("ClarificationClosingDate" in proposal_json)
-                {
-                    time_remaining_text = "Time remaining to make clarifications: "; 
-                    $("#proposal-instructions-span").text("Clarification(s) have been requested for your proposal. Please check your email and update the requested document(s).")
-                }
-
                 time_remaining_text += " Days: " + reasonable_time_remaining.days;
                 time_remaining_text += " Hours: " + reasonable_time_remaining.hours;
                 time_remaining_text += " Minutes: " + reasonable_time_remaining.minutes;
@@ -1294,6 +1282,7 @@ function initializeManageSubscriptions()
         if (xhr.status == 200) {
             var jsonArray = JSON.parse(xhr.responseText);
             console.log("Attempting");
+            // THIS LOOKS BROKEN AS FUCK
             $.ajax({
                 url: "php/api/bidder/getSubscriptions.php",
                 type: "POST",
