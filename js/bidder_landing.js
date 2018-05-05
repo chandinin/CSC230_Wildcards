@@ -25,7 +25,7 @@ $(document).ready(function(){
     $("#subscriptions-save-btn").click(function() { saveCategorySubscriptions(); });
 
     // TODO: Figure out a good way to pass bidder ID around the site
-    g_bidder_id = "1";
+    g_bidder_id = "1337";
     activateOpportunitiesList();
 });
 
@@ -1282,18 +1282,47 @@ function initializeManageSubscriptions()
         if (xhr.status == 200) {
             var jsonArray = JSON.parse(xhr.responseText);
             console.log("Attempting");
-            // THIS LOOKS BROKEN AS FUCK
-            $.ajax({
-                url: "php/api/bidder/getSubscriptions.php",
-                type: "POST",
-                data: {"bidderID": g_bidder_id},
-                success: function(subscriptions)
+
+            var subscriptions_xhr = new XMLHttpRequest();
+            subscriptions_xhr.open("POST", "php/api/bidder/getSubscriptions.php");
+            subscriptions_xhr.onload = function() 
+            {
+                if(xhr.status == 200)
                 {
+                    console.log(subscriptions_xhr.responseText);
+                    subscriptions = JSON.parse(subscriptions_xhr.responseText);
                     console.log(subscriptions);
+                    for(i = 0; i < jsonArray.Category.length; i++)
+                        jsonArray.Category[i].subscribed = false;
+
+                    for(i = 0; i < jsonArray.Category.length; i++)
+                    {
+                        for(j = 0; j < subscriptions.subscription.length; j++)
+                        {
+                            console.log(subscriptions.subscription[j].CategoryID + " " + jsonArray.Category[i].CategoryID);
+
+                            if(subscriptions.subscription[j].CategoryID == jsonArray.Category[i].CategoryID)
+                            {
+                                console.log(subscriptions.subscription[j].CategoryID + " is subscribed");
+                                jsonArray.Category[i].subscribed = true;
+                            }
+                        }
+                    }
+
+                    for(i = 0; i < jsonArray.Category.length; i++)
+                        console.log(jsonArray.Category[i].subscribed);
+
                     populateManageSubscriptions(jsonArray);
-                },
-                error: function(err) { console.log("Error getting your subscriptions"); populateManageSubscriptions(jsonArray);}
-            });
+                }
+                else
+                {
+                    console.log("There was an error getting your subscriptions: " + subscriptions_xhr.responseText);
+                }
+            }
+            subscriptions_xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+            subscriptions_xhr.send("bidderid="+g_bidder_id);
+
         } else {
             alert("Error getting categories");
         }
@@ -1305,10 +1334,14 @@ function initializeManageSubscriptions()
 // Todo: how to use the form data effectively...
 function populateManageSubscriptions(jsonArray)
 {
+    console.log(jsonArray);
     // Clear what we already have
     $('#subscriptions-form').empty();
 
     for(var i = jsonArray.Category.length-1; i >= 0 ; i--) {
+        if(jsonArray.Category[i].Name == "None")
+            continue;
+
         div_form_check = $("<div>", {
             class: 'form-check'
         });
@@ -1316,7 +1349,8 @@ function populateManageSubscriptions(jsonArray)
         input_checkbox = $('<input>', {
             class: 'form-check-input',
             type: 'checkbox',
-            id: jsonArray.Category[i].CategoryID
+            id: jsonArray.Category[i].CategoryID,
+            checked: jsonArray.Category[i].subscribed
         });
 
         label = $("<label>", {
@@ -1332,15 +1366,40 @@ function populateManageSubscriptions(jsonArray)
     }
 }
 
+function updateSubscriptions(bidder_id, category_id_array)
+{
+    json_payload = {"id":bidder_id};
+    json_payload.subscription = [];
+
+    for(i = 0; i < category_id_array.length; i++)
+    {
+        json_payload.subscription.push({"ID":bidder_id, "CategoryID":category_id_array[i]});
+    }
+
+    console.log("Sending the following json to category endpoint:");
+    console.log(JSON.stringify(json_payload));
+
+
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST','php/api/bidder/update.php', false);
+    xhr.onload = function() {
+        if(xhr.status == 200) {
+            console.log('File uploaded' + xhr.response);
+            alert("Your Subscriptions were succesfully updated");
+        } else {
+            alert('Error uploading file:' + xhr.response);
+        }
+    };
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send(JSON.stringify(json_payload));
+}
 
 function saveCategorySubscriptions()
 {
     checked_category_ids = getCheckedCategorySubscriptions();
 
-    // Ajax it to endpoint for updating subscriptions
-
-    alert("Your subscriptions have been IGNORED, congrats :p" + String(checked_category_ids));
-
+    updateSubscriptions(g_bidder_id, checked_category_ids);
 }
 
 
