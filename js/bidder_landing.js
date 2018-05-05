@@ -25,7 +25,9 @@ $(document).ready(function(){
     $("#subscriptions-save-btn").click(function() { saveCategorySubscriptions(); });
 
     // TODO: Figure out a good way to pass bidder ID around the site
-    g_bidder_id = "1337";
+    g_bidder_id = localStorage.getItem("bidderId");
+    if(g_bidder_id == null) // Our default test case
+        g_bidder_id = "1337";
     activateOpportunitiesList();
 });
 
@@ -130,8 +132,13 @@ function getCustomDateStringFromDate(date_object)
 {
     date = date_object;
     var str = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " +  date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-
+    str =  (date.getMonth() + 1) + "-" + date.getDate() + "-" + date.getFullYear() + " " +  date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
     return str;
+}
+
+function convert_db_date_to_custom(custom_date_str)
+{
+    return getCustomDateStringFromDate(parseCustomDateStringToDate(custom_date_str));
 }
 
 // returns string in format "YYYY-MM-DD HH:MM:SS"
@@ -240,6 +247,20 @@ timeRemainingCallback.start = function(cb, target_date)
     timeRemainingCallback(target_date);
 };
 
+// Inline sorts the docs based on SortOrder
+function sortOpportunityDocs(opportunities_json)
+{
+    function compare_docs(a,b) {
+      if (a.SortOrder < b.SortOrder)
+        return -1;
+      if (a.SortOrder > b.SortOrder)
+        return 1;
+      return 0;
+    }
+
+    opportunities_json.doctemplate.sort(compare_docs)
+}
+
 /**************************
  * spa-opportunities-list *
  **************************/
@@ -254,7 +275,8 @@ function activateOpportunitiesList()
 function initializeOpportunitiesList()
 {
     $.ajax({
-        url: "php/api/opportunity/read.php", 
+        // Easy as fuck, change this to 3
+        url: "php/api/opportunity/read.php?status=0", 
         success: function(opportunities_json)
         {
             opportunities = opportunities_json["opportunity"];
@@ -313,7 +335,7 @@ function populateOpportunitiesList(opportunities_json) {
             continue;
         }
         opportunityID_textNode = document.createTextNode(opportunities[i].OpportunityID);
-        closingDate_textNode = document.createTextNode(opportunities[i].ClosingDate);
+        closingDate_textNode = document.createTextNode(convert_db_date_to_custom(opportunities[i].ClosingDate));
         category_textNode = document.createTextNode(opportunities[i].CategoryName);
         anchor   = document.createElement("a");
 
@@ -369,7 +391,7 @@ function initializeOpportunityDetail(ID) {
 function parseOpportunity(opportunity) {
     console.log("Parsing...");
     $("#Title").text(opportunity["Name"]);
-    $("#ClosingDate").text(opportunity["ClosingDate"]);
+    $("#ClosingDate").text(convert_db_date_to_custom(opportunity["ClosingDate"]));
     $("#Description").text(opportunity["Description"]);
     $("#Category").text(opportunity.CategoryName);
 
@@ -385,6 +407,7 @@ function parseOpportunity(opportunity) {
         type: "GET",
         success: function(opp_doc_templates)
         {
+            sortOpportunityDocs(opp_doc_templates);
             console.log(opp_doc_templates);
             // TODO: Need more coverage on this URL, returning 3 byte files
             GET_FILE_URL_BASE = "php/api/doctemplate/getFile.php?doctemplateid=";
@@ -442,19 +465,22 @@ function initializeCreateProposal(opportunity_id)
     $("#proposal-save-btn").show();
     // Probably want to make this synchronous, so that we can populate the doc list then do other things
     $.ajax({
-        url: "php/api/opportunity/getDocTemplates.php?opportunityid="+opportunity_id, 
-        type: "GET",
-        success: populateOppDocTemplates,
-        async: false
-    });
-
-    $.ajax({
         url: "php/api/opportunity/read.php", 
         type: "POST",
         data: {"OpportunityID": opportunity_id},
         success: populateOppTitle,
         async: false
     });
+    $.ajax({
+        url: "php/api/opportunity/getDocTemplates.php?opportunityid="+opportunity_id, 
+        type: "GET",
+        success: populateOppDocTemplates,
+        async: false
+    });
+
+
+
+    $("#proposal-submit-btn").hide()
 
     $("#proposal-back-list-btn").off();
     $("#proposal-save-btn").off();
@@ -598,9 +624,9 @@ function getUniqueProposalID()
 
 function populateOppTitle(opportunity)
 {
-    current_opportunity_json = opportunity;
+    g_current_opportunity_json = opportunity;
     $("#opportunity-title").text("Title: " + opportunity["Name"]);
-    $("#opportunity-countdown").text("Closing Date and Time: " + opportunity["ClosingDate"]);
+    $("#opportunity-countdown").text("Closing Date and Time: " + convert_db_date_to_custom(opportunity["ClosingDate"]));
 
     // Setup our lovely countdown timer...
     //{"days":597,"hours":15,"minutes":44,"seconds":11}
@@ -631,6 +657,7 @@ function populateOppTitle(opportunity)
 
 function populateOppDocTemplates(opp_doc_templates)
 {
+    sortOpportunityDocs(opp_doc_templates);
     // TODO: Need more coverage on this URL, returning 3 byte files
     GET_FILE_URL_BASE = "php/api/doctemplate/getFile.php?doctemplateid=";
     doc_list = document.getElementById("opp-doc-templates-list");
@@ -646,13 +673,13 @@ function populateOppDocTemplates(opp_doc_templates)
     console.log("Retrieved " + doc_templates.length.toString() + " doc templates");
 
 
-
     for(i = 0; i < doc_templates.length; i++)
     {
         list_item = document.createElement('li');
         // Attach the DocTemplateID to the li itself for access by other functions
         // Will undoubtedly bite me in the ass down the road...
         list_item.dataset.DocTemplateID = doc_templates[i].DocTemplateID;
+        list_item.dataset.hasDocUploaded = false;
 
         // Create Template download anchor
         anchor = document.createElement("a");
@@ -665,6 +692,8 @@ function populateOppDocTemplates(opp_doc_templates)
         // Create file upload element
         file_upload = document.createElement("INPUT");
         file_upload.setAttribute("type", "file");
+        file_upload.dataset.parent_list_item = list_item;
+        file_upload.addEventListener("change", function(){alert("Selected a file?"); });
         
         // Create submit button
         // file_upload_button = document.createElement("a");
@@ -697,10 +726,12 @@ function initializeProposalsList()
 {
     // Fuck yeah, take that, readability!
     // Just gets all of the proposals, and then attaches the associated OpportunityName to it
-    // Christ, this operates on every single proposal...
+    // Christ, this operates on every single proposal since there is no endpoint to specify bidderID...
     $.ajax({
-        url: "php/api/proposal/read.php?bidderID="+String(g_bidder_id), 
+        url: "php/api/proposal/read.php", 
         success: function(proposals_json) {
+            proposals_json["proposal"] = proposals_json["proposal"].filter(proposal => proposal["BidderID"] == g_bidder_id)
+
             num_proposal_callbacks_left = proposals_json["proposal"].length * 3; // x3 because we have to get num docs for opportunity and prop
 
             // For each, get number of proposal docs
@@ -733,6 +764,7 @@ function initializeProposalsList()
                     type: "GET",
                     success: function(opp_doc_templates)
                     {
+                        sortOpportunityDocs(opp_doc_templates);
                         num_proposal_callbacks_left--; console.log("Remaining Callbacks: " +String(num_proposal_callbacks_left));
                         if(!("doctemplate" in opp_doc_templates))
                         {
@@ -777,6 +809,7 @@ function initializeProposalsList()
 
 function populateProposalList(proposals_json)
 {
+    console.log(proposals_json);
     proposals_table = document.getElementById("proposals-list-table");
     removeAllTableElements(proposals_table);
 
@@ -804,7 +837,7 @@ function populateProposalList(proposals_json)
 
         prop_status = document.createTextNode(status_name);
 
-        closingDate = document.createTextNode(proposals_json[i].ClosingDate);
+        closingDate = document.createTextNode(convert_db_date_to_custom(proposals_json[i].ClosingDate));
 
         anchor = document.createElement("a");
         anchor.appendChild(document.createTextNode(proposals_json[i].OpportunityName));
@@ -827,7 +860,7 @@ function populateProposalList(proposals_json)
  ********************/
 // In the spirit of lazyness, this is set by create-opportunity, so that
 // I don't have to fetch it again...
-var current_opportunity_json = null;
+var g_current_opportunity_json = null;
 
 // Gonna be a little sneaky and reuse the create-opportunity spa
 function activateEditProposal(proposal_id)
@@ -867,7 +900,7 @@ function activateEditProposal(proposal_id)
 
                     initializeCreateProposal(proposal_json.OpportunityID);
                     initializeEditProposal(proposal_json);
-                    router("#spa-create-proposal");    
+                    router("#spa-create-proposal"); // Sneaky! 
                 }
             });
         }
@@ -879,7 +912,7 @@ function initializeEditProposal(proposal_json)
     console.log("In initializeEditProposal");
 
     $("#create-proposal-header").text("Edit proposal");
-    $("#proposal-time-last-edit").text("Time last edit: " + proposal_json.LastEditDate);
+    $("#proposal-time-last-edit").text("Time last edit: " + convert_db_date_to_custom(proposal_json.LastEditDate));
     $("#proposal-back-list-btn").off();
     $("#proposal-save-btn").off();
 
@@ -914,13 +947,13 @@ function initializeEditProposal(proposal_json)
                 $("#proposal-time-remaining").text(time_remaining_text);
             }
         },
-        parseCustomDateStringToDate(current_opportunity_json["ClosingDate"])
+        parseCustomDateStringToDate(g_current_opportunity_json["ClosingDate"])
     );
 
 
     doc_list = document.getElementById("opp-doc-templates-list");
 
-    // If already have files, show them
+    // If already have files, show them, as well as the final submit button
     $.ajax({
         url: "php/api/proposal/getDocsList.php?proposalid="+proposal_json.ProposalID, 
         type: "GET",
@@ -937,9 +970,11 @@ function initializeEditProposal(proposal_json)
                 doc_map[doc.DocTemplateID] = doc;
             });
 
+            has_all_docs = true;
+
             for(i = 0; i < doc_list.children.length; i++)
             {
-                child = doc_list.children[i];
+                child = doc_list.children[i]; // Child is the list item
 
                 if(doc_map[child.dataset.DocTemplateID] != null)
                 {
@@ -949,13 +984,28 @@ function initializeEditProposal(proposal_json)
                     prev_doc_anchor.className += "old_doc_a";
 
                     child.dataset.DocID = doc_map[child.dataset.DocTemplateID].DocID;
+                    child.dataset.hasDocUploaded = true;
 
                     doc_list.children[i].appendChild(prev_doc_anchor);
                     console.log(doc_list.children[i]);
                 }
+                else
+                {
+                    has_all_docs = false;
+                }
 
-            } 
+            }
 
+            if(has_all_docs)
+            {
+                console.log("This proposal has all docs, showing submit button");
+                $("#proposal-submit-btn").show();
+            }
+            else
+            {
+                console.log("This proposal does not have all docs, hiding submit button");
+                $("#proposal-submit-btn").hide();
+            }
         }
     });
 }

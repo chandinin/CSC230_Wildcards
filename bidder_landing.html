@@ -195,6 +195,11 @@ li,td,th {
     margin-right: 20px;
 }
 
+#proposal-back-list-btn {
+    display: inline;
+    float: right;
+}
+
 </style>
 
 		<div id="main" role="main">
@@ -304,8 +309,14 @@ li,td,th {
                                 <ul id="opp-doc-templates-list">
                                 </ul>
                                 <br>
-                                <a id="proposal-save-btn" class="btn btn-primary">Save For Later</a>
-                                <a id="proposal-back-list-btn" class="btn btn-primary">Nevermind, back to list</a>
+                                <div class="row marketing">
+                                    <div class="col-xs-6">
+                                        <a id="proposal-save-btn" class="btn btn-primary">Save For Later</a>
+                                        <a id="proposal-submit-btn" class="btn btn-primary">Submit Proposal</a>
+
+                                        <a id="proposal-back-list-btn" class="btn btn-primary">Nevermind, back to list</a>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-12" id="spa-proposals-list">
                                 <table id="proposals-list-table" class="tablesorter table table-bordered table-striped table-hover">
