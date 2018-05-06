@@ -188,5 +188,108 @@ class Bidder
     else
       return false;
   }
+
+  function SessionDataExists($BidderID)
+  {
+    $query = "SELECT count(BidderID) as ItemCount FROM SessionData WHERE BidderID = :BidderID AND ItemIndex = 0 ;";
+    $stmt = $this->conn->prepare( $query );
+
+    // bind parameters
+    $stmt->bindParam(':BidderID', $BidderID);
+
+    // execute query
+    $stmt->execute();
+
+    // get retrieved row
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $rowCount = $stmt->rowCount();
+
+    if($rowCount > 0)
+    {
+      // set values to object properties
+      $ItemCount = $row['ItemCount'];
+      if($ItemCount > 0)
+        return true;
+      else
+        return false;
+    }
+    else
+      return false;
+  } 
+
+  function createSessionData($BidderID, $SessionData)
+  {
+    $query = "INSERT INTO SessionData (BidderID, ItemIndex, SessionData) " .
+             "VALUES(:BidderID, 0, :SessionData); ";
+    $stmt = $this->conn->prepare( $query );
+
+    // bind parameters
+    $stmt->bindParam(':BidderID', $BidderID);
+    $stmt->bindParam(':SessionData', $SessionData);
+
+    if($stmt->execute())
+      return true;
+    else
+      return false;
+  }
+
+  function updateSessionData($BidderID, $SessionData)
+  {
+    $query = "UPDATE SessionData SET SessionData = :SessionData WHERE BidderID = :BidderID AND ItemIndex = 0 ;";
+    $stmt = $this->conn->prepare( $query );
+
+    // bind parameters
+    $stmt->bindParam(':BidderID', $BidderID);
+    $stmt->bindParam(':SessionData', $SessionData);
+
+    if($stmt->execute())
+      return true;
+    else
+      return false;
+  }
+
+  function readSessionData($BidderID)
+  {
+    $query = "SELECT BidderID, SessionData FROM SessionData WHERE BidderID = :BidderID AND ItemIndex = 0 ;";
+    $stmt = $this->conn->prepare( $query );
+
+    // bind parameters
+    $stmt->bindParam(':BidderID', $BidderID);
+
+    // execute query
+    $stmt->execute();
+
+    return $stmt;
+  }
+  
+  function getNewID()
+  {
+    $NewID = "0_AGID_BDR";
+
+    $query = "SELECT ID FROM BIDDER WHERE ID LIKE '%_AGID_BDR';";
+    $stmt = $this->conn->prepare( $query );
+
+    // execute query
+    $stmt->execute();
+
+    // get retrieved row
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $rowCount = $stmt->rowCount();
+
+    if($rowCount > 0)
+    {
+      
+      // set values to object properties
+      $LastID = $row['ID'];
+      $LastID = str_replace("_AGID_BDR", "", $LastID);
+      $Idx = (int)($LastID);
+      $Idx = $Idx + 1;
+
+      $NewID = (string)$Idx . "_AGID_BDR";
+    }
+
+    return $NewID;
+  }
 }
 ?>

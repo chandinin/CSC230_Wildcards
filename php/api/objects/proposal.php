@@ -315,7 +315,16 @@ class Proposal
     $stmt->bindParam(':ProposalID', $this->ProposalID);
     $stmt->bindParam(':OpportunityID', $this->OpportunityID);
     $stmt->bindParam(':BidderID', $this->BidderID);
-    $stmt->bindParam(':Status', $this->Status);
+
+    if(isset($this->Status))
+    {
+      $stmt->bindParam(':Status', $this->Status);
+    }
+    else
+    {
+      $Status = 40; /* Default: Open - 40 */
+      $stmt->bindParam(':Status', $Status);
+    }
     $stmt->bindParam(':TechnicalScore', $this->TechnicalScore);
     $stmt->bindParam(':FeeScore', $this->FeeScore);
     $stmt->bindParam(':FinalTotalScore', $this->FinalTotalScore);
