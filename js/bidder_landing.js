@@ -1204,17 +1204,10 @@ function initializeMessageList()
     populateMessageList();
 }
 
-m0 = {"type":"NewOpportunity", "time_received":getFormattedCurrentDate(), "status":"read",
-"body":"Hello, this is an automated message. There is a new opportunity available"};
-
-m1 = {"type":"Clarification", "time_received":getFormattedCurrentDate(), "status":"unread",
-"body":"Hello, this is an official request for clarification on your proposal for AnOpportunity. Please re-upload your documents."};
-
-demo_messages = [m0,m1];
 
 function populateMessageList(messages_json)
 {
-    PREVIEW_LENGTH = 40; // Number of characters in the message preview
+    PREVIEW_LENGTH = 60; // Number of characters in the message preview
     messages_json = mc.messages;
     table_array = [];
 
@@ -1224,7 +1217,7 @@ function populateMessageList(messages_json)
         message_type.appendChild(document.createTextNode(messages_json[i].Type));
 
         time_received = document.createElement("a");
-        time_received.appendChild(document.createTextNode(messages_json[i].TimeReceived) );
+        time_received.appendChild(document.createTextNode(convert_db_date_to_custom(messages_json[i].TimeReceived)) );
 
         // This will be clipped
         preview = document.createElement("a");
@@ -1299,10 +1292,92 @@ function initializeMessageDetail(message_id)
 function populateMessageDetail(message)
 {
 
-    
+    // Populate all fields
+    $("#message-detail-time-received").text(message.TimeReceived);
+    $("#message-detail-type").text(message.Type);
     $("#message-detail-body").text(message.Body);
 
-    if(message.Status == "read")
+
+
+    if(message.Type == "ClarificationNotification")
+        populateClarificationRequestDetail(message);
+    else if(message.Type == "OpportunityNotification")
+        populateOpportunityNotificationDetail(message);
+    else
+        alert("error");
+
+    $("#send-message-btn").off();
+    $("#send-message-btn").click(function() 
+    {
+        sendClarificationResponse(message.ProposalID, message.ClarificationID);
+        alert("Response sent successfully");
+    });
+
+}
+
+function getDocUrlFromID(DocID)
+{
+    
+}
+
+function sendClarificationResponse(ProposalID, ClarificationID)
+{
+
+
+    doc_id = null;
+    clarification_input = document.getElementById("clarification-file-input");
+    if(clarification_input.files.length == 1)
+    {
+        var formData=new FormData();
+        formData.append('filename', clarification_input.files[0], clarification_input.files[0].name);
+        formData.append('ProposalID', ProposalID);
+        formData.append("OpportunityID", "-1");
+        formData.append("DocTemplateID", "-1");
+        formData.append('submit', "Lol this needs to be filled");
+        formData.append('final_submission', false); // Needs something in endpoint
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST','php/api/proposal/uploadDoc.php', false); // We're gonna make this synchronous
+        xhr.onload = function() {
+            if(xhr.status == 200) {
+                console.log('saveProposal: File uploaded' + xhr.response);
+                console.log(JSON.parse(xhr.response));
+                doc_id = JSON.parse(xhr.response).DocID;
+            } else {
+                alert('saveProposal: Error uploading file:' + xhr.response);
+                console.log("saveProposal: There was an error, dumping what was sent:");
+                console.log("saveProposal: " + String(xhr));
+            }
+        };
+        xhr.send(formData);
+    }
+
+
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "php/api/proposal/updateClarification.php");
+    xhr.onload = function(response)
+    {
+        if(xhr.status == 200)
+        {
+            console.log("succesfully sent clarification response");
+            console.log(xhr.response);
+        }
+        else
+        {
+            console.log("Error sendClarificationResponse");
+            console.log(xhr.response);
+        }
+    }
+    xhr.setRequestHeader("Content-type", "application/json");
+    answer = $("#message-response-editor")[0].value;
+    request_json = {"ProposalID":ProposalID, "ClarificationID":ClarificationID, "answer":answer, "DocID":String(doc_id)};
+    xhr.send(JSON.stringify(request_json));
+}
+
+function populateClarificationRequestDetail(message)
+{
+    if(message.Answer != null)
     {
         // Hide these
         $("#send-message-btn").hide();
@@ -1310,7 +1385,10 @@ function populateMessageDetail(message)
 
         //Unhide these
         $("#message-detail-time-responded-header").show();
+        $("#message-detail-time-responded").show();
+        $("#message-detail-time-responded").text(message.LastEditDate)
         $("#message-detail-back-btn").show();
+        $("#message-detail-response").show();
 
         // Set these
         // $("#message-response-editor").text("Enter you")
@@ -1325,22 +1403,15 @@ function populateMessageDetail(message)
         $("#message-detail-time-responded-header").hide();
         $("#message-detail-back-btn").hide();
     }
-
-    if(message.Type != "ClarificationNotification")
-    {
-        $("#message-detail-response").hide();
-    }
-    else
-    {
-        $("#message-detail-response").show();
-    }
-
-    // Populate all fields
-    $("#message-detail-time-received").text(message.TimeReceived);
-    $("#message-detail-type").text(message.Type);
-
 }
 
+function populateOpportunityNotificationDetail(message)
+{
+    $("#send-message-btn").hide();
+    $("#discard-message-btn").hide();
+    $("#message-detail-response").hide();
+    $("#message-detail-time-responded-header").hide();
+}
 
 /****************************
  * spa-manage-subscriptions *
@@ -1616,7 +1687,7 @@ class MessageCenter
                 console.log("Found a new notification:" + opportunity.Name);
                 var new_opportunity_notification = {};
                 new_opportunity_notification.TimeReceived = opportunity.LastEditDate;
-                new_opportunity_notification.Body = DEFAULT_NOTIFICATION_BODY;
+                new_opportunity_notification.Body = "There is a new Opportunity, " + "'" + opportunity.Name + "'" + " in Category: " + opportunity.CategoryName;
                 new_opportunity_notification.Status = "unread";
                 new_opportunity_notification.OpportunityID = opportunity.OpportunityID;
                 new_opportunity_notification.OpportunityName = opportunity.Name;
@@ -1854,6 +1925,8 @@ class MessageCenter
             new_message.Answer = clarification.answer;
             new_message.ClarificationID = clarification.ClarificationID;
             new_message.ProposalID = clarification.ProposalID;
+            new_message.LastEditDate = clarification.LastEditDate;
+            new_message.ClosingDate = clarification.ClosingDate;
 
             _messages.push(new_message);
         });
