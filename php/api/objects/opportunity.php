@@ -611,5 +611,21 @@ WHERE OpportunityID = ? ; ";
 
     return $Count;
   }
+
+  function getPotentialBidders($CategoryID)
+  {
+    $query = "SELECT id, bidopsid, first_name, last_name, email, password, phone, middleinitial, address, username FROM BIDDER ";
+    $query = $query .  "WHERE id in (SELECT id FROM Subscription WHERE CategoryID = ? ) ; ";
+
+    $stmt = $this->conn->prepare( $query );
+
+    // bind parameters
+    $stmt->bindParam(1, $CategoryID);
+
+    // execute query
+    $stmt->execute();
+
+    return $stmt;
+  }
 }
 ?>

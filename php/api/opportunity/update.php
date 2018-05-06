@@ -6,12 +6,15 @@ header("Access-Control-Allow-Credentials: true");
 header('Content-Type: application/json');
 
 include_once '../config/Database.php';
+include_once "../config/Mailer.php";
 include_once '../objects/opportunity.php';
 
 date_default_timezone_set('America/Tijuana');
 
 $database = new Database();
 $db = $database->Connect();
+
+$Mailer = new Mailer();
 
 // prepare to retrieve opportunity data by instantiate the opportunity.
 $opportunity = new Opportunity($db);
@@ -57,6 +60,56 @@ if(json_last_error() === JSON_ERROR_NONE)
 
   if($opportunity->update())
   {  
+    if(isset($data->Status) and !is_null($data->Status)
+        and isset($opportunity->CategoryID) and !is_null($opportunity->CategoryID))
+    {
+      try 
+      {
+        $Status = $data->Status;
+        $CategoryID = $opportunity->CategoryID; 
+      
+        if($Status == 3) //Opportunity is set to Published - 3
+        {
+          $stmt = $opportunity->getPotentialBidders($CategoryID);
+
+          $rowCount = $stmt->rowCount();
+
+          if($rowCount > 0)
+          {
+            $Subject = "New Contract Opportunity from CalPers";
+            $GenericBody = "Dear <bidder>, \r\n\r\n";
+            $GenericBody = $GenericBody . "A new bidding opportunity is available to you.\r\n";
+            $GenericBody = $GenericBody . "Please log into the CalPers BidOPS portal to offer a proposal.\r\n\r\n";
+            $GenericBody = $GenericBody . "Thank You.\r\nCalPers";
+
+            while($row = $stmt->fetch(PDO::FETCH_ASSOC))
+            {
+              try 
+              {
+                $To = $row['email'];
+                $FIRST_NAME = $row['first_name'];
+                $LAST_NAME = $row['last_name'];
+                $MiddleInitial = $row['middleinitial'];
+
+                $FullName = $FIRST_NAME . " " . $MiddleInitial . " " . $LAST_NAME;
+
+                $Body = str_replace("<bidder>", $FullName, $GenericBody);
+                $Body = $Body . "\n\n\n\nNote: This message was sent by an automatic mailing system.";
+                $Body = $Body . "  Do not reply to this email.";
+
+                $Mailer->SendMail($To, $Subject, $Body);
+              }
+              catch (Exception $e2) 
+              {
+              }
+            }
+          }
+        }
+      }
+      catch (Exception $e) 
+      {
+      }
+    }
   }
   else
   {
@@ -119,6 +172,7 @@ else
       $opportunity->Description = $Description;
     }
 
+    $Status = null;
     if(isSet($_POST_LowerCase["status"]))
     {
       $Status = $_POST_LowerCase["status"];
@@ -149,6 +203,55 @@ else
 
     if($opportunity->update())
     {  
+      if(isset($Status) and !is_null($Status)
+          and isset($opportunity->CategoryID) and !is_null($opportunity->CategoryID))
+      {
+        try 
+        {
+          $CategoryID = $opportunity->CategoryID; 
+      
+          if($Status == 3) //Opportunity is set to Published - 3
+          {
+            $stmt = $opportunity->getPotentialBidders($CategoryID);
+
+            $rowCount = $stmt->rowCount();
+
+            if($rowCount > 0)
+            {
+              $Subject = "New Contract Opportunity from CalPers";
+              $GenericBody = "Dear <bidder>, \r\n\r\n";
+              $GenericBody = $GenericBody . "A new bidding opportunity is available to you.\r\n";
+              $GenericBody = $GenericBody . "Please log into the CalPers BidOPS portal to offer a proposal.\r\n\r\n";
+              $GenericBody = $GenericBody . "Thank You.\r\nCalPers";
+
+              while($row = $stmt->fetch(PDO::FETCH_ASSOC))
+              {
+                try 
+                {
+                  $To = $row['email'];
+                  $FIRST_NAME = $row['first_name'];
+                  $LAST_NAME = $row['last_name'];
+                  $MiddleInitial = $row['middleinitial'];
+
+                  $FullName = $FIRST_NAME . " " . $MiddleInitial . " " . $LAST_NAME;
+
+                  $Body = str_replace("<bidder>", $FullName, $GenericBody);
+                  $Body = $Body . "\n\n\n\nNote: This message was sent by an automatic mailing system.";
+                  $Body = $Body . "  Do not reply to this email.";
+  
+                  $Mailer->SendMail($To, $Subject, $Body);
+                }
+                catch (Exception $e2) 
+                {
+                }
+              }
+            }
+          }
+        }
+        catch (Exception $e) 
+        {
+        }
+      }
     }
     else
     {
