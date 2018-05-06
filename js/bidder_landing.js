@@ -31,6 +31,7 @@ $(document).ready(function(){
 
     mc = new MessageCenter();
     mc.updateServer(); // Will report the messages we generated as well as the login time right
+    $("#num-unread-messages").text(mc.numUnread);
 });
 
 
@@ -452,8 +453,10 @@ function parseOpportunity(opportunity) {
                 else
                     anchor.href = "google.com";
 
-                anchor.appendChild(document.createTextNode(doc_templates[i].DocTitle));
-
+                if(doc_templates[i].DisplayTitle == null)
+                    anchor.appendChild(document.createTextNode(doc_templates[i].DocTitle));
+                else
+                    anchor.appendChild(document.createTextNode(doc_templates[i].DisplayTitle));
                 // Attach all elements to the list_item
                 list_item.appendChild(anchor);
                 doc_list.appendChild(list_item);
@@ -711,7 +714,12 @@ function populateOppDocTemplates(opp_doc_templates)
             anchor.href = doc_templates[i].Url.replace("https://athena.ecs.csus.edu/~wildcard/", "");
         else
             anchor.href = "google.com";
-        anchor.appendChild(document.createTextNode(doc_templates[i].DocTitle));
+
+        // Use DocTitle if DisplayTitle was not set
+        if(doc_templates[i].DisplayTitle == null)
+            anchor.appendChild(document.createTextNode(doc_templates[i].DocTitle));
+        else
+            anchor.appendChild(document.createTextNode(doc_templates[i].DisplayTitle));
 
         // Create file upload element
         file_upload = document.createElement("INPUT");
@@ -1201,13 +1209,15 @@ function initializeMessageList()
 {
     removeAllTableElements(document.getElementById("messages-list-table"));
     // Ajax call for messages associated with bidderID will go here
-    populateMessageList();
+    mc.updateServer();
+
+    mc = new MessageCenter(populateMessageList());
 }
 
 
 function populateMessageList(messages_json)
 {
-    PREVIEW_LENGTH = 60; // Number of characters in the message preview
+    PREVIEW_LENGTH = 90; // Number of characters in the message preview
     messages_json = mc.messages;
     table_array = [];
 
@@ -1221,7 +1231,13 @@ function populateMessageList(messages_json)
 
         // This will be clipped
         preview = document.createElement("a");
-        preview.appendChild(document.createTextNode(messages_json[i].Body.substring(0,PREVIEW_LENGTH)+"...") );
+        preview_text = ""
+        if(messages_json[i].Body.length > PREVIEW_LENGTH)
+            preview_text = messages_json[i].Body.substring(0,PREVIEW_LENGTH)+"...";
+        else
+            preview_text = messages_json[i].Body;
+        
+        preview.appendChild(document.createTextNode(preview_text) );
 
 
         message_status = document.createElement("a");
@@ -1271,6 +1287,8 @@ function activateMessageDetail(message_id)
     else
         alert("Error marking message as read!");
 
+    $("#num-unread-messages").text(mc.numUnread);
+
     router("#spa-message-detail");
 }
 
@@ -1293,10 +1311,20 @@ function populateMessageDetail(message)
 {
 
     // Populate all fields
-    $("#message-detail-time-received").text(message.TimeReceived);
+    $("#message-detail-time-received").text(convert_db_date_to_custom(message.TimeReceived));
     $("#message-detail-type").text(message.Type);
     $("#message-detail-body").text(message.Body);
 
+    // Hide non-essential, leave these to be shown by subroutines
+    $("#send-message-btn").hide();
+    $("#discard-message-btn").hide();
+    $("#message-detail-time-responded-header").hide();
+    $("#message-detail-back-btn").hide();
+    $("#send-message-btn").hide();
+    $("#discard-message-btn").hide();
+    $("#message-detail-response").hide();
+    $("#message-detail-due-by-header").hide();
+    $("#message-detail-upload").hide();
 
 
     if(message.Type == "ClarificationNotification")
@@ -1311,20 +1339,96 @@ function populateMessageDetail(message)
     {
         sendClarificationResponse(message.ProposalID, message.ClarificationID);
         alert("Response sent successfully");
+        activateMessageList();
     });
 
 }
 
+
+
+function populateClarificationRequestDetail(message)
+{
+    if(message.Answer != null)
+    {
+        console.log("There is an answer associated with this Clarification");
+        // Hide these
+        $("#send-message-btn").hide();
+        $("#discard-message-btn").hide();
+
+        //Unhide these
+        $("#message-detail-time-responded-header").show();
+        $("#message-detail-time-responded").show();
+        $("#message-detail-time-responded").text(message.LastEditDate)
+        $("#message-detail-back-btn").show();
+        $("#message-detail-response").show();
+
+        // Set these
+        $("#message-response-editor")[0].value = (message.Answer);
+        document.getElementById("message-response-editor").readOnly = true; 
+    }
+    else // There is no answer, will need one if closing date has not passed
+    {
+        // Check if expired
+        if(message.ClosingDate != null)
+        {
+            closing_date = parseCustomDateStringToDate(message.ClosingDate);
+            if(closing_date < new Date())
+            {
+                console.log("This clarification has expired!");
+                $("#send-message-btn").hide();
+                $("#discard-message-btn").hide();
+                $("#message-detail-due-by-header").show();
+                $("#message-detail-due-by").text(convert_db_date_to_custom(message.ClosingDate));
+                document.getElementById("message-detail-due-by").style.color = "red";
+                document.getElementById("message-response-editor").readOnly = true;
+                $("#message-detail-response").show();
+                $("#message-response-editor")[0].value = "THIS CLARIFICATION HAS EXPIRED";
+
+                return;
+            }
+        }
+        
+
+
+        if(message.ClosingDate != null)
+            $("#message-detail-due-by").text(convert_db_date_to_custom(message.ClosingDate));
+        else
+            $("#message-detail-due-by").text("None");
+        document.getElementById("message-detail-due-by").style.color = "#425b83";
+        $("#message-detail-due-by-header").show();
+
+        // Have to reset for some reason
+        $("#message-response-editor")[0].value = ""; 
+        clarification_input = document.getElementById("clarification-file-input");
+        clarification_input.value = "";
+        document.getElementById("message-response-editor").readOnly = false; 
+
+        // Show these
+        $("#send-message-btn").show();
+        $("#discard-message-btn").show();
+        $("#message-detail-response").show();
+        $("#message-detail-upload").show();
+    }
+}
+
+function populateOpportunityNotificationDetail(message)
+{
+    $("#send-message-btn").hide();
+    $("#discard-message-btn").hide();
+    $("#message-detail-response").hide();
+    $("#message-detail-time-responded-header").hide();
+}
+
 function getDocUrlFromID(DocID)
 {
-    
+
 }
 
 function sendClarificationResponse(ProposalID, ClarificationID)
 {
 
 
-    doc_id = null;
+    doc_id = -1;
     clarification_input = document.getElementById("clarification-file-input");
     if(clarification_input.files.length == 1)
     {
@@ -1373,44 +1477,6 @@ function sendClarificationResponse(ProposalID, ClarificationID)
     answer = $("#message-response-editor")[0].value;
     request_json = {"ProposalID":ProposalID, "ClarificationID":ClarificationID, "answer":answer, "DocID":String(doc_id)};
     xhr.send(JSON.stringify(request_json));
-}
-
-function populateClarificationRequestDetail(message)
-{
-    if(message.Answer != null)
-    {
-        // Hide these
-        $("#send-message-btn").hide();
-        $("#discard-message-btn").hide();
-
-        //Unhide these
-        $("#message-detail-time-responded-header").show();
-        $("#message-detail-time-responded").show();
-        $("#message-detail-time-responded").text(message.LastEditDate)
-        $("#message-detail-back-btn").show();
-        $("#message-detail-response").show();
-
-        // Set these
-        // $("#message-response-editor").text("Enter you")
-    }
-    else
-    {
-        // Show these
-        $("#send-message-btn").show();
-        $("#discard-message-btn").show();
-
-        // Hide these
-        $("#message-detail-time-responded-header").hide();
-        $("#message-detail-back-btn").hide();
-    }
-}
-
-function populateOpportunityNotificationDetail(message)
-{
-    $("#send-message-btn").hide();
-    $("#discard-message-btn").hide();
-    $("#message-detail-response").hide();
-    $("#message-detail-time-responded-header").hide();
 }
 
 /****************************
@@ -1582,7 +1648,7 @@ DEFAULT_NOTIFICATION_BODY = "There is a new Opportunity available"; // TODO: bet
 class MessageCenter
 {
 
-    constructor()
+    constructor(done_callback)
     {
         var self = this;
         console.log("MessageCenter: constructing");
@@ -1596,10 +1662,15 @@ class MessageCenter
         console.log(this.internal_json);
         this.time_of_last_login = parseCustomDateStringToDate(this.internal_json.time_of_last_login);
 
+        var num_callbacks_left = 2;
         this.fetchClarifications(function()
         {
             console.log("Clarifications fetch done");
             self.updateClarifications();
+
+            num_callbacks_left--;
+            if(num_callbacks_left == 0 && done_callback != null)
+                done_callback();
         });
 
 
@@ -1607,6 +1678,10 @@ class MessageCenter
         {
             console.log("Opportunities fetch done");
             self.updateNotifications();
+
+            num_callbacks_left--;
+            if(num_callbacks_left == 0 && done_callback != null)
+                done_callback();
         });
         // Fetch internal_json from backend
         // using session var for now
