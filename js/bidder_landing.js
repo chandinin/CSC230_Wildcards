@@ -1,6 +1,5 @@
 // TODO: Figure out a good way to pass bidder ID around the site
 var g_bidder_id;
-
 $(document).ready(function(){
     $("#show-list-btn").click(function() { router("#spa-opportunities-list"); });
 
@@ -29,6 +28,9 @@ $(document).ready(function(){
     if(g_bidder_id == null) // Our default test case
         g_bidder_id = "1337";
     activateOpportunitiesList();
+
+    mc = new MessageCenter();
+    mc.updateServer(); // Will report the messages we generated as well as the login time right
 });
 
 
@@ -133,6 +135,14 @@ function getCustomDateStringFromDate(date_object)
     date = date_object;
     var str = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " +  date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
     str =  (date.getMonth() + 1) + "-" + date.getDate() + "-" + date.getFullYear() + " " +  date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+    return str;
+}
+
+function getDatabaseDateStringFromDate(date_object)
+{
+    date = date_object;
+    var str = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " +  date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+    // str =  (date.getMonth() + 1) + "-" + date.getDate() + "-" + date.getFullYear() + " " +  date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
     return str;
 }
 
@@ -248,8 +258,9 @@ timeRemainingCallback.start = function(cb, target_date)
 };
 
 // Inline sorts the docs based on SortOrder
-function sortOpportunityDocs(opportunities_json)
+function sortOpportunityDocs(doctemplate)
 {
+    console.log(doctemplate)
     function compare_docs(a,b) {
       if (a.SortOrder < b.SortOrder)
         return -1;
@@ -258,7 +269,13 @@ function sortOpportunityDocs(opportunities_json)
       return 0;
     }
 
-    opportunities_json.doctemplate.sort(compare_docs)
+    if(doctemplate != null)
+        doctemplate.sort(compare_docs);
+    else
+    {
+        console.log("The doc Template was null:");
+        console.log(doctemplate);
+    }
 }
 
 /**************************
@@ -407,7 +424,6 @@ function parseOpportunity(opportunity) {
         type: "GET",
         success: function(opp_doc_templates)
         {
-            sortOpportunityDocs(opp_doc_templates);
             console.log(opp_doc_templates);
             // TODO: Need more coverage on this URL, returning 3 byte files
             GET_FILE_URL_BASE = "php/api/doctemplate/getFile.php?doctemplateid=";
@@ -421,6 +437,7 @@ function parseOpportunity(opportunity) {
                 return;
             }
 
+            sortOpportunityDocs(opp_doc_templates.doctemplate);
             doc_templates = opp_doc_templates["doctemplate"];
             console.log("Retrieved " + doc_templates.length.toString() + " doc templates");
 
@@ -657,8 +674,9 @@ function populateOppTitle(opportunity)
 
 function populateOppDocTemplates(opp_doc_templates)
 {
-    sortOpportunityDocs(opp_doc_templates);
-    // TODO: Need more coverage on this URL, returning 3 byte files
+    console.log("populateOppDocTemplates: " + String(opp_doc_templates));
+    sortOpportunityDocs(opp_doc_templates.doctemplate);
+
     GET_FILE_URL_BASE = "php/api/doctemplate/getFile.php?doctemplateid=";
     doc_list = document.getElementById("opp-doc-templates-list");
     doc_list.innerHTML = ""; // Clear what we may already have there
@@ -794,13 +812,13 @@ function initializeProposalsList()
                     type: "GET",
                     success: function(opp_doc_templates)
                     {
-                        sortOpportunityDocs(opp_doc_templates);
                         num_proposal_callbacks_left--; console.log("Remaining Callbacks: " +String(num_proposal_callbacks_left));
                         if(!("doctemplate" in opp_doc_templates))
                         {
                             console.log("Got no doc templates, returning...");
                             return;
                         }
+                        sortOpportunityDocs(opp_doc_templates.doctemplate);
                         doc_templates = opp_doc_templates["doctemplate"];
                         proposal_json.NumOpportunityDocs = doc_templates.length;
                         
@@ -1046,9 +1064,10 @@ function initializeEditProposal(proposal_json)
 
 function saveProposal(proposal_json, is_this_submit)
 {
+    console.log("In saveProposal")
 
     if(is_this_submit)
-        console.log("This is a final submission!");
+        console.log("saveProposal: This is a final submission!");
 
     /************************
      * Upload the documents *
@@ -1070,7 +1089,7 @@ function saveProposal(proposal_json, is_this_submit)
 
         if(current_input == null)
         {
-            alert("Something terribly wrong has ocurred when trying to get a lock on the input");
+            alert("saveProposal: Something terribly wrong has ocurred when trying to get a lock on the input");
             return false;
         }
 
@@ -1081,27 +1100,27 @@ function saveProposal(proposal_json, is_this_submit)
 
         if(current_file == null)
         {
-            console.log("No file for " + current_child.dataset.DocTemplateID + ", but that's ok!");
+            console.log("saveProposal: No file for " + current_child.dataset.DocTemplateID + ", but that's ok!");
             continue;
         }
 
         // If we get here, we have an input element that has a file
-        console.log(current_child.dataset.DocTemplateID + " got file with name: " + current_file.name);
+        console.log("saveProposal: " + current_child.dataset.DocTemplateID + " got file with name: " + current_file.name);
 
         // Need to check if there is a doc already associated with this...
         if(current_child.dataset.DocID != null)
         {
-            console.log("There is already a doc (" + current_child.dataset.DocID + ") associated with this DocTemplate");
-            console.log("Attempting to delete old document...");
+            console.log("saveProposal: There is already a doc (" + current_child.dataset.DocID + ") associated with this DocTemplate");
+            console.log("saveProposal: Attempting to delete old document...");
 
             // $.ajax({
             //     url: "",
             //     type: "GET",
             //     success: function() { console.log("Success deleting DocID"+current_child.dataset.DocID)}
             // });
-            console.log("TODO: Endpoint for deleting a doc/ProposalDoc");
+            console.log("saveProposal: TODO: Endpoint for deleting a doc/ProposalDoc");
         }
-        console.log("Attempting to upload...");
+        console.log("saveProposal: Attempting to upload...");
 
         var formData=new FormData();
         formData.append('filename', current_file, current_file.name);
@@ -1109,15 +1128,17 @@ function saveProposal(proposal_json, is_this_submit)
         formData.append("OpportunityID", proposal_json.OpportunityID);
         formData.append("DocTemplateID", current_child.dataset.DocTemplateID);
         formData.append('submit', "Lol this needs to be filled");
-        formData.append('final_submission', is_this_submit);
+        formData.append('final_submission', is_this_submit); // Needs something in endpoint
 
         var xhr = new XMLHttpRequest();
-        xhr.open('POST','php/api/proposal/uploadDoc.php');
+        xhr.open('POST','php/api/proposal/uploadDoc.php', false); // We're gonna make this synchronous
         xhr.onload = function() {
             if(xhr.status == 200) {
-                console.log('File uploaded' + xhr.response);
+                console.log('saveProposal: File uploaded' + xhr.response);
             } else {
-                alert('Error uploading file:' + xhr.response);
+                alert('saveProposal: Error uploading file:' + xhr.response);
+                console.log("saveProposal: There was an error, dumping what was sent:");
+                console.log("saveProposal: " + String(xhr));
             }
         };
         xhr.send(formData);
@@ -1194,24 +1215,24 @@ demo_messages = [m0,m1];
 function populateMessageList(messages_json)
 {
     PREVIEW_LENGTH = 40; // Number of characters in the message preview
-    messages_json = demo_messages;
+    messages_json = mc.messages;
     table_array = [];
 
     for(i = 0; i < messages_json.length; i++)
     {
         message_type = document.createElement("a");
-        message_type.appendChild(document.createTextNode(messages_json[i].type));
+        message_type.appendChild(document.createTextNode(messages_json[i].Type));
 
         time_received = document.createElement("a");
-        time_received.appendChild(document.createTextNode(messages_json[i].time_received) );
+        time_received.appendChild(document.createTextNode(messages_json[i].TimeReceived) );
 
         // This will be clipped
         preview = document.createElement("a");
-        preview.appendChild(document.createTextNode(messages_json[i].body.substring(0,PREVIEW_LENGTH)+"...") );
+        preview.appendChild(document.createTextNode(messages_json[i].Body.substring(0,PREVIEW_LENGTH)+"...") );
 
 
         message_status = document.createElement("a");
-        message_status.appendChild(document.createTextNode(messages_json[i].status) );
+        message_status.appendChild(document.createTextNode(messages_json[i].Status) );
 
         // Set onclick for each item in the table to activateMessageDetail for that item
         message_type.onclick = (function() {
@@ -1248,6 +1269,15 @@ function populateMessageList(messages_json)
 function activateMessageDetail(message_id)
 {
     initializeMessageDetail(message_id);
+
+    message = mc.messages[parseInt(message_id)];
+    if(message.Type == "ClarificationNotification")
+        mc.markRead("ClarificationNotification", message.ClarificationID);
+    else if(message.Type == "OpportunityNotification")
+        mc.markRead("OpportunityNotification", message.OpportunityID);
+    else
+        alert("Error marking message as read!");
+
     router("#spa-message-detail");
 }
 
@@ -1255,7 +1285,7 @@ function initializeMessageDetail(message_id)
 {
 
     // Ajax to get the specific message
-    populateMessageDetail(demo_messages[parseInt(message_id)]);
+    populateMessageDetail(mc.messages[parseInt(message_id)]);
 }
 
 // <h2>Message Type: <span id="message-detail-type">Message type placeholder</span></h2>
@@ -1270,9 +1300,9 @@ function populateMessageDetail(message)
 {
 
     
-    $("#message-detail-body").text(message.body);
+    $("#message-detail-body").text(message.Body);
 
-    if(message.status == "read")
+    if(message.Status == "read")
     {
         // Hide these
         $("#send-message-btn").hide();
@@ -1296,7 +1326,7 @@ function populateMessageDetail(message)
         $("#message-detail-back-btn").hide();
     }
 
-    if(message.type != "Clarification")
+    if(message.Type != "ClarificationNotification")
     {
         $("#message-detail-response").hide();
     }
@@ -1306,8 +1336,8 @@ function populateMessageDetail(message)
     }
 
     // Populate all fields
-    $("#message-detail-time-received").text(message.time_received);
-    $("#message-detail-type").text(message.type);
+    $("#message-detail-time-received").text(message.TimeReceived);
+    $("#message-detail-type").text(message.Type);
 
 }
 
@@ -1339,7 +1369,7 @@ function initializeManageSubscriptions()
             subscriptions_xhr.open("POST", "php/api/bidder/getSubscriptions.php");
             subscriptions_xhr.onload = function() 
             {
-                if(xhr.status == 200)
+                if(subscriptions_xhr.status == 200)
                 {
                     console.log(subscriptions_xhr.responseText);
                     subscriptions = JSON.parse(subscriptions_xhr.responseText);
@@ -1372,7 +1402,6 @@ function initializeManageSubscriptions()
                 }
             }
             subscriptions_xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
             subscriptions_xhr.send("bidderid="+g_bidder_id);
 
         } else {
@@ -1465,4 +1494,457 @@ function getCheckedCategorySubscriptions()
     })
 
     return selected_categories;
+}
+
+// Christ why isn't this included
+function isValidJSON(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
+
+// Messages are not saves on backend, it is the notifications that are saved. Messages are generated on the fly
+DEFAULT_NOTIFICATION_BODY = "There is a new Opportunity available"; // TODO: better
+class MessageCenter
+{
+
+    constructor()
+    {
+        var self = this;
+        console.log("MessageCenter: constructing");
+        this.bidder_id = g_bidder_id;
+        this.internal_json = {};
+        this.fetchJSON();
+
+        this.clarifications = [];
+        this.opportunities = [];
+
+        console.log(this.internal_json);
+        this.time_of_last_login = parseCustomDateStringToDate(this.internal_json.time_of_last_login);
+
+        this.fetchClarifications(function()
+        {
+            console.log("Clarifications fetch done");
+            self.updateClarifications();
+        });
+
+
+        this.fetchOpportunities(function()
+        {
+            console.log("Opportunities fetch done");
+            self.updateNotifications();
+        });
+        // Fetch internal_json from backend
+        // using session var for now
+    }
+
+    fetchJSON()
+    {
+        var self = this;
+        console.log("fetching json");
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://athena.ecs.csus.edu/~wildcard/php/api/bidder/readSessionData.php?bidderid="+this.bidder_id, false);
+        xhr.onload = function(response)
+        {
+            if(xhr.status == 200)
+            {
+                console.log("Success getting json payload");
+                var json_payload = xhr.response;
+                try {
+                    var j = JSON.parse(json_payload);
+
+                    j = JSON.parse(j.SessionData);
+                    console.log(j);
+
+                    self.internal_json = j;
+                    console.log("succesfully parsed JSON");
+                } catch (e) {
+                    console.log("UNsuccesfully parsed JSON")
+                    self.internal_json = null;
+                }
+            }
+            else
+            {
+                alert("Error posting json data");
+                console.log(xhr.response);
+            }
+        }
+        xhr.send();
+
+        if(self.internal_json == null)
+        {
+            console.log("Internal json was null, seeding");
+            self.seedInternalJSON();
+        }
+        else
+        {
+            console.log("Got internal json");
+        }
+    }
+
+    seedInternalJSON()
+    {
+        console.log("seeding internal json");
+
+        var last_login = new Date();
+        last_login.setYear(1994);
+
+        this.internal_json = {
+            "time_of_last_login": getDatabaseDateStringFromDate(last_login),
+            "OpportunityNotifications": [],
+            "ClarificationNotifications": []
+        }
+
+        console.log("Done seeding");
+    }
+
+    // Need to filter based on subscribed categories, attach OpportunityName and CategoryName
+    updateNotifications()
+    {
+        var self = this;
+        console.log("updating notifications");
+        this.opportunities.forEach(function(opportunity)
+        {
+            var opp_last_edit_date = parseCustomDateStringToDate(opportunity.LastEditDate);
+
+            if(opp_last_edit_date > self.time_of_last_login)
+            {
+                console.log("Found a new notification:" + opportunity.Name);
+                var new_opportunity_notification = {};
+                new_opportunity_notification.TimeReceived = opportunity.LastEditDate;
+                new_opportunity_notification.Body = DEFAULT_NOTIFICATION_BODY;
+                new_opportunity_notification.Status = "unread";
+                new_opportunity_notification.OpportunityID = opportunity.OpportunityID;
+                new_opportunity_notification.OpportunityName = opportunity.Name;
+                new_opportunity_notification.CategoryName    = opportunity.CategoryName;
+
+                self.internal_json.OpportunityNotifications.push(new_opportunity_notification);
+            }
+            
+        });
+    }
+
+    updateClarifications()
+    {
+        var self = this;
+
+        this.clarifications.forEach(function(clarification)
+        {
+            if(!(clarification.ClarificationID in self.internal_json.ClarificationNotifications))
+            {
+                console.log(clarification.ClarificationID + " is not in existing notifications, creating");
+                self.internal_json.ClarificationNotifications[clarification.ClarificationID] = {};
+                self.internal_json.ClarificationNotifications[clarification.ClarificationID].Status = "unread";
+
+                // This is redundant, but makes it easier
+                self.internal_json.ClarificationNotifications[clarification.ClarificationID].ClarificationID = clarification.ClarificationID;
+            }
+        });
+    }
+
+
+    fetchClarifications(finished_cb)
+    {
+        var self = this; // omfg are you serious, need this for callbacks
+
+        $.ajax({
+            url: "php/api/proposal/read.php", 
+            success: function(proposals_json) {
+                proposals_json["proposal"] = proposals_json["proposal"].filter(proposal => proposal["BidderID"] == g_bidder_id)
+                var num_proposal_callbacks_left = proposals_json["proposal"].length;
+
+                // For each proposal, get all requests for clarification, then select the only valid one for each proposal
+                proposals_json["proposal"].forEach( function (proposal_json)
+                {
+                    $.ajax({
+                        url: "php/api/proposal/getClarifications.php?proposalID="+proposal_json.ProposalID, 
+                        type: "GET",
+                        success: function(clarifications_json)
+                        {
+                            console.log(clarifications_json);
+                            num_proposal_callbacks_left--; console.log("Remaining Callbacks: " +String(num_proposal_callbacks_left));
+                            if(clarifications_json.clarification.length == 0)
+                            {
+                                console.log("Got no Clarifications for " + proposal_json.ProposalID);
+                            }
+                            else
+                            {
+                                console.log(clarifications_json.clarification);
+                                clarifications_json.clarification.forEach(function(c)
+                                {
+                                    c.ProposalID = proposal_json.ProposalID;
+                                    self.clarifications.push(c);
+                                });
+                            }
+
+                            if(num_proposal_callbacks_left == 0)
+                            {
+                                finished_cb();
+                            }
+                        }
+                    });
+                });
+            }
+        });
+    }
+
+    // Will get all opportunities, need to change status ID to someting appropriate
+    // Also fetch CategoryNames and subscriptions
+    fetchOpportunities(finished_cb)
+    {
+        var self = this;
+        var internal_opportunities = []; // Push here until we can filter, then push to this.opportunities
+        var internal_subscriptions = [];
+
+        function filterOpportunities()
+        {
+            console.log("MessageCenter: filtering!");
+            console.log(internal_subscriptions);
+            console.log(internal_opportunities);
+            internal_opportunities.forEach(function(opportunity)
+            {
+                console.log("MessageCenter: " + opportunity.CategoryID);
+
+                if(internal_subscriptions.includes(opportunity.CategoryID))
+                {
+                    console.log("Category " + opportunity.CategoryID + " matches, adding");
+                    self.opportunities.push(opportunity);
+                }
+            });
+
+            finished_cb();
+        }
+
+
+        console.log("MessageCenter: fetching opportunities");
+        var self = this;
+        var num_callbacks_left = 0;
+
+
+        num_callbacks_left++;
+        $.ajax({
+            // Easy as fuck, change this to 3
+            url: "php/api/opportunity/read.php?status=0", 
+            success: function(opportunities_json)
+            {
+                console.log("MessageCenter: Getting opportunities");
+                // We need to get the category name for each opportunity, via the categoryID
+                var categories = {}
+                $.ajax({
+                    url: "php/api/opportunity/categoryName.php", 
+                    success: function(category_json)
+                    {
+                        console.log("MessageCenter: Getting categories");
+                        console.log(category_json);
+                        for (var i = 0; i < category_json.length; i++) {
+                            categories[category_json[i].CategoryID] = category_json[i].Name;
+                        }
+
+                        console.log(categories);
+
+                        for(i = 0; i < opportunities_json["opportunity"].length; i++)
+                        {
+                            opportunities_json["opportunity"][i].CategoryName = categories[opportunities_json["opportunity"][i].CategoryID];
+                        }
+
+                        var opportunities = opportunities_json["opportunity"];
+
+                        opportunities.forEach(function(opportunity)
+                        {
+                            internal_opportunities.push(opportunity);
+                        });
+
+                        num_callbacks_left--;
+                        if(num_callbacks_left == 0)
+                        {
+                            console.log("MessageCenter: Finna call filter");
+                            filterOpportunities();
+                        }
+                    },
+                    error: function(error)
+                    {
+                        console.log("MessageCenter: Error getting categories");
+                        console.log(error);
+                    }
+                });
+            }
+        });
+
+        num_callbacks_left++;
+        var subscriptions_xhr = new XMLHttpRequest();
+        subscriptions_xhr.open("POST", "php/api/bidder/getSubscriptions.php");
+        subscriptions_xhr.onload = function() 
+        {
+            console.log("MessageCenter: Subscriptions call has returned");
+            if(subscriptions_xhr.status == 200)
+            {
+                console.log(subscriptions_xhr.responseText);
+                var subscriptions_json = JSON.parse(subscriptions_xhr.responseText);
+                
+                subscriptions_json.subscription.forEach(function(sub)
+                {
+                    internal_subscriptions.push(sub.CategoryID);
+                });
+                console.log(internal_subscriptions);
+
+            }
+            else
+            {
+                console.log("MessageCenter: There was an error getting your subscriptions: " + subscriptions_xhr.responseText);
+            }
+
+            num_callbacks_left--;
+            if(num_callbacks_left == 0)
+            {
+                console.log("HERE");
+                filterOpportunities();
+            }
+        }
+        subscriptions_xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        subscriptions_xhr.send("bidderid="+g_bidder_id);
+        console.log("MessageCenter: After xhr sent");
+    }
+
+    get messages()
+    {
+        var self = this;
+        var _messages = [];
+
+        self.internal_json.OpportunityNotifications.forEach(function(opportunity_notification)
+        {
+            var new_message = {};
+            new_message.Type = "OpportunityNotification";
+            new_message.TimeReceived = opportunity_notification.TimeReceived;
+            new_message.Body = opportunity_notification.Body;
+            new_message.Status = opportunity_notification.Status;
+            new_message.OpportunityID = opportunity_notification.OpportunityID;
+            new_message.OpportunityName = opportunity_notification.OpportunityName;
+            new_message.CategoryName    = opportunity_notification.CategoryName;
+
+            _messages.push(new_message);
+        });
+
+        // The clarification messages will be interesting because they are derived from the clarifications that we got from server
+        self.internal_json.ClarificationNotifications.forEach(function(clarification_notification)
+        {
+            var new_message = {};
+            
+
+            console.log(clarification_notification);
+
+            var clarification;
+            self.clarifications.forEach(function(c)
+            {
+                if(c.ClarificationID == clarification_notification.ClarificationID)
+                {
+                    console.log("Setting clarification: " + c.ClarificationID);
+                    clarification = c;
+                }
+            });
+
+            
+            new_message.Type = "ClarificationNotification";
+            new_message.TimeReceived = clarification.CreatedDate;
+            new_message.Body = clarification.question;
+            new_message.Status = clarification_notification.Status;
+            new_message.Answer = clarification.answer;
+            new_message.ClarificationID = clarification.ClarificationID;
+            new_message.ProposalID = clarification.ProposalID;
+
+            _messages.push(new_message);
+        });
+
+
+        return _messages;
+    }
+
+    get numUnread()
+    {
+        var unread = 0;
+
+        this.internal_json.ClarificationNotifications.forEach(function(target)
+        {
+            if(target.Status == "unread")
+                unread++;
+        });
+
+        this.internal_json.OpportunityNotifications.forEach(function(target)
+        {
+            if(target.Status == "unread")
+                unread++;
+        });
+
+        return unread;
+    }
+
+    updateServer()
+    {
+        console.log("Updating server");
+        console.log(this.internal_json);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://athena.ecs.csus.edu/~wildcard/php/api/bidder/createSessionData.php");
+        xhr.onload = function(response)
+        {
+            if(xhr.status == 200)
+            {
+                console.log("Success posting: "+ xhr.response)
+            }
+            else
+            {
+                alert("Error posting json data");
+                console.log(xhr.response);
+            }
+        };
+        xhr.setRequestHeader("Content-type", "application/json");
+
+        // var formData=new FormData();
+        // formData.append('bidderid', this.bidder_id);
+        // formData.append('sessiondata', JSON.stringify(this.internal_json));
+
+        this.internal_json.time_of_last_login = getDatabaseDateStringFromDate(new Date());
+        console.log("Setting time of last login as: " + this.internal_json.time_of_last_login);
+
+        var stringified_internal_json = JSON.stringify(this.internal_json);
+        var payload = {"BidderID": this.bidder_id, "SessionData":stringified_internal_json};
+        var stringified_payload = JSON.stringify(payload);
+
+        xhr.send(stringified_payload);
+    }
+
+    // Type being "ClarificationNotification" or "OpportunityNotification"
+    // ID being either the opportunity ID or the clarification ID in the message
+    markRead(message_type, id)
+    {
+        var target_array = null;
+        if(message_type == "ClarificationNotification")
+            target_array = this.internal_json.ClarificationNotifications;
+        else if(message_type == "OpportunityNotification")
+            target_array = this.internal_json.OpportunityNotifications;
+        else
+            alert("Incorrect message_type supplied: " + message_type);
+
+        target_array.forEach(function(target)
+        {
+            console.log("Checking");
+            var current_id = null;
+            if(message_type == "ClarificationNotification")
+                current_id = target.ClarificationID;
+            else if(message_type == "OpportunityNotification")
+                current_id = target.OpportunityID;
+
+            if(current_id == id)
+            {
+                console.log("Marking " + id + " as read");
+                target.Status = "read";
+                console.log(target_array);
+            }
+        });
+
+        this.updateServer();
+    }
 }
