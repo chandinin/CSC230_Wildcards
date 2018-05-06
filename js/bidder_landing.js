@@ -25,7 +25,9 @@ $(document).ready(function(){
     $("#subscriptions-save-btn").click(function() { saveCategorySubscriptions(); });
 
     // TODO: Figure out a good way to pass bidder ID around the site
-    g_bidder_id = "1";
+    g_bidder_id = localStorage.getItem("bidderId");
+    if(g_bidder_id == null) // Our default test case
+        g_bidder_id = "1337";
     activateOpportunitiesList();
 });
 
@@ -130,8 +132,13 @@ function getCustomDateStringFromDate(date_object)
 {
     date = date_object;
     var str = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " +  date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-
+    str =  (date.getMonth() + 1) + "-" + date.getDate() + "-" + date.getFullYear() + " " +  date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
     return str;
+}
+
+function convert_db_date_to_custom(custom_date_str)
+{
+    return getCustomDateStringFromDate(parseCustomDateStringToDate(custom_date_str));
 }
 
 // returns string in format "YYYY-MM-DD HH:MM:SS"
@@ -240,6 +247,20 @@ timeRemainingCallback.start = function(cb, target_date)
     timeRemainingCallback(target_date);
 };
 
+// Inline sorts the docs based on SortOrder
+function sortOpportunityDocs(opportunities_json)
+{
+    function compare_docs(a,b) {
+      if (a.SortOrder < b.SortOrder)
+        return -1;
+      if (a.SortOrder > b.SortOrder)
+        return 1;
+      return 0;
+    }
+
+    opportunities_json.doctemplate.sort(compare_docs)
+}
+
 /**************************
  * spa-opportunities-list *
  **************************/
@@ -254,28 +275,37 @@ function activateOpportunitiesList()
 function initializeOpportunitiesList()
 {
     $.ajax({
-        url: "php/api/opportunity/read.php", 
+        // Easy as fuck, change this to 3
+        url: "php/api/opportunity/read.php?status=0", 
         success: function(opportunities_json)
         {
             opportunities = opportunities_json["opportunity"];
             num_opportunity_callbacks_left = opportunities.length;
 
             // We need to get the category name for each opportunity, via the categoryID
-            opportunities.forEach(function(opportunity)
-            {
-                $.ajax({
-                    url: "php/api/opportunity/categoryName.php?CategoryID="+opportunity.CategoryID, 
-                    success: function(category_json)
-                    {
-                        opportunity.CategoryName = category_json.Name;
-                        num_opportunity_callbacks_left--;
-
-                        if(num_opportunity_callbacks_left == 0)
-                        {
-                            populateOpportunitiesList(opportunities_json);
-                        }
+            categories = {}
+            $.ajax({
+                url: "php/api/opportunity/categoryName.php", 
+                success: function(category_json)
+                {
+                    console.log(category_json);
+                    for (i = 0; i < category_json.length; i++) {
+                        categories[category_json[i].CategoryID] = category_json[i].Name;
                     }
-                });
+
+                    console.log(categories);
+
+                    for(i = 0; i < opportunities_json["opportunity"].length; i++)
+                    {
+                        opportunities_json["opportunity"][i].CategoryName = categories[opportunities_json["opportunity"][i].CategoryID];
+                    }
+
+                    populateOpportunitiesList(opportunities_json);
+                },
+                error: function(error)
+                {
+                    console.log(error);
+                }
             });
         }
     });
@@ -305,7 +335,7 @@ function populateOpportunitiesList(opportunities_json) {
             continue;
         }
         opportunityID_textNode = document.createTextNode(opportunities[i].OpportunityID);
-        closingDate_textNode = document.createTextNode(opportunities[i].ClosingDate);
+        closingDate_textNode = document.createTextNode(convert_db_date_to_custom(opportunities[i].ClosingDate));
         category_textNode = document.createTextNode(opportunities[i].CategoryName);
         anchor   = document.createElement("a");
 
@@ -361,8 +391,8 @@ function initializeOpportunityDetail(ID) {
 function parseOpportunity(opportunity) {
     console.log("Parsing...");
     $("#Title").text(opportunity["Name"]);
-    $("#ClosingDate").text(opportunity["ClosingDate"]);
-    $("#Description").text(opportunity["Description"]);
+    $("#ClosingDate").text(convert_db_date_to_custom(opportunity["ClosingDate"]));
+    document.getElementById("Description").innerHTML = opportunity["Description"];
     $("#Category").text(opportunity.CategoryName);
 
     $("#create-proposal-btn").off();
@@ -377,6 +407,7 @@ function parseOpportunity(opportunity) {
         type: "GET",
         success: function(opp_doc_templates)
         {
+            sortOpportunityDocs(opp_doc_templates);
             console.log(opp_doc_templates);
             // TODO: Need more coverage on this URL, returning 3 byte files
             GET_FILE_URL_BASE = "php/api/doctemplate/getFile.php?doctemplateid=";
@@ -434,19 +465,22 @@ function initializeCreateProposal(opportunity_id)
     $("#proposal-save-btn").show();
     // Probably want to make this synchronous, so that we can populate the doc list then do other things
     $.ajax({
-        url: "php/api/opportunity/getDocTemplates.php?opportunityid="+opportunity_id, 
-        type: "GET",
-        success: populateOppDocTemplates,
-        async: false
-    });
-
-    $.ajax({
         url: "php/api/opportunity/read.php", 
         type: "POST",
         data: {"OpportunityID": opportunity_id},
         success: populateOppTitle,
         async: false
     });
+    $.ajax({
+        url: "php/api/opportunity/getDocTemplates.php?opportunityid="+opportunity_id, 
+        type: "GET",
+        success: populateOppDocTemplates,
+        async: false
+    });
+
+
+
+    $("#proposal-submit-btn").hide()
 
     $("#proposal-back-list-btn").off();
     $("#proposal-save-btn").off();
@@ -590,9 +624,9 @@ function getUniqueProposalID()
 
 function populateOppTitle(opportunity)
 {
-    current_opportunity_json = opportunity;
+    g_current_opportunity_json = opportunity;
     $("#opportunity-title").text("Title: " + opportunity["Name"]);
-    $("#opportunity-countdown").text("Closing Date and Time: " + opportunity["ClosingDate"]);
+    $("#opportunity-countdown").text("Closing Date and Time: " + convert_db_date_to_custom(opportunity["ClosingDate"]));
 
     // Setup our lovely countdown timer...
     //{"days":597,"hours":15,"minutes":44,"seconds":11}
@@ -623,6 +657,7 @@ function populateOppTitle(opportunity)
 
 function populateOppDocTemplates(opp_doc_templates)
 {
+    sortOpportunityDocs(opp_doc_templates);
     // TODO: Need more coverage on this URL, returning 3 byte files
     GET_FILE_URL_BASE = "php/api/doctemplate/getFile.php?doctemplateid=";
     doc_list = document.getElementById("opp-doc-templates-list");
@@ -637,7 +672,10 @@ function populateOppDocTemplates(opp_doc_templates)
     doc_templates = opp_doc_templates["doctemplate"];
     console.log("Retrieved " + doc_templates.length.toString() + " doc templates");
 
-
+    // Will be using these to calculate how many doc links need to have files in their inputs to allow a submit
+    g_current_opportunity_json.num_opp_docs = doc_templates.length;
+    g_current_opportunity_json.num_docs_uploaded = 0;
+    g_current_opportunity_json.num_docs_pending = 0; // How many docs we have in the input bins, which don't already have docs
 
     for(i = 0; i < doc_templates.length; i++)
     {
@@ -645,6 +683,9 @@ function populateOppDocTemplates(opp_doc_templates)
         // Attach the DocTemplateID to the li itself for access by other functions
         // Will undoubtedly bite me in the ass down the road...
         list_item.dataset.DocTemplateID = doc_templates[i].DocTemplateID;
+        list_item.dataset.hasDocUploaded = false;
+        list_item.dataset.hasDocPending  = false;
+        list_item.id = "doc_li_" + doc_templates[i].DocTemplateID;
 
         // Create Template download anchor
         anchor = document.createElement("a");
@@ -657,6 +698,8 @@ function populateOppDocTemplates(opp_doc_templates)
         // Create file upload element
         file_upload = document.createElement("INPUT");
         file_upload.setAttribute("type", "file");
+        file_upload.dataset.parent_list_item_id = list_item.id;
+        file_upload.addEventListener("change", allDocsSatisfied);
         
         // Create submit button
         // file_upload_button = document.createElement("a");
@@ -674,6 +717,30 @@ function populateOppDocTemplates(opp_doc_templates)
     }
 }
 
+// Will be called whenever a file is selected to be uploaded in order to determine if we can show the submit button...
+// Here we go!
+function allDocsSatisfied(current_event)
+{
+    console.log("Setting this inputs parent as hasDocPending");
+    console.log(current_event);
+    document.getElementById(current_event.target.dataset.parent_list_item_id).dataset.hasDocPending = true;
+
+    console.log("Checking if we have all docs potentially satisfied");
+    doc_list = document.getElementById("opp-doc-templates-list");
+
+    has_all_docs = true;
+
+    for(i = 0; i < doc_list.children.length; i++)
+    {
+        li = doc_list.children[i];
+        has_all_docs = has_all_docs & (li.dataset.hasDocUploaded == "true" || li.dataset.hasDocPending == "true");
+    }
+
+    console.log("Has all docs: " + String(has_all_docs));
+    if(has_all_docs)
+        $("#proposal-submit-btn").show();
+}
+
 
 
 /*********************
@@ -689,11 +756,13 @@ function initializeProposalsList()
 {
     // Fuck yeah, take that, readability!
     // Just gets all of the proposals, and then attaches the associated OpportunityName to it
-    // Christ, this operates on every single proposal...
+    // Christ, this operates on every single proposal since there is no endpoint to specify bidderID...
     $.ajax({
-        url: "php/api/proposal/read.php?bidderID="+String(g_bidder_id), 
+        url: "php/api/proposal/read.php", 
         success: function(proposals_json) {
-            num_proposal_callbacks_left = proposals_json["proposal"].length * 4; // x4 because we have to get num docs for opportunity and prop
+            proposals_json["proposal"] = proposals_json["proposal"].filter(proposal => proposal["BidderID"] == g_bidder_id)
+
+            num_proposal_callbacks_left = proposals_json["proposal"].length * 3; // x3 because we have to get num docs for opportunity and prop
 
             // For each, get number of proposal docs
             proposals_json["proposal"].forEach( function (proposal_json)
@@ -725,6 +794,7 @@ function initializeProposalsList()
                     type: "GET",
                     success: function(opp_doc_templates)
                     {
+                        sortOpportunityDocs(opp_doc_templates);
                         num_proposal_callbacks_left--; console.log("Remaining Callbacks: " +String(num_proposal_callbacks_left));
                         if(!("doctemplate" in opp_doc_templates))
                         {
@@ -742,50 +812,6 @@ function initializeProposalsList()
                     }
                 });
             });
-
-            // For each proposal, get all requests for clarification, then select the only valid one for each proposal
-            proposals_json["proposal"].forEach( function (proposal_json)
-            {
-                $.ajax({
-                    url: "php/api/proposal/getClarifications.php?proposalID="+proposal_json.ProposalID, 
-                    type: "GET",
-                    success: function(clarifications)
-                    {
-                        num_proposal_callbacks_left--; console.log("Remaining Callbacks: " +String(num_proposal_callbacks_left));
-                        if(!("clarification" in clarifications))
-                        {
-                            console.log("Got no Clarifications, returning...");
-                            return;
-                        }
-
-                        found_open_clarification = false; // flag to check after loop
-                        clarifications.clarification.forEach( function(clarification)
-                        {
-                            // PUT Selection criteria for clarification here
-                            if(clarification.answer == null && !found_open_clarification)
-                            {
-                                console.log(proposal_json.ProposalID + " has an open clarification: " + clarification.ClarificationID);
-                                proposal_json.ClarificationClosingDate = clarification.ClosingDate;
-                                found_open_clarification = true;
-                            }
-                        });
-
-                        if(!found_open_clarification)
-                        {
-                            console.log("An open clarification was not found for " + proposal_json.ProposalID);
-                        }
-
-                        
-                        if(num_proposal_callbacks_left == 0)
-                        {
-                            // Filter down all proposals till we get just ours
-                            populateProposalList(proposals_json["proposal"].filter(proposal => proposal["BidderID"] == g_bidder_id)); 
-                        }
-                    }
-                });
-            });
-
-
 
 
             // For each, get OpportunityName
@@ -813,6 +839,7 @@ function initializeProposalsList()
 
 function populateProposalList(proposals_json)
 {
+    console.log(proposals_json);
     proposals_table = document.getElementById("proposals-list-table");
     removeAllTableElements(proposals_table);
 
@@ -840,11 +867,7 @@ function populateProposalList(proposals_json)
 
         prop_status = document.createTextNode(status_name);
 
-        closingDate = null;
-        if("ClarificationClosingDate" in proposals_json[i])
-            closingDate = document.createTextNode(proposals_json[i].ClarificationClosingDate);
-        else
-            closingDate = document.createTextNode(proposals_json[i].ClosingDate);
+        closingDate = document.createTextNode(convert_db_date_to_custom(proposals_json[i].ClosingDate));
 
         anchor = document.createElement("a");
         anchor.appendChild(document.createTextNode(proposals_json[i].OpportunityName));
@@ -867,7 +890,7 @@ function populateProposalList(proposals_json)
  ********************/
 // In the spirit of lazyness, this is set by create-opportunity, so that
 // I don't have to fetch it again...
-var current_opportunity_json = null;
+var g_current_opportunity_json = null;
 
 // Gonna be a little sneaky and reuse the create-opportunity spa
 function activateEditProposal(proposal_id)
@@ -907,7 +930,7 @@ function activateEditProposal(proposal_id)
 
                     initializeCreateProposal(proposal_json.OpportunityID);
                     initializeEditProposal(proposal_json);
-                    router("#spa-create-proposal");    
+                    router("#spa-create-proposal"); // Sneaky! 
                 }
             });
         }
@@ -919,18 +942,21 @@ function initializeEditProposal(proposal_json)
     console.log("In initializeEditProposal");
 
     $("#create-proposal-header").text("Edit proposal");
-    $("#proposal-time-last-edit").text("Time last edit: " + proposal_json.LastEditDate);
+    $("#proposal-time-last-edit").text("Time last edit: " + convert_db_date_to_custom(proposal_json.LastEditDate));
     $("#proposal-back-list-btn").off();
     $("#proposal-save-btn").off();
 
     $("#proposal-back-list-btn").click(function() { router("#spa-proposals-list"); });
-    $("#proposal-save-btn").click(function() { saveProposal(proposal_json); });
+    $("#proposal-save-btn").click(function() { saveProposal(proposal_json, false); }); // the false is that this is not a final submit
+
+
+    $("#proposal-submit-btn").off();
+    $("#proposal-submit-btn").click(function() { saveProposal(proposal_json, true); }); // True for this is a final submission
 
     if("ClarificationClosingDate" in proposal_json)
     {
         console.log("OK, we found a clarification...");
-        current_opportunity_json["ClosingDate"] = proposal_json.ClarificationClosingDate;
-        $("#opportunity-countdown").text("Closing Date and Time for Clarifications: " + current_opportunity_json["ClosingDate"]); // Overwrite what create proposal had
+        console.log("But we're gonan ignore it");
     }
 
     // Setup our lovely countdown timer...
@@ -948,13 +974,6 @@ function initializeEditProposal(proposal_json)
             else
             {
                 time_remaining_text = "Time remaining on this opportunity: ";
-                // We override this if there is a correction. proposals=instructions-span is reset in the create-proposal-spa init
-                if("ClarificationClosingDate" in proposal_json)
-                {
-                    time_remaining_text = "Time remaining to make clarifications: "; 
-                    $("#proposal-instructions-span").text("Clarification(s) have been requested for your proposal. Please check your email and update the requested document(s).")
-                }
-
                 time_remaining_text += " Days: " + reasonable_time_remaining.days;
                 time_remaining_text += " Hours: " + reasonable_time_remaining.hours;
                 time_remaining_text += " Minutes: " + reasonable_time_remaining.minutes;
@@ -962,13 +981,13 @@ function initializeEditProposal(proposal_json)
                 $("#proposal-time-remaining").text(time_remaining_text);
             }
         },
-        parseCustomDateStringToDate(current_opportunity_json["ClosingDate"])
+        parseCustomDateStringToDate(g_current_opportunity_json["ClosingDate"])
     );
 
 
     doc_list = document.getElementById("opp-doc-templates-list");
 
-    // If already have files, show them
+    // If already have files, show them, as well as the final submit button
     $.ajax({
         url: "php/api/proposal/getDocsList.php?proposalid="+proposal_json.ProposalID, 
         type: "GET",
@@ -985,9 +1004,11 @@ function initializeEditProposal(proposal_json)
                 doc_map[doc.DocTemplateID] = doc;
             });
 
+            has_all_docs = true;
+
             for(i = 0; i < doc_list.children.length; i++)
             {
-                child = doc_list.children[i];
+                child = doc_list.children[i]; // Child is the list item
 
                 if(doc_map[child.dataset.DocTemplateID] != null)
                 {
@@ -997,19 +1018,37 @@ function initializeEditProposal(proposal_json)
                     prev_doc_anchor.className += "old_doc_a";
 
                     child.dataset.DocID = doc_map[child.dataset.DocTemplateID].DocID;
+                    child.dataset.hasDocUploaded = true;
 
                     doc_list.children[i].appendChild(prev_doc_anchor);
                     console.log(doc_list.children[i]);
                 }
+                else
+                {
+                    has_all_docs = false;
+                }
 
-            } 
+            }
 
+            if(has_all_docs)
+            {
+                console.log("This proposal has all docs, showing submit button");
+                $("#proposal-submit-btn").show();
+            }
+            else
+            {
+                console.log("This proposal does not have all docs, hiding submit button");
+                $("#proposal-submit-btn").hide();
+            }
         }
     });
 }
 
-function saveProposal(proposal_json)
+function saveProposal(proposal_json, is_this_submit)
 {
+
+    if(is_this_submit)
+        console.log("This is a final submission!");
 
     /************************
      * Upload the documents *
@@ -1070,6 +1109,7 @@ function saveProposal(proposal_json)
         formData.append("OpportunityID", proposal_json.OpportunityID);
         formData.append("DocTemplateID", current_child.dataset.DocTemplateID);
         formData.append('submit', "Lol this needs to be filled");
+        formData.append('final_submission', is_this_submit);
 
         var xhr = new XMLHttpRequest();
         xhr.open('POST','php/api/proposal/uploadDoc.php');
@@ -1294,17 +1334,47 @@ function initializeManageSubscriptions()
         if (xhr.status == 200) {
             var jsonArray = JSON.parse(xhr.responseText);
             console.log("Attempting");
-            $.ajax({
-                url: "php/api/bidder/getSubscriptions.php",
-                type: "POST",
-                data: {"bidderID": g_bidder_id},
-                success: function(subscriptions)
+
+            var subscriptions_xhr = new XMLHttpRequest();
+            subscriptions_xhr.open("POST", "php/api/bidder/getSubscriptions.php");
+            subscriptions_xhr.onload = function() 
+            {
+                if(xhr.status == 200)
                 {
+                    console.log(subscriptions_xhr.responseText);
+                    subscriptions = JSON.parse(subscriptions_xhr.responseText);
                     console.log(subscriptions);
+                    for(i = 0; i < jsonArray.Category.length; i++)
+                        jsonArray.Category[i].subscribed = false;
+
+                    for(i = 0; i < jsonArray.Category.length; i++)
+                    {
+                        for(j = 0; j < subscriptions.subscription.length; j++)
+                        {
+                            console.log(subscriptions.subscription[j].CategoryID + " " + jsonArray.Category[i].CategoryID);
+
+                            if(subscriptions.subscription[j].CategoryID == jsonArray.Category[i].CategoryID)
+                            {
+                                console.log(subscriptions.subscription[j].CategoryID + " is subscribed");
+                                jsonArray.Category[i].subscribed = true;
+                            }
+                        }
+                    }
+
+                    for(i = 0; i < jsonArray.Category.length; i++)
+                        console.log(jsonArray.Category[i].subscribed);
+
                     populateManageSubscriptions(jsonArray);
-                },
-                error: function(err) { console.log("Error getting your subscriptions"); populateManageSubscriptions(jsonArray);}
-            });
+                }
+                else
+                {
+                    console.log("There was an error getting your subscriptions: " + subscriptions_xhr.responseText);
+                }
+            }
+            subscriptions_xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+            subscriptions_xhr.send("bidderid="+g_bidder_id);
+
         } else {
             alert("Error getting categories");
         }
@@ -1316,10 +1386,14 @@ function initializeManageSubscriptions()
 // Todo: how to use the form data effectively...
 function populateManageSubscriptions(jsonArray)
 {
+    console.log(jsonArray);
     // Clear what we already have
     $('#subscriptions-form').empty();
 
     for(var i = jsonArray.Category.length-1; i >= 0 ; i--) {
+        if(jsonArray.Category[i].Name == "None")
+            continue;
+
         div_form_check = $("<div>", {
             class: 'form-check'
         });
@@ -1327,7 +1401,8 @@ function populateManageSubscriptions(jsonArray)
         input_checkbox = $('<input>', {
             class: 'form-check-input',
             type: 'checkbox',
-            id: jsonArray.Category[i].CategoryID
+            id: jsonArray.Category[i].CategoryID,
+            checked: jsonArray.Category[i].subscribed
         });
 
         label = $("<label>", {
@@ -1343,15 +1418,40 @@ function populateManageSubscriptions(jsonArray)
     }
 }
 
+function updateSubscriptions(bidder_id, category_id_array)
+{
+    json_payload = {"id":bidder_id};
+    json_payload.subscription = [];
+
+    for(i = 0; i < category_id_array.length; i++)
+    {
+        json_payload.subscription.push({"ID":bidder_id, "CategoryID":category_id_array[i]});
+    }
+
+    console.log("Sending the following json to category endpoint:");
+    console.log(JSON.stringify(json_payload));
+
+
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST','php/api/bidder/update.php', false);
+    xhr.onload = function() {
+        if(xhr.status == 200) {
+            console.log('File uploaded' + xhr.response);
+            alert("Your Subscriptions were succesfully updated");
+        } else {
+            alert('Error uploading file:' + xhr.response);
+        }
+    };
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send(JSON.stringify(json_payload));
+}
 
 function saveCategorySubscriptions()
 {
     checked_category_ids = getCheckedCategorySubscriptions();
 
-    // Ajax it to endpoint for updating subscriptions
-
-    alert("Your subscriptions have been IGNORED, congrats :p" + String(checked_category_ids));
-
+    updateSubscriptions(g_bidder_id, checked_category_ids);
 }
 
 
