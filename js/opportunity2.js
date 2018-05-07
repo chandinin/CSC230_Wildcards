@@ -94,7 +94,7 @@ $(document).ready(
                     uploadScoring(scoreFile,opId);
             }
             getDocTemplates(opId);
-            showOppView(opId);
+            //showOppView(opId);
         });
 
         $('#clearDocTemplates').click(function () {
@@ -292,19 +292,26 @@ xhr.send();
 }
 
 function getScoringDocLink(opId,scoreLink){
-    var scoreFile;
+    var scoreFile="#";
     var xhr = new XMLHttpRequest();
     var  url = "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/getScoringCriteria.php?OpportunityID="+opId;
     xhr.open("GET",url);
     xhr.onload = function () {
         if (xhr.status == 200) {
-            var scoreInfo = JSON.parse(xhr.responseText);
-            scoreFile = scoreInfo.Url;
+            var retval = xhr.responseText;
+            var failed = retval.includes('error');
+            if (!failed) {
+                var scoreInfo = JSON.parse(retval);
+                scoreFile = scoreInfo.Url;
+            }
+            else {
+                alert("Could not load Scoring Criteria for this record.  Please edit.");
+            }
         }
-        else {
-            alert("Unable to get ScoringCriteria.");
-            scoreFile="#";
+            else {
+            alert("Server error: Could not load Scoring Criteria for this record.");
         }
+
         console.log("scorefile= " + scoreFile);
         //$("#oppScore").html("<a href='" + scoreFile + "'>" +
             scoreLink.html("<a target='_blank' href='" + scoreFile + "'>" +
