@@ -315,7 +315,6 @@
                                     <span class="opportunity-property">Scoring Criteria: </span>
                                     <span class="opportunity-detail" id="editoppScore"></span>
                                 </div>
-                                <hr>
                                 </form>
                             </div>
                             <div class="col-12">
@@ -333,7 +332,6 @@
                                 </table>
                             </div>
 
-                            <form>
                             <div class="row">
                                 <form id="uploadDocTemplatesForm" >
                                     <div class="col-md-12">
@@ -342,13 +340,22 @@
                                             <input type="file" id="uploadMFileName" name="uploadMFileName" multiple>
                                         </div>
                                     </div>
+                                    <div class="col-sm-8">
+                                        <div class="form-group">
+                                            <div class="custom-file">
+                                                   <label class="my-1 mr-2" for="criteriaFile">New Scoring Criteria</label>
+                                                   <input id="newcriteriaFile" type="file" name="criteriaFile">
+                                               </div>
+                                           </div>
+                                    </div>
                                 </form>
                             </div>
-
-                            <div class="col-12" >
-                                <div class="form-group">
-                                    <button id="uploadDocTemplates" value="" type="button" class="btn btn-openportal">Upload</button>
-                                    <button id="clearDocTemplates" type="button" class="btn btn-openportal">Clear</button>
+                            <div class="row">
+                                <div class="col-12" >
+                                    <div class="form-group">
+                                        <button id="uploadDocTemplates" value="" type="button" class="btn btn-openportal">Upload</button>
+                                        <button id="clearDocTemplates" type="button" class="btn btn-openportal">Clear</button>
+                                    </div>
                                 </div>
                             </div>
                             </form>
@@ -539,6 +546,8 @@
 <script src="js/bootstrap3-wysihtml5.all.min.js"></script>
 <script src="jquery-ui-1.12.1.custom/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
 <script src="jqueryui-editable-1.5.1/jqueryui-editable/js/jqueryui-editable.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/additional-methods.min.js"></script>
 </body>
 
 </html>

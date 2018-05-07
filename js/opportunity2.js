@@ -26,7 +26,15 @@ $(document).ready(
 
 
         $('#saveNewOpp').click(function () {
-            saveOpportunity();
+            var validator = $("#newOppForm").validate({
+                invalidHandler: function() {
+                    console.log( validator.numberOfInvalids() + " field(s) are invalid" );
+                }
+            });
+            if(validator.form())
+                saveOpportunity();
+            else
+                alert("Please correct noted fields.");
         });
 
         $('#showNewOpp').click(function () {
@@ -79,7 +87,14 @@ $(document).ready(
             alert("uploading files...");
             opId = $('#oppNumber').text();
             uploadDocTemplates(opId);
+            if($("#newcriteriaFile").val()) {
+                console.log("uploading new criteria file");
+                var scoreFile = $('#newcriteriaFile')[0].files[0];
+                if (typeof(scoreFile) != "undefined")
+                    uploadScoring(scoreFile,opId);
+            }
             getDocTemplates(opId);
+            showOppView(opId);
         });
 
         $('#clearDocTemplates').click(function () {
@@ -267,14 +282,37 @@ var xhr = new XMLHttpRequest();
         $("#oppName").text(oppArray.Name);
         $("#oppType").text(catName);
         $("#oppDesc").html(oppArray.Description);
-        $("#oppScore").html("<a href='http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/getScoringCriteria.php?OpportunityID="+opId+"'>" +
-            "View Scoring Criteria</a>");
     } else {
         alert('Unable to locate Opportunity '+ opId);
     }
+    var scoreLink = $("#oppScore");
+    var scoreFile = getScoringDocLink(opId, scoreLink);
 };
 xhr.send();
 }
+
+function getScoringDocLink(opId,scoreLink){
+    var scoreFile;
+    var xhr = new XMLHttpRequest();
+    var  url = "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/getScoringCriteria.php?OpportunityID="+opId;
+    xhr.open("GET",url);
+    xhr.onload = function () {
+        if (xhr.status == 200) {
+            var scoreInfo = JSON.parse(xhr.responseText);
+            scoreFile = scoreInfo.Url;
+        }
+        else {
+            alert("Unable to get ScoringCriteria.");
+            scoreFile="#";
+        }
+        console.log("scorefile= " + scoreFile);
+        //$("#oppScore").html("<a href='" + scoreFile + "'>" +
+            scoreLink.html("<a target='_blank' href='" + scoreFile + "'>" +
+            "View Scoring Criteria</a>");
+    }
+    xhr.send();
+}
+
 
 var savedOpportunity;
 
@@ -293,8 +331,8 @@ function getOpportunityEdit(opId) {
             $("#editoppName").text(oppArray.Name);
             $("#editoppType").text(catName);
             $("#editoppDesc").html(oppArray.Description);
-            $("#editoppScore").html("<a href='http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/getScoringCriteria.php?OpportunityID="+opId+"'>" +
-                "View Scoring Criteria</a>");
+            var scoreLink = $("#editoppScore");
+            var scoreFile = getScoringDocLink(opId,scoreLink);
         } else {
             alert('Unable to locate Opportunity '+ opId);
         }
