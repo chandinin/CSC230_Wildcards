@@ -70,7 +70,7 @@ class Bidder
 
   function update()
   {
-    $query = "UPDATE BIDDER set bidopsid = :bidopsid, first_name = :first_name, last_name = :last_name, email =:email, password = :password, phone = :phone, middleinitial = :middleinitial, address = :address, username = :username WHERE id = :id;";
+    $query = "UPDATE BIDDER set bidopsid = :bidopsid, first_name = :first_name, last_name = :last_name, email =:email, password = :password, phone = :phone, middleinitial = :middleinitial, address = :address, username = :username, LastEditDate = NOW() WHERE id = :id;";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
@@ -93,8 +93,8 @@ class Bidder
 
   function create()
   {
-    $query = "INSERT INTO BIDDER (id, bidopsid, first_name, last_name, email, password, phone, middleinitial, address, username) " .
-             "VALUES(:id, :bidopsid, :first_name, :last_name, :email, :password, :phone, :middleinitial, :address, :username);";
+    $query = "INSERT INTO BIDDER (id, bidopsid, first_name, last_name, email, password, phone, middleinitial, address, username, CreatedDate, LastEditDate) " .
+             "VALUES(:id, :bidopsid, :first_name, :last_name, :email, :password, :phone, :middleinitial, :address, :username, NOW(), NOW());";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
