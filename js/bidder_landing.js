@@ -883,7 +883,7 @@ function populateProposalList(proposals_json)
         else if(status_name == "Clarification Received ") { status_name = "Closed for edits, Under Evaluation"; }
         else if(status_name == "Evaluation 2 Rejected") { status_name = "Rejected"; }
         else if(status_name == "Evaluation 2 Accepted") { status_name = "Closed for edits, Under Evaluation"; }
-        else if(status_name == "In Progress" || status_name == "Open") 
+        else if(status_name == "In Progress" || status_name == "Open")
         { 
             status_name = proposals_json[i].NumProposalDocs >= proposals_json[i].NumOpportunityDocs ? 
                 "Open For Edits, pending close date" : "Open For Edits, missing documents"; 
@@ -981,8 +981,16 @@ function initializeEditProposal(proposal_json)
 
     if("ClarificationClosingDate" in proposal_json)
     {
-        console.log("OK, we found a clarification...");
-        console.log("But we're gonan ignore it");
+        if(parseCustomDateStringToDate(proposal_json["ClarificationClosingDate"]) > new Date())
+        {
+            console.log("OK, we found a clarification...");
+            $("#proposal-instructions-span").text("There is an open clarification request for this proposal, please respond in 'View Your Messages'");
+        }
+        else
+        {
+            console.log("That clarification is closed");
+        }
+
     }
 
     // Setup our lovely countdown timer...
@@ -994,8 +1002,33 @@ function initializeEditProposal(proposal_json)
             {
                 timeRemainingCallback.stop();
                 time_remaining_text = "Time Remaining: This opportunity has closed, your proposal will be evaluated soon";
+                // Hack, so that we don't override the fact that there is an open clarification if the Opportunity is closed
+                if($("#proposal-instructions-span").text() != "There is an open clarification request for this proposal, please respond in 'View Your Messages'")
+                    $("#proposal-instructions-span").text("");
                 $("#proposal-save-btn").hide();
+                $("#proposal-submit-btn").hide();
                 $("#proposal-time-remaining").text(time_remaining_text);
+
+                // Gonna use this to hide all the file inputs, since the Opportunity is now closed
+                doc_list_children = document.getElementById("opp-doc-templates-list").childNodes;
+
+                for(i = 0; i < doc_list_children.length; i++)
+                {
+                    current_child = doc_list_children[i];
+                    current_input = null;
+
+                    // Search for just the input in each li via localName=input
+                    for(j = 0; j < current_child.children.length; j++)
+                    {
+                        if(current_child.children[j].localName.toLowerCase() == "input")
+                            current_input = current_child.children[j];
+                    }
+
+                    if(current_input == null)
+                        alert("Encountering weirdness with hiding the inputs");
+
+                    current_input.style.display = "none";
+                }
             }
             else
             {
@@ -1058,8 +1091,16 @@ function initializeEditProposal(proposal_json)
 
             if(has_all_docs)
             {
-                console.log("This proposal has all docs, showing submit button");
-                $("#proposal-submit-btn").show();
+                if(parseCustomDateStringToDate(g_current_opportunity_json["ClosingDate"]) > new Date() )
+                {
+                    console.log("This proposal has all docs, showing submit button");
+                    $("#proposal-submit-btn").show();
+                }
+                else
+                {
+                    console.log("this proposal is expired, not touching submit");
+                }
+
             }
             else
             {
@@ -1208,7 +1249,8 @@ function activateMessageList()
 function initializeMessageList()
 {
     removeAllTableElements(document.getElementById("messages-list-table"));
-    // Ajax call for messages associated with bidderID will go here
+
+    // Force the message center to update
     mc.updateServer();
 
     mc = new MessageCenter(populateMessageList());
@@ -1325,6 +1367,7 @@ function populateMessageDetail(message)
     $("#message-detail-response").hide();
     $("#message-detail-due-by-header").hide();
     $("#message-detail-upload").hide();
+    $("message-detail-opportunity-name-header").hide();
 
 
     if(message.Type == "ClarificationNotification")
@@ -1348,6 +1391,11 @@ function populateMessageDetail(message)
 
 function populateClarificationRequestDetail(message)
 {
+    // Show these always
+    // console.log("Show this shit as: " + message.OpportunityName);
+    $("#message-detail-opportunity-name").text(message.OpportunityName);
+    $("#message-detail-opportunity-name-header").show();
+
     if(message.Answer != null)
     {
         console.log("There is an answer associated with this Clarification");
@@ -1658,6 +1706,7 @@ class MessageCenter
 
         this.clarifications = [];
         this.opportunities = [];
+        this.all_opportunities = [];
 
         console.log(this.internal_json);
         this.time_of_last_login = parseCustomDateStringToDate(this.internal_json.time_of_last_login);
@@ -1823,6 +1872,7 @@ class MessageCenter
                                 clarifications_json.clarification.forEach(function(c)
                                 {
                                     c.ProposalID = proposal_json.ProposalID;
+                                    c.OpportunityID = proposal_json.OpportunityID;
                                     self.clarifications.push(c);
                                 });
                             }
@@ -1862,6 +1912,7 @@ class MessageCenter
                 }
             });
 
+            self.all_opportunities = internal_opportunities;
             finished_cb();
         }
 
@@ -1982,7 +2033,8 @@ class MessageCenter
 
             console.log(clarification_notification);
 
-            var clarification;
+            var clarification = null;
+            var opportunity = null;
             self.clarifications.forEach(function(c)
             {
                 if(c.ClarificationID == clarification_notification.ClarificationID)
@@ -1991,6 +2043,29 @@ class MessageCenter
                     clarification = c;
                 }
             });
+
+            self.all_opportunities.forEach(function(o)
+            {
+                if(clarification.OpportunityID == o.OpportunityID)
+                {
+                    console.log("Setting Opportunity");
+                    opportunity = o;
+                }
+            });
+
+            if(clarification == null)
+                alert("There was an issue matching this message to a clarification");
+            if(opportunity == null)
+            {
+                console.log(self.all_opportunities);
+                console.log(clarification.OpportunityID);
+                alert("There was an error matching this message to an opportunity");
+            }
+            else
+            {
+                console.log("Matched an opportunity:" + opportunity.Name);
+                console.log(opportunity);
+            }
 
             
             new_message.Type = "ClarificationNotification";
@@ -2002,6 +2077,7 @@ class MessageCenter
             new_message.ProposalID = clarification.ProposalID;
             new_message.LastEditDate = clarification.LastEditDate;
             new_message.ClosingDate = clarification.ClosingDate;
+            new_message.OpportunityName = opportunity.Name;
 
             _messages.push(new_message);
         });
