@@ -267,7 +267,7 @@ class Bidder
   {
     $NewID = "0_AGID_BDR";
 
-    $query = "SELECT ID FROM BIDDER WHERE ID LIKE '%_AGID_BDR';";
+    $query = "SELECT ID FROM BIDDER WHERE ID LIKE '%_AGID_BDR' ORDER BY ID DESC;";
     $stmt = $this->conn->prepare( $query );
 
     // execute query
