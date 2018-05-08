@@ -164,7 +164,42 @@ function showEditOpp(opId) {
 
 function saveEditOpp(opId) {
     var sortedIDs = $( "#docTemplatesBody" ).sortable( "toArray");
+    var name = $('#editoppName').text();
+    var desc = $('#editoppDesc').text();
+    var close = $('#editoppDate').text();
+    var jsonRecord =
+        {"OpportunityID": opId,
+            "ClosingDate":close,
+            "Name":name,
+            "Description":desc,
+        };
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/update.php', true);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=utf-8');  //Creates an  error
+    xhr.onload = function () {
+        if (xhr.status == 200) {
+            var retval = xhr.responseText;
+            var failed = retval.includes("failed");
+            if(!failed) {
+                updateDocTemplates(sortedIDs);
+                showEditOpp(opId);
+            }
+            else
+                alert("Failed to edit this opportunity");
+        } else {
+            alert("500: Server error saving edits to this opportunity");
+        }
+    };
+    var jsonString = JSON.stringify(jsonRecord);
+    xhr.send(jsonString);
+    console.log("Wrote Json: " + jsonString);
+
     alert("Saving changes to opportunity number " + opId);
+};
+
+function updateDocTemplates(sortedIDs) {
+    console.log("Sorted docTemplates: ") + JSON.stringify(sortedIDs);
 }
 
 function showNewOpp() {
@@ -234,6 +269,8 @@ var xhr = new XMLHttpRequest();
 xhr.send();
 }
 
+var savedOpportunity;
+
 function getOpportunityEdit(opId) {
     var xhr = new XMLHttpRequest();
     var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php?OpportunityID="+opId;
@@ -242,6 +279,7 @@ function getOpportunityEdit(opId) {
     xhr.onload = function () {
         if (xhr.status == 200) {
             var oppArray = JSON.parse(xhr.responseText);
+            savedOpportunity = oppArray;
             var catName = categoryArray.Category[oppArray.CategoryID].Name;
             $("#editoppNumber").text(oppArray.OpportunityID);
             $("#editoppDate").text(oppArray.ClosingDate);
@@ -257,6 +295,7 @@ function getOpportunityEdit(opId) {
     xhr.send();
 }
 
+var savedDocTemplates;
 function getDocTemplates(opId) {
     $('#docTemplatesBody').empty();
     var xhr = new XMLHttpRequest();
@@ -269,6 +308,7 @@ function getDocTemplates(opId) {
             if(failed)
                return;
             var docArray= JSON.parse(retval);
+            savedDocTemplates = docArray;
             var size = docArray.doctemplate.length;
             for(var i = 0; i< size; i++) {
                 var template = docArray.doctemplate[i];
@@ -281,7 +321,7 @@ function getDocTemplates(opId) {
                 var row = "<tr><td>" + title + "</td><td>" + title + "</td><td>" + "Posted Date" + "</td><td>" +
                     "Delete" + "</td></tr>";
                     */
-                var row = "<tr id='" + template.DocTemplateID + "'><td class='changeable'>" + template.DocTitle + "</td><td>" + "<a href ='" + tempUrl + "'>" +
+                var row = "<tr id='" + template.DocTemplateID + "'><td class='changeable'>" + template.DocTitle + "</td><td>" + "<a href ='" + tempUrl + "'target='_blank'>" +
                 template.DocTitle + "</a></td><td>" + "Posted Date" +
                     "</td><td>" +
                     "<button onclick=\"deleteDoc(\'"+ opId + "\'," + "\'" + template.DocTemplateID + "\')\"" +
@@ -319,8 +359,8 @@ function getDocTemplatesView(opId) {
                 var template = docArray.doctemplate[i];
                 var tempUrl = "https://docs.google.com/viewer?url=http://athena.ecs.csus.edu/~wildcard/data/files/" + template.DocTitle;
                 if (template.Url != null) {
-                    var row = "<tr><td>" + template.DocTitle + "</td><td>" + "<a href ='" + tempUrl + "'>" +
-                        template.DocTitle + "</a></td><td>" + "Posted Date" + "</td><td>temp</td></tr>";
+                    var row = "<tr><td>" + template.DocTitle + "</td><td>" + "<a href ='" + tempUrl + "' target='_blank'>" +
+                        template.DocTitle + "</a></td><td>" + "Posted Date" + "</td></tr>";
                     $('#docTemplatesBodyView').append(row);
                 }
             }
@@ -416,7 +456,7 @@ function fillOppTable(oppArray,type) {
         var opp = oppArray.opportunity[i];
         var oppDesc = opp.Description;
         if (oppDesc.length > 100)
-            oppDesc = oppDesc.substr(1, 100) + "...";
+            oppDesc = "... " + oppDesc.substr(20, 100) + "...";
         try {
             var catName = categoryArray.Category[opp.CategoryID].Name;
         }catch(err) {
@@ -562,14 +602,15 @@ function saveOpportunity() {
 
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/create.php', true);
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=utf-8');  //Creates an  error
+    //xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=utf-8');  //Creates an  error
     xhr.onload = function () {
         if (xhr.status == 200) {
             var retval = xhr.responseText;
             var failed = retval.includes("failed");
             if(!failed) {
-                uploadScoring(scoreFile,opId);
-                showEditOpp(opId);
+                if (typeof scoreFile != "undefined")
+                    uploadScoring(scoreFile,opId);
+                showOppView(opId);
             }
             else
                 alert("Failed to create new opportunity");

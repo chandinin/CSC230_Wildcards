@@ -33,6 +33,9 @@ if(json_last_error() === JSON_ERROR_NONE)
   if(isset($data->DisplayTitle) and !is_null($data->DisplayTitle))
     $doctemplate->DisplayTitle = $data->DisplayTitle; 
 
+  if(isset($data->SortOrder) and !is_null($data->SortOrder))
+    $doctemplate->SortOrder = $data->SortOrder; 
+
   if($doctemplate->update())
   {  
     echo '{';
@@ -82,6 +85,13 @@ else
       $DisplayTitle = $_POST_LowerCase["displaytitle"];
       $DisplayTitle = htmlspecialchars(strip_tags($DisplayTitle));
       $doctemplate->DisplayTitle = $DisplayTitle;
+    }
+
+    if(isSet($_POST_LowerCase["sortorder"]))
+    {
+      $SortOrder = $_POST_LowerCase["sortorder"];
+      $SortOrder = htmlspecialchars(strip_tags($SortOrder));
+      $doctemplate->SortOrder = $SortOrder;
     }
 
     if($doctemplate->update())

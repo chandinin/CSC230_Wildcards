@@ -38,7 +38,7 @@ if(isSet($_POST_LowerCase["docid"]) || isSet($_GET_LowerCase["docid"]))
 
     header("Content-length: $size");
     header("Content-type: $MimeType");
-    header("Content-Disposition: attachment; filename='" . $DocTitle . "." . "'");
+    header("Content-Disposition: attachment; filename=" . $DocTitle . "");
 
     readfile($Path);
   }

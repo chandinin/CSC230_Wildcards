@@ -5,6 +5,8 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Credentials: true");
 header('Content-Type: application/json');
 
+date_default_timezone_set('America/Tijuana');
+
 include_once '../config/Database.php';
 include_once '../objects/proposal.php';
 
@@ -36,8 +38,16 @@ if(json_last_error() === JSON_ERROR_NONE)
     $proposal->FeeScore = $data->FeeScore;
   if(isset($data->FinalTotalScore) and !is_null($data->FinalTotalScore))
     $proposal->FinalTotalScore = $data->FinalTotalScore;
+  if(isset($data->ContractAwarded) and !is_null($data->ContractAwarded))
+    $proposal->ContractAwarded = $data->ContractAwarded;
 
-  if($proposal->update())
+  $OpportunityID = $proposal->OpportunityID;
+  if($proposal->HasOpportunityExpired($OpportunityID))
+  {
+    $proposal->SetOpportunityStatusToClosed($OpportunityID);
+    $proposal->RejectAllProposals($OpportunityID);
+  }
+  else if($proposal->update())
   {  
       if(isset($proposal->OpportunityID))
         $OpportunityID = $proposal->OpportunityID;
@@ -108,8 +118,6 @@ else
       $Status = $_POST_LowerCase["status"];
       $Status = htmlspecialchars(strip_tags($Status));
       $proposal->Status =$Status;
-
-      echo "$Status = " . $Status . " ";
     }
 
     if(isSet($_POST_LowerCase["technicalscore"]))
@@ -133,7 +141,20 @@ else
       $proposal->FinalTotalScore =$FinalTotalScore;
     }
 
-    if($proposal->update())
+    if(isSet($_POST_LowerCase["contractawarded"]))
+    {
+      $ContractAwarded = $_POST_LowerCase["contractawarded"];
+      $ContractAwarded = htmlspecialchars(strip_tags($ContractAwarded));
+      $proposal->ContractAwarded =$ContractAwarded;
+    }
+
+    $OpportunityID = $proposal->OpportunityID;
+    if($proposal->HasOpportunityExpired($OpportunityID))
+    {
+      $proposal->SetOpportunityStatusToClosed($OpportunityID);
+      $proposal->RejectAllProposals($OpportunityID);
+    }
+    else if($proposal->update())
     {  
       if(isset($proposal->OpportunityID))
         $OpportunityID = $proposal->OpportunityID;
@@ -182,5 +203,4 @@ else
   }
 }
 ?>
-
 

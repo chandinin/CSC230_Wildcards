@@ -14,6 +14,7 @@ header('Content-Type: application/json');
 
 include_once '../config/Database.php';
 include_once '../objects/proposal.php';
+include_once '../objects/bidder.php';
 
 $_GET_LowerCase = array_change_key_case($_GET, CASE_LOWER);
 $_POST_LowerCase = array_change_key_case($_POST, CASE_LOWER);
@@ -31,45 +32,38 @@ if(isSet($_POST_LowerCase["proposalid"]) || isSet($_GET_LowerCase["proposalid"])
   //  echo ' "message" : "$ProposalID = ' . $ProposalID . '"';
   //  echo '}';
   
-  $stmt = $proposal->getDocByProposalID($ProposalID);
-  $rowCount = $stmt->rowCount();
-    
-  if($rowCount > 0)
-  {
-    $Docs_arr = array();
-    $Docs_arr["doc"] = array();
+  $proposal->selectByID($ProposalID);
 
-    while($row = $stmt->fetch(PDO::FETCH_ASSOC))
-    {
-      $Doc_arr = array(
-          "DocID" => $row['DocID'],
-          "DocTitle" => $row['DocTitle'],
-          "Description" => $row['Description'],
-          "Url" => $row['Url'],
-          "CreatedDate" => $row['CreatedDate'],
-          "LastEditDate" => $row['LastEditDate'],
-          "SortOrder" => $row['SortOrder'],
-          "DocTemplateID" => $row['DocTemplateID']
-      );
-     
-      array_push($Docs_arr["doc"], $Doc_arr);
-    }
+  if(isset($proposal->BidderID))
+  {
+    $BidderID = $proposal->BidderID;
+    $bidder = new Bidder($db);
+    $bidder->selectByBidderID($BidderID);
+
+    $bidder_arr = array(
+      "id" =>  $bidder->id,
+      "bidopsid" =>  $bidder->bidopsid,
+      "first_name" =>  $bidder->first_name,
+      "last_name" =>  $bidder->last_name,
+      "email" =>  $bidder->email,
+      //"password" =>  $bidder->password,
+      "phone" =>  $bidder->phone,
+      "middle_init" => $bidder->middle_init,
+      "address" => $bidder->address,
+      "user_name" => $bidder->user_name
+    );
 
     // make it json format
-    print_r(json_encode($Docs_arr));
+    print_r(json_encode($bidder_arr));
   }
   else
   {
-    echo '{';
-    echo ' "message" : "Sorry, there was an error retrieving your file."';
-    echo '}';
+
   }
 }
 else
 {
-  echo '{';
-  echo ' "message" : "Sorry, there was an error retrieving your file."';
-  echo '}';
+  
 }
 ?>
 
