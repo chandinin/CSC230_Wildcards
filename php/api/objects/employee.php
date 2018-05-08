@@ -55,10 +55,7 @@ class Employee
   function selectAll()
   {
     $query = "SELECT id, first_name, last_name, email, password, phone, " .
-             "middleinitial, address, username, er.Role as RoleID, r.Name as Role FROM EMPLOYEE
-        " .
-                         "left join EmployeeRole er on EMPLOYEE.ID = er.EID ".
-                         "left join Roles r on er.Role = r.RoleID;";
+             "middleinitial, address, username FROM EMPLOYEE";
 
 
     $stmt = $this->conn->prepare( $query );
