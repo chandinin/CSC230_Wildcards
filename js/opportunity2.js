@@ -76,6 +76,7 @@ $(document).ready(
         });
 
         $('#oppEditButton').click(function () {
+            $("editExistOpp")[0].reset();
             showEditOpp($("#oppNumber").text());
         });
 
@@ -94,7 +95,7 @@ $(document).ready(
                     uploadScoring(scoreFile,opId);
             }
             getDocTemplates(opId);
-            showOppView(opId);
+            //showOppView(opId);
         });
 
         $('#clearDocTemplates').click(function () {
@@ -444,7 +445,7 @@ function deleteDoc(opId, templateId) {
             alert("Failed to delete the document.");
         }
     }
-    xhr.send();
+    xhr.send(formData);
 
 }
 
