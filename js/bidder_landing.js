@@ -1,5 +1,6 @@
 // TODO: Figure out a good way to pass bidder ID around the site
-var g_bidder_id;
+var g_bidder_id = localStorage.getItem("BidderID");
+
 $(document).ready(function(){
     $("#show-list-btn").click(function() { router("#spa-opportunities-list"); });
 
@@ -23,15 +24,7 @@ $(document).ready(function(){
     // Init the save category subscriptions button
     $("#subscriptions-save-btn").click(function() { saveCategorySubscriptions(); });
 
-    // TODO: Figure out a good way to pass bidder ID around the site
-    g_bidder_id = localStorage.getItem("bidderId");
-    if(g_bidder_id == null) // Our default test case
-        g_bidder_id = "1337";
     activateOpportunitiesList();
-
-    mc = new MessageCenter();
-    mc.updateServer(); // Will report the messages we generated as well as the login time right
-    $("#num-unread-messages").text(mc.numUnread);
 });
 
 
@@ -70,7 +63,7 @@ function removeAllTableElements(table)
     var tbody = null;
     for(i = 0; i < table.children.length; i++)
     {
-        if(table.children[i].localName.toLowerCase() == "tbody") 
+        if(table.children[i].localName.toLowerCase() == "tbody")
         {
             table.children[i].innerHTML = "";
         }
@@ -80,11 +73,11 @@ function removeAllTableElements(table)
 // Blindly inserts rows into the specified table DOM node
 // Each element in rows_array is an array of nodes to be inserted into a new TR element
 function insertTableRows(rows_array, table_node)
-{    
+{
     var tbody = null;
     for(i = 0; i < table_node.children.length; i++)
     {
-        if(table_node.children[i].localName.toLowerCase() == "tbody") 
+        if(table_node.children[i].localName.toLowerCase() == "tbody")
         {
             tbody = table_node.children[i];
             break;
@@ -129,27 +122,14 @@ function insertTableRows(rows_array, table_node)
 /******************
  * Date Utilities *
  ******************/
- 
+
 // returns string in format "YYYY-MM-DD HH:MM:SS"
 function getCustomDateStringFromDate(date_object)
 {
     date = date_object;
     var str = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " +  date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-    str =  (date.getMonth() + 1) + "-" + date.getDate() + "-" + date.getFullYear() + " " +  date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-    return str;
-}
 
-function getDatabaseDateStringFromDate(date_object)
-{
-    date = date_object;
-    var str = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " +  date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-    // str =  (date.getMonth() + 1) + "-" + date.getDate() + "-" + date.getFullYear() + " " +  date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
     return str;
-}
-
-function convert_db_date_to_custom(custom_date_str)
-{
-    return getCustomDateStringFromDate(parseCustomDateStringToDate(custom_date_str));
 }
 
 // returns string in format "YYYY-MM-DD HH:MM:SS"
@@ -240,10 +220,10 @@ function isReasonableTimeNegative(reasonable_time)
 // Only one callback can be running at a given time
 function timeRemainingCallback(target_date)
 {
-    TIMEOUT_mSEC = 1000; 
+    TIMEOUT_mSEC = 1000;
     if(timeRemainingCallback.stop_flag)
         return;
-    else 
+    else
     {
         timeRemainingCallback.callback(reasonableTimeRemaining(target_date));
         timeRemainingCallback.timeout =  window.setTimeout(timeRemainingCallback, TIMEOUT_mSEC, target_date);
@@ -252,32 +232,11 @@ function timeRemainingCallback(target_date)
 
 timeRemainingCallback.stop = function() { clearTimeout(timeRemainingCallback.timeout); timeRemainingCallback.stop_flag = true; };
 timeRemainingCallback.start = function(cb, target_date)
-{ 
-    timeRemainingCallback.stop_flag = false; 
+{
+    timeRemainingCallback.stop_flag = false;
     timeRemainingCallback.callback = cb;
     timeRemainingCallback(target_date);
 };
-
-// Inline sorts the docs based on SortOrder
-function sortOpportunityDocs(doctemplate)
-{
-    console.log(doctemplate)
-    function compare_docs(a,b) {
-      if (a.SortOrder < b.SortOrder)
-        return -1;
-      if (a.SortOrder > b.SortOrder)
-        return 1;
-      return 0;
-    }
-
-    if(doctemplate != null)
-        doctemplate.sort(compare_docs);
-    else
-    {
-        console.log("The doc Template was null:");
-        console.log(doctemplate);
-    }
-}
 
 /**************************
  * spa-opportunities-list *
@@ -293,37 +252,28 @@ function activateOpportunitiesList()
 function initializeOpportunitiesList()
 {
     $.ajax({
-        // Easy as fuck, change this to 3
-        url: "php/api/opportunity/read.php?status=0", 
+        url: "php/api/opportunity/read.php",
         success: function(opportunities_json)
         {
             opportunities = opportunities_json["opportunity"];
             num_opportunity_callbacks_left = opportunities.length;
 
             // We need to get the category name for each opportunity, via the categoryID
-            categories = {}
-            $.ajax({
-                url: "php/api/opportunity/categoryName.php", 
-                success: function(category_json)
-                {
-                    console.log(category_json);
-                    for (i = 0; i < category_json.length; i++) {
-                        categories[category_json[i].CategoryID] = category_json[i].Name;
-                    }
-
-                    console.log(categories);
-
-                    for(i = 0; i < opportunities_json["opportunity"].length; i++)
+            opportunities.forEach(function(opportunity)
+            {
+                $.ajax({
+                    url: "php/api/opportunity/categoryName.php?CategoryID="+opportunity.CategoryID,
+                    success: function(category_json)
                     {
-                        opportunities_json["opportunity"][i].CategoryName = categories[opportunities_json["opportunity"][i].CategoryID];
-                    }
+                        opportunity.CategoryName = category_json.Name;
+                        num_opportunity_callbacks_left--;
 
-                    populateOpportunitiesList(opportunities_json);
-                },
-                error: function(error)
-                {
-                    console.log(error);
-                }
+                        if(num_opportunity_callbacks_left == 0)
+                        {
+                            populateOpportunitiesList(opportunities_json);
+                        }
+                    }
+                });
             });
         }
     });
@@ -353,12 +303,12 @@ function populateOpportunitiesList(opportunities_json) {
             continue;
         }
         opportunityID_textNode = document.createTextNode(opportunities[i].OpportunityID);
-        closingDate_textNode = document.createTextNode(convert_db_date_to_custom(opportunities[i].ClosingDate));
+        closingDate_textNode = document.createTextNode(opportunities[i].ClosingDate);
         category_textNode = document.createTextNode(opportunities[i].CategoryName);
         anchor   = document.createElement("a");
 
         anchor.appendChild(document.createTextNode(opportunities[i].Name));
-        anchor.onclick = (function() { 
+        anchor.onclick = (function() {
             var ID = opportunities[i].OpportunityID;
             return function() { activateOpportunityDetail(ID); };
         })();
@@ -381,20 +331,20 @@ function activateOpportunityDetail(ID)
 
 function initializeOpportunityDetail(ID) {
     // $.ajax({
-    //     url: "php/api/opportunity/read.php", 
+    //     url: "php/api/opportunity/read.php",
     //     type: "POST",
     //     data: {"OpportunityID": ID},
     //     success: parseOpportunity
     // });
 
     $.ajax({
-        url: "php/api/opportunity/read.php", 
+        url: "php/api/opportunity/read.php",
         type: "POST",
         data: {"OpportunityID": ID},
         success: function(opportunity)
         {
             $.ajax({
-                url: "php/api/opportunity/categoryName.php?CategoryID="+opportunity.CategoryID, 
+                url: "php/api/opportunity/categoryName.php?CategoryID="+opportunity.CategoryID,
                 success: function(category_json)
                 {
                     opportunity.CategoryName = category_json.Name;
@@ -409,8 +359,8 @@ function initializeOpportunityDetail(ID) {
 function parseOpportunity(opportunity) {
     console.log("Parsing...");
     $("#Title").text(opportunity["Name"]);
-    $("#ClosingDate").text(convert_db_date_to_custom(opportunity["ClosingDate"]));
-    document.getElementById("Description").innerHTML = opportunity["Description"];
+    $("#ClosingDate").text(opportunity["ClosingDate"]);
+    $("#Description").text(opportunity["Description"]);
     $("#Category").text(opportunity.CategoryName);
 
     $("#create-proposal-btn").off();
@@ -421,7 +371,7 @@ function parseOpportunity(opportunity) {
      * Populate associated documents for Opportunity *
      *************************************************/
      $.ajax({
-        url: "php/api/opportunity/getDocTemplates.php?opportunityid="+opportunity.OpportunityID, 
+        url: "php/api/opportunity/getDocTemplates.php?opportunityid="+opportunity.OpportunityID,
         type: "GET",
         success: function(opp_doc_templates)
         {
@@ -438,7 +388,6 @@ function parseOpportunity(opportunity) {
                 return;
             }
 
-            sortOpportunityDocs(opp_doc_templates.doctemplate);
             doc_templates = opp_doc_templates["doctemplate"];
             console.log("Retrieved " + doc_templates.length.toString() + " doc templates");
 
@@ -453,16 +402,14 @@ function parseOpportunity(opportunity) {
                 else
                     anchor.href = "google.com";
 
-                if(doc_templates[i].DisplayTitle == null)
-                    anchor.appendChild(document.createTextNode(doc_templates[i].DocTitle));
-                else
-                    anchor.appendChild(document.createTextNode(doc_templates[i].DisplayTitle));
+                anchor.appendChild(document.createTextNode(doc_templates[i].DocTitle));
+
                 // Attach all elements to the list_item
                 list_item.appendChild(anchor);
                 doc_list.appendChild(list_item);
             }
 
-            console.log("Done..."); 
+            console.log("Done...");
         }
     });
 
@@ -485,22 +432,19 @@ function initializeCreateProposal(opportunity_id)
     $("#proposal-save-btn").show();
     // Probably want to make this synchronous, so that we can populate the doc list then do other things
     $.ajax({
-        url: "php/api/opportunity/read.php", 
-        type: "POST",
-        data: {"OpportunityID": opportunity_id},
-        success: populateOppTitle,
-        async: false
-    });
-    $.ajax({
-        url: "php/api/opportunity/getDocTemplates.php?opportunityid="+opportunity_id, 
+        url: "php/api/opportunity/getDocTemplates.php?opportunityid="+opportunity_id,
         type: "GET",
         success: populateOppDocTemplates,
         async: false
     });
 
-
-
-    $("#proposal-submit-btn").hide()
+    $.ajax({
+        url: "php/api/opportunity/read.php",
+        type: "POST",
+        data: {"OpportunityID": opportunity_id},
+        success: populateOppTitle,
+        async: false
+    });
 
     $("#proposal-back-list-btn").off();
     $("#proposal-save-btn").off();
@@ -536,8 +480,8 @@ function saveNewProposal(opportunity_id)
 
     console.log(new_proposal_json);
 
-    $.ajax({    
-        url: "php/api/proposal/create.php", 
+    $.ajax({
+        url: "php/api/proposal/create.php",
         type: "POST",
         data: new_proposal_json,
         success: function(resp) { console.log(resp); proposal_create_success = false; },
@@ -627,7 +571,7 @@ function getUniqueProposalID()
     var used_IDs = [];
 
     // $.ajax({
-    //     url: "php/api/opportunity/read.php", 
+    //     url: "php/api/opportunity/read.php",
     //     type: "POST",
     //     data: {"OpportunityID": opportunity_id},
     //     success: function(results) {
@@ -644,9 +588,9 @@ function getUniqueProposalID()
 
 function populateOppTitle(opportunity)
 {
-    g_current_opportunity_json = opportunity;
+    current_opportunity_json = opportunity;
     $("#opportunity-title").text("Title: " + opportunity["Name"]);
-    $("#opportunity-countdown").text("Closing Date and Time: " + convert_db_date_to_custom(opportunity["ClosingDate"]));
+    $("#opportunity-countdown").text("Closing Date and Time: " + opportunity["ClosingDate"]);
 
     // Setup our lovely countdown timer...
     //{"days":597,"hours":15,"minutes":44,"seconds":11}
@@ -677,9 +621,7 @@ function populateOppTitle(opportunity)
 
 function populateOppDocTemplates(opp_doc_templates)
 {
-    console.log("populateOppDocTemplates: " + String(opp_doc_templates));
-    sortOpportunityDocs(opp_doc_templates.doctemplate);
-
+    // TODO: Need more coverage on this URL, returning 3 byte files
     GET_FILE_URL_BASE = "php/api/doctemplate/getFile.php?doctemplateid=";
     doc_list = document.getElementById("opp-doc-templates-list");
     doc_list.innerHTML = ""; // Clear what we may already have there
@@ -693,10 +635,7 @@ function populateOppDocTemplates(opp_doc_templates)
     doc_templates = opp_doc_templates["doctemplate"];
     console.log("Retrieved " + doc_templates.length.toString() + " doc templates");
 
-    // Will be using these to calculate how many doc links need to have files in their inputs to allow a submit
-    g_current_opportunity_json.num_opp_docs = doc_templates.length;
-    g_current_opportunity_json.num_docs_uploaded = 0;
-    g_current_opportunity_json.num_docs_pending = 0; // How many docs we have in the input bins, which don't already have docs
+
 
     for(i = 0; i < doc_templates.length; i++)
     {
@@ -704,9 +643,6 @@ function populateOppDocTemplates(opp_doc_templates)
         // Attach the DocTemplateID to the li itself for access by other functions
         // Will undoubtedly bite me in the ass down the road...
         list_item.dataset.DocTemplateID = doc_templates[i].DocTemplateID;
-        list_item.dataset.hasDocUploaded = false;
-        list_item.dataset.hasDocPending  = false;
-        list_item.id = "doc_li_" + doc_templates[i].DocTemplateID;
 
         // Create Template download anchor
         anchor = document.createElement("a");
@@ -714,19 +650,12 @@ function populateOppDocTemplates(opp_doc_templates)
             anchor.href = doc_templates[i].Url.replace("https://athena.ecs.csus.edu/~wildcard/", "");
         else
             anchor.href = "google.com";
-
-        // Use DocTitle if DisplayTitle was not set
-        if(doc_templates[i].DisplayTitle == null)
-            anchor.appendChild(document.createTextNode(doc_templates[i].DocTitle));
-        else
-            anchor.appendChild(document.createTextNode(doc_templates[i].DisplayTitle));
+        anchor.appendChild(document.createTextNode(doc_templates[i].DocTitle));
 
         // Create file upload element
         file_upload = document.createElement("INPUT");
         file_upload.setAttribute("type", "file");
-        file_upload.dataset.parent_list_item_id = list_item.id;
-        file_upload.addEventListener("change", allDocsSatisfied);
-        
+
         // Create submit button
         // file_upload_button = document.createElement("a");
         // file_upload_button.classList.add('btn');
@@ -741,30 +670,6 @@ function populateOppDocTemplates(opp_doc_templates)
 
         doc_list.appendChild(list_item);
     }
-}
-
-// Will be called whenever a file is selected to be uploaded in order to determine if we can show the submit button...
-// Here we go!
-function allDocsSatisfied(current_event)
-{
-    console.log("Setting this inputs parent as hasDocPending");
-    console.log(current_event);
-    document.getElementById(current_event.target.dataset.parent_list_item_id).dataset.hasDocPending = true;
-
-    console.log("Checking if we have all docs potentially satisfied");
-    doc_list = document.getElementById("opp-doc-templates-list");
-
-    has_all_docs = true;
-
-    for(i = 0; i < doc_list.children.length; i++)
-    {
-        li = doc_list.children[i];
-        has_all_docs = has_all_docs & (li.dataset.hasDocUploaded == "true" || li.dataset.hasDocPending == "true");
-    }
-
-    console.log("Has all docs: " + String(has_all_docs));
-    if(has_all_docs)
-        $("#proposal-submit-btn").show();
 }
 
 
@@ -782,19 +687,17 @@ function initializeProposalsList()
 {
     // Fuck yeah, take that, readability!
     // Just gets all of the proposals, and then attaches the associated OpportunityName to it
-    // Christ, this operates on every single proposal since there is no endpoint to specify bidderID...
+    // Christ, this operates on every single proposal...
     $.ajax({
-        url: "php/api/proposal/read.php", 
+        url: "php/api/proposal/read.php?bidderID="+String(g_bidder_id),
         success: function(proposals_json) {
-            proposals_json["proposal"] = proposals_json["proposal"].filter(proposal => proposal["BidderID"] == g_bidder_id)
-
-            num_proposal_callbacks_left = proposals_json["proposal"].length * 3; // x3 because we have to get num docs for opportunity and prop
+            num_proposal_callbacks_left = proposals_json["proposal"].length * 4; // x4 because we have to get num docs for opportunity and prop
 
             // For each, get number of proposal docs
             proposals_json["proposal"].forEach( function (proposal_json)
             {
                 $.ajax({
-                    url: "php/api/proposal/getDocsList.php?proposalid="+proposal_json.ProposalID, 
+                    url: "php/api/proposal/getDocsList.php?proposalid="+proposal_json.ProposalID,
                     type: "GET",
                     success: function(proposal_docs_json)
                     {
@@ -802,11 +705,11 @@ function initializeProposalsList()
                         docs = proposal_docs_json.doc;
                         proposal_json.NumProposalDocs = (docs == null ? 0 : docs.length);
 
-                        
+
                         if(num_proposal_callbacks_left == 0)
                         {
                             // Filter down all proposals till we get just ours
-                            populateProposalList(proposals_json["proposal"].filter(proposal => proposal["BidderID"] == g_bidder_id)); 
+                            populateProposalList(proposals_json["proposal"].filter(proposal => proposal["BidderID"] == g_bidder_id));
                         }
                     }
                 });
@@ -816,7 +719,7 @@ function initializeProposalsList()
             proposals_json["proposal"].forEach( function (proposal_json)
             {
                 $.ajax({
-                    url: "php/api/opportunity/getDocTemplates.php?opportunityid="+proposal_json.OpportunityID, 
+                    url: "php/api/opportunity/getDocTemplates.php?opportunityid="+proposal_json.OpportunityID,
                     type: "GET",
                     success: function(opp_doc_templates)
                     {
@@ -826,25 +729,68 @@ function initializeProposalsList()
                             console.log("Got no doc templates, returning...");
                             return;
                         }
-                        sortOpportunityDocs(opp_doc_templates.doctemplate);
                         doc_templates = opp_doc_templates["doctemplate"];
                         proposal_json.NumOpportunityDocs = doc_templates.length;
-                        
+
                         if(num_proposal_callbacks_left == 0)
                         {
                             // Filter down all proposals till we get just ours
-                            populateProposalList(proposals_json["proposal"].filter(proposal => proposal["BidderID"] == g_bidder_id)); 
+                            populateProposalList(proposals_json["proposal"].filter(proposal => proposal["BidderID"] == g_bidder_id));
+                        }
+                    }
+                });
+            });
+
+            // For each proposal, get all requests for clarification, then select the only valid one for each proposal
+            proposals_json["proposal"].forEach( function (proposal_json)
+            {
+                $.ajax({
+                    url: "php/api/proposal/getClarifications.php?proposalID="+proposal_json.ProposalID,
+                    type: "GET",
+                    success: function(clarifications)
+                    {
+                        num_proposal_callbacks_left--; console.log("Remaining Callbacks: " +String(num_proposal_callbacks_left));
+                        if(!("clarification" in clarifications))
+                        {
+                            console.log("Got no Clarifications, returning...");
+                            return;
+                        }
+
+                        found_open_clarification = false; // flag to check after loop
+                        clarifications.clarification.forEach( function(clarification)
+                        {
+                            // PUT Selection criteria for clarification here
+                            if(clarification.answer == null && !found_open_clarification)
+                            {
+                                console.log(proposal_json.ProposalID + " has an open clarification: " + clarification.ClarificationID);
+                                proposal_json.ClarificationClosingDate = clarification.ClosingDate;
+                                found_open_clarification = true;
+                            }
+                        });
+
+                        if(!found_open_clarification)
+                        {
+                            console.log("An open clarification was not found for " + proposal_json.ProposalID);
+                        }
+
+
+                        if(num_proposal_callbacks_left == 0)
+                        {
+                            // Filter down all proposals till we get just ours
+                            populateProposalList(proposals_json["proposal"].filter(proposal => proposal["BidderID"] == g_bidder_id));
                         }
                     }
                 });
             });
 
 
+
+
             // For each, get OpportunityName
             proposals_json["proposal"].forEach( function (proposal_json)
             {
                 $.ajax({
-                    url: "php/api/opportunity/read.php?opportunityid="+proposal_json["OpportunityID"], 
+                    url: "php/api/opportunity/read.php?opportunityid="+proposal_json["OpportunityID"],
                     success: function(opportunity_json) {
                         proposal_json["OpportunityName"] = opportunity_json["Name"];
                         proposal_json["ClosingDate"] = opportunity_json["ClosingDate"];
@@ -853,7 +799,7 @@ function initializeProposalsList()
                         if(num_proposal_callbacks_left == 0)
                         {
                             // Filter down all proposals till we get just ours
-                            populateProposalList(proposals_json["proposal"].filter(proposal => proposal["BidderID"] == g_bidder_id)); 
+                            populateProposalList(proposals_json["proposal"].filter(proposal => proposal["BidderID"] == g_bidder_id));
                         }
                     }
                 });
@@ -865,7 +811,6 @@ function initializeProposalsList()
 
 function populateProposalList(proposals_json)
 {
-    console.log(proposals_json);
     proposals_table = document.getElementById("proposals-list-table");
     removeAllTableElements(proposals_table);
 
@@ -884,20 +829,24 @@ function populateProposalList(proposals_json)
         else if(status_name == "Evaluation 2 Rejected") { status_name = "Rejected"; }
         else if(status_name == "Evaluation 2 Accepted") { status_name = "Closed for edits, Under Evaluation"; }
         else if(status_name == "In Progress" || status_name == "Open")
-        { 
-            status_name = proposals_json[i].NumProposalDocs >= proposals_json[i].NumOpportunityDocs ? 
-                "Open For Edits, pending close date" : "Open For Edits, missing documents"; 
+        {
+            status_name = proposals_json[i].NumProposalDocs >= proposals_json[i].NumOpportunityDocs ?
+                "Open For Edits, pending close date" : "Open For Edits, missing documents";
         }
         else {status_name = "UNKNOWN STATUS MAPPING: " + status_name; }
-        
+
 
         prop_status = document.createTextNode(status_name);
 
-        closingDate = document.createTextNode(convert_db_date_to_custom(proposals_json[i].ClosingDate));
+        closingDate = null;
+        if("ClarificationClosingDate" in proposals_json[i])
+            closingDate = document.createTextNode(proposals_json[i].ClarificationClosingDate);
+        else
+            closingDate = document.createTextNode(proposals_json[i].ClosingDate);
 
         anchor = document.createElement("a");
         anchor.appendChild(document.createTextNode(proposals_json[i].OpportunityName));
-        anchor.onclick = (function() { 
+        anchor.onclick = (function() {
 
             var ID = proposals_json[i].ProposalID;
             return function() { activateEditProposal(ID); };
@@ -916,18 +865,18 @@ function populateProposalList(proposals_json)
  ********************/
 // In the spirit of lazyness, this is set by create-opportunity, so that
 // I don't have to fetch it again...
-var g_current_opportunity_json = null;
+var current_opportunity_json = null;
 
 // Gonna be a little sneaky and reuse the create-opportunity spa
 function activateEditProposal(proposal_id)
 {
     $.ajax({
-        url: "php/api/proposal/read.php?proposalid="+proposal_id, 
+        url: "php/api/proposal/read.php?proposalid="+proposal_id,
         type: "GET",
         success: function(proposal_json)
         {
             $.ajax({
-                url: "php/api/proposal/getClarifications.php?proposalID="+proposal_json.ProposalID, 
+                url: "php/api/proposal/getClarifications.php?proposalID="+proposal_json.ProposalID,
                 type: "GET",
                 success: function(clarifications)
                 {
@@ -956,7 +905,7 @@ function activateEditProposal(proposal_id)
 
                     initializeCreateProposal(proposal_json.OpportunityID);
                     initializeEditProposal(proposal_json);
-                    router("#spa-create-proposal"); // Sneaky! 
+                    router("#spa-create-proposal");
                 }
             });
         }
@@ -968,29 +917,18 @@ function initializeEditProposal(proposal_json)
     console.log("In initializeEditProposal");
 
     $("#create-proposal-header").text("Edit proposal");
-    $("#proposal-time-last-edit").text("Time last edit: " + convert_db_date_to_custom(proposal_json.LastEditDate));
+    $("#proposal-time-last-edit").text("Time last edit: " + proposal_json.LastEditDate);
     $("#proposal-back-list-btn").off();
     $("#proposal-save-btn").off();
 
     $("#proposal-back-list-btn").click(function() { router("#spa-proposals-list"); });
-    $("#proposal-save-btn").click(function() { saveProposal(proposal_json, false); }); // the false is that this is not a final submit
-
-
-    $("#proposal-submit-btn").off();
-    $("#proposal-submit-btn").click(function() { saveProposal(proposal_json, true); }); // True for this is a final submission
+    $("#proposal-save-btn").click(function() { saveProposal(proposal_json); });
 
     if("ClarificationClosingDate" in proposal_json)
     {
-        if(parseCustomDateStringToDate(proposal_json["ClarificationClosingDate"]) > new Date())
-        {
-            console.log("OK, we found a clarification...");
-            $("#proposal-instructions-span").text("There is an open clarification request for this proposal, please respond in 'View Your Messages'");
-        }
-        else
-        {
-            console.log("That clarification is closed");
-        }
-
+        console.log("OK, we found a clarification...");
+        current_opportunity_json["ClosingDate"] = proposal_json.ClarificationClosingDate;
+        $("#opportunity-countdown").text("Closing Date and Time for Clarifications: " + current_opportunity_json["ClosingDate"]); // Overwrite what create proposal had
     }
 
     // Setup our lovely countdown timer...
@@ -1002,37 +940,19 @@ function initializeEditProposal(proposal_json)
             {
                 timeRemainingCallback.stop();
                 time_remaining_text = "Time Remaining: This opportunity has closed, your proposal will be evaluated soon";
-                // Hack, so that we don't override the fact that there is an open clarification if the Opportunity is closed
-                if($("#proposal-instructions-span").text() != "There is an open clarification request for this proposal, please respond in 'View Your Messages'")
-                    $("#proposal-instructions-span").text("");
                 $("#proposal-save-btn").hide();
-                $("#proposal-submit-btn").hide();
                 $("#proposal-time-remaining").text(time_remaining_text);
-
-                // Gonna use this to hide all the file inputs, since the Opportunity is now closed
-                doc_list_children = document.getElementById("opp-doc-templates-list").childNodes;
-
-                for(i = 0; i < doc_list_children.length; i++)
-                {
-                    current_child = doc_list_children[i];
-                    current_input = null;
-
-                    // Search for just the input in each li via localName=input
-                    for(j = 0; j < current_child.children.length; j++)
-                    {
-                        if(current_child.children[j].localName.toLowerCase() == "input")
-                            current_input = current_child.children[j];
-                    }
-
-                    if(current_input == null)
-                        alert("Encountering weirdness with hiding the inputs");
-
-                    current_input.style.display = "none";
-                }
             }
             else
             {
                 time_remaining_text = "Time remaining on this opportunity: ";
+                // We override this if there is a correction. proposals=instructions-span is reset in the create-proposal-spa init
+                if("ClarificationClosingDate" in proposal_json)
+                {
+                    time_remaining_text = "Time remaining to make clarifications: ";
+                    $("#proposal-instructions-span").text("Clarification(s) have been requested for your proposal. Please check your email and update the requested document(s).")
+                }
+
                 time_remaining_text += " Days: " + reasonable_time_remaining.days;
                 time_remaining_text += " Hours: " + reasonable_time_remaining.hours;
                 time_remaining_text += " Minutes: " + reasonable_time_remaining.minutes;
@@ -1040,15 +960,15 @@ function initializeEditProposal(proposal_json)
                 $("#proposal-time-remaining").text(time_remaining_text);
             }
         },
-        parseCustomDateStringToDate(g_current_opportunity_json["ClosingDate"])
+        parseCustomDateStringToDate(current_opportunity_json["ClosingDate"])
     );
 
 
     doc_list = document.getElementById("opp-doc-templates-list");
 
-    // If already have files, show them, as well as the final submit button
+    // If already have files, show them
     $.ajax({
-        url: "php/api/proposal/getDocsList.php?proposalid="+proposal_json.ProposalID, 
+        url: "php/api/proposal/getDocsList.php?proposalid="+proposal_json.ProposalID,
         type: "GET",
         success: function(proposal_docs_json)
         {
@@ -1063,11 +983,9 @@ function initializeEditProposal(proposal_json)
                 doc_map[doc.DocTemplateID] = doc;
             });
 
-            has_all_docs = true;
-
             for(i = 0; i < doc_list.children.length; i++)
             {
-                child = doc_list.children[i]; // Child is the list item
+                child = doc_list.children[i];
 
                 if(doc_map[child.dataset.DocTemplateID] != null)
                 {
@@ -1077,46 +995,19 @@ function initializeEditProposal(proposal_json)
                     prev_doc_anchor.className += "old_doc_a";
 
                     child.dataset.DocID = doc_map[child.dataset.DocTemplateID].DocID;
-                    child.dataset.hasDocUploaded = true;
 
                     doc_list.children[i].appendChild(prev_doc_anchor);
                     console.log(doc_list.children[i]);
                 }
-                else
-                {
-                    has_all_docs = false;
-                }
 
             }
 
-            if(has_all_docs)
-            {
-                if(parseCustomDateStringToDate(g_current_opportunity_json["ClosingDate"]) > new Date() )
-                {
-                    console.log("This proposal has all docs, showing submit button");
-                    $("#proposal-submit-btn").show();
-                }
-                else
-                {
-                    console.log("this proposal is expired, not touching submit");
-                }
-
-            }
-            else
-            {
-                console.log("This proposal does not have all docs, hiding submit button");
-                $("#proposal-submit-btn").hide();
-            }
         }
     });
 }
 
-function saveProposal(proposal_json, is_this_submit)
+function saveProposal(proposal_json)
 {
-    console.log("In saveProposal")
-
-    if(is_this_submit)
-        console.log("saveProposal: This is a final submission!");
 
     /************************
      * Upload the documents *
@@ -1138,7 +1029,7 @@ function saveProposal(proposal_json, is_this_submit)
 
         if(current_input == null)
         {
-            alert("saveProposal: Something terribly wrong has ocurred when trying to get a lock on the input");
+            alert("Something terribly wrong has ocurred when trying to get a lock on the input");
             return false;
         }
 
@@ -1149,27 +1040,27 @@ function saveProposal(proposal_json, is_this_submit)
 
         if(current_file == null)
         {
-            console.log("saveProposal: No file for " + current_child.dataset.DocTemplateID + ", but that's ok!");
+            console.log("No file for " + current_child.dataset.DocTemplateID + ", but that's ok!");
             continue;
         }
 
         // If we get here, we have an input element that has a file
-        console.log("saveProposal: " + current_child.dataset.DocTemplateID + " got file with name: " + current_file.name);
+        console.log(current_child.dataset.DocTemplateID + " got file with name: " + current_file.name);
 
         // Need to check if there is a doc already associated with this...
         if(current_child.dataset.DocID != null)
         {
-            console.log("saveProposal: There is already a doc (" + current_child.dataset.DocID + ") associated with this DocTemplate");
-            console.log("saveProposal: Attempting to delete old document...");
+            console.log("There is already a doc (" + current_child.dataset.DocID + ") associated with this DocTemplate");
+            console.log("Attempting to delete old document...");
 
             // $.ajax({
             //     url: "",
             //     type: "GET",
             //     success: function() { console.log("Success deleting DocID"+current_child.dataset.DocID)}
             // });
-            console.log("saveProposal: TODO: Endpoint for deleting a doc/ProposalDoc");
+            console.log("TODO: Endpoint for deleting a doc/ProposalDoc");
         }
-        console.log("saveProposal: Attempting to upload...");
+        console.log("Attempting to upload...");
 
         var formData=new FormData();
         formData.append('filename', current_file, current_file.name);
@@ -1177,17 +1068,14 @@ function saveProposal(proposal_json, is_this_submit)
         formData.append("OpportunityID", proposal_json.OpportunityID);
         formData.append("DocTemplateID", current_child.dataset.DocTemplateID);
         formData.append('submit', "Lol this needs to be filled");
-        formData.append('final_submission', is_this_submit); // Needs something in endpoint
 
         var xhr = new XMLHttpRequest();
-        xhr.open('POST','php/api/proposal/uploadDoc.php', false); // We're gonna make this synchronous
+        xhr.open('POST','php/api/proposal/uploadDoc.php');
         xhr.onload = function() {
             if(xhr.status == 200) {
-                console.log('saveProposal: File uploaded' + xhr.response);
+                console.log('File uploaded' + xhr.response);
             } else {
-                alert('saveProposal: Error uploading file:' + xhr.response);
-                console.log("saveProposal: There was an error, dumping what was sent:");
-                console.log("saveProposal: " + String(xhr));
+                alert('Error uploading file:' + xhr.response);
             }
         };
         xhr.send(formData);
@@ -1249,41 +1137,39 @@ function activateMessageList()
 function initializeMessageList()
 {
     removeAllTableElements(document.getElementById("messages-list-table"));
-
-    // Force the message center to update
-    mc.updateServer();
-
-    mc = new MessageCenter(populateMessageList());
+    // Ajax call for messages associated with bidderID will go here
+    populateMessageList();
 }
 
+m0 = {"type":"NewOpportunity", "time_received":getFormattedCurrentDate(), "status":"read",
+"body":"Hello, this is an automated message. There is a new opportunity available"};
+
+m1 = {"type":"Clarification", "time_received":getFormattedCurrentDate(), "status":"unread",
+"body":"Hello, this is an official request for clarification on your proposal for AnOpportunity. Please re-upload your documents."};
+
+demo_messages = [m0,m1];
 
 function populateMessageList(messages_json)
 {
-    PREVIEW_LENGTH = 90; // Number of characters in the message preview
-    messages_json = mc.messages;
+    PREVIEW_LENGTH = 40; // Number of characters in the message preview
+    messages_json = demo_messages;
     table_array = [];
 
     for(i = 0; i < messages_json.length; i++)
     {
         message_type = document.createElement("a");
-        message_type.appendChild(document.createTextNode(messages_json[i].Type));
+        message_type.appendChild(document.createTextNode(messages_json[i].type));
 
         time_received = document.createElement("a");
-        time_received.appendChild(document.createTextNode(convert_db_date_to_custom(messages_json[i].TimeReceived)) );
+        time_received.appendChild(document.createTextNode(messages_json[i].time_received) );
 
         // This will be clipped
         preview = document.createElement("a");
-        preview_text = ""
-        if(messages_json[i].Body.length > PREVIEW_LENGTH)
-            preview_text = messages_json[i].Body.substring(0,PREVIEW_LENGTH)+"...";
-        else
-            preview_text = messages_json[i].Body;
-        
-        preview.appendChild(document.createTextNode(preview_text) );
+        preview.appendChild(document.createTextNode(messages_json[i].body.substring(0,PREVIEW_LENGTH)+"...") );
 
 
         message_status = document.createElement("a");
-        message_status.appendChild(document.createTextNode(messages_json[i].Status) );
+        message_status.appendChild(document.createTextNode(messages_json[i].status) );
 
         // Set onclick for each item in the table to activateMessageDetail for that item
         message_type.onclick = (function() {
@@ -1320,17 +1206,6 @@ function populateMessageList(messages_json)
 function activateMessageDetail(message_id)
 {
     initializeMessageDetail(message_id);
-
-    message = mc.messages[parseInt(message_id)];
-    if(message.Type == "ClarificationNotification")
-        mc.markRead("ClarificationNotification", message.ClarificationID);
-    else if(message.Type == "OpportunityNotification")
-        mc.markRead("OpportunityNotification", message.OpportunityID);
-    else
-        alert("Error marking message as read!");
-
-    $("#num-unread-messages").text(mc.numUnread);
-
     router("#spa-message-detail");
 }
 
@@ -1338,7 +1213,7 @@ function initializeMessageDetail(message_id)
 {
 
     // Ajax to get the specific message
-    populateMessageDetail(mc.messages[parseInt(message_id)]);
+    populateMessageDetail(demo_messages[parseInt(message_id)]);
 }
 
 // <h2>Message Type: <span id="message-detail-type">Message type placeholder</span></h2>
@@ -1352,184 +1227,52 @@ function initializeMessageDetail(message_id)
 function populateMessageDetail(message)
 {
 
-    // Populate all fields
-    $("#message-detail-time-received").text(convert_db_date_to_custom(message.TimeReceived));
-    $("#message-detail-type").text(message.Type);
-    $("#message-detail-body").text(message.Body);
 
-    // Hide non-essential, leave these to be shown by subroutines
-    $("#send-message-btn").hide();
-    $("#discard-message-btn").hide();
-    $("#message-detail-time-responded-header").hide();
-    $("#message-detail-back-btn").hide();
-    $("#send-message-btn").hide();
-    $("#discard-message-btn").hide();
-    $("#message-detail-response").hide();
-    $("#message-detail-due-by-header").hide();
-    $("#message-detail-upload").hide();
-    $("message-detail-opportunity-name-header").hide();
+    $("#message-detail-body").text(message.body);
 
-
-    if(message.Type == "ClarificationNotification")
-        populateClarificationRequestDetail(message);
-    else if(message.Type == "OpportunityNotification")
-        populateOpportunityNotificationDetail(message);
-    else
-        alert("error");
-
-    $("#send-message-btn").off();
-    $("#send-message-btn").click(function() 
+    if(message.status == "read")
     {
-        sendClarificationResponse(message.ProposalID, message.ClarificationID);
-        alert("Response sent successfully");
-        activateMessageList();
-    });
-
-}
-
-
-
-function populateClarificationRequestDetail(message)
-{
-    // Show these always
-    // console.log("Show this shit as: " + message.OpportunityName);
-    $("#message-detail-opportunity-name").text(message.OpportunityName);
-    $("#message-detail-opportunity-name-header").show();
-
-    if(message.Answer != null)
-    {
-        console.log("There is an answer associated with this Clarification");
         // Hide these
         $("#send-message-btn").hide();
         $("#discard-message-btn").hide();
 
         //Unhide these
         $("#message-detail-time-responded-header").show();
-        $("#message-detail-time-responded").show();
-        $("#message-detail-time-responded").text(message.LastEditDate)
         $("#message-detail-back-btn").show();
-        $("#message-detail-response").show();
 
         // Set these
-        $("#message-response-editor")[0].value = (message.Answer);
-        document.getElementById("message-response-editor").readOnly = true; 
+        // $("#message-response-editor").text("Enter you")
     }
-    else // There is no answer, will need one if closing date has not passed
+    else
     {
-        // Check if expired
-        if(message.ClosingDate != null)
-        {
-            closing_date = parseCustomDateStringToDate(message.ClosingDate);
-            if(closing_date < new Date())
-            {
-                console.log("This clarification has expired!");
-                $("#send-message-btn").hide();
-                $("#discard-message-btn").hide();
-                $("#message-detail-due-by-header").show();
-                $("#message-detail-due-by").text(convert_db_date_to_custom(message.ClosingDate));
-                document.getElementById("message-detail-due-by").style.color = "red";
-                document.getElementById("message-response-editor").readOnly = true;
-                $("#message-detail-response").show();
-                $("#message-response-editor")[0].value = "THIS CLARIFICATION HAS EXPIRED";
-
-                return;
-            }
-        }
-        
-
-
-        if(message.ClosingDate != null)
-            $("#message-detail-due-by").text(convert_db_date_to_custom(message.ClosingDate));
-        else
-            $("#message-detail-due-by").text("None");
-        document.getElementById("message-detail-due-by").style.color = "#425b83";
-        $("#message-detail-due-by-header").show();
-
-        // Have to reset for some reason
-        $("#message-response-editor")[0].value = ""; 
-        clarification_input = document.getElementById("clarification-file-input");
-        clarification_input.value = "";
-        document.getElementById("message-response-editor").readOnly = false; 
-
         // Show these
         $("#send-message-btn").show();
         $("#discard-message-btn").show();
+
+        // Hide these
+        $("#message-detail-time-responded-header").hide();
+        $("#message-detail-back-btn").hide();
+    }
+
+    if(message.type != "Clarification")
+    {
+        $("#message-detail-response").hide();
+    }
+    else
+    {
         $("#message-detail-response").show();
-        $("#message-detail-upload").show();
-    }
-}
-
-function populateOpportunityNotificationDetail(message)
-{
-    $("#send-message-btn").hide();
-    $("#discard-message-btn").hide();
-    $("#message-detail-response").hide();
-    $("#message-detail-time-responded-header").hide();
-}
-
-function getDocUrlFromID(DocID)
-{
-
-}
-
-function sendClarificationResponse(ProposalID, ClarificationID)
-{
-
-
-    doc_id = -1;
-    clarification_input = document.getElementById("clarification-file-input");
-    if(clarification_input.files.length == 1)
-    {
-        var formData=new FormData();
-        formData.append('filename', clarification_input.files[0], clarification_input.files[0].name);
-        formData.append('ProposalID', ProposalID);
-        formData.append("OpportunityID", "-1");
-        formData.append("DocTemplateID", "-1");
-        formData.append('submit', "Lol this needs to be filled");
-        formData.append('final_submission', false); // Needs something in endpoint
-
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST','php/api/proposal/uploadDoc.php', false); // We're gonna make this synchronous
-        xhr.onload = function() {
-            if(xhr.status == 200) {
-                console.log('saveProposal: File uploaded' + xhr.response);
-                console.log(JSON.parse(xhr.response));
-                doc_id = JSON.parse(xhr.response).DocID;
-            } else {
-                alert('saveProposal: Error uploading file:' + xhr.response);
-                console.log("saveProposal: There was an error, dumping what was sent:");
-                console.log("saveProposal: " + String(xhr));
-            }
-        };
-        xhr.send(formData);
     }
 
+    // Populate all fields
+    $("#message-detail-time-received").text(message.time_received);
+    $("#message-detail-type").text(message.type);
 
-
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "php/api/proposal/updateClarification.php");
-    xhr.onload = function(response)
-    {
-        if(xhr.status == 200)
-        {
-            console.log("succesfully sent clarification response");
-            console.log(xhr.response);
-        }
-        else
-        {
-            console.log("Error sendClarificationResponse");
-            console.log(xhr.response);
-        }
-    }
-    xhr.setRequestHeader("Content-type", "application/json");
-    answer = $("#message-response-editor")[0].value;
-    request_json = {"ProposalID":ProposalID, "ClarificationID":ClarificationID, "answer":answer, "DocID":String(doc_id)};
-    xhr.send(JSON.stringify(request_json));
 }
+
 
 /****************************
  * spa-manage-subscriptions *
- ****************************/ 
+ ****************************/
 
 
 
@@ -1549,46 +1292,17 @@ function initializeManageSubscriptions()
         if (xhr.status == 200) {
             var jsonArray = JSON.parse(xhr.responseText);
             console.log("Attempting");
-
-            var subscriptions_xhr = new XMLHttpRequest();
-            subscriptions_xhr.open("POST", "php/api/bidder/getSubscriptions.php");
-            subscriptions_xhr.onload = function() 
-            {
-                if(subscriptions_xhr.status == 200)
+            $.ajax({
+                url: "php/api/bidder/getSubscriptions.php",
+                type: "POST",
+                data: {"bidderID": g_bidder_id},
+                success: function(subscriptions)
                 {
-                    console.log(subscriptions_xhr.responseText);
-                    subscriptions = JSON.parse(subscriptions_xhr.responseText);
                     console.log(subscriptions);
-                    for(i = 0; i < jsonArray.Category.length; i++)
-                        jsonArray.Category[i].subscribed = false;
-
-                    for(i = 0; i < jsonArray.Category.length; i++)
-                    {
-                        for(j = 0; j < subscriptions.subscription.length; j++)
-                        {
-                            console.log(subscriptions.subscription[j].CategoryID + " " + jsonArray.Category[i].CategoryID);
-
-                            if(subscriptions.subscription[j].CategoryID == jsonArray.Category[i].CategoryID)
-                            {
-                                console.log(subscriptions.subscription[j].CategoryID + " is subscribed");
-                                jsonArray.Category[i].subscribed = true;
-                            }
-                        }
-                    }
-
-                    for(i = 0; i < jsonArray.Category.length; i++)
-                        console.log(jsonArray.Category[i].subscribed);
-
                     populateManageSubscriptions(jsonArray);
-                }
-                else
-                {
-                    console.log("There was an error getting your subscriptions: " + subscriptions_xhr.responseText);
-                }
-            }
-            subscriptions_xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            subscriptions_xhr.send("bidderid="+g_bidder_id);
-
+                },
+                error: function(err) { console.log("Error getting your subscriptions"); populateManageSubscriptions(jsonArray);}
+            });
         } else {
             alert("Error getting categories");
         }
@@ -1600,14 +1314,10 @@ function initializeManageSubscriptions()
 // Todo: how to use the form data effectively...
 function populateManageSubscriptions(jsonArray)
 {
-    console.log(jsonArray);
     // Clear what we already have
     $('#subscriptions-form').empty();
 
     for(var i = jsonArray.Category.length-1; i >= 0 ; i--) {
-        if(jsonArray.Category[i].Name == "None")
-            continue;
-
         div_form_check = $("<div>", {
             class: 'form-check'
         });
@@ -1615,8 +1325,7 @@ function populateManageSubscriptions(jsonArray)
         input_checkbox = $('<input>', {
             class: 'form-check-input',
             type: 'checkbox',
-            id: jsonArray.Category[i].CategoryID,
-            checked: jsonArray.Category[i].subscribed
+            id: jsonArray.Category[i].CategoryID
         });
 
         label = $("<label>", {
@@ -1632,40 +1341,15 @@ function populateManageSubscriptions(jsonArray)
     }
 }
 
-function updateSubscriptions(bidder_id, category_id_array)
-{
-    json_payload = {"id":bidder_id};
-    json_payload.subscription = [];
-
-    for(i = 0; i < category_id_array.length; i++)
-    {
-        json_payload.subscription.push({"ID":bidder_id, "CategoryID":category_id_array[i]});
-    }
-
-    console.log("Sending the following json to category endpoint:");
-    console.log(JSON.stringify(json_payload));
-
-
-
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST','php/api/bidder/update.php', false);
-    xhr.onload = function() {
-        if(xhr.status == 200) {
-            console.log('File uploaded' + xhr.response);
-            alert("Your Subscriptions were succesfully updated");
-        } else {
-            alert('Error uploading file:' + xhr.response);
-        }
-    };
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.send(JSON.stringify(json_payload));
-}
 
 function saveCategorySubscriptions()
 {
     checked_category_ids = getCheckedCategorySubscriptions();
 
-    updateSubscriptions(g_bidder_id, checked_category_ids);
+    // Ajax it to endpoint for updating subscriptions
+
+    alert("Your subscriptions have been IGNORED, congrats :p" + String(checked_category_ids));
+
 }
 
 
@@ -1679,496 +1363,4 @@ function getCheckedCategorySubscriptions()
     })
 
     return selected_categories;
-}
-
-// Christ why isn't this included
-function isValidJSON(str) {
-    try {
-        JSON.parse(str);
-    } catch (e) {
-        return false;
-    }
-    return true;
-}
-
-// Messages are not saves on backend, it is the notifications that are saved. Messages are generated on the fly
-DEFAULT_NOTIFICATION_BODY = "There is a new Opportunity available"; // TODO: better
-class MessageCenter
-{
-
-    constructor(done_callback)
-    {
-        var self = this;
-        console.log("MessageCenter: constructing");
-        this.bidder_id = g_bidder_id;
-        this.internal_json = {};
-        this.fetchJSON();
-
-        this.clarifications = [];
-        this.opportunities = [];
-        this.all_opportunities = [];
-
-        console.log(this.internal_json);
-        this.time_of_last_login = parseCustomDateStringToDate(this.internal_json.time_of_last_login);
-
-        var num_callbacks_left = 2;
-        this.fetchClarifications(function()
-        {
-            console.log("Clarifications fetch done");
-            self.updateClarifications();
-
-            num_callbacks_left--;
-            if(num_callbacks_left == 0 && done_callback != null)
-                done_callback();
-        });
-
-
-        this.fetchOpportunities(function()
-        {
-            console.log("Opportunities fetch done");
-            self.updateNotifications();
-
-            num_callbacks_left--;
-            if(num_callbacks_left == 0 && done_callback != null)
-                done_callback();
-        });
-        // Fetch internal_json from backend
-        // using session var for now
-    }
-
-    fetchJSON()
-    {
-        var self = this;
-        console.log("fetching json");
-
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "http://athena.ecs.csus.edu/~wildcard/php/api/bidder/readSessionData.php?bidderid="+this.bidder_id, false);
-        xhr.onload = function(response)
-        {
-            if(xhr.status == 200)
-            {
-                console.log("Success getting json payload");
-                var json_payload = xhr.response;
-                try {
-                    var j = JSON.parse(json_payload);
-
-                    j = JSON.parse(j.SessionData);
-                    console.log(j);
-
-                    self.internal_json = j;
-                    console.log("succesfully parsed JSON");
-                } catch (e) {
-                    console.log("UNsuccesfully parsed JSON")
-                    self.internal_json = null;
-                }
-            }
-            else
-            {
-                alert("Error posting json data");
-                console.log(xhr.response);
-            }
-        }
-        xhr.send();
-
-        if(self.internal_json == null)
-        {
-            console.log("Internal json was null, seeding");
-            self.seedInternalJSON();
-        }
-        else
-        {
-            console.log("Got internal json");
-        }
-    }
-
-    seedInternalJSON()
-    {
-        console.log("seeding internal json");
-
-        var last_login = new Date();
-        last_login.setYear(1994);
-
-        this.internal_json = {
-            "time_of_last_login": getDatabaseDateStringFromDate(last_login),
-            "OpportunityNotifications": [],
-            "ClarificationNotifications": []
-        }
-
-        console.log("Done seeding");
-    }
-
-    // Need to filter based on subscribed categories, attach OpportunityName and CategoryName
-    updateNotifications()
-    {
-        var self = this;
-        console.log("updating notifications");
-        this.opportunities.forEach(function(opportunity)
-        {
-            var opp_last_edit_date = parseCustomDateStringToDate(opportunity.LastEditDate);
-
-            if(opp_last_edit_date > self.time_of_last_login)
-            {
-                console.log("Found a new notification:" + opportunity.Name);
-                var new_opportunity_notification = {};
-                new_opportunity_notification.TimeReceived = opportunity.LastEditDate;
-                new_opportunity_notification.Body = "There is a new Opportunity, " + "'" + opportunity.Name + "'" + " in Category: " + opportunity.CategoryName;
-                new_opportunity_notification.Status = "unread";
-                new_opportunity_notification.OpportunityID = opportunity.OpportunityID;
-                new_opportunity_notification.OpportunityName = opportunity.Name;
-                new_opportunity_notification.CategoryName    = opportunity.CategoryName;
-
-                self.internal_json.OpportunityNotifications.push(new_opportunity_notification);
-            }
-            
-        });
-    }
-
-    updateClarifications()
-    {
-        var self = this;
-
-        this.clarifications.forEach(function(clarification)
-        {
-            if(!(clarification.ClarificationID in self.internal_json.ClarificationNotifications))
-            {
-                console.log(clarification.ClarificationID + " is not in existing notifications, creating");
-                self.internal_json.ClarificationNotifications[clarification.ClarificationID] = {};
-                self.internal_json.ClarificationNotifications[clarification.ClarificationID].Status = "unread";
-
-                // This is redundant, but makes it easier
-                self.internal_json.ClarificationNotifications[clarification.ClarificationID].ClarificationID = clarification.ClarificationID;
-            }
-        });
-    }
-
-
-    fetchClarifications(finished_cb)
-    {
-        var self = this; // omfg are you serious, need this for callbacks
-
-        $.ajax({
-            url: "php/api/proposal/read.php", 
-            success: function(proposals_json) {
-                proposals_json["proposal"] = proposals_json["proposal"].filter(proposal => proposal["BidderID"] == g_bidder_id)
-                var num_proposal_callbacks_left = proposals_json["proposal"].length;
-
-                // For each proposal, get all requests for clarification, then select the only valid one for each proposal
-                proposals_json["proposal"].forEach( function (proposal_json)
-                {
-                    $.ajax({
-                        url: "php/api/proposal/getClarifications.php?proposalID="+proposal_json.ProposalID, 
-                        type: "GET",
-                        success: function(clarifications_json)
-                        {
-                            console.log(clarifications_json);
-                            num_proposal_callbacks_left--; console.log("Remaining Callbacks: " +String(num_proposal_callbacks_left));
-                            if(clarifications_json.clarification.length == 0)
-                            {
-                                console.log("Got no Clarifications for " + proposal_json.ProposalID);
-                            }
-                            else
-                            {
-                                console.log(clarifications_json.clarification);
-                                clarifications_json.clarification.forEach(function(c)
-                                {
-                                    c.ProposalID = proposal_json.ProposalID;
-                                    c.OpportunityID = proposal_json.OpportunityID;
-                                    self.clarifications.push(c);
-                                });
-                            }
-
-                            if(num_proposal_callbacks_left == 0)
-                            {
-                                finished_cb();
-                            }
-                        }
-                    });
-                });
-            }
-        });
-    }
-
-    // Will get all opportunities, need to change status ID to someting appropriate
-    // Also fetch CategoryNames and subscriptions
-    fetchOpportunities(finished_cb)
-    {
-        var self = this;
-        var internal_opportunities = []; // Push here until we can filter, then push to this.opportunities
-        var internal_subscriptions = [];
-
-        function filterOpportunities()
-        {
-            console.log("MessageCenter: filtering!");
-            console.log(internal_subscriptions);
-            console.log(internal_opportunities);
-            internal_opportunities.forEach(function(opportunity)
-            {
-                console.log("MessageCenter: " + opportunity.CategoryID);
-
-                if(internal_subscriptions.includes(opportunity.CategoryID))
-                {
-                    console.log("Category " + opportunity.CategoryID + " matches, adding");
-                    self.opportunities.push(opportunity);
-                }
-            });
-
-            self.all_opportunities = internal_opportunities;
-            finished_cb();
-        }
-
-
-        console.log("MessageCenter: fetching opportunities");
-        var self = this;
-        var num_callbacks_left = 0;
-
-
-        num_callbacks_left++;
-        $.ajax({
-            // Easy as fuck, change this to 3
-            url: "php/api/opportunity/read.php?status=0", 
-            success: function(opportunities_json)
-            {
-                console.log("MessageCenter: Getting opportunities");
-                // We need to get the category name for each opportunity, via the categoryID
-                var categories = {}
-                $.ajax({
-                    url: "php/api/opportunity/categoryName.php", 
-                    success: function(category_json)
-                    {
-                        console.log("MessageCenter: Getting categories");
-                        console.log(category_json);
-                        for (var i = 0; i < category_json.length; i++) {
-                            categories[category_json[i].CategoryID] = category_json[i].Name;
-                        }
-
-                        console.log(categories);
-
-                        for(i = 0; i < opportunities_json["opportunity"].length; i++)
-                        {
-                            opportunities_json["opportunity"][i].CategoryName = categories[opportunities_json["opportunity"][i].CategoryID];
-                        }
-
-                        var opportunities = opportunities_json["opportunity"];
-
-                        opportunities.forEach(function(opportunity)
-                        {
-                            internal_opportunities.push(opportunity);
-                        });
-
-                        num_callbacks_left--;
-                        if(num_callbacks_left == 0)
-                        {
-                            console.log("MessageCenter: Finna call filter");
-                            filterOpportunities();
-                        }
-                    },
-                    error: function(error)
-                    {
-                        console.log("MessageCenter: Error getting categories");
-                        console.log(error);
-                    }
-                });
-            }
-        });
-
-        num_callbacks_left++;
-        var subscriptions_xhr = new XMLHttpRequest();
-        subscriptions_xhr.open("POST", "php/api/bidder/getSubscriptions.php");
-        subscriptions_xhr.onload = function() 
-        {
-            console.log("MessageCenter: Subscriptions call has returned");
-            if(subscriptions_xhr.status == 200)
-            {
-                console.log(subscriptions_xhr.responseText);
-                var subscriptions_json = JSON.parse(subscriptions_xhr.responseText);
-                
-                subscriptions_json.subscription.forEach(function(sub)
-                {
-                    internal_subscriptions.push(sub.CategoryID);
-                });
-                console.log(internal_subscriptions);
-
-            }
-            else
-            {
-                console.log("MessageCenter: There was an error getting your subscriptions: " + subscriptions_xhr.responseText);
-            }
-
-            num_callbacks_left--;
-            if(num_callbacks_left == 0)
-            {
-                console.log("HERE");
-                filterOpportunities();
-            }
-        }
-        subscriptions_xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        subscriptions_xhr.send("bidderid="+g_bidder_id);
-        console.log("MessageCenter: After xhr sent");
-    }
-
-    get messages()
-    {
-        var self = this;
-        var _messages = [];
-
-        self.internal_json.OpportunityNotifications.forEach(function(opportunity_notification)
-        {
-            var new_message = {};
-            new_message.Type = "OpportunityNotification";
-            new_message.TimeReceived = opportunity_notification.TimeReceived;
-            new_message.Body = opportunity_notification.Body;
-            new_message.Status = opportunity_notification.Status;
-            new_message.OpportunityID = opportunity_notification.OpportunityID;
-            new_message.OpportunityName = opportunity_notification.OpportunityName;
-            new_message.CategoryName    = opportunity_notification.CategoryName;
-
-            _messages.push(new_message);
-        });
-
-        // The clarification messages will be interesting because they are derived from the clarifications that we got from server
-        self.internal_json.ClarificationNotifications.forEach(function(clarification_notification)
-        {
-            var new_message = {};
-            
-
-            console.log(clarification_notification);
-
-            var clarification = null;
-            var opportunity = null;
-            self.clarifications.forEach(function(c)
-            {
-                if(c.ClarificationID == clarification_notification.ClarificationID)
-                {
-                    console.log("Setting clarification: " + c.ClarificationID);
-                    clarification = c;
-                }
-            });
-
-            self.all_opportunities.forEach(function(o)
-            {
-                if(clarification.OpportunityID == o.OpportunityID)
-                {
-                    console.log("Setting Opportunity");
-                    opportunity = o;
-                }
-            });
-
-            if(clarification == null)
-                alert("There was an issue matching this message to a clarification");
-            if(opportunity == null)
-            {
-                console.log(self.all_opportunities);
-                console.log(clarification.OpportunityID);
-                alert("There was an error matching this message to an opportunity");
-            }
-            else
-            {
-                console.log("Matched an opportunity:" + opportunity.Name);
-                console.log(opportunity);
-            }
-
-            
-            new_message.Type = "ClarificationNotification";
-            new_message.TimeReceived = clarification.CreatedDate;
-            new_message.Body = clarification.question;
-            new_message.Status = clarification_notification.Status;
-            new_message.Answer = clarification.answer;
-            new_message.ClarificationID = clarification.ClarificationID;
-            new_message.ProposalID = clarification.ProposalID;
-            new_message.LastEditDate = clarification.LastEditDate;
-            new_message.ClosingDate = clarification.ClosingDate;
-            new_message.OpportunityName = opportunity.Name;
-
-            _messages.push(new_message);
-        });
-
-
-        return _messages;
-    }
-
-    get numUnread()
-    {
-        var unread = 0;
-
-        this.internal_json.ClarificationNotifications.forEach(function(target)
-        {
-            if(target.Status == "unread")
-                unread++;
-        });
-
-        this.internal_json.OpportunityNotifications.forEach(function(target)
-        {
-            if(target.Status == "unread")
-                unread++;
-        });
-
-        return unread;
-    }
-
-    updateServer()
-    {
-        console.log("Updating server");
-        console.log(this.internal_json);
-
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "http://athena.ecs.csus.edu/~wildcard/php/api/bidder/createSessionData.php");
-        xhr.onload = function(response)
-        {
-            if(xhr.status == 200)
-            {
-                console.log("Success posting: "+ xhr.response)
-            }
-            else
-            {
-                alert("Error posting json data");
-                console.log(xhr.response);
-            }
-        };
-        xhr.setRequestHeader("Content-type", "application/json");
-
-        // var formData=new FormData();
-        // formData.append('bidderid', this.bidder_id);
-        // formData.append('sessiondata', JSON.stringify(this.internal_json));
-
-        this.internal_json.time_of_last_login = getDatabaseDateStringFromDate(new Date());
-        console.log("Setting time of last login as: " + this.internal_json.time_of_last_login);
-
-        var stringified_internal_json = JSON.stringify(this.internal_json);
-        var payload = {"BidderID": this.bidder_id, "SessionData":stringified_internal_json};
-        var stringified_payload = JSON.stringify(payload);
-
-        xhr.send(stringified_payload);
-    }
-
-    // Type being "ClarificationNotification" or "OpportunityNotification"
-    // ID being either the opportunity ID or the clarification ID in the message
-    markRead(message_type, id)
-    {
-        var target_array = null;
-        if(message_type == "ClarificationNotification")
-            target_array = this.internal_json.ClarificationNotifications;
-        else if(message_type == "OpportunityNotification")
-            target_array = this.internal_json.OpportunityNotifications;
-        else
-            alert("Incorrect message_type supplied: " + message_type);
-
-        target_array.forEach(function(target)
-        {
-            console.log("Checking");
-            var current_id = null;
-            if(message_type == "ClarificationNotification")
-                current_id = target.ClarificationID;
-            else if(message_type == "OpportunityNotification")
-                current_id = target.OpportunityID;
-
-            if(current_id == id)
-            {
-                console.log("Marking " + id + " as read");
-                target.Status = "read";
-                console.log(target_array);
-            }
-        });
-
-        this.updateServer();
-    }
 }
