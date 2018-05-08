@@ -24,6 +24,7 @@ function BidderLoginAction() {
             var response = JSON.parse(xhttp.responseText);
             var status = JSON.parse(xhttp.status);
             if (status == 200 && response.authenticated) {
+                localStorage.setItem("BidderID",response.ID);
                 window.location.replace("bidder_landing.html")
             }
             else{

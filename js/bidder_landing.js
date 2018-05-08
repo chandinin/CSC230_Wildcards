@@ -1,5 +1,5 @@
 // TODO: Figure out a good way to pass bidder ID around the site
-var g_bidder_id;
+var g_bidder_id = localStorage.getItem("BidderID");
 
 $(document).ready(function(){
     $("#show-list-btn").click(function() { router("#spa-opportunities-list"); });
@@ -24,8 +24,6 @@ $(document).ready(function(){
     // Init the save category subscriptions button
     $("#subscriptions-save-btn").click(function() { saveCategorySubscriptions(); });
 
-    // TODO: Figure out a good way to pass bidder ID around the site
-    g_bidder_id = "1";
     activateOpportunitiesList();
 });
 
