@@ -58,6 +58,9 @@ if(json_last_error() === JSON_ERROR_NONE)
   if(isset($data->TotalScore) and !is_null($data->TotalScore))
     $opportunity->TotalScore = $data->TotalScore;
 
+  if(isset($data->TotalPoints) and !is_null($data->TotalPoints))
+    $opportunity->TotalScore = $data->TotalPoints;
+
   if($opportunity->update())
   {  
     if(isset($data->Status) and !is_null($data->Status)
@@ -197,6 +200,13 @@ else
     if(isSet($_POST_LowerCase["totalscore"]))
     {
       $TotalScore = $_POST_LowerCase["totalscore"];
+      $TotalScore = htmlspecialchars(strip_tags($TotalScore));
+      $opportunity->TotalScore = $TotalScore;
+    }
+
+    if(isSet($_POST_LowerCase["TotalPoints"]))
+    {
+      $TotalScore = $_POST_LowerCase["TotalPoints"];
       $TotalScore = htmlspecialchars(strip_tags($TotalScore));
       $opportunity->TotalScore = $TotalScore;
     }

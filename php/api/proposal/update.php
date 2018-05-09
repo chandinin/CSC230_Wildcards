@@ -59,25 +59,28 @@ if(json_last_error() === JSON_ERROR_NONE)
         $MinScore = 0;
         $MinScore = $proposal->getMinumumOppScore($OpportunityID);
         
-        $FinalTotalScore = $proposal->FinalTotalScore;
+        if($MinScore > 0)  // Only check if there is a min score.
+        {
+          $FinalTotalScore = $proposal->FinalTotalScore;
 
-        if($FinalTotalScore < $MinScore)
-        {
-          //Automatically Reject Proposal
-          $proposal->reject($proposal->ProposalID);
-          //echo '{';
-          //echo ' "Action" : "Reject",';
-          //echo ' "MinScore" : "'.$MinScore.'",';
-          //echo ' "FinalTotalScore" : "'.$FinalTotalScore.'"';
-          //echo '}';
-        }
-        else
-        {
-          //echo '{';
-          //echo ' "Action" : "Do Not Reject",';
-          //echo ' "MinScore" : "'.$MinScore.'",';
-          //echo ' "FinalTotalScore" : "'.$FinalTotalScore.'"';
-          //echo '}';
+          if($FinalTotalScore < $MinScore)
+          {
+            //Automatically Reject Proposal
+            $proposal->reject($proposal->ProposalID);
+            //echo '{';
+            //echo ' "Action" : "Reject",';
+            //echo ' "MinScore" : "'.$MinScore.'",';
+            //echo ' "FinalTotalScore" : "'.$FinalTotalScore.'"';
+            //echo '}';
+          }
+          else
+          {
+            //echo '{';
+            //echo ' "Action" : "Do Not Reject",';
+            //echo ' "MinScore" : "'.$MinScore.'",';
+            //echo ' "FinalTotalScore" : "'.$FinalTotalScore.'"';
+            //echo '}';
+          }
         }
       }
   }
@@ -165,26 +168,29 @@ else
       {
         $MinScore = 0;
         $MinScore = $proposal->getMinumumOppScore($OpportunityID);
-        
-        $FinalTotalScore = $proposal->FinalTotalScore;
 
-        if($FinalTotalScore < $MinScore)
+        if($MinScore > 0)  // Only check if there is a min score.
         {
-          //Automatically Reject Proposal
-          $proposal->reject($proposal->ProposalID);
-          //echo '{';
-          //echo ' "Action" : "Reject",';
-          //echo ' "MinScore" : "'.$MinScore.'",';
-          //echo ' "FinalTotalScore" : "'.$FinalTotalScore.'"';
-          //echo '}';
-        }
-        else
-        {
-          //echo '{';
-          //echo ' "Action" : "Do Not Reject",';
-          //echo ' "MinScore" : "'.$MinScore.'",';
-          //echo ' "FinalTotalScore" : "'.$FinalTotalScore.'"';
-          //echo '}';
+          $FinalTotalScore = $proposal->FinalTotalScore;
+
+          if($FinalTotalScore < $MinScore)
+          {
+            //Automatically Reject Proposal
+            $proposal->reject($proposal->ProposalID);
+            //echo '{';
+            //echo ' "Action" : "Reject",';
+            //echo ' "MinScore" : "'.$MinScore.'",';
+            //echo ' "FinalTotalScore" : "'.$FinalTotalScore.'"';
+            //echo '}';
+          }
+          else
+          {
+            //echo '{';
+            //echo ' "Action" : "Do Not Reject",';
+            //echo ' "MinScore" : "'.$MinScore.'",';
+            //echo ' "FinalTotalScore" : "'.$FinalTotalScore.'"';
+            //echo '}';
+          }
         }
       }
     }
