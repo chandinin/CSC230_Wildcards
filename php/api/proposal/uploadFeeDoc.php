@@ -11,17 +11,18 @@ header("Access-Control-Allow-Credentials: true");
 header('Content-Type: application/json');
 
 include_once '../config/Database.php';
+include_once '../config/FileSystem.php';
 include_once '../objects/proposal.php';
 
 // prepare to retrieve bidder data by instantiate the Bidder.
+$filesystem = new FileSystem();
 $database = new Database();
 $db = $database->Connect();
 
 $proposal = new Proposal($db);
 
-$temp_base_dir = "../../../data/files/";
-//$base_url = "https://athena.ecs.csus.edu/~wildcard/php/api/";
-$base_url = "http://localhost/PHP_TEST/api/";
+$temp_base_dir = $filesystem->base_dir;
+$base_url = $filesystem->base_url;
 
 //
 //
@@ -60,7 +61,8 @@ if(isset($_POST["submit"]))
 
     if (move_uploaded_file($_FILES["filename"]["tmp_name"], $tempFilePath)) 
     {
-      $url = $base_url . "docs/getFile.php?docid=" . $proposalID . "_" . $DocID;
+      //$url = $base_url . "docs/getFile.php?docid=" . $proposalID . "_" . $DocID;
+      $url = $base_url . $proposalID . "_" . $DocID . "_" . $filename;
       if($proposal->UploadDoc($DocID, $filename, $tempFilePath, $url))
       {
         $proposal->removeFeeDocsByProposalID($proposalID);
@@ -102,3 +104,4 @@ else
   echo '}';
 }
 ?>
+

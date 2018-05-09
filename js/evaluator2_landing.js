@@ -18,6 +18,7 @@ function getOppList() {
     $('#oppListTableBody').empty();
     var xhr = new XMLHttpRequest();
     xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php',true);
+    //xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php?Status=4',true);
     xhr.onload = function() {
         if (xhr.status == 200) {
             var jsonArray = JSON.parse(xhr.responseText);

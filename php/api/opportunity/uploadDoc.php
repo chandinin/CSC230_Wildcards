@@ -11,17 +11,18 @@ header('Content-Type: application/json');
 date_default_timezone_set('America/Tijuana');
 
 include_once '../config/Database.php';
+include_once '../config/FileSystem.php';
 include_once '../objects/opportunity.php';
 
 // prepare to retrieve bidder data by instantiate the Bidder.
+$filesystem = new FileSystem();
 $database = new Database();
 $db = $database->Connect();
 
 $opportunity = new Opportunity($db);
 
-$temp_base_dir = "../../../data/files/";
-$base_url = "https://athena.ecs.csus.edu/~wildcard/data/files/";
-//$base_url = "http://localhost/data/files/";
+$temp_base_dir = $filesystem->base_dir;
+$base_url = $filesystem->base_url;
 
 //
 //
@@ -73,12 +74,15 @@ if(isset($_POST["submit"]))
       echo ', "message2" : "DocTemplateID = '. $DocTemplateID .'"';
       echo ', "message3" : "Exists = '. $Exists .'"';
       echo ', "message4" : "URL = '. $url .'"';
+    echo ', "tempFilePath" : "'.$tempFilePath.'"';
       echo '}';
     } 
     else 
     {
       echo '{';
-      echo ' "message" : "Sorry, there was an error uploading your file."';
+      echo ' "message" : "Sorry, there was an error uploading your file.",';
+      echo ' "temp_base_dir" : "'.$temp_base_dir.'",';
+      echo ' "base_url" : "'. $base_url .'"';
       echo '}';
     }
   }

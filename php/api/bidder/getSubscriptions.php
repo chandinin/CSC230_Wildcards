@@ -73,3 +73,4 @@ else if(isSet($_POST_LowerCase["categoryid"]))
   print_r(json_encode($subscriptions_arr));
 }
 ?>
+

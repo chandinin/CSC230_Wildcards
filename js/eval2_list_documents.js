@@ -114,15 +114,28 @@ function UpdateTechnicalscore(){
     xhttp.onload = function () {
         if (xhttp.status == 200) {
             alert(proposalID+" Update successful");
-
-            //TODO add an end point here to accept reject proposal automatically based on min score
-            window.location.replace("eval2_list_proposals.html")
+            //update the proposal status based on min opp score
+            updateProposalStatus();
         } else {
             alert("Error updating status of " +proposalID);
         }
     }
     xhttp.send(myJson);
 
+}
+
+//update proposal status based on min opp score
+function updateProposalStatus(){
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/proposal/GradeTechnicalScore.php?ProposalID='+proposalID,true);
+    xhr.onload = function() {
+        if (xhr.status == 200) {
+            window.location.replace("eval2_list_proposals.html")
+        } else {
+            alert("Error response");
+        }
+    };
+    xhr.send();
 }
 
 //TODO get the right endpoint to use

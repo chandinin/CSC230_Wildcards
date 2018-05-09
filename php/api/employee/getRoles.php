@@ -36,4 +36,3 @@ if($rowCount > 0)
   print_r(json_encode($roles_arr));
 }
 ?>
-

@@ -42,7 +42,8 @@ if(isSet($_POST_LowerCase["opportunityid"])
     "CreatedDate" =>  $opportunity->CreatedDate,
     "LastEditDate" =>  $opportunity->LastEditDate,
     "ProposalCount" =>  $ProposalCount,
-    "MinimumScore" =>  $opportunity->MinimumScore
+    "MinimumScore" =>  $opportunity->MinimumScore,
+    "TotalScore" =>  $opportunity->TotalScore
   );
 
   // make it json format
@@ -82,7 +83,8 @@ else if(isSet($_POST_LowerCase["status"])
           "CreatedDate" => $row['CreatedDate'],
           "LastEditDate" => $row['LastEditDate'],
           "ProposalCount" => $ProposalCount,
-          "MinimumScore" =>  $row['MinimumScore']
+          "MinimumScore" =>  $row['MinimumScore'],
+          "TotalScore" =>  $row['TotalScore']
       );
 
       array_push($opportunities_arr["opportunity"], $opportunity_arr);
@@ -127,7 +129,8 @@ else if(isSet($_POST_LowerCase["categoryid"])
           "CreatedDate" => $row['CreatedDate'],
           "LastEditDate" => $row['LastEditDate'],
           "ProposalCount" => $ProposalCount,
-          "MinimumScore" =>  $row['MinimumScore']
+          "MinimumScore" =>  $row['MinimumScore'],
+          "TotalScore" =>  $row['TotalScore']
       );
 
       array_push($opportunities_arr["opportunity"], $opportunity_arr);
@@ -167,7 +170,8 @@ else
           "CreatedDate" => $row['CreatedDate'],
           "LastEditDate" => $row['LastEditDate'],
           "ProposalCount" => $ProposalCount,
-          "MinimumScore" =>  $row['MinimumScore']
+          "MinimumScore" =>  $row['MinimumScore'],
+          "TotalScore" =>  $row['TotalScore']
       );
      
       array_push($opportunities_arr["opportunity"], $opportunity_arr);
@@ -177,3 +181,4 @@ else
   print_r(trim(json_encode($opportunities_arr)));
 }
 ?>
+

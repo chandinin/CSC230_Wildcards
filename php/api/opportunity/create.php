@@ -44,6 +44,8 @@ if(json_last_error() === JSON_ERROR_NONE)
     $opportunity->CategoryID = $data->CategoryID;
   if(isset($data->MinimumScore) and !is_null($data->MinimumScore))
     $opportunity->MinimumScore = $data->MinimumScore;
+  if(isset($data->TotalScore) and !is_null($data->TotalScore))
+    $opportunity->TotalScore = $data->TotalScore;
 
   if($opportunity->create())
   {
@@ -133,6 +135,13 @@ else
       $opportunity->MinimumScore = $MinimumScore;
     }
 
+    if(isSet($_POST_LowerCase["totalscore"]))
+    {
+      $TotalScore = $_POST_LowerCase["totalscore"];
+      $TotalScore = htmlspecialchars(strip_tags($TotalScore));
+      $opportunity->TotalScore = $TotalScore;
+    }
+
     if($opportunity->create())
     {
       //echo '{';
@@ -154,3 +163,4 @@ else
   }
 }
 ?>
+
