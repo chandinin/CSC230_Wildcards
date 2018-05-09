@@ -15,14 +15,20 @@ $db = $database->Connect();
 $employee = new Employee($db);
 
 // get employeeID from POST
+$_GET_LowerCase = array_change_key_case($_GET, CASE_LOWER);
 $_POST_LowerCase = array_change_key_case($_POST, CASE_LOWER);
-if(isSet($_POST_LowerCase["employeeid"]) || isSet($_POST_LowerCase["id"]))
+if(isSet($_POST_LowerCase["employeeid"]) || isSet($_POST_LowerCase["id"])
+   || isSet($_GET_LowerCase["employeeid"]) || isSet($_GET_LowerCase["id"]))
 {
-  $employeeID = $_POST_LowerCase["employeeid"];
+  $employeeID = null;
   if(isSet($_POST_LowerCase["employeeid"]))
     $employeeID = $_POST_LowerCase["employeeid"];
   else if(isSet($_POST_LowerCase["id"]))
     $employeeID = $_POST_LowerCase["id"];
+  else if(isSet($_GET_LowerCase["employeeid"]))
+    $employeeID = $_GET_LowerCase["employeeid"];
+  else if(isSet($_GET_LowerCase["id"]))
+    $employeeID = $_GET_LowerCase["id"];
 
   //Search
   $employee->selectByID($employeeID);
@@ -62,9 +68,9 @@ if(isSet($_POST_LowerCase["employeeid"]) || isSet($_POST_LowerCase["id"]))
   // make it json format
   print_r(json_encode($employee_arr));
 }
-else if(isSet($_POST_LowerCase["role"]))
+else if(isSet($_POST_LowerCase["role"]) || isSet($_GET_LowerCase["role"]))
 {
-  $roleID = $_POST_LowerCase["role"];
+  $roleID = (isSet($_GET_LowerCase["role"]) ? $_GET_LowerCase["role"] : $_POST_LowerCase["role"]);
 
   //Search
   $stmt = $employee->selectByRole($roleID);
@@ -123,6 +129,7 @@ else
   $stmt = $employee->selectAll();
   $rowCount = $stmt->rowCount();
 
+  //Search
   if($rowCount > 0)
   {
     $employees_arr = array();

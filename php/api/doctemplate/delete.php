@@ -42,4 +42,3 @@ if(isSet($_POST_LowerCase["doctemplateid"]))
   }
 }
 ?>
-
