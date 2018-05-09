@@ -1,6 +1,11 @@
 // TODO: Figure out a good way to pass bidder ID around the site
 var g_bidder_id;
+var g_bread;
+
 $(document).ready(function(){
+    // init breadcrumb
+    g_bread = new BreadCrumb("Home", function() {$("#opportunities-tab").trigger("click"); activateOpportunitiesList(); }, "the-breadcrumb");
+
     $("#show-list-btn").click(function() { router("#spa-opportunities-list"); });
 
     $("#proposals-tab").click(function() { activateProposalsList(); });
@@ -29,15 +34,82 @@ $(document).ready(function(){
         g_bidder_id = "1337";
     activateOpportunitiesList();
 
+    // init message center
     mc = new MessageCenter();
     mc.updateServer(); // Will report the messages we generated as well as the login time right
     $("#num-unread-messages").text(mc.numUnread);
+
+
 });
 
+class BreadCrumb
+{
+    // Home item never changes
+    constructor(home_text, home_onClick, target_ol_id)
+    {
+        this.home_text = home_text;
+        this.home_onClick = home_onClick;
+        this.li_array = [];
+        this.target_id = target_ol_id;
+    }
+
+    gen_anchor(text, onClick){
+        var anchor = document.createElement("a");
+        anchor.appendChild(document.createTextNode(text));
+        anchor.onclick = onClick;
+
+        var li = document.createElement("li");
+        li.appendChild(anchor);
+
+        return li;
+    }
+
+    gen_text(text)
+    {
+        var li = document.createElement("li");
+        li.appendChild(document.createTextNode(text));
+
+        return li;
+    }
+
+    add(text, onClick)
+    {
+        if(onClick != null)
+            this.li_array.push(this.gen_anchor(text, onClick));
+        else
+            this.li_array.push(this.gen_text(text));
+    }
+
+    render()
+    {
+        var self = this;
+        var target = document.getElementById(this.target_id);
+
+        if(target == null)
+            alert("Breadcrumb is messed up!");
+
+        
+        // Clear what we already have in breadcrumb
+        target.innerHTML = "";
+
+        target.appendChild(this.gen_anchor(this.home_text, this.home_onClick));
+        this.li_array.forEach(function(li)
+        {
+            target.appendChild(li);
+        });
+    }
+
+    clear()
+    {
+        this.li_array = [];
+    }
+
+
+}
 
 // Handles hiding and unhiding the correct divs, based on the arg div_to_show
 // Does not handle actually initializing those divs.
-function router(div_to_show)
+function router(div_to_show, spa_edit_proposal_shitty_workaround_flag)
 {
     div_list = [
                     "#spa-opportunities-list",
@@ -62,6 +134,53 @@ function router(div_to_show)
     }
 
     $(div_to_show).show();
+
+
+    // Build and render breadcrumb
+    // Probably an easier way to do this but....
+    g_bread.clear();
+
+    if(spa_edit_proposal_shitty_workaround_flag)
+    {
+        g_bread.add("Your Proposals", function() {$("proposals-tab").trigger("click"); } );
+        g_bread.add("Edit Your Proposal");
+    }
+    else if(div_to_show == "#spa-opportunities-list")
+    {
+        // Nothing, this is home
+    }
+    else if(div_to_show == "#spa-opportunity-detail")
+    {
+        g_bread.add("Opportunity Detail");
+    }
+    else if(div_to_show == "#spa-create-proposal")
+    {
+        g_bread.add("Create Proposal");
+    }
+    else if(div_to_show == "#spa-proposals-list")
+    {
+        g_bread.add("Your Proposals");
+    }
+    else if(div_to_show == "#spa-edit-proposal")
+    {
+        // Have to use the shitty workaround flag, god damnit
+    }
+    else if(div_to_show == "#spa-message-list")
+    {
+        g_bread.add("Message List");
+    }
+    else if(div_to_show == "#spa-message-detail")
+    {
+        g_bread.add("Message List", function() {$("messages-tab").trigger("click"); activateMessageList(); });
+        g_bread.add("View Message");
+    }
+    else if(div_to_show == "#spa-manage-subscriptions")
+    {
+        g_bread.add("Manage Subscriptions");
+    }
+
+    // Done building, now render
+    g_bread.render();
 }
 
 // Removes all elements in tbody, preserving 'thead'
@@ -278,6 +397,9 @@ function sortOpportunityDocs(doctemplate)
         console.log(doctemplate);
     }
 }
+
+
+getDocUrlFromID
 
 /**************************
  * spa-opportunities-list *
@@ -877,17 +999,15 @@ function populateProposalList(proposals_json)
         status_name = proposals_json[i].StatusName;
         if(status_name == "Evaluation 1 Rejected") { status_name = "Rejected"; }
         else if(status_name == "Evaluation 1 Accepted") { status_name = "Closed for edits, Under Evaluation"; }
-        else if(status_name == "Seeking Clarification 1") { status_name = "clarification requested"; }
-        else if(status_name == "Seeking Clarification 2") { status_name = "clarification requested"; }
-        else if(status_name == "Clarification Received ") { status_name = "Closed for edits, Under Evaluation"; }
-        else if(status_name == "Clarification Received ") { status_name = "Closed for edits, Under Evaluation"; }
+        else if(status_name == "Seeking Clarification 1") { status_name = "Clarification Requested"; }
+        else if(status_name == "Seeking Clarification 2") { status_name = "Clarification Requested"; }
+        else if(status_name == "Clarification Received 1") { status_name = "Clarification Received, Under Evaluation"; }
+        else if(status_name == "Clarification Received 2") { status_name = "Clarification Received, Under Evaluation"; }
         else if(status_name == "Evaluation 2 Rejected") { status_name = "Rejected"; }
         else if(status_name == "Evaluation 2 Accepted") { status_name = "Closed for edits, Under Evaluation"; }
-        else if(status_name == "In Progress" || status_name == "Open")
-        { 
-            status_name = proposals_json[i].NumProposalDocs >= proposals_json[i].NumOpportunityDocs ? 
-                "Open For Edits, pending close date" : "Open For Edits, missing documents"; 
-        }
+        else if(status_name == "In Progress") { status_name = "Submitted, Under Evaluation"; }
+        else if(status_name == "Open") { status_name = "Open"; }
+        else if(status_name == "Expired") { status_name = "Expired"; }
         else {status_name = "UNKNOWN STATUS MAPPING: " + status_name; }
         
 
@@ -956,11 +1076,43 @@ function activateEditProposal(proposal_id)
 
                     initializeCreateProposal(proposal_json.OpportunityID);
                     initializeEditProposal(proposal_json);
-                    router("#spa-create-proposal"); // Sneaky! 
+                    router("#spa-create-proposal", true); // Sneaky! 
                 }
             });
         }
     });
+}
+
+function shutdownProposal(instructions_text)
+{
+    console.log("shutdownProposal called");
+    console.log(instructions_text);
+    $("#proposal-instructions-span").text(instructions_text);
+
+    $("#proposal-save-btn").hide();
+    $("#proposal-submit-btn").hide();
+    $("#proposal-time-remaining").hide();
+
+    // Gonna use this to hide all the file inputs, since the proposal is now closed
+    doc_list_children = document.getElementById("opp-doc-templates-list").childNodes;
+
+    for(i = 0; i < doc_list_children.length; i++)
+    {
+        current_child = doc_list_children[i];
+        current_input = null;
+
+        // Search for just the input in each li via localName=input
+        for(j = 0; j < current_child.children.length; j++)
+        {
+            if(current_child.children[j].localName.toLowerCase() == "input")
+                current_input = current_child.children[j];
+        }
+
+        if(current_input == null)
+            alert("Encountering weirdness with hiding the inputs");
+
+        current_input.style.display = "none";
+    }
 }
 
 function initializeEditProposal(proposal_json)
@@ -971,6 +1123,7 @@ function initializeEditProposal(proposal_json)
     $("#proposal-time-last-edit").text("Time last edit: " + convert_db_date_to_custom(proposal_json.LastEditDate));
     $("#proposal-back-list-btn").off();
     $("#proposal-save-btn").off();
+    $("#proposal-time-remaining").show();
 
     $("#proposal-back-list-btn").click(function() { router("#spa-proposals-list"); });
     $("#proposal-save-btn").click(function() { saveProposal(proposal_json, false); }); // the false is that this is not a final submit
@@ -979,69 +1132,50 @@ function initializeEditProposal(proposal_json)
     $("#proposal-submit-btn").off();
     $("#proposal-submit-btn").click(function() { saveProposal(proposal_json, true); }); // True for this is a final submission
 
-    if("ClarificationClosingDate" in proposal_json)
+
+    timeRemainingCallback.stop(); // Don't want this shit lingering
+
+    // Clarification state
+    console.log("Proposal status: " + proposal_json.StatusName);
+    if(proposal_json.StatusName == "Seeking Clarification 1" || proposal_json.StatusName == "Seeking Clarification 2")
     {
-        if(parseCustomDateStringToDate(proposal_json["ClarificationClosingDate"]) > new Date())
-        {
-            console.log("OK, we found a clarification...");
-            $("#proposal-instructions-span").text("There is an open clarification request for this proposal, please respond in 'View Your Messages'");
-        }
-        else
-        {
-            console.log("That clarification is closed");
-        }
-
+        console.log("OK, we found a clarification...");
+        shutdownProposal("There is an open clarification request for this proposal, please respond in 'View Your Messages'");
     }
-
-    // Setup our lovely countdown timer...
-    //{"days":597,"hours":15,"minutes":44,"seconds":11}
-    timeRemainingCallback.stop();
-    timeRemainingCallback.start(
-        function(reasonable_time_remaining) {
-            if(isReasonableTimeNegative(reasonable_time_remaining))
-            {
-                timeRemainingCallback.stop();
-                time_remaining_text = "Time Remaining: This opportunity has closed, your proposal will be evaluated soon";
-                // Hack, so that we don't override the fact that there is an open clarification if the Opportunity is closed
-                if($("#proposal-instructions-span").text() != "There is an open clarification request for this proposal, please respond in 'View Your Messages'")
-                    $("#proposal-instructions-span").text("");
-                $("#proposal-save-btn").hide();
-                $("#proposal-submit-btn").hide();
-                $("#proposal-time-remaining").text(time_remaining_text);
-
-                // Gonna use this to hide all the file inputs, since the Opportunity is now closed
-                doc_list_children = document.getElementById("opp-doc-templates-list").childNodes;
-
-                for(i = 0; i < doc_list_children.length; i++)
+    else if(proposal_json.StatusName == "Expired")
+    {
+        shutdownProposal("Your proposal expired, next time upload all your docs and submit on time");
+    }
+    else if(proposal_json.StatusName == "Open")
+    {
+        // Setup our lovely countdown timer...
+        
+        timeRemainingCallback.start(
+            function(reasonable_time_remaining) {
+                if(isReasonableTimeNegative(reasonable_time_remaining))
                 {
-                    current_child = doc_list_children[i];
-                    current_input = null;
+                    timeRemainingCallback.stop();
+                    console.log("This fuckin guy being called");
+                    shutdownProposal("This opportunity has closed, your proposal will be evaluated soon");
 
-                    // Search for just the input in each li via localName=input
-                    for(j = 0; j < current_child.children.length; j++)
-                    {
-                        if(current_child.children[j].localName.toLowerCase() == "input")
-                            current_input = current_child.children[j];
-                    }
-
-                    if(current_input == null)
-                        alert("Encountering weirdness with hiding the inputs");
-
-                    current_input.style.display = "none";
                 }
-            }
-            else
-            {
-                time_remaining_text = "Time remaining on this opportunity: ";
-                time_remaining_text += " Days: " + reasonable_time_remaining.days;
-                time_remaining_text += " Hours: " + reasonable_time_remaining.hours;
-                time_remaining_text += " Minutes: " + reasonable_time_remaining.minutes;
-                time_remaining_text += " Seconds: " + reasonable_time_remaining.seconds;
-                $("#proposal-time-remaining").text(time_remaining_text);
-            }
-        },
-        parseCustomDateStringToDate(g_current_opportunity_json["ClosingDate"])
-    );
+                else
+                {
+                    time_remaining_text = "Time remaining on this opportunity: ";
+                    time_remaining_text += " Days: " + reasonable_time_remaining.days;
+                    time_remaining_text += " Hours: " + reasonable_time_remaining.hours;
+                    time_remaining_text += " Minutes: " + reasonable_time_remaining.minutes;
+                    time_remaining_text += " Seconds: " + reasonable_time_remaining.seconds;
+                    $("#proposal-time-remaining").text(time_remaining_text);
+                }
+            },
+            parseCustomDateStringToDate(g_current_opportunity_json["ClosingDate"])
+        );
+    }
+    else
+    {
+        shutdownProposal("Your Proposal has been submitted and is under evaluation");
+    }
 
 
     doc_list = document.getElementById("opp-doc-templates-list");
@@ -1091,14 +1225,14 @@ function initializeEditProposal(proposal_json)
 
             if(has_all_docs)
             {
-                if(parseCustomDateStringToDate(g_current_opportunity_json["ClosingDate"]) > new Date() )
+                if(proposal_json.StatusName == "Open")
                 {
                     console.log("This proposal has all docs, showing submit button");
                     $("#proposal-submit-btn").show();
                 }
                 else
                 {
-                    console.log("this proposal is expired, not touching submit");
+                    console.log("this proposal is not open, not touching submit");
                 }
 
             }
@@ -1193,7 +1327,18 @@ function saveProposal(proposal_json, is_this_submit)
         xhr.send(formData);
     }
 
-    alert("Your proposal was succesfully saved");
+    if(final_submission)
+    {
+        console.log("Setting proposal to In Progress");
+        updateProposal(proposal_json.ProposalID, {"Status":"30"});
+        alert("Your proposal was succesfully submitted");
+    }
+    else
+    {
+       alert("Your proposal was succesfully saved"); 
+    }
+
+
     activateProposalsList();
 }
 
@@ -1368,6 +1513,7 @@ function populateMessageDetail(message)
     $("#message-detail-due-by-header").hide();
     $("#message-detail-upload").hide();
     $("message-detail-opportunity-name-header").hide();
+    $("#message-detail-download-link").hide();
 
 
     if(message.Type == "ClarificationNotification")
@@ -1412,7 +1558,15 @@ function populateClarificationRequestDetail(message)
 
         // Set these
         $("#message-response-editor")[0].value = (message.Answer);
-        document.getElementById("message-response-editor").readOnly = true; 
+        document.getElementById("message-response-editor").readOnly = true;
+
+        if(message.DocID != null)
+        {
+            $("#message-detail-download-link").show();
+            $("#message-detail-download-link").attr("href", getDocUrlFromID(message.DocID));
+        }
+
+
     }
     else // There is no answer, will need one if closing date has not passed
     {
@@ -1469,7 +1623,57 @@ function populateOpportunityNotificationDetail(message)
 
 function getDocUrlFromID(DocID)
 {
+//{"DocID":"87","DocTitle":"linker.py","Path":"..\/..\/..\/data\/files\/35587_87_linker.py","Blob":null,"Url":"http:\/\/athena.ecs.csus.edu\/~mackeys\/data\/files\/35587_87_linker.py","Description":"linker.py","CreatedDate":"2018-05-06 12:56:02","LastEditDate":"2018-05-06 12:56:02","SortOrder":"0"}
+    var DocURL = null;
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/docs/read.php?DocID='+DocID,false);
+    xhr.onload = function() {
+        if (xhr.status == 200) {
+            DocJson = JSON.parse(xhr.response);
+            if(DocJson.Url == null)
+            {
+                console.log("Error getting doc url");
+                console.log(DocJson);
+                alert("Error getting doc url");
+                return;
+            }       
 
+            DocURL = DocJson.Url.replace("https://athena.ecs.csus.edu/~wildcard/", "");
+
+        }
+        else {
+            alert("Error getting Document URL with ID: " + DocID);
+        }
+    };
+    xhr.send();
+
+    return DocURL;
+}
+
+function updateProposal(ProposalID, proposal_json)
+{
+    success_flag = null;
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'php/api/proposal/update.php', false);
+    xhr.onload = function()
+    {
+        if(xhr.status == 200)
+        {
+            success_flag = true;
+        }
+        else
+        {
+            console.log("Error updating proposal:");
+            console.log(xhr.response);
+            alert("There was an error updating the proposal");
+            success_flag = false;
+        }
+    }
+    xhr.setRequestHeader("Content-type", "application/json");
+    proposal_json.ProposalID = ProposalID;
+    xhr.send(JSON.stringify(proposal_json));
+
+    return success_flag;
 }
 
 function sendClarificationResponse(ProposalID, ClarificationID)
@@ -1525,6 +1729,21 @@ function sendClarificationResponse(ProposalID, ClarificationID)
     answer = $("#message-response-editor")[0].value;
     request_json = {"ProposalID":ProposalID, "ClarificationID":ClarificationID, "answer":answer, "DocID":String(doc_id)};
     xhr.send(JSON.stringify(request_json));
+
+    // This is kind of fucked up, but we have to update the proposal based on what phase its in right now
+    proposal = getProposalByID(ProposalID);
+    if(proposal.StatusName == "Seeking Clarification 1")
+    {
+        console.log("We are in Clarification 1 currently, updating to status 50")
+        updateProposal(ProposalID, {"Status":"50"});
+    }
+    else if(proposal.StatusName == "Seeking Clarification 2")
+    {
+        console.log("We are in Clarification 2 currently, updating to status 55");
+        updateProposal(proposalID, {"Status":"55"});
+    }
+
+    
 }
 
 /****************************
@@ -1689,6 +1908,36 @@ function isValidJSON(str) {
         return false;
     }
     return true;
+}
+
+function getProposalByID(ProposalID)
+{
+    proposal_json = null;
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "http://athena.ecs.csus.edu/~wildcard/php/api/proposal/read.php?ProposalID="+ProposalID, false);
+    xhr.onload = function(response)
+    {
+        if(xhr.status == 200)
+        {
+            proposal_json = JSON.parse(xhr.response);
+            
+            if(proposal_json.ProposalID == null)
+            {
+                console.log("Error getting proposal by ID");
+                console.log(xhr.response);
+                proposals_json = null;
+            }
+        }
+        else
+        {
+            console.log("Error getting proposal by ID");
+            console.log(xhr.response);
+        }
+    }
+
+    xhr.send();
+
+    return proposal_json;
 }
 
 // Messages are not saves on backend, it is the notifications that are saved. Messages are generated on the fly
@@ -2054,7 +2303,12 @@ class MessageCenter
             });
 
             if(clarification == null)
+            {
+                console.log("Error matching clarification");
+                console.log(self.clarifications);
+                console.log(clarification_notification);
                 alert("There was an issue matching this message to a clarification");
+            }
             if(opportunity == null)
             {
                 console.log(self.all_opportunities);
@@ -2065,6 +2319,13 @@ class MessageCenter
             {
                 console.log("Matched an opportunity:" + opportunity.Name);
                 console.log(opportunity);
+            }
+
+            var proposal = getProposalByID(clarification.ProposalID);
+            if(proposal == null)
+            {
+                console.log("Proposal was null");
+                alert("Error generating message");
             }
 
             
@@ -2078,6 +2339,8 @@ class MessageCenter
             new_message.LastEditDate = clarification.LastEditDate;
             new_message.ClosingDate = clarification.ClosingDate;
             new_message.OpportunityName = opportunity.Name;
+            new_message.DocID = clarification.DocID;
+            new_message.Proposal = proposal;
 
             _messages.push(new_message);
         });

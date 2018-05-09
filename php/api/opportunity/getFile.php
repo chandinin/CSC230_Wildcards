@@ -31,4 +31,3 @@ if(isSet($_POST_LowerCase["doctemplateid"]) || isSet($_GET_LowerCase["doctemplat
   readfile($Path);
 }
 ?>
-

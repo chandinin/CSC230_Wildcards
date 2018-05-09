@@ -57,7 +57,7 @@ function getProposalListWithFee() {
     opportunityID = localStorage.getItem("opportunityID");
     $('#proposalListTableBody').empty();
     var xhr = new XMLHttpRequest();
-    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/proposal/read.php?OpportunityID='+opportunityID,true);
+    xhr.open('GET',' http://athena.ecs.csus.edu/~wildcard/php/api/proposal/read.php?Status=65&OpportunityID='+opportunityID,true);
     xhr.onload = function() {
         if (xhr.status == 200) {
             var jsonArray = JSON.parse(xhr.responseText);
@@ -125,7 +125,7 @@ function fillProposalFeeTable(jsonArray){
             var row ="<tr>"+"</td><td>"+ proposal.BidderName + "<td>" +  proposal.ProposalID + "</a></td><td>"
                  + proposal.FinalTotalScore + "<td>" +  "<button onclick='calculateFee(\"" + proposal.ProposalID + "\")' id='editOppButton' value='\" + proposal.ProposalID + \"' type='button' " +
                 "class='btn btn-primary btn-sm'>" +
-                "<span class='glyphicon glyphicon-triangle-right'></span>Calculate Final Score</button><td>" + "<button onclick='showProposalDetails(\"" + proposal.ProposalID + "\")' id='editOppButton' value='\" + proposal.ProposalID + \"' type='button' " +
+                "<span class='glyphicon glyphicon-triangle-right'></span>Calculate Final Score</button><td>" + "<button onclick='awardContract(\"" + proposal.ProposalID + "\")' id='editOppButton' value='\" + proposal.ProposalID + \"' type='button' " +
                 "class='btn btn-accept btn-sm'>" +
                 "<span class='glyphicon glyphicon-ok-sign'></span>Award Contract</button></td>";
 
@@ -153,6 +153,24 @@ function fillProposalFeeTable(jsonArray){
             fillOppTable(pre,limit);
         }
     });
+}
+
+function awardContract(proposalID){
+    var params = {"ProposalID":proposalID,
+        "ContractAwarded":1};
+    var myJson = JSON.stringify(params);
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "http://athena.ecs.csus.edu/~wildcard/php/api/proposal/update.php",true);
+    xhttp.onload = function () {
+        if (xhttp.status == 200) {
+            alert("Contract awarded to proposal: " +proposalID);
+            //update the proposal status based on min opp score
+            updateProposalStatus();
+        } else {
+            alert("Error awarding contract");
+        }
+    }
+    xhttp.send(myJson);
 }
 
 //Store proposal id to pass to next screen to get a list of documents

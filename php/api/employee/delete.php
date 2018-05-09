@@ -39,4 +39,3 @@ if(isSet($_POST_LowerCase["employeeid"]) || isSet($_POST_LowerCase["id"]))
   }
 }
 ?>
-
