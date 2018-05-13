@@ -193,18 +193,18 @@ function router(div_to_show, spa_edit_proposal_shitty_workaround_flag)
 /*******************************************************
  * Helper functions I should have made in the begining *
  *******************************************************/
- 
-function uploadDocument(file, filename)
+
+function uploadFeeDocument(file, filename, ProposalID, OpportunityID, DocTemplateID)
 {
         var formData=new FormData();
         formData.append('filename', file, filename);
-        formData.append('ProposalID', "0");
-        formData.append("OpportunityID", "0");
-        formData.append("DocTemplateID", "0");
+        formData.append('ProposalID', ProposalID);
+        formData.append("OpportunityID", OpportunityID);
+        formData.append("DocTemplateID", DocTemplateID);
         formData.append('submit', "Lol this needs to be filled");
 
         var xhr = new XMLHttpRequest();
-        xhr.open('POST','php/api/proposal/uploadDoc.php', false);
+        xhr.open('POST','php/api/proposal/uploadFeeDoc.php', false);
         xhr.onload = function() {
             if(xhr.status == 200) {
                 console.log('File uploaded' + xhr.response);
@@ -214,6 +214,34 @@ function uploadDocument(file, filename)
         };
         xhr.send(formData);
 }
+
+function getFeeDocument(ProposalID)
+{
+    response = null;
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET','php/api/proposal/getFeeDoc.php?proposalid='+ProposalID, false);
+    xhr.onload = function() {
+        if(xhr.status == 200) {
+            json = JSON.parse(xhr.response);
+            if(json.doc == null)
+            {
+                console.log("No fee doc found for " + ProposalID);
+                response = false;
+            }
+            else
+            {
+                response = json.doc[0];
+            }
+        } else {
+            alert(xhr.response);
+        }
+    };
+    xhr.send();
+
+    return response;
+}
+
+
 
 function getDocUrlFromID(DocID)
 {
@@ -270,6 +298,9 @@ function updateProposal(ProposalID, proposal_json)
     return success_flag;
 }
 
+/*****************
+ * Table Helpers *
+ *****************/
 
 
 // Removes all elements in tbody, preserving 'thead'
@@ -717,6 +748,8 @@ function initializeCreateProposal(opportunity_id)
     $("#proposal-back-list-btn").click(function() { router("#spa-opportunities-list"); });
     $("#proposal-save-btn").click(function() { console.log("Pressed proposal-save-btn"); saveNewProposal(opportunity_id); });
 
+    $("#prev-fee-doc").hide();
+
     // Because edit-proposal can change this
     $("#proposal-instructions-span").text('Please download, fill out, and upload all requested forms. You can come back and edit your documents at any time before the deadline for submissions, just press "Save For Later". You may submit your Proposal once you have satsifed all required documents');
 
@@ -818,6 +851,18 @@ function saveNewProposal(opportunity_id)
         };
         xhr.send(formData);
     }
+
+    fee_input = document.getElementById("fee-input");
+    current_file = fee_input.files.length > 0 ? fee_input.files[0] : null;
+    if(current_file != null)
+    {
+        uploadFeeDocument(current_file, current_file.name, proposal_id, opportunity_id, 0);
+    }
+    else
+    {
+        console.log("No fee doc to upload");
+    }
+
 
     alert("Your proposal was succesfully saved");
     activateOpportunitiesList();
@@ -1278,6 +1323,20 @@ function initializeEditProposal(proposal_json)
         type: "GET",
         success: function(proposal_docs_json)
         {
+            // Do fee doc first cuz the rest of this shit might error out
+            fee_doc = getFeeDocument(proposal_json.ProposalID);
+            if(fee_doc)
+            {
+                // Set attribute
+                $("#prev-fee-doc").attr("href", fee_doc.Url);
+                $("#prev-fee-doc").show();
+            }
+            else
+            {
+                has_all_docs = false;
+            }
+
+            // Do the fuckin rest
             docs = proposal_docs_json.doc;
             doc_map = {}; // with DocTemplateID as the key
 
@@ -1315,6 +1374,7 @@ function initializeEditProposal(proposal_json)
 
             }
 
+            // Logic to show submit button
             if(has_all_docs)
             {
                 if(proposal_json.StatusName == "Open")
@@ -1417,6 +1477,17 @@ function saveProposal(proposal_json, is_this_submit)
             }
         };
         xhr.send(formData);
+    }
+
+    fee_input = document.getElementById("fee-input");
+    current_file = fee_input.files.length > 0 ? fee_input.files[0] : null;
+    if(current_file != null)
+    {
+        uploadFeeDocument(current_file, current_file.name, proposal_json.ProposalID, proposal_json.OpportunityID, 0);
+    }
+    else
+    {
+        console.log("No fee doc to upload");
     }
 
     if(is_this_submit)
