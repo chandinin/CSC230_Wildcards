@@ -1,6 +1,7 @@
 // TODO: Figure out a good way to pass bidder ID around the site
 var g_bidder_id;
 var g_bread;
+var g_mc;
 
 $(document).ready(function(){
     // init breadcrumb
@@ -35,9 +36,9 @@ $(document).ready(function(){
     activateOpportunitiesList();
 
     // init message center
-    mc = new MessageCenter();
-    mc.updateServer(); // Will report the messages we generated as well as the login time right
-    $("#num-unread-messages").text(mc.numUnread);
+    g_mc = new MessageCenter();
+    g_mc.updateServer(); // Will report the messages we generated as well as the login time right
+    $("#num-unread-messages").text(g_mc.numUnread);
 });
 
 class BreadCrumb
@@ -179,6 +180,13 @@ function router(div_to_show, spa_edit_proposal_shitty_workaround_flag)
 
     // Done building, now render
     g_bread.render();
+
+    // Update our messages...
+    if(g_mc != null)
+    {
+        g_mc.updateServer(); // Will report the messages we generated as well as the login time right
+        $("#num-unread-messages").text(g_mc.numUnread);
+   }
 }
 
 // Removes all elements in tbody, preserving 'thead'
@@ -1395,16 +1403,16 @@ function initializeMessageList()
     removeAllTableElements(document.getElementById("messages-list-table"));
 
     // Force the message center to update
-    mc.updateServer();
+    g_mc.updateServer();
 
-    mc = new MessageCenter(populateMessageList());
+    g_mc = new MessageCenter(populateMessageList());
 }
 
 
 function populateMessageList(messages_json)
 {
     PREVIEW_LENGTH = 90; // Number of characters in the message preview
-    messages_json = mc.messages;
+    messages_json = g_mc.messages;
     table_array = [];
 
     for(i = 0; i < messages_json.length; i++)
@@ -1465,15 +1473,15 @@ function activateMessageDetail(message_id)
 {
     initializeMessageDetail(message_id);
 
-    message = mc.messages[parseInt(message_id)];
+    message = g_mc.messages[parseInt(message_id)];
     if(message.Type == "ClarificationNotification")
-        mc.markRead("ClarificationNotification", message.ClarificationID);
+        g_mc.markRead("ClarificationNotification", message.ClarificationID);
     else if(message.Type == "OpportunityNotification")
-        mc.markRead("OpportunityNotification", message.OpportunityID);
+        g_mc.markRead("OpportunityNotification", message.OpportunityID);
     else
         alert("Error marking message as read!");
 
-    $("#num-unread-messages").text(mc.numUnread);
+    $("#num-unread-messages").text(g_mc.numUnread);
 
     router("#spa-message-detail");
 }
@@ -1482,7 +1490,7 @@ function initializeMessageDetail(message_id)
 {
 
     // Ajax to get the specific message
-    populateMessageDetail(mc.messages[parseInt(message_id)]);
+    populateMessageDetail(g_mc.messages[parseInt(message_id)]);
 }
 
 // <h2>Message Type: <span id="message-detail-type">Message type placeholder</span></h2>
@@ -1501,11 +1509,11 @@ function populateMessageDetail(message)
     $("#message-detail-type").text(message.Type);
     $("#message-detail-body").text(message.Body);
 
+
     // Hide non-essential, leave these to be shown by subroutines
     $("#send-message-btn").hide();
     $("#discard-message-btn").hide();
     $("#message-detail-time-responded-header").hide();
-    $("#message-detail-back-btn").hide();
     $("#send-message-btn").hide();
     $("#discard-message-btn").hide();
     $("#message-detail-response").hide();
@@ -1513,6 +1521,7 @@ function populateMessageDetail(message)
     $("#message-detail-upload").hide();
     $("message-detail-opportunity-name-header").hide();
     $("#message-detail-download-link").hide();
+    $("send-message-div").hide();
 
 
     if(message.Type == "ClarificationNotification")
@@ -1540,6 +1549,9 @@ function populateClarificationRequestDetail(message)
     // console.log("Show this shit as: " + message.OpportunityName);
     $("#message-detail-opportunity-name").text(message.OpportunityName);
     $("#message-detail-opportunity-name-header").show();
+    $("#message-detail-back-btn").text("Discard Message");
+    $("send-message-div").show();
+
 
     if(message.Answer != null)
     {
@@ -1614,6 +1626,8 @@ function populateClarificationRequestDetail(message)
 
 function populateOpportunityNotificationDetail(message)
 {
+    $("#message-detail-back-btn").text("Back to Messages");
+
     $("#send-message-btn").hide();
     $("#discard-message-btn").hide();
     $("#message-detail-response").hide();
