@@ -203,7 +203,7 @@ li,td,th {
 
 #opp-doc-templates-list li {
     border-top: 1px solid #555;
-    margin-top: 
+    margin-top: 1.5vh;
 }
 
 #proposal-back-list-btn {
@@ -296,28 +296,36 @@ li,td,th {
                             <!-- All will be hidden except one at any given time
                              -->
                             <div id="spa-opportunities-list">
-                                <!--Category dropdown-->
-                                <div class="form-group">
-                                    <select id="selectCategory" name="category" required style="width: 325px">
-                                        <option id = "id" value="default">All</option>
-                                    </select>
-                                </div>
-                                <table id="opportunities-list-table" class="tablesorter table table-bordered table-striped table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>OpportunityID</th>
-                                            <th>Opportunity Name</th>
-                                            <th>Category</th>
-                                            <th>Closing Date and Time</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div id="spa-opportunity-detail">
-
                                 <div class="row marketing">
+                                    <div class="col-md-12">
+                                        <!--Category dropdown-->
+                                        <div class="form-group">
+                                            <select id="selectCategory" name="category" required style="width: 325px">
+                                                <option id = "id" value="default">All</option>
+                                            </select>
+                                        </div>
+                                        <table id="opportunities-list-table" class="tablesorter table table-bordered table-striped table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>OpportunityID</th>
+                                                    <th>Opportunity Name</th>
+                                                    <th>Category</th>
+                                                    <th>Closing Date and Time</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="spa-opportunity-detail">
+                                <div class="row marketing">
+                                    <div class="col-md-12" id="create-proposal-header-div">
+                                        <h1 style="font-weight: 600">Opportunity Detail</h1>
+                                        <br>
+                                    </div>
                                     <div class="col-md-6">
                                         <span class="opportunity-property">Opportunity Title: </span>
                                         <span class="opportunity-detail" id="Title"> Sample Title </span>
@@ -332,22 +340,19 @@ li,td,th {
                                     </div>
                                 </div>
                                 <br>
-                                <div class="row marketing">
-                                    <div class="col-xs-12">
-                                        <span class="opportunity-property">Description: </span>
-                                    </div>
 
-                                </div>
-                                <div class="row marketing">
+                                <div class="row">
                                     <div class="col-xs-12">
+                                        <span class="opportunity-property">Opportunity Detail: </span>
                                         <div contenteditable="true" class="opportunity-detail" id="Description">Sample Description</div>
                                     </div>
                                 </div>
                                 <br>
-                                <br>
+                                <hr>
+
                                 <div class="row marketing">
                                     <div class="col-xs-12">
-                                        <span class="opportunity-property">Associated Docs and Forms:</span>
+                                        <span class="opportunity-property">Required Forms:</span>
                                         <ul id=opp-detail-doc-templates-list>
                                         </ul>
                                     </div>
@@ -455,12 +460,45 @@ li,td,th {
                                 </table>
                             </div>
                             <div class="col-md-12" id="spa-message-detail">
-                                <h2>Message Type: <span id="message-detail-type">Message type placeholder</span></h2>
-                                <h2>Time Received: <span id="message-detail-time-received">Message time received placeholder</span></h2>
-                                <h2 id="message-detail-due-by-header">Clarification Due By: <span id="message-detail-due-by">Message time due by placeholder</span></h2>
-                                <h2 id="message-detail-time-responded-header">Time Responded: <span id="message-detail-time-responded">Message time response placeholder</span></h2>
-                                <h2 id="message-detail-opportunity-name-header">Regarding Opportunity: <span id="message-detail-opportunity-name">AHHH</span></h2>
-                                <h2>Message Body:</h2>
+                                <div class="row marketing">
+                                    <div class="col-xs-12">
+                                        <span class="opportunity-property">Message Type: </span>
+                                        <span class="opportunity-detail" id="message-detail-type"> Sample Category </span>
+                                    </div>
+                                </div>
+                                <div class="row marketing">
+                                    <div class="col-xs-12">
+                                        <span class="opportunity-property">Time Received: </span>
+                                        <span class="opportunity-detail" id="message-detail-time-received"></span>
+                                    </div>
+                                </div>
+                                <div class="row marketing">
+                                    <div class="col-xs-12">
+                                        <span class="opportunity-property"></span>
+                                        <span class="opportunity-detail" id=""></span>
+                                    </div>
+                                </div>
+                                <div class="row marketing" id="message-detail-due-by-header">
+                                    <div class="col-xs-12">
+                                        <span class="opportunity-property">Clarification Due By: </span>
+                                        <span class="opportunity-detail" id="message-detail-due-by"></span>
+                                    </div>
+                                </div>
+                                <div class="row marketing" id="message-detail-time-responded-header">
+                                    <div class="col-xs-12">
+                                        <span class="opportunity-property">Time Responded: </span>
+                                        <span class="opportunity-detail" id="message-detail-time-responded"></span>
+                                    </div>
+                                </div>
+                                <div class="row marketing" id="message-detail-opportunity-name-header">
+                                    <div class="col-xs-12">
+                                        <span class="opportunity-property"></span>
+                                        <span class="opportunity-detail" id="message-detail-opportunity-name"></span>
+                                    </div>
+                                </div>
+                                <br>
+                                <span class="opportunity-property">Message Body</span>
+                                <br>
                                 <span id="message-detail-body">Placeholder message body</span>
                                 <br>
                                 <br>

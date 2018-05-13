@@ -1326,7 +1326,7 @@ function saveProposal(proposal_json, is_this_submit)
         xhr.send(formData);
     }
 
-    if(final_submission)
+    if(is_this_submit)
     {
         console.log("Setting proposal to In Progress");
         updateProposal(proposal_json.ProposalID, {"Status":"30"});
