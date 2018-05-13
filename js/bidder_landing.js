@@ -3,6 +3,7 @@ var g_bidder_id;
 var g_bread;
 var g_mc;
 
+
 $(document).ready(function(){
     // init breadcrumb
     g_bread = new BreadCrumb("Home", function() {$("#opportunities-tab").trigger("click"); activateOpportunitiesList(); }, "the-breadcrumb");
@@ -188,6 +189,88 @@ function router(div_to_show, spa_edit_proposal_shitty_workaround_flag)
         $("#num-unread-messages").text(g_mc.numUnread);
    }
 }
+
+/*******************************************************
+ * Helper functions I should have made in the begining *
+ *******************************************************/
+ 
+function uploadDocument(file, filename)
+{
+        var formData=new FormData();
+        formData.append('filename', file, filename);
+        formData.append('ProposalID', "0");
+        formData.append("OpportunityID", "0");
+        formData.append("DocTemplateID", "0");
+        formData.append('submit', "Lol this needs to be filled");
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST','php/api/proposal/uploadDoc.php', false);
+        xhr.onload = function() {
+            if(xhr.status == 200) {
+                console.log('File uploaded' + xhr.response);
+            } else {
+                alert('Error uploading file:' + xhr.response);
+            }
+        };
+        xhr.send(formData);
+}
+
+function getDocUrlFromID(DocID)
+{
+//{"DocID":"87","DocTitle":"linker.py","Path":"..\/..\/..\/data\/files\/35587_87_linker.py","Blob":null,"Url":"http:\/\/athena.ecs.csus.edu\/~mackeys\/data\/files\/35587_87_linker.py","Description":"linker.py","CreatedDate":"2018-05-06 12:56:02","LastEditDate":"2018-05-06 12:56:02","SortOrder":"0"}
+    var DocURL = null;
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/docs/read.php?DocID='+DocID,false);
+    xhr.onload = function() {
+        if (xhr.status == 200) {
+            DocJson = JSON.parse(xhr.response);
+            if(DocJson.Url == null)
+            {
+                console.log("Error getting doc url");
+                console.log(DocJson);
+                alert("Error getting doc url");
+                return;
+            }       
+
+            DocURL = DocJson.Url.replace("https://athena.ecs.csus.edu/~wildcard/", "");
+
+        }
+        else {
+            alert("Error getting Document URL with ID: " + DocID);
+        }
+    };
+    xhr.send();
+
+    return DocURL;
+}
+
+function updateProposal(ProposalID, proposal_json)
+{
+    success_flag = null;
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'php/api/proposal/update.php', false);
+    xhr.onload = function()
+    {
+        if(xhr.status == 200)
+        {
+            success_flag = true;
+        }
+        else
+        {
+            console.log("Error updating proposal:");
+            console.log(xhr.response);
+            alert("There was an error updating the proposal");
+            success_flag = false;
+        }
+    }
+    xhr.setRequestHeader("Content-type", "application/json");
+    proposal_json.ProposalID = ProposalID;
+    xhr.send(JSON.stringify(proposal_json));
+
+    return success_flag;
+}
+
+
 
 // Removes all elements in tbody, preserving 'thead'
 function removeAllTableElements(table)
@@ -623,6 +706,7 @@ function initializeCreateProposal(opportunity_id)
         async: false
     });
 
+    $("#time-remaining-div").show();
 
     $("#fee-input").show();
     $("#proposal-submit-btn").hide()
@@ -1098,6 +1182,7 @@ function shutdownProposal(instructions_text)
     $("#proposal-submit-btn").hide();
     $("#proposal-time-remaining").hide();
     $("#fee-input").hide();
+    $("#time-remaining-div").hide();
 
     // Gonna use this to hide all the file inputs, since the proposal is now closed
     doc_list_children = document.getElementById("opp-doc-templates-list").childNodes;
@@ -1549,7 +1634,7 @@ function populateClarificationRequestDetail(message)
     // console.log("Show this shit as: " + message.OpportunityName);
     $("#message-detail-opportunity-name").text(message.OpportunityName);
     $("#message-detail-opportunity-name-header").show();
-    $("#message-detail-back-btn").text("Discard Message");
+
     $("send-message-div").show();
 
 
@@ -1559,6 +1644,7 @@ function populateClarificationRequestDetail(message)
         // Hide these
         $("#send-message-btn").hide();
         $("#discard-message-btn").hide();
+        $("#message-detail-back-btn").text("Back to Messages");
 
         //Unhide these
         $("#message-detail-time-responded-header").show();
@@ -1601,7 +1687,7 @@ function populateClarificationRequestDetail(message)
             }
         }
         
-
+        $("#message-detail-back-btn").text("Discard Message");
 
         if(message.ClosingDate != null)
             $("#message-detail-due-by").text(convert_db_date_to_custom(message.ClosingDate));
@@ -1634,60 +1720,9 @@ function populateOpportunityNotificationDetail(message)
     $("#message-detail-time-responded-header").hide();
 }
 
-function getDocUrlFromID(DocID)
-{
-//{"DocID":"87","DocTitle":"linker.py","Path":"..\/..\/..\/data\/files\/35587_87_linker.py","Blob":null,"Url":"http:\/\/athena.ecs.csus.edu\/~mackeys\/data\/files\/35587_87_linker.py","Description":"linker.py","CreatedDate":"2018-05-06 12:56:02","LastEditDate":"2018-05-06 12:56:02","SortOrder":"0"}
-    var DocURL = null;
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/docs/read.php?DocID='+DocID,false);
-    xhr.onload = function() {
-        if (xhr.status == 200) {
-            DocJson = JSON.parse(xhr.response);
-            if(DocJson.Url == null)
-            {
-                console.log("Error getting doc url");
-                console.log(DocJson);
-                alert("Error getting doc url");
-                return;
-            }       
 
-            DocURL = DocJson.Url.replace("https://athena.ecs.csus.edu/~wildcard/", "");
 
-        }
-        else {
-            alert("Error getting Document URL with ID: " + DocID);
-        }
-    };
-    xhr.send();
 
-    return DocURL;
-}
-
-function updateProposal(ProposalID, proposal_json)
-{
-    success_flag = null;
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'php/api/proposal/update.php', false);
-    xhr.onload = function()
-    {
-        if(xhr.status == 200)
-        {
-            success_flag = true;
-        }
-        else
-        {
-            console.log("Error updating proposal:");
-            console.log(xhr.response);
-            alert("There was an error updating the proposal");
-            success_flag = false;
-        }
-    }
-    xhr.setRequestHeader("Content-type", "application/json");
-    proposal_json.ProposalID = ProposalID;
-    xhr.send(JSON.stringify(proposal_json));
-
-    return success_flag;
-}
 
 function sendClarificationResponse(ProposalID, ClarificationID)
 {

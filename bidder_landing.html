@@ -206,10 +206,10 @@ li,td,th {
     margin-top: 1.5vh;
 }
 
-#proposal-back-list-btn {
+/*#proposal-back-list-btn {
     display: inline;
     float: right;
-}
+}*/
 
 #dfg {
 /*    display: block;
@@ -232,31 +232,10 @@ li,td,th {
 
 }
 
-/* Tooltip container */
-.tooltip {
-    position: relative;
-    display: inline-block;
-    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
-}
-
-/* Tooltip text */
-.tooltip .tooltiptext {
-    visibility: hidden;
-    width: 120px;
-    background-color: black;
-    color: #fff;
-    text-align: center;
-    padding: 5px 0;
-    border-radius: 6px;
- 
-    /* Position the tooltip text - see examples below! */
-    position: absolute;
-    z-index: 1;
-}
-
-/* Show the tooltip text when you mouse over the tooltip container */
-.tooltip:hover .tooltiptext {
-    visibility: visible;
+hr {
+    margin: unset; 
+    margin-top: 25px;
+    margin-bottom: 25px;
 }
 
 .w3-badge,.w3-tag{background-color:#000;color:#fff;display:inline-block;padding-left:8px;padding-right:8px;text-align:center}.w3-badge{border-radius:50%}
@@ -347,9 +326,7 @@ li,td,th {
                                         <div contenteditable="true" class="opportunity-detail" id="Description">Sample Description</div>
                                     </div>
                                 </div>
-                                <br>
                                 <hr>
-
                                 <div class="row marketing">
                                     <div class="col-xs-12">
                                         <span class="opportunity-property">Required Forms:</span>
@@ -386,7 +363,7 @@ li,td,th {
                                         <span class="opportunity-property">Time of Last Edit: </span>
                                         <span class="opportunity-detail" id="proposal-time-last-edit"></span>
                                     </div>
-                                    <div class="col-md-12">
+                                    <div class="col-md-12" id="time-remaining-div">
                                         <span class="opportunity-property">Time Remaining: </span>
                                         <span class="opportunity-detail" id="proposal-time-remaining"></span>
                                     </div>
@@ -398,7 +375,6 @@ li,td,th {
                                         <div contenteditable="true" class="opportunity-detail" id="proposal-opportunity-detail">Sample Description</div>
                                     </div>
                                 </div>
-                                <br>
                                 <hr>
                                 <div class="row">
                                     <div class="col-xs-12">
@@ -519,10 +495,8 @@ li,td,th {
                                 <a id="message-detail-download-link">View what you uploaded for this Clarification</a>
 
                                 <div class="row marketing">
-                                    <div class="col-md-2" id="send-message-div" >
+                                    <div class="col-md-12" id="send-message-div" >
                                         <a id="send-message-btn" class="btn btn-primary">Send Message</a>
-                                    </div>
-                                    <div class="col-md-1">
                                         <a id="message-detail-back-btn" class="btn btn-primary" onclick="activateMessageList();">Back to Messages</a>
                                     </div>
                                 </div>
