@@ -22,6 +22,7 @@
 	    <link href="https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
 	    <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
         <link rel="stylesheet" type="text/css" href="css/tablesorter-style.css">
+        <link rel="stylesheet" href="css/opportunity.css">
 
 		<!-- Latest compiled and minified JavaScript -->
 	    <script src="https://code.jquery.com/jquery-1.11.2.min.js"
@@ -189,10 +190,20 @@ li,td,th {
     float: right;
 }
 
+#fee-input {
+    display: inline;
+    float: right;
+}
+
 #opp-doc-templates-list .old_doc_a {
     display: inline;
     float: right;
     margin-right: 20px;
+}
+
+#opp-doc-templates-list li {
+    border-top: 1px solid #555;
+    margin-top: 
 }
 
 #proposal-back-list-btn {
@@ -219,6 +230,33 @@ li,td,th {
     text-overflow: ellipsis;
     maxlength: 10;
 
+}
+
+/* Tooltip container */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+ 
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+    visibility: visible;
 }
 
 .w3-badge,.w3-tag{background-color:#000;color:#fff;display:inline-block;padding-left:8px;padding-right:8px;text-align:center}.w3-badge{border-radius:50%}
@@ -326,15 +364,58 @@ li,td,th {
                             </div>
 
                             <div id="spa-create-proposal">
-                                <h1 id="create-proposal-header">Create Proposal</h1>
-                                <h3 id="opportunity-title">TODO: Opportunity Title</h3>
-                                <h5 id="opportunity-countdown">Close Date and Time: TODO</h5>
-                                <h5 id="proposal-time-last-edit"></h5>
-                                <h5 id="proposal-time-remaining"></h5>
-
-                                <span id="proposal-instructions-span">Please download, fill out, and upload all requested forms. You can come back and edit your documents at any time before the deadline for submissions, just press 'save and come back later'</span>
-                                <ul id="opp-doc-templates-list">
-                                </ul>
+                                <div class="row">
+                                    <div class="col-md-12" id="create-proposal-header-div">
+                                        <h1 id="create-proposal-header" style="font-weight: 600">Create Proposal</h1>
+                                        <br>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <span class="opportunity-property" id="opportunity-title-div">Opportunity Title:</span>
+                                        <span class="opportunity-detail" id="opportunity-title"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <span class="opportunity-property" id="opportunity-countdown-div">Closing Date:</span>
+                                        <span class="opportunity-detail" id="opportunity-countdown"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <span class="opportunity-property">Time of Last Edit: </span>
+                                        <span class="opportunity-detail" id="proposal-time-last-edit"></span>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <span class="opportunity-property">Time Remaining: </span>
+                                        <span class="opportunity-detail" id="proposal-time-remaining"></span>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <span class="opportunity-property">Opportunity Detail: </span>
+                                        <div contenteditable="true" class="opportunity-detail" id="proposal-opportunity-detail">Sample Description</div>
+                                    </div>
+                                </div>
+                                <br>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <span class="opportunity-property">Required Forms</span>
+                                        <br>
+                                        <span id="proposal-instructions-span">Please download, fill out, and upload all requested forms. You can come back and edit your documents at any time before the deadline for submissions, just press 'Save For Later'. You may submit your Proposal once you have satsifed all required documents</span>
+                                        <br>
+                                        <br>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <span>Fee Document</span>
+                                        <input id="fee-input" type="file"></input>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <ul id="opp-doc-templates-list">
+                                        </ul>
+                                    </div>
+                                </div>
                                 <br>
                                 <div class="row marketing">
                                     <div class="col-xs-6">
@@ -345,6 +426,7 @@ li,td,th {
                                     </div>
                                 </div>
                             </div>
+
                             <div class="col-md-12" id="spa-proposals-list">
                                 <table id="proposals-list-table" class="tablesorter table table-bordered table-striped table-hover">
                                   <thead>

@@ -38,8 +38,6 @@ $(document).ready(function(){
     mc = new MessageCenter();
     mc.updateServer(); // Will report the messages we generated as well as the login time right
     $("#num-unread-messages").text(mc.numUnread);
-
-
 });
 
 class BreadCrumb
@@ -399,8 +397,6 @@ function sortOpportunityDocs(doctemplate)
 }
 
 
-getDocUrlFromID
-
 /**************************
  * spa-opportunities-list *
  **************************/
@@ -415,8 +411,7 @@ function activateOpportunitiesList()
 function initializeOpportunitiesList()
 {
     $.ajax({
-        // Easy as fuck, change this to 3
-        url: "php/api/opportunity/read.php?status=0", 
+        url: "php/api/opportunity/read.php?status=3", 
         success: function(opportunities_json)
         {
             opportunities = opportunities_json["opportunity"];
@@ -470,7 +465,7 @@ function populateOpportunitiesList(opportunities_json) {
     for(var i = 0; i < opportunities.length; i++)
     {
         // Skip and do not add any opportunities that don't match our selected category, if we have selected one
-        if((selected_categoryID != undefined && opportunities[i].CategoryID != selected_categoryID ) || opportunities[i].StatusName != "New")
+        if((selected_categoryID != undefined && opportunities[i].CategoryID != selected_categoryID ) || opportunities[i].StatusName != "Published")
         {
             continue;
         }
@@ -621,7 +616,7 @@ function initializeCreateProposal(opportunity_id)
     });
 
 
-
+    $("#fee-input").show();
     $("#proposal-submit-btn").hide()
 
     $("#proposal-back-list-btn").off();
@@ -631,7 +626,7 @@ function initializeCreateProposal(opportunity_id)
     $("#proposal-save-btn").click(function() { console.log("Pressed proposal-save-btn"); saveNewProposal(opportunity_id); });
 
     // Because edit-proposal can change this
-    $("#proposal-instructions-span").text("Please download, fill out, and upload all requested forms. You can come back and edit your documents at any time before the deadline for submissions, just press 'save and come back later");
+    $("#proposal-instructions-span").text('Please download, fill out, and upload all requested forms. You can come back and edit your documents at any time before the deadline for submissions, just press "Save For Later". You may submit your Proposal once you have satsifed all required documents');
 
 
 }
@@ -648,7 +643,8 @@ function saveNewProposal(opportunity_id)
         "ProposalID": proposal_id,
         "OpportunityID": opportunity_id,
         "BidderID": g_bidder_id,
-        "Status": "saved, still open",
+        "Status": "40",
+        "StatusName": "Open",
         "TechnicalScore": -1,
         "FeeScore": -1,
         "FinalTotalScore": -1,
@@ -760,15 +756,16 @@ function getUniqueProposalID()
     //     async: false
     // });
 
-    return getRandomInt(0,65325).toString();
+    return getRandomInt(1,65325).toString();
 }
 
 
 function populateOppTitle(opportunity)
 {
     g_current_opportunity_json = opportunity;
-    $("#opportunity-title").text("Title: " + opportunity["Name"]);
-    $("#opportunity-countdown").text("Closing Date and Time: " + convert_db_date_to_custom(opportunity["ClosingDate"]));
+    $("#opportunity-title").text(opportunity["Name"]);
+    $("#opportunity-countdown").text(convert_db_date_to_custom(opportunity["ClosingDate"]));
+    document.getElementById("proposal-opportunity-detail").innerHTML = opportunity.Description;
 
     // Setup our lovely countdown timer...
     //{"days":597,"hours":15,"minutes":44,"seconds":11}
@@ -1092,6 +1089,7 @@ function shutdownProposal(instructions_text)
     $("#proposal-save-btn").hide();
     $("#proposal-submit-btn").hide();
     $("#proposal-time-remaining").hide();
+    $("#fee-input").hide();
 
     // Gonna use this to hide all the file inputs, since the proposal is now closed
     doc_list_children = document.getElementById("opp-doc-templates-list").childNodes;
@@ -1119,8 +1117,8 @@ function initializeEditProposal(proposal_json)
 {
     console.log("In initializeEditProposal");
 
-    $("#create-proposal-header").text("Edit proposal");
-    $("#proposal-time-last-edit").text("Time last edit: " + convert_db_date_to_custom(proposal_json.LastEditDate));
+    $("#create-proposal-header").text("Edit Proposal");
+    $("#proposal-time-last-edit").text(convert_db_date_to_custom(proposal_json.LastEditDate));
     $("#proposal-back-list-btn").off();
     $("#proposal-save-btn").off();
     $("#proposal-time-remaining").show();
@@ -1161,8 +1159,8 @@ function initializeEditProposal(proposal_json)
                 }
                 else
                 {
-                    time_remaining_text = "Time remaining on this opportunity: ";
-                    time_remaining_text += " Days: " + reasonable_time_remaining.days;
+                    time_remaining_text = "";
+                    time_remaining_text += "Days: " + reasonable_time_remaining.days;
                     time_remaining_text += " Hours: " + reasonable_time_remaining.hours;
                     time_remaining_text += " Minutes: " + reasonable_time_remaining.minutes;
                     time_remaining_text += " Seconds: " + reasonable_time_remaining.seconds;
@@ -1174,6 +1172,7 @@ function initializeEditProposal(proposal_json)
     }
     else
     {
+        console.log("proposal-edit: " + proposal_json.StatusName);
         shutdownProposal("Your Proposal has been submitted and is under evaluation");
     }
 
@@ -2173,8 +2172,7 @@ class MessageCenter
 
         num_callbacks_left++;
         $.ajax({
-            // Easy as fuck, change this to 3
-            url: "php/api/opportunity/read.php?status=0", 
+            url: "php/api/opportunity/read.php?status=3", 
             success: function(opportunities_json)
             {
                 console.log("MessageCenter: Getting opportunities");
@@ -2311,6 +2309,7 @@ class MessageCenter
             }
             if(opportunity == null)
             {
+                console.log(clarification_notification);
                 console.log(self.all_opportunities);
                 console.log(clarification.OpportunityID);
                 alert("There was an error matching this message to an opportunity");
