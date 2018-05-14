@@ -692,7 +692,8 @@ function parseOpportunity(opportunity) {
                 // Create Template download anchor
                 anchor = document.createElement("a");
                 if(doc_templates[i].Url != null)
-                    anchor.href = doc_templates[i].Url.replace("https://athena.ecs.csus.edu/~wildcard/", "");
+                    anchor.href = doc_templates[i].Url;
+//                     anchor.href = doc_templates[i].Url.replace("https://athena.ecs.csus.edu/~wildcard/", "");
                 else
                     anchor.href = "google.com";
 
@@ -700,6 +701,8 @@ function parseOpportunity(opportunity) {
                     anchor.appendChild(document.createTextNode(doc_templates[i].DocTitle));
                 else
                     anchor.appendChild(document.createTextNode(doc_templates[i].DisplayTitle));
+              
+                anchor.target = "_blank";
                 // Attach all elements to the list_item
                 list_item.appendChild(anchor);
                 doc_list.appendChild(list_item);
@@ -973,7 +976,10 @@ function populateOppDocTemplates(opp_doc_templates)
         // Create Template download anchor
         anchor = document.createElement("a");
         if(doc_templates[i].Url != null)
+        {
             anchor.href = doc_templates[i].Url.replace("https://athena.ecs.csus.edu/~wildcard/", "");
+//             anchor.href = doc_templates[i].Url;
+        }
         else
             anchor.href = "google.com";
 
@@ -1375,6 +1381,7 @@ function initializeEditProposal(proposal_json)
                     prev_doc_anchor.href = doc_map[child.dataset.DocTemplateID].Url;
                     prev_doc_anchor.appendChild(document.createTextNode("View what you uploaded"));
                     prev_doc_anchor.className += "old_doc_a";
+                    prev_doc_anchor.target = "_blank";
 
                     child.dataset.DocID = doc_map[child.dataset.DocTemplateID].DocID;
                     child.dataset.hasDocUploaded = true;
