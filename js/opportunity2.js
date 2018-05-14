@@ -24,8 +24,21 @@ $(document).ready(
             $("#oppsMenu option[id='opplist']").attr("selected", "selected");
         });
 
+      /*  $('#newOppForm').validator().on('submit', function (e) {
+            if (e.isDefaultPrevented()) {
+                // handle the invalid form...
+                alert("Please correct noted fields.");
+            } else {
+                // everything looks good!
+                saveOpportunity();
+            }
+        });
+*/
 
         $('#saveNewOpp').click(function () {
+  /*          $('#newOppForm').validator('update');
+            $('#newOppForm').validator('validate');
+            */
             var validator = $("#newOppForm").validate({
                 invalidHandler: function() {
                     console.log( validator.numberOfInvalids() + " field(s) are invalid" );
@@ -35,7 +48,9 @@ $(document).ready(
                 saveOpportunity();
             else
                 alert("Please correct noted fields.");
+
         });
+
 
         $('#showNewOpp').click(function () {
             showNewOpp();
@@ -534,7 +549,7 @@ function fillOppTable(oppArray,type) {
         var row;
         switch(type) {
             case 11:
-                row = "<tr><td>" + catName + "</td></td><td>" + opp.OpportunityID + "</td><td><a onclick='showOppView(\"" +
+                row = "<tr><td>" + catName + "</td></td><td>" + opp.OpportunityID + "</td><td><a class='dynamic_href' onclick='showOppView(\"" +
                     opp.OpportunityID + "\")'> " + opp.Name +
                     "</a></td><td>" + tempCDate + "</td><td>" + tempEDate + "</td><td>" + oppDesc + "</td><td>" +
                     opp.StatusName + "</td><td>" +
@@ -542,7 +557,7 @@ function fillOppTable(oppArray,type) {
                     "<span class='glyphicon glyphicon-globe' aria-hidden='true'></span> Publish</button></td></tr>";
                 break;
             default:
-                row = "<tr><td>" + catName + "</td></td><td>" + opp.OpportunityID + "</td><td><a onclick='showOppView(\"" +
+                row = "<tr><td>" + catName + "</td></td><td>" + opp.OpportunityID + "</td><td><a class='dynamic_href' onclick='showOppView(\"" +
                     opp.OpportunityID + "\")'> " + opp.Name +
                     "</a></td><td>" + tempCDate + "</td><td>" + tempEDate + "</td><td>" + oppDesc + "</td><td>" +
                     opp.StatusName + "</td><td></td></tr>";
