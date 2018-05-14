@@ -10,6 +10,8 @@ header('Content-Type: application/json');
 include_once '../config/Database.php';
 include_once '../objects/opportunity.php';
 
+include_once '../config/Database.php';
+
 $database = new Database();
 $db = $database->Connect();
 
@@ -42,10 +44,26 @@ if(isSet($_POST_LowerCase["categoryid"])
 }
 else
 {
-  echo '{';
-  echo ' "message" : "Error. Category not found."';
-  echo '}';
+  // Query database for our user with ID
+  $query = "SELECT * FROM OppCategory;";
+
+  // Get our connection
+  $conn = $database->Connect();
+
+  // prepare query statement
+  $stmt = $conn->prepare($query);
+
+  // execute query
+  $stmt->execute();
+
+  $categories_array = array();
+
+  while($row = $stmt->fetch(PDO::FETCH_ASSOC))
+  {
+    array_push($categories_array, $row);
+  }
+
+  print_r(json_encode($categories_array));
 }
 
 ?>
-

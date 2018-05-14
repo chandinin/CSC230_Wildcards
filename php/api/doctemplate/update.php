@@ -18,10 +18,20 @@ $doctemplate = new DocTemplate($db);
 $data = json_decode(file_get_contents("php://input"));
 if(json_last_error() === JSON_ERROR_NONE)
 {
-  $doctemplate->DocTemplateID = $data->DocTemplateID;
-  $doctemplate->DocTitle = $data->DocTitle;
-  $doctemplate->Path = $data->Path;
-  $doctemplate->Blob = $data->Blob; 
+  if(isset($data->DocTemplateID) and !is_null($data->DocTemplateID))
+    $doctemplate->DocTemplateID = $data->DocTemplateID;
+
+  if(isset($data->DocTitle) and !is_null($data->DocTitle))
+    $doctemplate->DocTitle = $data->DocTitle;
+
+  if(isset($data->Path) and !is_null($data->Path))
+    $doctemplate->Path = $data->Path;
+
+  if(isset($data->Blob) and !is_null($data->Blob))
+    $doctemplate->Blob = $data->Blob; 
+
+  if(isset($data->DisplayTitle) and !is_null($data->DisplayTitle))
+    $doctemplate->DisplayTitle = $data->DisplayTitle; 
 
   if($doctemplate->update())
   {  
@@ -67,6 +77,13 @@ else
       $doctemplate->Blob = $blob;
     }
 
+    if(isSet($_POST_LowerCase["displaytitle"]))
+    {
+      $DisplayTitle = $_POST_LowerCase["displaytitle"];
+      $DisplayTitle = htmlspecialchars(strip_tags($DisplayTitle));
+      $doctemplate->DisplayTitle = $DisplayTitle;
+    }
+
     if($doctemplate->update())
     {  
       echo '{';
@@ -88,4 +105,3 @@ else
   }
 }
 ?>
-

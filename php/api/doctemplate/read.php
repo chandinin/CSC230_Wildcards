@@ -35,7 +35,9 @@ if(isSet($_POST_LowerCase["opportunityid"]))
           "DocTemplateID" => $row['DocTemplateID'],
           "DocTitle" => $row['DocTitle'],
           "Path" => $row['Path'],
-          "Blob" => $row['Blob']
+          "Blob" => $row['Blob'],
+          "DisplayTitle" => $row['DisplayTitle'],
+          "PostedDate" => $row['PostedDate']
       );
      
       array_push($doctemplates_arr["doctemplate"], $doctemplate_arr);
@@ -54,7 +56,9 @@ else if(isSet($_POST_LowerCase["doctemplateid"]))
     "doctemplateid" =>  $doctemplate->DocTemplateID,
     "doctitle" =>  $doctemplate->DocTitle,
     "path" =>  $doctemplate->Path,
-    "blob" =>  $doctemplate->Blob
+    "blob" =>  $doctemplate->Blob,
+    "DisplayTitle" => $doctemplate->DisplayTitle,
+    "PostedDate" => $doctemplate->PostedDate
   );
 
   // make it json format
@@ -80,7 +84,9 @@ else if(isSet($_POST_LowerCase["doctitle"]))
           "DocTemplateID" => $row['DocTemplateID'],
           "DocTitle" => $row['DocTitle'],
           "Path" => $row['Path'],
-          "Blob" => $row['Blob']
+          "Blob" => $row['Blob'],
+          "DisplayTitle" => $row['DisplayTitle'],
+          "PostedDate" => $row['PostedDate']
       );
      
       array_push($doctemplates_arr["doctemplate"], $doctemplate_arr);
@@ -107,7 +113,9 @@ else
           "DocTemplateID" => $row['DocTemplateID'],
           "DocTitle" => $row['DocTitle'],
           "Path" => $row['Path'],
-          "Blob" => $row['Blob']
+          "Blob" => $row['Blob'],
+          "DisplayTitle" => $row['DisplayTitle'],
+          "PostedDate" => $row['PostedDate']
       );
      
       array_push($doctemplates_arr["doctemplate"], $doctemplate_arr);
@@ -117,4 +125,3 @@ else
   print_r(json_encode($doctemplates_arr));
 }
 ?>
-

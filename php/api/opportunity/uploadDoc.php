@@ -8,17 +8,21 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Credentials: true");
 header('Content-Type: application/json');
 
+date_default_timezone_set('America/Tijuana');
+
 include_once '../config/Database.php';
+include_once '../config/FileSystem.php';
 include_once '../objects/opportunity.php';
 
 // prepare to retrieve bidder data by instantiate the Bidder.
+$filesystem = new FileSystem();
 $database = new Database();
 $db = $database->Connect();
 
 $opportunity = new Opportunity($db);
 
-$temp_base_dir = "../../../data/files/";
-$base_url = "https://athena.ecs.csus.edu/~wildcard/php/api/";
+$temp_base_dir = $filesystem->base_dir;
+$base_url = $filesystem->base_url;
 
 //
 //
@@ -52,13 +56,13 @@ if(isset($_POST["submit"]))
     $file_size = $_FILES["filename"]["size"];
     $filename = basename($_FILES['filename']['name']);
     $DocTemplateID = $opportunity->getNewDocTemplateID();
-
-    $tempFilePath =  $temp_base_dir . $OpportunityID . "_" . $DocTemplateID . "_" . $filename;
+    $tempFilePath =  $temp_base_dir . "O" .$OpportunityID . "_" . $DocTemplateID . "_" . $filename;
     $file_type = strtolower(pathinfo($tempFilePath,PATHINFO_EXTENSION));
 
     if (move_uploaded_file($_FILES["filename"]["tmp_name"], $tempFilePath)) 
     {
-      $url = $base_url . "doctemplate/getFile.php?doctemplateid=" . $OpportunityID . "_" . $DocTemplateID;
+      //$url = $base_url . "doctemplate/getFile.php?doctemplateid=" . $OpportunityID . "_" . $DocTemplateID;
+      $url = $base_url . "O" .$OpportunityID . "_" . $DocTemplateID . "_" . $filename;
       if($opportunity->UploadDocTemplate($DocTemplateID, $filename, $tempFilePath, $url))
       {
         $opportunity->RelateDocTemplateToOppID($OpportunityID, $DocTemplateID, $ExpirationDate);
@@ -70,15 +74,17 @@ if(isset($_POST["submit"]))
       echo ', "message2" : "DocTemplateID = '. $DocTemplateID .'"';
       echo ', "message3" : "Exists = '. $Exists .'"';
       echo ', "message4" : "URL = '. $url .'"';
+    echo ', "tempFilePath" : "'.$tempFilePath.'"';
       echo '}';
     } 
     else 
     {
       echo '{';
-      echo ' "message" : "Sorry, there was an error uploading your file."';
+      echo ' "message" : "Sorry, there was an error uploading your file.",';
+      echo ' "temp_base_dir" : "'.$temp_base_dir.'",';
+      echo ' "base_url" : "'. $base_url .'"';
       echo '}';
     }
   }
 }
 ?>
-

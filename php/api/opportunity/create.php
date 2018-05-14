@@ -20,23 +20,41 @@ $opportunity = new Opportunity($db);
 $data = json_decode(file_get_contents("php://input"));
 if(json_last_error() === JSON_ERROR_NONE)
 {
+
   $opportunity->OpportunityID = $data->OpportunityID;
 
-  $ClosingDate = htmlspecialchars(strip_tags($data->ClosingDate));
-  $date = new DateTime($ClosingDate);
-  $opportunity->ClosingDate = $date->format('Y-m-d H:i:s');
-  $opportunity->LeadEvaluatorID = $data->LeadEvaluatorID;
-  $opportunity->Name = $data->Name;
-  $opportunity->LowestBid = $data->LowestBid;
-  $opportunity->Description = $data->Description;
-  $opportunity->Status = $data->Status;
-  $opportunity->CategoryID = $data->CategoryID;
+  if(isset($data->ClosingDate) and !is_null($data->ClosingDate))
+  {
+    $ClosingDate = htmlspecialchars(strip_tags($data->ClosingDate));
+    $date = new DateTime($ClosingDate);
+    $opportunity->ClosingDate = $date->format('Y-m-d H:i:s');
+  }
+
+  if(isset($data->LeadEvaluatorID) and !is_null($data->LeadEvaluatorID))
+    $opportunity->LeadEvaluatorID = $data->LeadEvaluatorID;
+  if(isset($data->Name) and !is_null($data->Name))
+    $opportunity->Name = $data->Name;
+  if(isset($data->LowestBid) and !is_null($data->LowestBid))
+    $opportunity->LowestBid = $data->LowestBid;
+  if(isset($data->Description) and !is_null($data->Description))
+    $opportunity->Description = $data->Description;
+  if(isset($data->Status) and !is_null($data->Status))
+    $opportunity->Status = $data->Status;
+  if(isset($data->CategoryID) and !is_null($data->CategoryID))
+    $opportunity->CategoryID = $data->CategoryID;
+  if(isset($data->MinimumScore) and !is_null($data->MinimumScore))
+    $opportunity->MinimumScore = $data->MinimumScore;
+
+  if(isset($data->TotalScore) and !is_null($data->TotalScore))
+    $opportunity->TotalScore = $data->TotalScore;
+  else if(isset($data->TotalPoints) and !is_null($data->TotalPoints))
+    $opportunity->TotalScore = $data->TotalPoints;
 
   if($opportunity->create())
   {
-//    echo '{';
-//       echo ' message : "Create suceeded. "';
-//    echo '}';
+    //echo '{';
+    //   echo ' message : "Create suceeded. "';
+    //echo '}';
   }
   else
   {
@@ -113,11 +131,32 @@ else
       $opportunity->CategoryID = $CategoryID;
     }
 
+    if(isSet($_POST_LowerCase["minimumscore"]))
+    {
+      $MinimumScore = $_POST_LowerCase["minimumscore"];
+      $MinimumScore = htmlspecialchars(strip_tags($MinimumScore));
+      $opportunity->MinimumScore = $MinimumScore;
+    }
+
+    if(isSet($_POST_LowerCase["totalscore"]))
+    {
+      $TotalScore = $_POST_LowerCase["totalscore"];
+      $TotalScore = htmlspecialchars(strip_tags($TotalScore));
+      $opportunity->TotalScore = $TotalScore;
+    }
+
+    if(isSet($_POST_LowerCase["TotalPoints"]))
+    {
+      $TotalScore = $_POST_LowerCase["TotalPoints"];
+      $TotalScore = htmlspecialchars(strip_tags($TotalScore));
+      $opportunity->TotalScore = $TotalScore;
+    }
+
     if($opportunity->create())
     {
-      echo '{';
-      echo ' message : "Create suceeded.  Record(OpportunityID='.$opportunityID.')"';
-      echo '}';
+      //echo '{';
+      //echo ' message : "Create suceeded.  Record(OpportunityID='.$opportunityID.')"';
+      //echo '}';
     }
     else
     {

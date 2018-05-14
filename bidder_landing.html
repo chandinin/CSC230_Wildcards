@@ -2,7 +2,7 @@
     <head>
 
 		<!-- Basic Styles -->
-<!--        <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.0/css/mdb.min.css" rel="stylesheet">-->
+        <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.0/css/mdb.min.css" rel="stylesheet"> -->
 	    	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
             <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
             <link rel="stylesheet" type="text/css" href="css/ept/style.css"/>
@@ -195,11 +195,42 @@ li,td,th {
     margin-right: 20px;
 }
 
-</style>
+#proposal-back-list-btn {
+    display: inline;
+    float: right;
+}
 
+#dfg {
+/*    display: block;
+    height: 20px;
+    width: 20px;
+    line-height: 60px;*/
+
+    -moz-border-radius: 50%; /* or 50% */
+    border-radius: 50%; /* or 50% */
+
+    background-color: black;
+    color: white;
+    text-align: center;
+    /*font-size: 2em;*/
+}
+
+#message-preview {
+    text-overflow: ellipsis;
+    maxlength: 10;
+
+}
+
+.w3-badge,.w3-tag{background-color:#000;color:#fff;display:inline-block;padding-left:8px;padding-right:8px;text-align:center}.w3-badge{border-radius:50%}
+.w3-red,.w3-hover-red:hover{color:#fff!important;background-color:#f44336!important}
+.w3-blue-grey,.w3-hover-blue-grey:hover,.w3-blue-gray,.w3-hover-blue-gray:hover{color:#fff!important;background-color:#607d8b!important}
+.w3-blue,.w3-hover-blue:hover{color:#fff!important;background-color:#2196F3!important}
+</style>
 		<div id="main" role="main">
 			<div class="custom-app">
 				<div class="container content">
+                    <ol class="breadcrumb" id="the-breadcrumb">
+                    </ol>
                     <div class="row" id="chooseAction">
                         <ul class="nav nav-tabs nav-justified" role="tablist">
                             <li class="nav-item">
@@ -212,12 +243,13 @@ li,td,th {
                                 <a class="nav-link" data-toggle="tab" id="subscriptions-tab" href="#subscriptions-panel" role="tab">Manage Your Subscriptions</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" id="messages-tab" href="#messages-panel" role="tab">View Your Messages <span id="num-unread-messages" class="badge badge-pill badge-primary">1</span></a>
+                                <a class="nav-link" data-toggle="tab" id="messages-tab" href="#messages-panel" role="tab">View Your Messages <span id="num-unread-messages" class="w3-badge w3-blue">0</span></a>
                             </li>
                         </ul>
                     </div>
                     <br>
                     <!--<div class="tab-content card"> -->
+
                         <div class="col-md-12 clearfix bid-opportunities" id="view-opporunities">
 
 
@@ -270,7 +302,7 @@ li,td,th {
                                 </div>
                                 <div class="row marketing">
                                     <div class="col-xs-12">
-                                        <span class="opportunity-detail" id="Description"> Sample Description</span>
+                                        <div contenteditable="true" class="opportunity-detail" id="Description">Sample Description</div>
                                     </div>
                                 </div>
                                 <br>
@@ -304,8 +336,14 @@ li,td,th {
                                 <ul id="opp-doc-templates-list">
                                 </ul>
                                 <br>
-                                <a id="proposal-save-btn" class="btn btn-primary">Save For Later</a>
-                                <a id="proposal-back-list-btn" class="btn btn-primary">Nevermind, back to list</a>
+                                <div class="row marketing">
+                                    <div class="col-xs-6">
+                                        <a id="proposal-save-btn" class="btn btn-primary">Save For Later</a>
+                                        <a id="proposal-submit-btn" class="btn btn-primary">Submit Proposal</a>
+
+                                        <a id="proposal-back-list-btn" class="btn btn-primary">Nevermind, back to list</a>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-12" id="spa-proposals-list">
                                 <table id="proposals-list-table" class="tablesorter table table-bordered table-striped table-hover">
@@ -337,7 +375,9 @@ li,td,th {
                             <div class="col-md-12" id="spa-message-detail">
                                 <h2>Message Type: <span id="message-detail-type">Message type placeholder</span></h2>
                                 <h2>Time Received: <span id="message-detail-time-received">Message time received placeholder</span></h2>
+                                <h2 id="message-detail-due-by-header">Clarification Due By: <span id="message-detail-due-by">Message time due by placeholder</span></h2>
                                 <h2 id="message-detail-time-responded-header">Time Responded: <span id="message-detail-time-responded">Message time response placeholder</span></h2>
+                                <h2 id="message-detail-opportunity-name-header">Regarding Opportunity: <span id="message-detail-opportunity-name">AHHH</span></h2>
                                 <h2>Message Body:</h2>
                                 <span id="message-detail-body">Placeholder message body</span>
                                 <br>
@@ -347,6 +387,11 @@ li,td,th {
                                     <textarea class="form-control" id="message-response-editor" rows="4"
                                               placeholder="Enter your response here." required></textarea>
                                 </div>
+                                <div id="message-detail-upload">
+                                    <span>Attach supporting document (If requested)</span><INPUT id="clarification-file-input" type="file"></INPUT>
+                                </div>
+
+                                <a id="message-detail-download-link">View what you uploaded for this Clarification</a>
 
                                 <div class="row marketing">
                                     <div class="col-md-2">

@@ -12,6 +12,8 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Credentials: true");
 header('Content-Type: application/json');
 
+date_default_timezone_set('America/Tijuana');
+
 include_once '../config/Database.php';
 include_once '../objects/opportunity.php';
 
@@ -40,6 +42,9 @@ if(isSet($_POST_LowerCase["opportunityid"]) || isSet($_GET_LowerCase["opportunit
       $DocTemplate_arr = array(
           "DocTemplateID" => $row['DocTemplateID'],
           "DocTitle" => $row['DocTitle'],
+          "DisplayTitle" => $row['DisplayTitle'],
+          "PostedDate" => $row['PostedDate'],
+          "SortOrder" => $row['SortOrder'],
           "Url" => $row['Url']
       );
      
@@ -52,7 +57,8 @@ if(isSet($_POST_LowerCase["opportunityid"]) || isSet($_GET_LowerCase["opportunit
   else
   {
     echo '{';
-    echo ' "message" : "Sorry, there was an error retrieving your file."';
+    echo ' "message" : "Sorry, there was an error retrieving your file.",';
+    echo ' "OpportunityID" : "' . $OpportunityID . '"';
     echo '}';
   }
 }
@@ -63,4 +69,3 @@ else
   echo '}';
 }
 ?>
-

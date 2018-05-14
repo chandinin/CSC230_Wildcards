@@ -27,6 +27,8 @@ if(isSet($_POST_LowerCase["doctemplateid"]))
   //delete doctemplate.
   if($doctemplate->delete())
   {  
+    $doctemplate->deleteOppDocTemplateByID($doctemplateID);
+
     echo '{';
     echo ' message : "Delete suceeded.  (DoctemplateID='.$doctemplateID.')"';
     echo '}';

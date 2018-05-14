@@ -18,7 +18,10 @@
     <script src="/resources/js/html5shiv.js"></script>
     <script src="/resources/js/respond.min.js"></script>
     <![endif]-->
-
+							    <script src="https://code.jquery.com/jquery-1.11.2.min.js"
+							        integrity="sha256-Ls0pXSlb7AYs7evhd+VLnWsZ/AqEHcXBeMZUycz/CcA="
+						        	crossorigin="anonymous"></script>
+    							<script src="js/bidder_register.js"></script>
 								<script src="js/jquery.min.js"></script>
 								<script src="js/bootstrap.min.js"></script>
 								<script src="js/jquery.bxslider.min.js?ver=1.8"></script>
@@ -105,7 +108,25 @@
 
 									</div>
 								</div>
-
+<style type="text/css">
+hr {
+                border: 0;
+                clear:both;
+                display:block;
+                width: 100%;                
+                background-color:#00659e;
+                height: 1px;
+            }
+.required-field {
+	box-sizing: border-box;
+	color: rgb(204, 0, 51);
+	font-family: "Open Sans", arial, sans-serif;
+	font-size: 12px;
+	font-weight: 400;
+	line-height: 19.2px;
+	overflow-wrap: break-word;
+}
+</style>
 								<!-- Main Tabs Navigation -->
 								<!-- Mobile version -->
 								<div class="navbar navbar-inverse navbar-static-top navbar-tab">
@@ -150,7 +171,8 @@
 
 																	</div>
 																</div>
-															</div>                    </div>
+															</div>
+									                    </div>
 													</li>
 												</ul>
 												<a href="employee_login.html" class="btn btn-primary pull-right hidden-xs" target="_blank">CalPERS Staff
@@ -177,8 +199,6 @@
 
 											<div class="breadcrumb visible-xs"> <a href="/page/about/doing-business-with-calpers"><i class="fa fa-chevron-left"></i>&nbsp; More in Doing Business With CalPERS</a> </div>
 											<form role="form"
-												action="php/api/bidder/create.php"
-												method="post"
 												id="registration-form">
 												<div class="container content">
 													<div class="row">
@@ -186,7 +206,24 @@
 															<div class="page-header">
 																<h1>Register for an account</h1>
 															</div>
-															<!-- TODO: Work with Dane on updating what the backend needs -->
+
+
+															<!-- Enter subscriptions -->
+															<h2>Categories</h2>
+															<p>Choose the categories you're interested in here. We'll email
+																you when new information is available for your selected
+																categories.</p>
+								                            <div class="col-md-12" id="subscriptions-form">
+								                                <h2>Please check all categories that you'd like to be notified of new opportunities</h2>
+																<label>Category <span class="help-span">(select one or more)</span>
+																		<span class="required-field">(required)</span></label>
+								                                <form id="subscriptions-form">
+								                                    <!-- Category buttons will go here -->
+								                                </form>
+								                                <a id="subscriptions-save-btn" class="btn btn-primary">Update Subscriptions</a>
+								                            </div>
+								                            <br>
+								                            <hr>
 															<h2>Your Information</h2>
 															<div class="row">
 																<div class="col-md-5">
@@ -197,70 +234,44 @@
 																</div>
 																<div class="col-md-2">
 																	<div class="form-group" id="middle_init">
-																		<label>Middle Initial <span class="required-field"></span></label>
-																		<input type="text" class="form-control" name="middle_init" maxlength="1" value=" ">
+																		<label>Middle Init. <span class="required-field"></span></label>
+																		<input type="text" class="form-control" name="middle_init" maxlength="1" value="">
 																	</div>
 																</div>
 																<div class="col-md-5">
 																	<div class="form-group" id="last_name" >
 																		<label>Last Name <span class="required-field">(required)</span></label>
-																		<input type="text" class="form-control" name="last_name" maxlength="30" value=" ">
+																		<input type="text" class="form-control" name="last_name" maxlength="30" value="">
 																	</div>
 																</div>
 															</div>
-															<div class="form-group" id="phonenumber" >
+															<div class="form-group" id="phone" >
 																<label>Phone Number<span class="required-field">(required)</span></label>
-																<input type="number" class="form-control" name="phonenumber" value="">
+																<input type="text" class="form-control" name="phone" value="" required>
 															</div>
-															<div class="form-group" id="Address" >
+															<div class="form-group" id="address" >
 																<label>Address<span class="required-field">(required)</span></label>
-																<input type="text" class="form-control" name="Address" value="">
-															</div>
-															<div class="form-group" id="bidopsid" >
-																<label>bidopsid<span class="required-field">(required)</span></label>
-																<input type="number" class="form-control" name="bidopsid" value="">
-															</div>
-
-															<div class="form-group" id="bidderid" >
-																<label>bidderid<span class="required-field">(required)</span></label>
-																<input type="text" class="form-control" name="bidderid" value="">
+																<input type="text" class="form-control" name="address" value="" required>
 															</div>
 															<div class="form-group" id="username" >
 																<label>Username<span class="required-field">(required)</span></label>
-																<input type="username" class="form-control" name="user_name" value="">
+																<input type="username" class="form-control" name="user_name" value="" required>
 															</div>
 															<div class="form-group" id="email" >
 																<label>Email Address <span class="required-field">(required)</span></label>
-																<input type="email" class="form-control" name="email" value="">
+																<input type="email" class="form-control" name="email" value="" required>
 															</div>
 															<div class="form-group" id="password" >
 																<label>Password <span class="required-field">(required)</span></label>
-																<input type="password" class="form-control" name="password" value="">
+																<input type="password" class="form-control" name="password" value="" required>
 															</div>
 															<p>
-																<button type="submit" class="btn btn-primary">Register for Account</button>
+																<a id="register-btn" class="btn btn-primary">Register</a>
 															</p>
 														</div>
 													</div>
 												</div>
 											</form>
-											<script>     
-												// Attach a submit handler to our registration form
-												// Uses http://malsup.github.com/jquery.form.js for this, not vanilla jquery
-												$(document).ready(function() { 
-													$("#registration-form").ajaxForm({
-												        url : $(this).attr("action"),
-												        dataType: 'json',
-												        method: 'POST',
-												        // TODO: Figure out why error is always called...
-												        // TODO: Actually display a failure mode
-												        error: function (response) {
-												        	alert("The server says: " + JSON.stringify(response));
-												        	window.location.href = 'bidder_register_success.html';
-												        }
-												    });	
-												});
-											</script>
 
 
 										</div>

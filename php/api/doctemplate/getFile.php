@@ -8,28 +8,47 @@ $_POST_LowerCase = array_change_key_case($_POST, CASE_LOWER);
 if(isSet($_POST_LowerCase["doctemplateid"]) || isSet($_GET_LowerCase["doctemplateid"]))
 {
   $DocTemplateID = isSet($_GET_LowerCase["doctemplateid"]) ? $_GET_LowerCase["doctemplateid"] : $_POST_LowerCase["doctemplateid"];
+  $pos = strpos($DocTemplateID, "_");
 
-  $DocTemplateIDArr = explode("_", $DocTemplateID);
+  if($pos !== FALSE)
+  {
+    $DocTemplateIDArr = explode("_", $DocTemplateID);
+    $DocTemplateID = $DocTemplateIDArr[1];
+  }
 
   $database = new Database();
   $db = $database->Connect();
 
   $doctemplate = new DocTemplate($db);
-  $doctemplate->selectByDocTemplateID($DocTemplateIDArr[1]);
 
-  $Path = $doctemplate->Path;
-  $DocTitle = $doctemplate->DocTitle;
+  if($doctemplate->DocTemplateExistsByID($DocTemplateID))
+  {
+    //header('Content-Type: application/json');
+    //echo '{';
+    //echo ' message : "File Exists.  Record(DocTemplateID='.$DocTemplateID.')"';
+    //echo '}';
 
-  $size = filesize($Path);
-  $MimeType = strtolower(pathinfo($Path,PATHINFO_EXTENSION));
+    $doctemplate->selectByDocTemplateID($DocTemplateID);
 
-  header("Content-length: $size");
-  header("Content-type: $MimeType");
-  header("Content-Disposition: attachment; filename='" . $DocTitle . "." . "'");
+    $Path = $doctemplate->Path;
+    $DocTitle = $doctemplate->DocTitle;
 
+    $size = filesize($Path);
+    $MimeType = strtolower(pathinfo($Path,PATHINFO_EXTENSION));
 
-  readfile($Path);
+    header("Content-length: $size");
+    header("Content-type: $MimeType");
+    header("Content-Disposition: attachment; filename=" . $DocTitle . "");
+
+    readfile($Path);
+  }
+  else
+  {
+    header('Content-Type: application/json');
+    echo '{';
+    echo ' message : "File Not Found.  Record(DocTemplateID='.$DocTemplateID.')"';
+    echo '}';
+  }
 }
 
 ?>
-

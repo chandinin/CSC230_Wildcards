@@ -16,9 +16,12 @@ $employee = new Employee($db);
 
 // get employeeID from POST
 $_POST_LowerCase = array_change_key_case($_POST, CASE_LOWER);
-if(isSet($_POST_LowerCase["employeeid"]))
+if(isSet($_POST_LowerCase["employeeid"]) || isSet($_POST_LowerCase["id"]))
 {
-  $employeeID = $_POST_LowerCase["employeeid"];
+  if(isSet($_POST_LowerCase["employeeid"]))
+    $employeeID = $_POST_LowerCase["employeeid"];
+  else if(isSet($_POST_LowerCase["id"]))
+    $employeeID = $_POST_LowerCase["id"];
 
   //Search
   $employee->id = $employeeID;
@@ -26,9 +29,7 @@ if(isSet($_POST_LowerCase["employeeid"]))
   //delete bidder.
   if($employee->delete())
   {  
-    echo '{';
-    echo ' message : "Delete suceeded.  Record(EmployeeID='.$employeeID.')"';
-    echo '}';
+    $employee->removeEmployeeAllRoles($employeeID);
   }
   else
   {
@@ -38,4 +39,3 @@ if(isSet($_POST_LowerCase["employeeid"]))
   }
 }
 ?>
-
