@@ -40,6 +40,10 @@ $(document).ready(function(){
     g_mc = new MessageCenter();
     g_mc.updateServer(); // Will report the messages we generated as well as the login time right
     $("#num-unread-messages").text(g_mc.numUnread);
+
+    // Init the fee doc listener
+
+    document.getElementById("fee-input").addEventListener("change", allDocsSatisfied);
 });
 
 class BreadCrumb
@@ -753,6 +757,8 @@ function initializeCreateProposal(opportunity_id)
     // Because edit-proposal can change this
     $("#proposal-instructions-span").text('Please download, fill out, and upload all requested forms. You can come back and edit your documents at any time before the deadline for submissions, just press "Save For Later". You may submit your Proposal once you have satsifed all required documents');
 
+    document.getElementById("fee-input").value = "";
+
 
 }
 
@@ -1004,8 +1010,10 @@ function populateOppDocTemplates(opp_doc_templates)
 function allDocsSatisfied(current_event)
 {
     console.log("Setting this inputs parent as hasDocPending");
-    console.log(current_event);
-    document.getElementById(current_event.target.dataset.parent_list_item_id).dataset.hasDocPending = true;
+    if(current_event.target.id != "fee-input")
+        document.getElementById(current_event.target.dataset.parent_list_item_id).dataset.hasDocPending = true;
+    else
+        console.log("This is the fee-input event");
 
     console.log("Checking if we have all docs potentially satisfied");
     doc_list = document.getElementById("opp-doc-templates-list");
@@ -1016,6 +1024,13 @@ function allDocsSatisfied(current_event)
     {
         li = doc_list.children[i];
         has_all_docs = has_all_docs & (li.dataset.hasDocUploaded == "true" || li.dataset.hasDocPending == "true");
+    }
+
+    fee_input = document.getElementById("fee-input");
+    if(fee_input.files.length == 0 && !($("#prev-fee-doc").is(":visible"))) // Hacky piece of shit!
+    {
+
+        has_all_docs = false;
     }
 
     console.log("Has all docs: " + String(has_all_docs));
