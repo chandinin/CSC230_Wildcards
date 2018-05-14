@@ -157,14 +157,12 @@
                                     </div>
                                 </div>
                                 <br>
-                                <div class="row">
+                                <div align="left" class="row">
                                     <div class="col-md-12">
                                         <div class="col-md-9">
                                             <select id="selectFilterCategory" name="category" required style="width: 325px">
                                                 <option id = "id" value="default">Category</option>
                                             </select>
-                                        </div>
-                                        <div class="col-md-3">
                                             <button id="showNewOpp" type="button" class="btn btn-accept">
                                                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Create New
                                             </button>
@@ -212,6 +210,7 @@
                                         </select>
                                     </div>
                                 </div><br>
+
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -311,35 +310,43 @@
                                 <h3 class="my-2 h3">Opportunity Details</h3>
                             </div>
                         </div>
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <span class="opportunity-property">Category: </span>
+                        <table class="table table-bordered table-heading">
+                            <th>Category</th>
+                            <td>
                                 <span class="opportunity-detail" id="oppType">1</span>
-                            </div>
-                            <div class="col-md-6">
-                                <span class="opportunity-property">Opportunity Number: </span>
-                                <span class="opportunity-detail" id="oppNumber">1</span>
-                            </div>
-                            <div class="col-md-6">
-                                <span class="opportunity-property">Opportunity Name: </span>
-                                <span class="opportunity-detail" id="oppName">1</span>
-                            </div>
-                            <div class="col-md-6">
-                                <span class="opportunity-property">Final Filing Date: </span>
-                                <span class="opportunity-detail" id="oppDate">1</span>
-                            </div>
-                            <div class="col-md-12">
-                                <span class="opportunity-property">Description: </span>
-                                <span class="opportunity-detail" id="oppDesc">1</span>
-                            </div>
-                            <div class="col-md-12">
-                                <span class="opportunity-property">Scoring Criteria: </span>
-                                <span class="opportunity-detail" id="oppScore">1</span>
-                            </div>
-                            <hr>
-                        </div>
+                            </td>
+                            <tr>
+                                <th>Opportunity Id</th>
+                                <td>
+                                    <span class="opportunity-detail" id="oppNumber">1</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Opportunity Name</th>
+                                <td>
+                                    <span class="opportunity-detail" id="oppName">1</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Opportunity Description</th>
+                                <td>
+                                    <span class="opportunity-detail" id="oppDesc">1</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Final Filing Date</th>
+                                <td>
+                                    <span class="opportunity-detail" id="oppDate">1</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Scoring Criteria</th>
+                                <td>
+                                    <span class="opportunity-detail" id="oppScore">1</span>
+                                </td>
+                            </tr>
 
+                        </table>
 
                         <div class="col-12">
                             <h4>Existing documents attached to this opportunity.</h4>
