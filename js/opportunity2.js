@@ -76,7 +76,7 @@ $(document).ready(
         });
 
         $('#oppEditButton').click(function () {
-            $("editExistOpp")[0].reset();
+            $("#editExistOpp")[0].reset();
             showEditOpp($("#oppNumber").text());
         });
 
