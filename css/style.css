@@ -1017,184 +1017,6 @@ hr {
     letter-spacing: -.25px;
 }
 
-/* Home - Section 3 - News and Events*/
-
-.home .section-3 {
-    background: #EFF5F9;
-    margin: 0 auto;
-    padding: 10px 0 10px 0;
-}
-
-.home .section-3 h2 {
-    border-color: #b9ccd9;
-    margin-bottom: 9px !important;
-    font-size: 26px;
-    margin-top: 20px;
-    padding-bottom: 20px;
-    font-weight: 400;
-    color: #444;
-    letter-spacing: -.25px;
-}
-
-.home .section-3 a {
-    text-decoration: none;
-}
-
-.home .section-3 .bucket-news li {
-    margin: 0;
-    border-bottom: 1px solid #b9ccd9;
-}
-
-.home .section-3 .bucket-news li a {
-    padding: 11px 0;
-    display: block;
-    text-decoration: none;
-}
-
-.home .section-3 .table > tbody > tr > th, .home .section-3 .table > tbody > tr > td {
-    border: none;
-}
-
-.home .section-3 .table tr th {
-    color: #666666;
-}
-
-.home .section-3 .table tr {
-    border-bottom: 1px solid #b9ccd9;
-}
-
-.home .section-3 .table th {
-    padding: 8px 20px 8px 0;
-    font-size: 17px;
-    color: #00659e;
-}
-
-.home .section-3 .table td {
-    padding: 13px 0;
-    font-size: 16px;
-}
-
-.home .section-3 .table td a {
-    display: block;
-}
-
-.home .section-3 .bucket {
-    padding-bottom: 30px;
-}
-
-.home .section-3 hr {
-    border-color: #00659e;
-    margin-top: 0;
-    margin-bottom: 10px;
-}
-
-/* Home - Section 4 - Videos */
-
-.home .section-4 {
-    padding: 30px 0 25px 0;
-}
-
-.home .section-4 h2 {
-    margin-bottom: 25px;
-    border-color: #fcb614;
-}
-
-.home .section-4 .bucket h2 {
-    font-size: 26px;
-    margin-top: 0px;
-    padding-bottom: 20px;
-    margin-bottom: 30px;
-    font-weight: 400;
-    color: #444;
-    letter-spacing: -.25px;
-    /*padding-bottom:15px;
-      margin-bottom: 25px;
-     border-bottom: 1px solid #fcb614;*/
-}
-
-.home .section-4 .thumbnail {
-    margin-bottom: 10px;
-}
-
-.home .section-4 .thumbnail .caption {
-    padding: 0;
-}
-
-.home .section-4 .featured .thumbnail .caption {
-    font-size: 16px;
-    color: #333333;
-}
-
-.home .section-4 .thumbnail iframe {
-    width: 260px;
-    height: 146px;
-}
-
-/* Home - Section 5 - CalPERS Facts*/
-
-.home .section-5 h2 {
-    font-size: 26px;
-    margin-bottom: 30px;
-    border-color: #00659e;
-    padding-bottom: 20px;
-    margin-top: 0px;
-    font-weight: 400;
-    color: #444;
-    letter-spacing: -.25px;
-}
-
-.home .section-5 {
-    background: #ebebeb;
-    border-top: 2px solid #fcb614;
-    padding: 30px 0 30px 0;
-}
-
-.home .section-5 .panel img {
-    width: 100%;
-}
-
-.faq-home h4 {
-    color: #666;
-    font-size: 22px;
-    line-height: 1.2em;
-    margin-top: 0;
-    color: #444;
-    font-weight: 400;
-}
-
-.biography div.page-header {
-    /*margin: 0 0 15px 0;*/
-    border-bottom: 1px solid #fcb614;
-    /*padding-bottom: 0;*/
-}
-
-.faq-home .panel.panel-default h3 {
-    font-size: 22px;
-    line-height: 1.2em;
-    margin-top: 0;
-    color: #444;
-    font-weight: 400;
-}
-
-/* Home - Section 6 - State Initiatives */
-
-.home .section-6 {
-    padding: 25px 0 10px 0;
-}
-
-.home .section-6 .panel {
-    height: 60px;
-    width: 150px;
-    margin-bottom: 0;
-}
-
-.home .section-6 .bucket li {
-    margin-right: 50px;
-}
-
-.home .section-6 .bucket li img {
-    height: 69px;
-}
 
 /*------------------------------------------------*/
 
@@ -3166,5 +2988,15 @@ th {text-align:center}
 .form-check-label-calpers {
     margin-bottom: 0;
     font-size: small;
+}
+
+
+.table-heading{
+}
+
+.table-heading th{
+    background-color:  #00659e;
+    color: white;
+    width: 200px;
 }
 
