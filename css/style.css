@@ -131,6 +131,16 @@ a:hover {
 }
 
 /*sticky footer*/
+#footer {
+    clear:both;
+    margin: 30px 10px 10px 10px;
+    padding: 10px;
+    text-align:center;
+    font-size: 1.2em;
+    color: #404040;
+    background-color: #eee;
+    border: 1px solid #ccc;
+}
 
 html, body {
     height: 98%;
