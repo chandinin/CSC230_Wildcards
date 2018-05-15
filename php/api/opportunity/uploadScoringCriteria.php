@@ -64,44 +64,31 @@ if(isset($_POST["submit"]))
     {
       $url = $base_url . "OSC" .$OpportunityID . "_" . $SCID . "_" . $filename;
 
-      if(!$opportunity->ScoringCriteriaExists($OpportunityID))
-      {
-        if($opportunity->UploadScoringCriteria($SCID, $OpportunityID, $filename, $tempFilePath, $url))
-        {
-          $Exists = "Uploaded Document";
-          $Success = true;
+      /* Delete Previous Scoring Opportunity  */
+      $opportunity->DeleteScoringCriteria($OpportunityID);
 
-          echo '{';
-          echo ' "message" : "Upload Successful."';
-          echo ', "filename" : "'. $filename .'"';
-          echo ', "OpportunityID" : "'. $OpportunityID .'"';
-          echo ', "URL" : "'. $url .'"';
-          echo '}';
-        }
-        else
-        {
-          echo '{';
-          echo ' "message" : "File was successfully uploaded and moved to file repository."';
-          echo ', "message2" : "Database operation failed!  Could not add record to Scoring Criteria table."';
-          echo ', "SCID" : "'. $SCID .'"';
-          echo ', "OpportunityID" : "'. $OpportunityID .'"';
-          echo ', "filename" : "'. $filename .'"';
-          echo ', "tempFilePath" : "'. $tempFilePath .'"';
-          echo ', "URL" : "'. $url .'"';
-          echo '}';
-        }
+      if($opportunity->UploadScoringCriteria($SCID, $OpportunityID, $filename, $tempFilePath, $url))
+      {
+        $Exists = "Uploaded Document";
+        $Success = true;
+        echo '{';
+        echo ' "message" : "Upload Successful."';
+        echo ', "filename" : "'. $filename .'"';
+        echo ', "OpportunityID" : "'. $OpportunityID .'"';
+        echo ', "URL" : "'. $url .'"';
+        echo '}';
       }
       else
       {
-        if($opportunity->UpdateScoringCriteria($OpportunityID, $filename, $tempFilePath, $url))
-        {
-          echo '{';
-          echo ' "message" : "Upload Successful."';
-          echo ', "filename" : "'. $filename .'"';
-          echo ', "OpportunityID" : "'. $OpportunityID .'"';
-          echo ', "URL" : "'. $url .'"';
-          echo '}';
-        }
+        echo '{';
+        echo ' "message" : "File was successfully uploaded and moved to file repository, but error occurred."';
+        echo ', "message2" : "Database operation failed!  Could not add record to Scoring Criteria table."';
+        echo ', "SCID" : "'. $SCID .'"';
+        echo ', "OpportunityID" : "'. $OpportunityID .'"';
+        echo ', "filename" : "'. $filename .'"';
+        echo ', "tempFilePath" : "'. $tempFilePath .'"';
+        echo ', "URL" : "'. $url .'"';
+        echo '}';
       }
     } 
     else 

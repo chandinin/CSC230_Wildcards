@@ -434,6 +434,35 @@ class Opportunity
     }
   }
 
+
+  // Upload Document Template 
+  function DeleteScoringCriteria($OpportunityID)
+  { 
+    try
+    {
+      $results = false;   
+
+      $query = "DELETE FROM ScoringCriteria WHERE OpportunityID = ? ; ";
+      
+      $stmt = $this->conn->prepare( $query );
+   
+      // bind parameters
+      $stmt->bindParam(1, $OpportunityID);
+
+      if($stmt->execute())
+      {
+        $results = true;
+      }
+
+      return $results;
+    }
+    catch (PDOException $e) 
+    {
+      echo 'Connection failed: ' . $e->getMessage();
+      return false;
+    }
+  }
+
   // Upload Document Template 
   function getDocTemplates($OpportunityID)
   { 
