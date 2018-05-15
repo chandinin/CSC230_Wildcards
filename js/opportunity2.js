@@ -321,7 +321,7 @@ function getScoringDocLink(opId,scoreLink){
                 scoreFile = scoreInfo.Url;
             }
             else {
-                alert("Could not load Scoring Criteria for this record.  Please edit.");
+                //alert("Could not load Scoring Criteria for this record.  Please edit.");
             }
         }
             else {

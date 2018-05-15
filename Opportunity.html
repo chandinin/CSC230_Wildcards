@@ -8,10 +8,10 @@
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/bootstrap-datepicker.css">
     <link rel="stylesheet" type="text/css" href="css/tablesorter-style.css">
-    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/bootstrap3-wysihtml5.css">
     <link rel="stylesheet" href="css/opportunity.css">
     <link rel="stylesheet" href="jqueryui-editable-1.5.1/jqueryui-editable/css/jqueryui-editable.css">
+    <link rel="stylesheet" href="css/style.css">
 
     <!--
 -->
@@ -294,22 +294,15 @@
                         <div class="row">
                             <div class="col-md-3" >
                             </div>
-                            <div class="col-md-2">
-                                <button id="oppEditButton" type="button" class="btn btn-openportal">
-                                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit
-                                </button>
-                            </div>
-                            <div class="col-md-2">
-                                <button id="oppReadyButton" type="button" class="btn btn-accept">
-                                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>Mark For Review
-                                </button>
-                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <h3 class="my-2 h3">Opportunity Details</h3>
                             </div>
                         </div>
+                        <div class="row">
+                        <table>
+                            <tr>
                         <table class="table table-bordered table-heading">
                             <th>Category</th>
                             <td>
@@ -345,8 +338,25 @@
                                     <span class="opportunity-detail" id="oppScore">1</span>
                                 </td>
                             </tr>
-
                         </table>
+                            </tr>
+                            <tr>
+                                <td></td>
+                               <td>
+                                   <div class="col-md-2">
+                                       <button id="oppEditButton" type="button" class="btn btn-openportal">
+                                           <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit
+                                       </button>
+                                   </div>
+                                   <div class="col-md-2">
+                                       <button id="oppReadyButton" type="button" class="btn btn-accept">
+                                           <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>Mark For Review
+                                       </button>
+                                   </div>
+                               </td>
+                            </tr>
+                        </table>
+                        </div>
 
                         <div class="col-12">
                             <h4>Existing documents attached to this opportunity.</h4>
@@ -362,6 +372,7 @@
                         </div>
 
                     </div>
+                    <!-- View Panel 3 -->
 
                     <!--Edit Panel 4-->
                     <div class="col-md-12 clearfix bid-opportunities" id="editOppPanel2">
@@ -369,19 +380,11 @@
                             <div class="col-md-6">
                                 <h3 class="my-2 h3">Opportunity Details</h3>
                             </div>
-                            <div class="col-md-3" >
-                                <button id="editoppSave" type="button" class="btn btn-success">
-                                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>Save Changes
-                                </button>
-                            </div>
-                            <div class="col-md-3" >
-                                <button onclick="showOppView($('#editoppNumber').text())" class="btn btn-openportal">
-                                    <span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span>Exit Edit
-                                </button>
-                            </div>
                         </div>
                         <div class="row">
                             <form id="editExistOpp">
+                                <table>
+                                    <tr>
                                 <table class="table table-bordered table-heading">
                                     <th>Category</th>
                                     <td>
@@ -415,6 +418,24 @@
                                         <th>Scoring Criteria</th>
                                         <td>
                                             <span class="opportunity-detail" id="editoppScore">1</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                                    </tr>
+                                    <tr style="border-style: hidden">
+
+                                        <td></td>
+                                        <td>
+                                        <div class="col-md-3" >
+                                            <button id="editoppSave" type="button" class="btn btn-success">
+                                                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>Save Changes
+                                            </button>
+                                        </div>
+                                        <div class="col-md-3" >
+                                            <button onclick="showOppView($('#editoppNumber').text())" class="btn btn-openportal">
+                                                <span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span>Exit Edit
+                                            </button>
+                                        </div>
                                         </td>
                                     </tr>
                                 </table>
@@ -463,13 +484,7 @@
                         </form>
                     </div>
                     <!--/.Edit Panel 4-->
-
                 </div>
-                <!-- View Panel 3 -->
-
-
-
-
                 <!--/.Opportunity Panel 1-->
 
                 <!--Awarded Panel 2-->
@@ -651,6 +666,9 @@
 <script src="js/bootstrap3-wysihtml5.all.min.js"></script>
 <script src="jquery-ui-1.12.1.custom/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
 <script src="jqueryui-editable-1.5.1/jqueryui-editable/js/jqueryui-editable.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.min.js"></script>
+
+
 </body>
 
 </html>
