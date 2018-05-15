@@ -179,7 +179,7 @@
                                         <th>Last Updated</th>
                                         <th>Opportunity Description</th>
                                         <th>Status</th>
-                                        <th>Action</th>
+                                        <th></th> <!--Action-->
                                         </thead>
                                         <tbody id="oppListTableBody">
                                         </tbody>
@@ -381,8 +381,9 @@
                                 <h3 class="my-2 h3">Opportunity Details</h3>
                             </div>
                         </div>
+                        <form id="editExistOpp">
                         <div class="row">
-                            <form id="editExistOpp">
+
                                 <table>
                                     <tr>
                                 <table class="table table-bordered table-heading">
@@ -431,7 +432,7 @@
                                                 <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>Save Changes
                                             </button>
                                         </div>
-                                        <div class="col-md-3" >
+                                        <div class="col-md-2" >
                                             <button onclick="showOppView($('#editoppNumber').text())" class="btn btn-openportal">
                                                 <span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span>Exit Edit
                                             </button>
@@ -439,8 +440,8 @@
                                         </td>
                                     </tr>
                                 </table>
-                            </form>
-                        </div>
+                         </div>
+                        </form>
                         <div class="col-12">
                             <h4>Existing documents attached to this opportunity.</h4>
                             <table id="listDocTemplates" class="table table-responsive">

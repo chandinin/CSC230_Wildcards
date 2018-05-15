@@ -309,6 +309,7 @@ xhr.send();
 
 function getScoringDocLink(opId,scoreLink){
     var scoreFile="#";
+    var scoreText = "View Scoring Criteria";
     var xhr = new XMLHttpRequest();
     var  url = "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/getScoringCriteria.php?OpportunityID="+opId;
     xhr.open("GET",url);
@@ -321,17 +322,19 @@ function getScoringDocLink(opId,scoreLink){
                 scoreFile = scoreInfo.Url;
             }
             else {
+                scoreText = "No Scoring Criteria Uploaded";
                 //alert("Could not load Scoring Criteria for this record.  Please edit.");
             }
         }
             else {
+            scoreText = "No Scoring Criteria Uploaded";
             alert("Server error: Could not load Scoring Criteria for this record.");
         }
 
         console.log("scorefile= " + scoreFile);
         //$("#oppScore").html("<a href='" + scoreFile + "'>" +
             scoreLink.html("<a target='_blank' href='" + scoreFile + "'>" +
-            "View Scoring Criteria</a>");
+            scoreText + "</a>");
     }
     xhr.send();
 }
@@ -659,6 +662,29 @@ function uploadScoring(file, opId) {
     };
     xhr.send(formData);
 }
+
+function updateScoring(file, opId) {
+    /* Update scoring criteria*/
+    console.log(file.name);
+    var formData = new FormData();
+    formData.append('OpportunityID', opId);
+    formData.append('filename', file, file.name);
+    formData.append('submit',1);
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/updateScoringCriteria.php');
+    //xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onload = function () {
+        if (xhr.status == 200) {
+            alert('New scoring File uploaded');
+        } else {
+            alert('Error uploading new scoring file');
+        }
+    };
+    xhr.send(formData);
+}
+
+
+
 function uploadDocTemplates(opId) {
     /*upload other documents */
     var numfiles =  $('#uploadMFileName')[0].files.length;
