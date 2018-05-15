@@ -41,8 +41,7 @@ function processOpportunity(opId) {
     var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/update.php"
     xhr.open('POST', url);
     var formData = new FormData();
-    formData.append("OpportunityID", opId);
-    formData.append("Status", 11);
+    var formData = {"OpportunityID":"" + opId + "","Status":11};
     xhr.onload = function () {
         if (xhr.status == 200) {
             var retval = xhr.responseText;
@@ -57,7 +56,7 @@ function processOpportunity(opId) {
         }
         //alert("processed: " + opId);
     }
-    xhr.send(formData);
+    xhr.send(JSON.stringify(formData));
 }
 
 function showEditOpp(opId) {
