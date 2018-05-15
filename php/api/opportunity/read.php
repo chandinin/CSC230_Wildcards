@@ -24,10 +24,17 @@ if(isSet($_POST_LowerCase["opportunityid"])
   $opportunityID = isSet($_GET_LowerCase["opportunityid"]) ? 
      $_GET_LowerCase["opportunityid"] : $_POST_LowerCase["opportunityid"];
 
+  $ProposalCount = $opportunity->getProposalCount($opportunityID);
+
+  /* 
+      Check if Opportunity has expired.  
+      If yes then set proposals with all docs to "In Progress". Those with not all of the docs to "Expired".
+      If not expired, do not change status. 
+  */
+  $opportunity->CheckIFOpportunityExpired($opportunityID);
+
   //Search
   $opportunity->selectByID($opportunityID);
-
-  $ProposalCount = $opportunity->getProposalCount($opportunityID);
 
   $opportunity_arr = array(
     "OpportunityID" =>  $opportunity->OpportunityID,

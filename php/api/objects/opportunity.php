@@ -7,6 +7,7 @@
 ini_set('display_errors', 'On');
 error_reporting(E_ALL);
 
+include_once 'proposal.php';
 
 class Opportunity
 {
@@ -626,6 +627,158 @@ WHERE OpportunityID = ? ; ";
     $stmt->execute();
 
     return $stmt;
+  }
+
+  // Has Opportunity Expired?
+  function HasOpportunityExpired($OpportunityID)
+  {
+    $isExpired = false;
+    try
+    {
+      $query = "SELECT CASE WHEN NOW() > ClosingDate THEN 1 ELSE 0 END Expired FROM Opportunity WHERE OpportunityID = ? ; ";
+
+      $stmt = $this->conn->prepare( $query );
+
+      // bind parameters
+      $stmt->bindParam(1, $OpportunityID);
+
+      if($stmt->execute())
+      {
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $ExpiredFlag = $row['Expired'];
+
+        if($ExpiredFlag > 0)
+          $isExpired = true;
+      }
+    }
+    catch (PDOException $e)
+    {
+      echo 'Connection failed: ' . $e->getMessage();
+    }
+
+    return $isExpired;
+  }
+
+  // Set Opportunity to Closed (Expired).
+  function SetOpportunityStatusToClosed($OpportunityID)
+  {
+    try
+    {
+      $query = "UPDATE Opportunity SET Status = 6 WHERE OpportunityID = ? ; ";
+      $stmt = $this->conn->prepare( $query );
+
+      // bind parameters
+      $stmt->bindParam(1, $OpportunityID);
+
+      if($stmt->execute())
+        return true;
+      else
+        return false;
+    }
+    catch (PDOException $e)
+    {
+      echo 'Connection failed: ' . $e->getMessage();
+      return false;
+    }
+  }
+
+  // Reject All Proposals.
+  function RejectAllProposals($OpportunityID)
+  {
+    try
+    {
+      $query = "UPDATE Proposal SET Status = 70 WHERE OpportunityID = ? ; ";
+      $stmt = $this->conn->prepare( $query );
+
+      // bind parameters
+      $stmt->bindParam(1, $OpportunityID);
+
+      if($stmt->execute())
+        return true;
+      else
+        return false;
+    }
+    catch (PDOException $e)
+    {
+      echo 'Connection failed: ' . $e->getMessage();
+      return false;
+    }
+  }
+
+  // Has Opportunity Expired?
+  function getDocTemplateCount($OpportunityID)
+  {
+    $DocCount = 0;
+    try
+    {
+      $query = "select count(*) as DocTempCount from OppDocTemplate where OpportunityID = ?; ";
+
+      $stmt = $this->conn->prepare( $query );
+
+      // bind parameters
+      $stmt->bindParam(1, $OpportunityID);
+
+      if($stmt->execute())
+      {
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $DocCount = $row['DocTempCount'];
+      }
+    }
+    catch (PDOException $e)
+    {
+      echo 'Connection failed: ' . $e->getMessage();
+    }
+
+    return $DocCount;
+  }
+
+  function CheckIFOpportunityExpired($OpportunityID)
+  {
+    $Expired = false;
+    try
+    {
+      $proposal = new Proposal($this->conn);
+
+      if($proposal->HasOpportunityExpired($OpportunityID))
+      {
+        $proposal->SetOpportunityStatusToClosed($OpportunityID);
+
+        //Step 1) Get Opp DocTemplate Count.
+        $DocTempCount = $this->getDocTemplateCount($OpportunityID);
+    
+        //Step 2) Get Proposals.    
+        $stmt = $proposal->selectByOppID($OpportunityID);
+        $rowCount = $stmt->rowCount();
+        if($rowCount > 0)
+        {
+          while($row = $stmt->fetch(PDO::FETCH_ASSOC))
+          {
+            $ProposalID = $row['ProposalID'];
+            $Status = $row['Status'];
+            $DocCount = $proposal->getDocCount($ProposalID);
+
+            if(($DocCount >= $DocTempCount) || ($Status == 15)) /* Evaluator 1 Accepted. */
+            {
+              $NewStatus = 30; /* In Progress */
+              $proposal->setProposalStatus($ProposalID, $NewStatus);
+            }
+            else
+            {
+              $NewStatus = 70; /* Expired */
+              $proposal->setProposalStatus($ProposalID, $NewStatus);
+            }
+          }
+        }
+
+        $Expired = true;
+      }
+    }
+    catch (PDOException $e) 
+    {
+      echo 'Connection failed: ' . $e->getMessage();
+    }
+
+    return $Expired;
   }
 }
 ?>
