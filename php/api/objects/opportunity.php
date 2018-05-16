@@ -100,6 +100,22 @@ class Opportunity
     return $stmt;
   }
 
+  // select one by ID
+  function selectByMultStatusID($Statuses)
+  {
+    $query = "select OpportunityID, ClosingDate, LeadEvaluatorID, O.Name, LowestBid, Description, O.Status, OS.Name as StatusName, CategoryID, CreatedDate, LastEditDate, MinimumScore, TotalScore from Opportunity O
+  left join OppStatus OS on OS.StatusID = O.`Status` ";
+    $query = $query . "WHERE `Status` in (". $Statuses .") Order By `Status`, OpportunityID;";
+    $stmt = $this->conn->prepare( $query );
+
+    /* echo "query = " . $query; */
+
+    // execute query
+    $stmt->execute();
+
+    return $stmt;
+  }
+
   // select All in the table
   function selectAll()
   {
