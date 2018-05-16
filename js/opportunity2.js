@@ -24,21 +24,8 @@ $(document).ready(
             $("#oppsMenu option[id='opplist']").attr("selected", "selected");
         });
 
-      /*  $('#newOppForm').validator().on('submit', function (e) {
-            if (e.isDefaultPrevented()) {
-                // handle the invalid form...
-                alert("Please correct noted fields.");
-            } else {
-                // everything looks good!
-                saveOpportunity();
-            }
-        });
-*/
 
         $('#saveNewOpp').click(function () {
-  /*          $('#newOppForm').validator('update');
-            $('#newOppForm').validator('validate');
-            */
             var validator = $("#newOppForm").validate({
                 invalidHandler: function() {
                     console.log( validator.numberOfInvalids() + " field(s) are invalid" );
@@ -64,11 +51,7 @@ $(document).ready(
         $('#clearNewOpp').click(function () {
             $('#newOppForm')[0].reset();
         });
-/*
-        $('#oppListTable tr').click(function () {
-            showOpp();
-        });
-*/
+
         $('#docTemplatesBody').sortable();
         $('#oppTab').click(function () {
             showOppList(0);
