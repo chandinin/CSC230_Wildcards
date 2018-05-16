@@ -526,6 +526,9 @@ function getOppList(type) {
 function fillOppTable(oppArray,type) {
     var size = oppArray.opportunity.length;
     var tablename = "oppListTableBody";
+    var start = 0;
+    var elements_per_page = 7;
+    var limit = elements_per_page;
     switch (type)  {
         case 1:
             tablename = "oppArListTableBody";
@@ -537,44 +540,50 @@ function fillOppTable(oppArray,type) {
             tablename = "oppAwListTableBody";
             break;
     }
-    for (var i = 0; i < size; i++) {
-        var opp = oppArray.opportunity[i];
-        var oppDesc = opp.Description;
-        if (oppDesc.length > 100)
-            oppDesc = "... " + oppDesc.substr(20, 100) + "...";
-        try {
-            var catName = categoryArray.Category[opp.CategoryID].Name;
-        }catch(err) {
-            var catName  = "None";
-        }
-        var tempEDate =new Date(opp.LastEditDate).toDateString();
-        var tempCDate =new Date(opp.ClosingDate).toDateString();
-        var row;
-        switch(type) {
-            case 11:
-                row = "<tr><td>" + catName + "</td></td><td>" + opp.OpportunityID + "</td><td><a class='dynamic_href' onclick='showOppView(\"" +
-                    opp.OpportunityID + "\")'> " + opp.Name +
-                    "</a></td><td>" + tempCDate + "</td><td>" + tempEDate + "</td><td>" + oppDesc + "</td><td>" +
-                    opp.StatusName + "</td><td>" +
-                    "<button onclick='markPublishOpp(\"" + opp.OpportunityID + "\")' value='" + opp.OpportunityID + "' type='button' class='btn btn-primary'>" +
-                    "<span class='glyphicon glyphicon-globe' aria-hidden='true'></span> Publish</button></td></tr>";
-                break;
-            default:
-                row = "<tr><td>" + catName + "</td></td><td>" + opp.OpportunityID + "</td><td><a class='dynamic_href' onclick='showOppView(\"" +
-                    opp.OpportunityID + "\")'> " + opp.Name +
-                    "</a></td><td>" + tempCDate + "</td><td>" + tempEDate + "</td><td>" + oppDesc + "</td><td>" +
-                    opp.StatusName + "</td><td></td></tr>";
-        }
-        $("#" + tablename).append(row);
-        $("#" + tablename).trigger("update");
+    if(size < limit)
+        limit = size;
+    pagedfillOppTable(start,limit,type);
 
+    function pagedfillOppTable(start, limit,type) {
+        for (var i = start; i < limit; i++) {
+            var opp = oppArray.opportunity[i];
+            var oppDesc = opp.Description;
+            if (oppDesc.length > 100)
+                oppDesc = "... " + oppDesc.substr(20, 100) + "...";
+            try {
+                var catName = categoryArray.Category[opp.CategoryID].Name;
+            } catch (err) {
+                var catName = "None";
+            }
+            var tempEDate = new Date(opp.LastEditDate).toDateString();
+            var tempCDate = new Date(opp.ClosingDate).toDateString();
+            var row;
+            switch (type) {
+                case 11:
+                    row = "<tr><td>" + catName + "</td></td><td>" + opp.OpportunityID + "</td><td><a class='dynamic_href' onclick='showOppView(\"" +
+                        opp.OpportunityID + "\")'> " + opp.Name +
+                        "</a></td><td>" + tempCDate + "</td><td>" + tempEDate + "</td><td>" + oppDesc + "</td><td>" +
+                        opp.StatusName + "</td><td>" +
+                        "<button onclick='markPublishOpp(\"" + opp.OpportunityID + "\")' value='" + opp.OpportunityID + "' type='button' class='btn btn-primary'>" +
+                        "<span class='glyphicon glyphicon-globe' aria-hidden='true'></span> Publish</button></td></tr>";
+                    break;
+                default:
+                    row = "<tr><td>" + catName + "</td></td><td>" + opp.OpportunityID + "</td><td><a class='dynamic_href' onclick='showOppView(\"" +
+                        opp.OpportunityID + "\")'> " + opp.Name +
+                        "</a></td><td>" + tempCDate + "</td><td>" + tempEDate + "</td><td>" + oppDesc + "</td><td>" +
+                        opp.StatusName + "</td><td></td></tr>";
+            }
+            $("#" + tablename).append(row);
+            $("#" + tablename).trigger("update");
+        }
     }
+
     $('#next').click(function(){
         var next = limit;
         if(size>next) {
             limit = limit + elements_per_page;
-            $('#oppListTableBody').empty();
-            fillOppTable(next,limit);
+            $('#' + tablename).empty();
+            pagedfillOppTable(next,limit);
         }
     });
 
@@ -582,8 +591,8 @@ function fillOppTable(oppArray,type) {
         var pre = limit-(2*elements_per_page);
         if(pre >= 0) {
             limit = limit - elements_per_page;
-            $('#oppListTableBody').empty();
-            fillOppTable(pre,limit);
+            $('#' + tablename).empty();
+            pagedfillOppTable(pre,limit);
         }
     });
 }
