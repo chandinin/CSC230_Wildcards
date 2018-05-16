@@ -3000,3 +3000,7 @@ th {text-align:center}
     width: 200px;
 }
 
+.dynamic_href {
+    text-decoration: underline !important;
+}
+

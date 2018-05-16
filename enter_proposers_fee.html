@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SCORE Calculation</title>
+    <title>Enter Proposer's Fee</title>
     <!-- CSS Includes -->
     <link rel="stylesheet" type="text/css" href="css/ept/menu2.css"/>
     <link rel="stylesheet" type="text/css" href="css/ept/style.css"/>
@@ -36,7 +36,7 @@
     <link rel="stylesheet" type="text/css" href="css/ept/login.css"/>
     <script type="text/javascript" src="js/ept/jquery.cookie.js"></script>
     <script src="js/bidder_login.js"></script>
-    <script src="js/fee_calculation.js"></script>
+    <script src="js/enter_proposers_fee.js"></script>
 </head>
 <body>
 
@@ -129,7 +129,8 @@
                 <li><a href="home_page.html">Home</a></li>
                 <li><a href="evaluator2_landing.html">Secondary Evaluation</a></li>
                 <li><a href="eval2_list_proposals.html">Proposal</a></li>
-                <li class="active">Score Calculation</li>
+                <li><a href="reveal_fee.html">Reveal Fee</a></li>
+                <li class="active">Enter Proposer's Fee</li>
             </ul>
         </div>
 
@@ -151,14 +152,6 @@
                     <th style="background-color:  #00659e; color: white">Fee:</th>
                     <td><span id="feeDoc">feeProposal.doc</span></td>
                 </tr>
-                <tr>
-                    <th style="background-color:  #00659e; color: white">Scoring Criteria:</th>
-                    <td><span id="scorCriteriaDoc">ScoringCriteria.doc</span></td>
-                </tr>
-                <tr>
-                    <th style="background-color:  #00659e; color: white">Fee Proposal Score:</th>
-                    <td><span id="feeProposalScore"></span></td>
-                </tr>
             </table>
                     </div>
                 </div>
@@ -169,33 +162,16 @@
         <!--Score Calculation-->
         <div class="container navbar-right">
             <h3>
-                <b> Fee Proposal Score Calculation</b>
+                <b> Enter Proposer's Fee</b>
             </h3>
-            <br>
-            <!--Lowest fee-->
-            <label align ="left" for="lowestFee" id="lowestFeeLbl">Lowest Fee Proposal:</label>
-            <br>
-            <input id="lowestFee" name="lowestFee" type="number" style="width: 100px;"> <span
-                class="required">(required)</span>
-            <p></p>
-            <br>
             <!--Fee proposal-->
-            <label align ="left" for="feeProposal" id="feeProposalLbl">Proposer's Fee Proposal:</label>
-            <br>
+
             <input id="feeProposal" name="feeProposal" type="number" style="width: 100px;"/> <span
                 class="required">(required)</span>
             <p></p>
             <br>
-            <!--Total Possible Points-->
-            <label align ="left" for="totalPossiblePoints" id="totalPossiblePointsLbl">Total Possible Points:</label>
-            <br>
-            <input id="totalPossiblePoints" name="totalPossiblePoints" type="number" style="width: 100px;"/> <span
-                class="required">(required)</span>
-            <p></p>
-            <br>
-
-            <button type="button" class="btn btn-accept btn-sm" onclick="calculateFee()">
-                <span class="glyphicon glyphicon-ok-sign"></span> Calculate Fee Proposal Score
+            <button type="button" class="btn btn-accept btn-sm" onclick="submit()">
+                <span class="glyphicon glyphicon-ok-sign"></span> Submit
             </button>
         </div>
         </div>

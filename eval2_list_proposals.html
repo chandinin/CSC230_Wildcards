@@ -133,28 +133,6 @@
         </ul>
     </div>
 
-    <!--Tabs-->
-    <div class="container navbar-right">
-        <!-- Nav tabs -->
-        <ul class="nav nav-tabs nav-justified indigo" role="tablist">
-            <li class="nav-item">
-                <a id="proposalTab" class="nav-link active" data-toggle="tab" href="#panel1" role="tab" >
-                    <i class="fa fa-user"></i> Proposals</a>
-            </li>
-            <li class="nav-item">
-                <a id="feeTab" class="nav-link" data-toggle="tab" href="#panel2" role="tab">
-                    <i class="fa fa-heart"></i> Fee Calculation</a>
-            </li>
-        </ul>
-    </div>
-
-    <!--tab1-->
-    <div class="tab-content">
-        <div class="tab-pane fade in active" id="panel1" role="tabpanel">
-            <div class="row">
-                <div class="col-md-12">
-                    <div id="listProposalPanel1" >
-
     <!--table, opportunity name and bidder name-->
     <div class="container navbar-right">
         <br>
@@ -173,6 +151,7 @@
                         <thead>
                         <th>Bidder</th>
                         <th>Proposal</th>
+                        <th>Technical Score</th>
                         <th>Creation Date</th>
                         <th>Status</th>
                         <th>Action</th>
@@ -186,62 +165,14 @@
 
         <!--Buttons for text message-->
         <div align="right">
-
+            <button id ="revealFeeButton" type="button" class="btn btn-accept btn-sm" onclick="revealFee()">
+                <span class="glyphicon glyphicon-ok-sign"></span> Reveal Fee
+            </button>
             <button type="button" class="btn btn-accept btn-sm" onclick="completeOpportunityEval()">
                 <span class="glyphicon glyphicon-ok-sign"></span> Complete Evaluation
             </button>
         </div>
     </div>
-
-    </div>
-        </div>
-            </div>
-                </div>
-                    </div>
-
-    <!--tab2-->
-    <div class="tab-content">
-        <div class="tab-pane fade in active" id="panel2" role="tabpanel">
-            <div class="row">
-                <div class="col-md-12">
-                    <div id="listProposalPanel2" >
-
-                        <!--table, opportunity name and bidder name-->
-                        <div class="container navbar-right">
-                            <br>
-                            <br>
-
-                            <!-- Opportunity Name bidder name-->
-                            <div align="left">
-                                <h2>Opportunity: <span id="oppName"></span></h2>
-                            </div>
-
-                            <!-- Table and contents-->
-                            <div class="tab-content vertical">
-                                <div class="row ">
-                                    <div class="col-md-9">
-                                        <table id="proposalListFeeTable" class="table table-bordered table-striped table-hover">
-                                            <thead>
-                                            <th>Bidder</th>
-                                            <th>Proposal</th>
-                                            <th>Fee Proposal Score</th>
-                                            <th>Final Score</th>
-                                            <th>Award</th>
-                                            </thead>
-                                            <tbody id="proposalListFeeTableBody">
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
 
     <!--Pagination-->
     <div class="container navbar-right">

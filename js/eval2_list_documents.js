@@ -85,25 +85,6 @@ function fillDocumentTable(jsonArray){
     });
 }
 
-//Function to update proposal status
-//TODO get the right endpoint to use
-function updateProposalStatus(status) {
-    //status is passed and proposal id is a global variable
-    var params = {"ProposalID":proposalID,
-        "Status":status};
-    var myJson = JSON.stringify(params);
-    var xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "http://athena.ecs.csus.edu/~wildcard/php/api/proposal/update.php",true);
-    xhttp.onload = function () {
-        if (xhttp.status == 200) {
-            alert(proposalID+" Update successful");
-        } else {
-            alert("Error updating status of " +proposalID);
-        }
-    }
-    xhttp.send(myJson);
-}
-
 function UpdateTechnicalscore(){
     var technicalScore = document.getElementById("score").value;
     var params = {"ProposalID":proposalID,
@@ -138,7 +119,24 @@ function updateProposalStatus(){
     xhr.send();
 }
 
-//TODO get the right endpoint to use
+//Function to update proposal status
+function updateProposalStatus(status) {
+    //status is passed and proposal id is a global variable
+    var params = {"ProposalID":proposalID,
+        "Status":status};
+    var myJson = JSON.stringify(params);
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "http://athena.ecs.csus.edu/~wildcard/php/api/proposal/update.php",true);
+    xhttp.onload = function () {
+        if (xhttp.status == 200) {
+            alert(proposalID+" Update successful");
+        } else {
+            alert("Error updating status of " +proposalID);
+        }
+    }
+    xhttp.send(myJson);
+}
+
 function SeekClarificationButton() {
     localStorage.setItem("bidderName",bidderName);
     localStorage.setItem("proposalId",proposalID);

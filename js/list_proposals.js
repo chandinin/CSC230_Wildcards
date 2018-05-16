@@ -37,7 +37,7 @@ function fillProposalTable(jsonArray){
     fillOppTable(start, limit);
 
     function fillOppTable(start, limit){
-        for(var i=0;i<size;i++) {
+        for(var i=start;i<limit;i++) {
             var proposal = jsonArray.proposal[i];
             var row ="<tr>"+"</td><td>"+ proposal.BidderName + "<td>" + "<a href='javascript:showProposalDetails(\"" + proposal.ProposalID + "\")'>" +  proposal.ProposalID + "</a></td><td>"
                 + new Date(proposal.CreatedDate).toDateString()+ "<td>" + proposal.StatusName + "<td>" +  "<button onclick='showProposalDetails(\"" + proposal.ProposalID + "\")' id='editOppButton' value='\" + proposal.ProposalID + \"' type='button' " +
