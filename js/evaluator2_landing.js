@@ -13,7 +13,7 @@ $(document).ready(
         });
     });
 
-//Get all opportunity list from server
+//Get all opportunity list from server where eval 1 is complete
 function getOppList() {
     $('#oppListTableBody').empty();
     var xhr = new XMLHttpRequest();

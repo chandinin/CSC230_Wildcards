@@ -36,6 +36,8 @@ if(isSet($_POST_LowerCase["opportunityid"])
   //Search
   $opportunity->selectByID($opportunityID);
 
+  $ProposalCount = $opportunity->getProposalCount($opportunityID);
+
   $opportunity_arr = array(
     "OpportunityID" =>  $opportunity->OpportunityID,
     "ClosingDate" =>  $opportunity->ClosingDate,
@@ -50,7 +52,11 @@ if(isSet($_POST_LowerCase["opportunityid"])
     "LastEditDate" =>  $opportunity->LastEditDate,
     "ProposalCount" =>  $ProposalCount,
     "MinimumScore" =>  $opportunity->MinimumScore,
+<<<<<<< HEAD
+    "TotalScore" =>  $opportunity->TotalScore
+=======
     "TotalPoints" =>  $opportunity->TotalScore
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
   );
 
   // make it json format
@@ -91,7 +97,11 @@ else if(isSet($_POST_LowerCase["status"])
           "LastEditDate" => $row['LastEditDate'],
           "ProposalCount" => $ProposalCount,
           "MinimumScore" =>  $row['MinimumScore'],
+<<<<<<< HEAD
+          "TotalScore" =>  $row['TotalScore']
+=======
           "TotalPoints" =>  $row['TotalScore']
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
       );
 
       array_push($opportunities_arr["opportunity"], $opportunity_arr);
@@ -137,7 +147,11 @@ else if(isSet($_POST_LowerCase["categoryid"])
           "LastEditDate" => $row['LastEditDate'],
           "ProposalCount" => $ProposalCount,
           "MinimumScore" =>  $row['MinimumScore'],
+<<<<<<< HEAD
+          "TotalScore" =>  $row['TotalScore']
+=======
           "TotalPoints" =>  $row['TotalScore']
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
       );
 
       array_push($opportunities_arr["opportunity"], $opportunity_arr);
@@ -178,7 +192,11 @@ else
           "LastEditDate" => $row['LastEditDate'],
           "ProposalCount" => $ProposalCount,
           "MinimumScore" =>  $row['MinimumScore'],
+<<<<<<< HEAD
+          "TotalScore" =>  $row['TotalScore']
+=======
           "TotalPoints" =>  $row['TotalScore']
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
       );
      
       array_push($opportunities_arr["opportunity"], $opportunity_arr);

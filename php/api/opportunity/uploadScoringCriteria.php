@@ -38,8 +38,13 @@ $Exists = "";
 $Success = false;
 
 //if(is_uploaded_file($tempFilePath))
+<<<<<<< HEAD
+if(isset($_POST["submit"]))
+{
+=======
 //if(isset($_POST["submit"]))
 //{
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
 
   $_POST_LowerCase = array_change_key_case($_POST, CASE_LOWER);
   if(isSet($_POST_LowerCase["opportunityid"]))
@@ -64,6 +69,46 @@ $Success = false;
     {
       $url = $base_url . "OSC" .$OpportunityID . "_" . $SCID . "_" . $filename;
 
+<<<<<<< HEAD
+      if(!$opportunity->ScoringCriteriaExists($OpportunityID))
+      {
+        if($opportunity->UploadScoringCriteria($SCID, $OpportunityID, $filename, $tempFilePath, $url))
+        {
+          $Exists = "Uploaded Document";
+          $Success = true;
+
+          echo '{';
+          echo ' "message" : "Upload Successful."';
+          echo ', "filename" : "'. $filename .'"';
+          echo ', "OpportunityID" : "'. $OpportunityID .'"';
+          echo ', "URL" : "'. $url .'"';
+          echo '}';
+        }
+        else
+        {
+          echo '{';
+          echo ' "message" : "File was successfully uploaded and moved to file repository."';
+          echo ', "message2" : "Database operation failed!  Could not add record to Scoring Criteria table."';
+          echo ', "SCID" : "'. $SCID .'"';
+          echo ', "OpportunityID" : "'. $OpportunityID .'"';
+          echo ', "filename" : "'. $filename .'"';
+          echo ', "tempFilePath" : "'. $tempFilePath .'"';
+          echo ', "URL" : "'. $url .'"';
+          echo '}';
+        }
+      }
+      else
+      {
+        if($opportunity->UpdateScoringCriteria($OpportunityID, $filename, $tempFilePath, $url))
+        {
+          echo '{';
+          echo ' "message" : "Upload Successful."';
+          echo ', "filename" : "'. $filename .'"';
+          echo ', "OpportunityID" : "'. $OpportunityID .'"';
+          echo ', "URL" : "'. $url .'"';
+          echo '}';
+        }
+=======
       /* Delete Previous Scoring Opportunity  */
       $opportunity->DeleteScoringCriteria($OpportunityID);
 
@@ -89,6 +134,7 @@ $Success = false;
         echo ', "tempFilePath" : "'. $tempFilePath .'"';
         echo ', "URL" : "'. $url .'"';
         echo '}';
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
       }
     } 
     else 
@@ -100,6 +146,11 @@ $Success = false;
       echo '}';
     }
   }
+<<<<<<< HEAD
+}
+?>
+=======
 //}
 ?>
 
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e

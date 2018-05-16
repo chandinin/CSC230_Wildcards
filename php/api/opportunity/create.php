@@ -25,7 +25,11 @@ if(json_last_error() === JSON_ERROR_NONE)
 
   if(isset($data->ClosingDate) and !is_null($data->ClosingDate))
   {
+<<<<<<< HEAD
+    $ClosingDate = htmlspecialchars(strip_tags($data->ClosingDate));
+=======
     $ClosingDate = $data->ClosingDate;
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
     $date = new DateTime($ClosingDate);
     $opportunity->ClosingDate = $date->format('Y-m-d H:i:s');
   }
@@ -44,11 +48,16 @@ if(json_last_error() === JSON_ERROR_NONE)
     $opportunity->CategoryID = $data->CategoryID;
   if(isset($data->MinimumScore) and !is_null($data->MinimumScore))
     $opportunity->MinimumScore = $data->MinimumScore;
+<<<<<<< HEAD
+  if(isset($data->TotalScore) and !is_null($data->TotalScore))
+    $opportunity->TotalScore = $data->TotalScore;
+=======
 
   if(isset($data->TotalScore) and !is_null($data->TotalScore))
     $opportunity->TotalScore = $data->TotalScore;
   else if(isset($data->TotalPoints) and !is_null($data->TotalPoints))
     $opportunity->TotalScore = $data->TotalPoints;
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
 
   if($opportunity->create())
   {
@@ -121,18 +130,26 @@ else
     if(isSet($_POST_LowerCase["minimumscore"]))
     {
       $MinimumScore = $_POST_LowerCase["minimumscore"];
+<<<<<<< HEAD
+      $MinimumScore = htmlspecialchars(strip_tags($MinimumScore));
+=======
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
       $opportunity->MinimumScore = $MinimumScore;
     }
 
     if(isSet($_POST_LowerCase["totalscore"]))
     {
       $TotalScore = $_POST_LowerCase["totalscore"];
+<<<<<<< HEAD
+      $TotalScore = htmlspecialchars(strip_tags($TotalScore));
+=======
       $opportunity->TotalScore = $TotalScore;
     }
 
     if(isSet($_POST_LowerCase["TotalPoints"]))
     {
       $TotalScore = $_POST_LowerCase["TotalPoints"];
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
       $opportunity->TotalScore = $TotalScore;
     }
 

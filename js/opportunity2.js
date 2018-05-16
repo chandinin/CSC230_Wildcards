@@ -321,6 +321,8 @@ var xhr = new XMLHttpRequest();
 xhr.send();
 }
 
+<<<<<<< HEAD
+=======
 function getScoringDocLink(opId,scoreLink){
     var scoreFile="#";
     var scoreText = "View Scoring Criteria";
@@ -355,6 +357,7 @@ function getScoringDocLink(opId,scoreLink){
 }
 
 
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
 var savedOpportunity;
 
 function getOpportunityEdit(opId) {
@@ -410,8 +413,17 @@ function getDocTemplates(opId) {
                 var row = "<tr><td>" + title + "</td><td>" + title + "</td><td>" + "Posted Date" + "</td><td>" +
                     "Delete" + "</td></tr>";
                     */
+<<<<<<< HEAD
+                var row = "<tr id='" + template.DocTemplateID + "'><td class='changeable'>" + template.DocTitle + "</td><td>" + "<a href ='" + tempUrl + "'target='_blank'>" +
+                template.DocTitle + "</a></td><td>" + "Posted Date" +
+=======
                 var row = "<tr id='" + template.DocTemplateID + "'><td class='changeable'>" + template.DisplayTitle + "</td><td>" + "<a href ='" + tempUrl + "'target='_blank'>" +
+<<<<<<< HEAD
                 template.DocTitle + "</a></td><td>" + date +
+=======
+                template.DocTitle + "</a></td><td>" + template.PostedDate +
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
+>>>>>>> 29cbc816ff96d56f393e4392ad0d80e399e27a00
                     "</td><td>" +
                     "<button onclick=\"deleteDoc(\'"+ opId + "\'," + "\'" + template.DocTemplateID + "\')\"" +
                     " class='btn btn-delete'><span class='glyphicon glyphicon-remove'" +
@@ -454,8 +466,17 @@ function getDocTemplatesView(opId) {
                 if (typeof(template.DisplayTitle) != "undefined")
                     tempTitle = template.DisplayTitle;
                 if (template.Url != null) {
+<<<<<<< HEAD
+                    var row = "<tr><td>" + template.DocTitle + "</td><td>" + "<a href ='" + tempUrl + "' target='_blank'>" +
+                        template.DocTitle + "</a></td><td>" + "Posted Date" + "</td></tr>";
+=======
                     var row = "<tr><td>" + tempTitle + "</td><td>" + "<a href ='" + tempUrl + "' target='_blank'>" +
+<<<<<<< HEAD
                         template.DocTitle + "</a></td><td>" + date + "</td></tr>";
+=======
+                        template.DocTitle + "</a></td><td>" + template.PostedDate + "</td></tr>";
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
+>>>>>>> 29cbc816ff96d56f393e4392ad0d80e399e27a00
                     $('#docTemplatesBodyView').append(row);
                 }
             }
@@ -525,7 +546,11 @@ function getOppList(type) {
             url = url + "?status=10";
             break;
         case 11:
+<<<<<<< HEAD
+            url = url + "?status=11";
+=======
             url = url + "?status=11"; //append this list to existing, don't empty
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
             break;
         default:
             $('#oppListTableBody').empty();
@@ -800,7 +825,11 @@ function saveOpportunity() {
             var retval = xhr.responseText;
             var failed = retval.includes("failed");
             if(!failed) {
+<<<<<<< HEAD
+                if (typeof scoreFile != "undefined")
+=======
                 if (typeof(scoreFile) != "undefined")
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
                     uploadScoring(scoreFile,opId);
                 showOppView(opId);
             }

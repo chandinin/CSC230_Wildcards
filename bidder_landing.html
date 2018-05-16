@@ -1,5 +1,25 @@
 <html>
     <head>
+        <!-- Basic Styles -->
+        <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.0/css/mdb.min.css" rel="stylesheet"> -->
+	    	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+            <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
+            <link rel="stylesheet" type="text/css" href="css/ept/style.css"/>
+
+				
+					<!-- Latest compiled and minified CSS -->
+
+					<!-- Optional theme -->
+
+					
+					<!--<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">-->
+	    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css">
+	    <link rel="stylesheet" type="text/css" href="css/style.css">
+     <!--   <link rel="stylesheet" type="text/css" href="css/jquery.dm-uploader.min.css">-->
+	    <link rel="stylesheet" type="text/css" media="print" href="css/print.css">
+	<!--<link rel="stylesheet" type="text/css" media="print" href="css/bootstrap-datetimepicker.css">-->
+	    <link href="https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
+	    <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
 
         <!-- Basic Styles -->
         <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.0/css/mdb.min.css" rel="stylesheet"> -->
@@ -201,21 +221,29 @@ li,td,th {
     margin-right: 20px;
 }
 
+#proposal-back-list-btn {
+    display: inline;
+    float: right;
+}
+
 #opp-doc-templates-list li {
     border-top: 1px solid #555;
     margin-top: 1.5vh;
 }
 
-/*#proposal-back-list-btn {
-    display: inline;
-    float: right;
-}*/
 
-#dfg {
-/*    display: block;
-    height: 20px;
-    width: 20px;
-    line-height: 60px;*/
+    -moz-border-radius: 50%; /* or 50% */
+    border-radius: 50%; /* or 50% */
+
+    background-color: black;
+    color: white;
+    text-align: center;
+    /*font-size: 2em;*/
+}
+
+#message-preview {
+    text-overflow: ellipsis;
+    maxlength: 10;
 
     -moz-border-radius: 50%; /* or 50% */
     border-radius: 50%; /* or 50% */
@@ -322,7 +350,9 @@ hr {
 
                                 <div class="row">
                                     <div class="col-xs-12">
+
                                         <span class="opportunity-property">Opportunity Detail: </span>
+
                                         <div contenteditable="true" class="opportunity-detail" id="Description">Sample Description</div>
                                     </div>
                                 </div>
@@ -438,6 +468,13 @@ hr {
                                 </table>
                             </div>
                             <div class="col-md-12" id="spa-message-detail">
+
+                                <h2>Message Type: <span id="message-detail-type">Message type placeholder</span></h2>
+                                <h2>Time Received: <span id="message-detail-time-received">Message time received placeholder</span></h2>
+                                <h2 id="message-detail-due-by-header">Clarification Due By: <span id="message-detail-due-by">Message time due by placeholder</span></h2>
+                                <h2 id="message-detail-time-responded-header">Time Responded: <span id="message-detail-time-responded">Message time response placeholder</span></h2>
+                                <h2 id="message-detail-opportunity-name-header">Regarding Opportunity: <span id="message-detail-opportunity-name">AHHH</span></h2>
+                                <h2>Message Body:</h2>
                                 <div class="row marketing">
                                     <div class="col-md-12" id="create-proposal-header-div">
                                         <h1 style="font-weight: 600">View Message</h1>
@@ -495,6 +532,7 @@ hr {
                                 <br>
 
                                 <a id="message-detail-download-link" target="_blank">View what you uploaded for this Clarification</a>
+
 
                                 <div class="row marketing">
                                     <div class="col-md-12" id="send-message-div" >

@@ -10,6 +10,8 @@ header('Content-Type: application/json');
 include_once '../config/Database.php';
 include_once '../objects/opportunity.php';
 
+include_once '../config/Database.php';
+
 $database = new Database();
 $db = $database->Connect();
 

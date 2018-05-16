@@ -43,7 +43,12 @@ function processOpportunity(opId) {
     var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/update.php"
     xhr.open('POST', url);
     var formData = new FormData();
+<<<<<<< HEAD
+    formData.append("OpportunityID", opId);
+    formData.append("Status", 11);
+=======
     var formData = {"OpportunityID":"" + opId + "","Status":11};
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
     xhr.onload = function () {
         if (xhr.status == 200) {
             var retval = xhr.responseText;

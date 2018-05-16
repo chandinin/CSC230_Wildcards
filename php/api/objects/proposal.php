@@ -698,6 +698,10 @@ class Proposal
     }
   }
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
   // Reject All Proposals.
   function RejectAllProposals($OpportunityID)
   {
@@ -721,6 +725,8 @@ class Proposal
     }
   }
 
+<<<<<<< HEAD
+=======
   function getDocCount($ProposalID)
   {
     $Count = 0;
@@ -771,5 +777,6 @@ class Proposal
       return false;
     }
   }
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
 }
 ?>

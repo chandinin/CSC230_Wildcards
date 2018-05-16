@@ -269,6 +269,8 @@ class Opportunity
       $stmt->bindParam(':DocTemplateID', $DocTemplateID);
       $stmt->bindParam(':DocTitle', $DocTitle);
       $stmt->bindParam(':DisplayTitle', $DocTitle);
+<<<<<<< HEAD
+=======
       $stmt->bindParam(':Path', $Path);
       $stmt->bindParam(':Url', $Url);
 
@@ -298,6 +300,7 @@ class Opportunity
       $stmt->bindParam(':OpportunityID', $OpportunityID);
       $stmt->bindParam(':DocTitle', $DocTitle);
       $stmt->bindParam(':DisplayTitle', $DocTitle);
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
       $stmt->bindParam(':Path', $Path);
       $stmt->bindParam(':Url', $Url);
 
@@ -314,6 +317,38 @@ class Opportunity
   }
 
   // Upload Scoring Criteria as a file. 
+<<<<<<< HEAD
+  function UploadScoringCriteria($SCID, $OpportunityID, $DocTitle, $Path, $Url)
+  { 
+    try
+    {
+      $query = "INSERT INTO ScoringCriteria (SCID, OpportunityID, DocTitle, DisplayTitle, Path, Url, CreatedDate, LastEditDate, PostedDate) VALUES (:SCID, :OpportunityID, :DocTitle, :DisplayTitle, :Path, :Url, NOW(), NOW(), NOW())";
+      
+      $stmt = $this->conn->prepare( $query );
+   
+      // bind parameters
+      $stmt->bindParam(':SCID', $SCID);
+      $stmt->bindParam(':OpportunityID', $OpportunityID);
+      $stmt->bindParam(':DocTitle', $DocTitle);
+      $stmt->bindParam(':DisplayTitle', $DocTitle);
+      $stmt->bindParam(':Path', $Path);
+      $stmt->bindParam(':Url', $Url);
+
+      if($stmt->execute())
+        return true;
+      else
+        return false;
+    }
+    catch (PDOException $e) 
+    {
+      echo 'Connection failed: ' . $e->getMessage();
+      return false;
+    }
+  }
+
+  // Upload Scoring Criteria as a file. 
+=======
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
   function UpdateScoringCriteria($OpportunityID, $DocTitle, $DisplayTitle)
   { 
     try
@@ -411,6 +446,42 @@ class Opportunity
    
       // bind parameters
       $stmt->bindParam(1, $OpportunityID);
+<<<<<<< HEAD
+
+      if($stmt->execute())
+      {
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if(!is_null($row['rowcount']))
+        {
+          $rowcount = $row['rowcount'];
+
+          if($rowcount > 0)
+            $results = true;
+        }
+      }
+
+      return $results;
+    }
+    catch (PDOException $e) 
+    {
+      echo 'Connection failed: ' . $e->getMessage();
+      return false;
+    }
+  }
+
+  // Upload Document Template 
+  function getDocTemplates($OpportunityID)
+  { 
+    try
+    {
+      $query = "SELECT DocTemplate.DocTemplateID, DocTitle, DisplayTitle, Path, Url, PostedDate, SortOrder ";
+      $query = $query . "FROM DocTemplate "; 
+      $query = $query . "INNER JOIN OppDocTemplate ODT ON ODT.DocTemplateID = DocTemplate.DocTemplateID ";
+      $query = $query . "
+WHERE OpportunityID = ? ; ";
+=======
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
 
       if($stmt->execute())
       {
@@ -448,6 +519,8 @@ class Opportunity
    
       // bind parameters
       $stmt->bindParam(1, $OpportunityID);
+<<<<<<< HEAD
+=======
 
       if($stmt->execute())
       {
@@ -478,6 +551,7 @@ WHERE OpportunityID = ? ; ";
    
       // bind parameters
       $stmt->bindParam(1, $OpportunityID);
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
       $stmt->execute();
 
       return $stmt;
@@ -657,6 +731,10 @@ WHERE OpportunityID = ? ; ";
 
     return $stmt;
   }
+<<<<<<< HEAD
+}
+?>
+=======
 
   // Has Opportunity Expired?
   function HasOpportunityExpired($OpportunityID)
@@ -811,3 +889,4 @@ WHERE OpportunityID = ? ; ";
   }
 }
 ?>
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
