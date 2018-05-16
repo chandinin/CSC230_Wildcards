@@ -54,7 +54,9 @@ class Employee
   // select All in the table
   function selectAll()
   {
-    $query = "SELECT id, first_name, last_name, email, password, phone, middleinitial, address, username FROM EMPLOYEE;";
+    $query = "SELECT id, first_name, last_name, email, password, phone, " .
+             "middleinitial, address, username FROM EMPLOYEE";
+
 
     $stmt = $this->conn->prepare( $query );
 
@@ -292,5 +294,3 @@ class Employee
   }
 }
 ?>
-
-

@@ -35,4 +35,3 @@ if($rowCount > 0)
 // make it json format
 print_r(json_encode($ProposalStatusList_arr));
 ?>
-

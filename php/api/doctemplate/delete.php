@@ -19,14 +19,17 @@ $_POST_LowerCase = array_change_key_case($_POST, CASE_LOWER);
 if(isSet($_POST_LowerCase["doctemplateid"]))
 {
   $doctemplateID = $_POST_LowerCase["doctemplateid"];
+  $DocTemplateIDArr = explode("_", $doctemplateID);
 
   //Search
   $doctemplate->DocTemplateID = $doctemplateID;
-  $doctemplate->selectByDocTemplateID($doctemplateID);
+  $doctemplate->selectByDocTemplateID($DocTemplateIDArr[1]);
 
   //delete doctemplate.
   if($doctemplate->delete())
   {  
+    $doctemplate->deleteOppDocTemplateByID($DocTemplateIDArr[1]);
+
     echo '{';
     echo ' message : "Delete suceeded.  (DoctemplateID='.$doctemplateID.')"';
     echo '}';

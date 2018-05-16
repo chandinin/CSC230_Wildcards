@@ -18,22 +18,55 @@ $bidder = new Bidder($db);
 $data = json_decode(file_get_contents("php://input"));
 if(json_last_error() === JSON_ERROR_NONE)
 {
-  $bidder->id = $data->id;
-  $bidder->bidopsid = $data->bidopsid;
-  $bidder->first_name =$data->first_name;
-  $bidder->last_name = $data->last_name;
-  $bidder->email = $data->email;
-  $bidder->password = $data->password;
-  $bidder->phone = $data->phone;
-  $bidder->middle_init = $data->middle_init;
-  $bidder->address = $data->address;
-  $bidder->user_name = $data->user_name;  
+  $BidderID = $data->id;
+  $bidder->id = $BidderID;
+  
+  $bidder->selectByBidderID($BidderID);
+
+  if(isset($data->bidopsid) and !is_null($data->bidopsid))
+    $bidder->bidopsid = $data->bidopsid;
+  if(isset($data->first_name) and !is_null($data->first_name))
+    $bidder->first_name =$data->first_name;
+  if(isset($data->last_name) and !is_null($data->last_name))
+    $bidder->last_name = $data->last_name;
+  if(isset($data->email) and !is_null($data->email))
+    $bidder->email = $data->email;
+  if(isset($data->password) and !is_null($data->password))
+    $bidder->password = $data->password;
+  if(isset($data->phone) and !is_null($data->phone))
+    $bidder->phone = $data->phone;
+  if(isset($data->middle_init) and !is_null($data->middle_init))
+    $bidder->middle_init = $data->middle_init;
+  if(isset($data->address) and !is_null($data->address))
+    $bidder->address = $data->address;
+  if(isset($data->user_name) and !is_null($data->user_name))
+    $bidder->user_name = $data->user_name;  
 
   if($bidder->update())
   {  
-    echo '{';
-       echo ' message : "Update suceeded. "';
-    echo '}';
+    if(isset($data->subscription) and !is_null($data->subscription))
+    {      
+      $bidder->DeleteAllSubscriptions($BidderID);
+
+      $Index = 0;
+      $Subscriptions = $data->subscription;
+      foreach($Subscriptions as $Subscription)
+      { 
+        $ID=$Subscription->ID;
+        $CategoryID=$Subscription->CategoryID;
+        if($bidder->Subscribe($ID, $CategoryID))
+        {
+        }
+        else
+        {
+          echo '{';
+          echo ' "ID" : "'.$ID.'"';
+          echo ' "CategoryID" : "'.$CategoryID.'"';
+          echo '}';
+        }
+        $Index = $Index + 1; 
+      }
+    }    
   }
   else
   {
