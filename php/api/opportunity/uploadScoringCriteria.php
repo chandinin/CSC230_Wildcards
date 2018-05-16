@@ -38,8 +38,8 @@ $Exists = "";
 $Success = false;
 
 //if(is_uploaded_file($tempFilePath))
-if(isset($_POST["submit"]))
-{
+//if(isset($_POST["submit"]))
+//{
 
   $_POST_LowerCase = array_change_key_case($_POST, CASE_LOWER);
   if(isSet($_POST_LowerCase["opportunityid"]))
@@ -100,5 +100,6 @@ if(isset($_POST["submit"]))
       echo '}';
     }
   }
-}
+//}
 ?>
+
