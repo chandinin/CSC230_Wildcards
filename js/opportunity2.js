@@ -648,6 +648,8 @@ function markPublishOpp(opId) {
         } else {
             alert('Server error on publish Opportunity ' + opId);
         }
+        showOppList(0);
+        showOppList(11);
         return;
     }
     xhr.send(JSON.stringify(formData));
