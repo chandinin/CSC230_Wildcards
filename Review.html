@@ -155,7 +155,6 @@
                                                     <th>Last Updated</th>
                                                     <th>Opportunity Description</th>
                                                     <th>Status</th>
-                                                    <th>Action</th>
                                                     </thead>
                                                     <tbody id="oppListTableBody">
                                                     </tbody>
@@ -173,43 +172,66 @@
                                             <div class="col-md-6">
                                                 <h3 class="my-2 h3">Opportunity Details</h3>
                                             </div>
-                                            <div class="col-md-3">
-                                                <button type="button" class="btn btn-accept waves-effect" id="oppReviewedButton">
-                                                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Mark as Reviewed
-                                                </button>
-                                            </div>
                                         </div>
                                         <br>
+
                                         <div class="row">
-                                            <div class="col-md-12">
-                                                <span class="opportunity-property">Category: </span>
-                                                <span class="opportunity-detail" id="oppType">1</span>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <span class="opportunity-property">Opportunity Number: </span>
-                                                <span class="opportunity-detail" id="oppNumber">1</span>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <span class="opportunity-property">Opportunity Name: </span>
-                                                <span class="opportunity-detail" id="oppName">1</span>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <span class="opportunity-property">Final Filing Date: </span>
-                                                <span class="opportunity-detail" id="oppDate">1</span>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <span class="opportunity-property">Description: </span>
-                                                <span class="opportunity-detail" id="oppDesc">1</span>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <span class="opportunity-property">Scoring Criteria: </span>
-                                                <span class="opportunity-detail" id="oppScore">1</span>
-                                            </div>
-                                            <hr>
+
+                                            <table>
+                                                <tr>
+                                                    <table class="table table-bordered table-heading">
+                                                        <th>Category</th>
+                                                        <td>
+                                                            <span class="opportunity-detail" id="oppType"></span>
+                                                        </td>
+                                                        <tr>
+                                                            <th>Opportunity Id</th>
+                                                            <td>
+                                                                <span class="opportunity-detail" id="oppNumber"></span>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Opportunity Name</th>
+                                                            <td>
+                                                                <span class="opportunity-detail" id="oppName">New Name</span>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Opportunity Description</th>
+                                                            <td>
+                                                                <span class="opportunity-detail" id="oppDesc">New Description</span>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Final Filing Date</th>
+                                                            <td>
+                                                                <span class="opportunity-detail" id="oppDate">New Date</span>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Scoring Criteria</th>
+                                                            <td>
+                                                                <span class="opportunity-detail" id="oppScore">1</span>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </tr>
+                                                <tr style="border-style: hidden">
+
+                                                    <td></td>
+                                                    <td>
+                                                        <div class="col-md-4">
+                                                            <button type="button" class="btn btn-accept waves-effect" id="oppReviewedButton">
+                                                                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Mark as Reviewed
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
                                         </div>
+
                                         <div class="col-12">
                                             <h4>Documents attached to this opportunity.</h4>
-                                            <form>
                                                 <table id="listDocTemplates" class="table table-responsive">
                                                     <thead>
                                                     <th scope="col">Title</th>
@@ -220,7 +242,6 @@
 
                                                     </tbody>
                                                 </table>
-                                            </form>
                                         </div>
                                     </div>
                                 </div>
