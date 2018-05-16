@@ -698,7 +698,10 @@ class Proposal
     }
   }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
   // Reject All Proposals.
   function RejectAllProposals($OpportunityID)
   {
@@ -722,5 +725,58 @@ class Proposal
     }
   }
 
+<<<<<<< HEAD
+=======
+  function getDocCount($ProposalID)
+  {
+    $Count = 0;
+    try
+    {
+      $query = "select count(*) DocCount from ProposalDocs where ProposalID = ?; ";
+
+      $stmt = $this->conn->prepare( $query );
+
+      // bind parameters
+      $stmt->bindParam(1, $ProposalID);
+
+      if($stmt->execute())
+      {
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $Count = $row['DocCount'];
+      }
+    }
+    catch (PDOException $e)
+    {
+      echo 'Connection failed: ' . $e->getMessage();
+    }
+
+    return $Count;
+  }
+
+  // Has Opportunity Expired?
+  function setProposalStatus($ProposalID, $Status)
+  {
+    //Status: 70 - (Expired) , 30 - (In Progress)
+    try
+    {
+      $query = "UPDATE Proposal SET Status = :Status WHERE ProposalID = :ProposalID ; ";
+      $stmt = $this->conn->prepare( $query );
+
+      // bind parameters
+      $stmt->bindParam(":Status", $Status);
+      $stmt->bindParam(":ProposalID", $ProposalID);
+
+      if($stmt->execute())
+        return true;
+      else
+        return false;
+    }
+    catch (PDOException $e)
+    {
+      echo 'Connection failed: ' . $e->getMessage();
+      return false;
+    }
+  }
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
 }
 ?>

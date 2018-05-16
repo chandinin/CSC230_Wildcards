@@ -25,10 +25,11 @@ $(document).ready(function() {
         showEmpList();
     });
 
-
+/*
     $('#empTab').click(function() {
-        getEmployeeList();
+        showEmpList();
     });
+    */
     $("#selectBidderCategory").change(function () {
         //Storing the dropdown selection in category variable
         category= $('#selectBidderCategory option:selected').attr('id');
@@ -123,14 +124,62 @@ function getEmployeeList() {
                     "aria-hidden='true'></span> Edit </button></td></tr>";
                 $('#employeeListTableBody').append(row);
                 $("#employeeListTableBody").trigger("update");
-
             }
         } else {
             alert("Error response");
         }
     };
     xhr.send();
+}
 
+function saveEmployee() {
+    //"Roles":[{"Role":"1"}, {"Role":"2"}, {"Role":"3"},{"Role":"5"}]
+    var empId = $('#formEmpIdInput').val();
+    var fname = $('#formEmpFNameInput').val();
+    var lname = $('#formEmpLNameInput').val();
+    var email = $('#formEmpEmailInput').val();
+    var pwd = $('#formEmpPwdInput').val();
+    var phone = $('#formEmpPhoneInput').val();
+    var roles = new Array();
+    if ($('#Checkbox0').is(":checked"))
+        roles.push({Role:"0"});
+    if ($('#Checkbox1').is(":checked"))
+        roles.push({Role:"1"});
+    if ($('#Checkbox2').is(":checked"))
+        roles.push({Role:"2"});
+    if ($('#Checkbox3').is(":checked"))
+        roles.push({Role:"3"});
+    if ($('#Checkbox4').is(":checked"))
+        roles.push({Role:"4"});
+    if ($('#Checkbox5').is(":checked"))
+        roles.push({Role:"5"});
+    var rolesjson = JSON.parse(JSON.stringify(roles));
+    var jsonRecord =
+        {"ID": empId,
+            "FirstName":fname,
+            "LastName":lname,
+            "Email": email,
+            "Phone":phone,
+            "Roles":rolesjson,
+            "Password":pwd,
+        };
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'http://athena.ecs.csus.edu/~wildcard/php/api/employee/create.php', true);
+    xhr.onload = function () {
+        if (xhr.status == 200) {
+            var retval = xhr.responseText;
+            var failed = retval.includes("failed");
+            if(failed) {
+                alert("Failed to create new employee");
+            }
+        } else {
+            alert("500: Server error saving employee");
+        }
+    };
+    var jsonString = JSON.stringify(jsonRecord);
+    xhr.send(jsonString);
+    console.log("Wrote Json: " + jsonString);
 }
 
 function saveEmployee() {

@@ -38,4 +38,3 @@ if(isSet($_POST_LowerCase["proposalid"]))
   }
 }
 ?>
-

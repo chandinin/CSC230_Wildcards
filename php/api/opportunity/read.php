@@ -24,6 +24,15 @@ if(isSet($_POST_LowerCase["opportunityid"])
   $opportunityID = isSet($_GET_LowerCase["opportunityid"]) ? 
      $_GET_LowerCase["opportunityid"] : $_POST_LowerCase["opportunityid"];
 
+  $ProposalCount = $opportunity->getProposalCount($opportunityID);
+
+  /* 
+      Check if Opportunity has expired.  
+      If yes then set proposals with all docs to "In Progress". Those with not all of the docs to "Expired".
+      If not expired, do not change status. 
+  */
+  $opportunity->CheckIFOpportunityExpired($opportunityID);
+
   //Search
   $opportunity->selectByID($opportunityID);
 
@@ -43,7 +52,11 @@ if(isSet($_POST_LowerCase["opportunityid"])
     "LastEditDate" =>  $opportunity->LastEditDate,
     "ProposalCount" =>  $ProposalCount,
     "MinimumScore" =>  $opportunity->MinimumScore,
+<<<<<<< HEAD
     "TotalScore" =>  $opportunity->TotalScore
+=======
+    "TotalPoints" =>  $opportunity->TotalScore
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
   );
 
   // make it json format
@@ -84,7 +97,11 @@ else if(isSet($_POST_LowerCase["status"])
           "LastEditDate" => $row['LastEditDate'],
           "ProposalCount" => $ProposalCount,
           "MinimumScore" =>  $row['MinimumScore'],
+<<<<<<< HEAD
           "TotalScore" =>  $row['TotalScore']
+=======
+          "TotalPoints" =>  $row['TotalScore']
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
       );
 
       array_push($opportunities_arr["opportunity"], $opportunity_arr);
@@ -130,7 +147,11 @@ else if(isSet($_POST_LowerCase["categoryid"])
           "LastEditDate" => $row['LastEditDate'],
           "ProposalCount" => $ProposalCount,
           "MinimumScore" =>  $row['MinimumScore'],
+<<<<<<< HEAD
           "TotalScore" =>  $row['TotalScore']
+=======
+          "TotalPoints" =>  $row['TotalScore']
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
       );
 
       array_push($opportunities_arr["opportunity"], $opportunity_arr);
@@ -171,7 +192,11 @@ else
           "LastEditDate" => $row['LastEditDate'],
           "ProposalCount" => $ProposalCount,
           "MinimumScore" =>  $row['MinimumScore'],
+<<<<<<< HEAD
           "TotalScore" =>  $row['TotalScore']
+=======
+          "TotalPoints" =>  $row['TotalScore']
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
       );
      
       array_push($opportunities_arr["opportunity"], $opportunity_arr);

@@ -72,4 +72,3 @@ else
   print_r(json_encode($bidders_arr));
 }
 ?>
-

@@ -1,6 +1,16 @@
 // TODO: Figure out a good way to pass bidder ID around the site
 var g_bidder_id;
+<<<<<<< HEAD
+=======
+var g_bread;
+var g_mc;
+
+
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
 $(document).ready(function(){
+    // init breadcrumb
+    g_bread = new BreadCrumb("Home", function() {$("#opportunities-tab").trigger("click"); activateOpportunitiesList(); }, "the-breadcrumb");
+
     $("#show-list-btn").click(function() { router("#spa-opportunities-list"); });
 
     $("#proposals-tab").click(function() { activateProposalsList(); });
@@ -24,20 +34,99 @@ $(document).ready(function(){
     $("#subscriptions-save-btn").click(function() { saveCategorySubscriptions(); });
 
     // TODO: Figure out a good way to pass bidder ID around the site
+<<<<<<< HEAD
     g_bidder_id = localStorage.getItem("BidderID");
+=======
+    g_bidder_id = localStorage.getItem("bidderId");
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
     if(g_bidder_id == null) // Our default test case
         g_bidder_id = "1337";
     activateOpportunitiesList();
 
+<<<<<<< HEAD
     mc = new MessageCenter();
     mc.updateServer(); // Will report the messages we generated as well as the login time right
     $("#num-unread-messages").text(mc.numUnread);
+=======
+    // init message center
+    g_mc = new MessageCenter();
+    g_mc.updateServer(); // Will report the messages we generated as well as the login time right
+    $("#num-unread-messages").text(g_mc.numUnread);
+
+    // Init the fee doc listener
+
+    document.getElementById("fee-input").addEventListener("change", allDocsSatisfied);
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
 });
 
+class BreadCrumb
+{
+    // Home item never changes
+    constructor(home_text, home_onClick, target_ol_id)
+    {
+        this.home_text = home_text;
+        this.home_onClick = home_onClick;
+        this.li_array = [];
+        this.target_id = target_ol_id;
+    }
+
+    gen_anchor(text, onClick){
+        var anchor = document.createElement("a");
+        anchor.appendChild(document.createTextNode(text));
+        anchor.onclick = onClick;
+
+        var li = document.createElement("li");
+        li.appendChild(anchor);
+
+        return li;
+    }
+
+    gen_text(text)
+    {
+        var li = document.createElement("li");
+        li.appendChild(document.createTextNode(text));
+
+        return li;
+    }
+
+    add(text, onClick)
+    {
+        if(onClick != null)
+            this.li_array.push(this.gen_anchor(text, onClick));
+        else
+            this.li_array.push(this.gen_text(text));
+    }
+
+    render()
+    {
+        var self = this;
+        var target = document.getElementById(this.target_id);
+
+        if(target == null)
+            alert("Breadcrumb is messed up!");
+
+        
+        // Clear what we already have in breadcrumb
+        target.innerHTML = "";
+
+        target.appendChild(this.gen_anchor(this.home_text, this.home_onClick));
+        this.li_array.forEach(function(li)
+        {
+            target.appendChild(li);
+        });
+    }
+
+    clear()
+    {
+        this.li_array = [];
+    }
+
+
+}
 
 // Handles hiding and unhiding the correct divs, based on the arg div_to_show
 // Does not handle actually initializing those divs.
-function router(div_to_show)
+function router(div_to_show, spa_edit_proposal_shitty_workaround_flag)
 {
     div_list = [
         "#spa-opportunities-list",
@@ -62,7 +151,174 @@ function router(div_to_show)
     }
 
     $(div_to_show).show();
+
+
+    // Build and render breadcrumb
+    // Probably an easier way to do this but....
+    g_bread.clear();
+
+    if(spa_edit_proposal_shitty_workaround_flag)
+    {
+        g_bread.add("Your Proposals", function() {$("proposals-tab").trigger("click"); } );
+        g_bread.add("Edit Your Proposal");
+    }
+    else if(div_to_show == "#spa-opportunities-list")
+    {
+        // Nothing, this is home
+    }
+    else if(div_to_show == "#spa-opportunity-detail")
+    {
+        g_bread.add("Opportunity Detail");
+    }
+    else if(div_to_show == "#spa-create-proposal")
+    {
+        g_bread.add("Create Proposal");
+    }
+    else if(div_to_show == "#spa-proposals-list")
+    {
+        g_bread.add("Your Proposals");
+    }
+    else if(div_to_show == "#spa-edit-proposal")
+    {
+        // Have to use the shitty workaround flag, god damnit
+    }
+    else if(div_to_show == "#spa-message-list")
+    {
+        g_bread.add("Message List");
+    }
+    else if(div_to_show == "#spa-message-detail")
+    {
+        g_bread.add("Message List", function() {$("messages-tab").trigger("click"); activateMessageList(); });
+        g_bread.add("View Message");
+    }
+    else if(div_to_show == "#spa-manage-subscriptions")
+    {
+        g_bread.add("Manage Subscriptions");
+    }
+
+    // Done building, now render
+    g_bread.render();
+
+    // Update our messages...
+    if(g_mc != null)
+    {
+        g_mc.updateServer(); // Will report the messages we generated as well as the login time right
+        $("#num-unread-messages").text(g_mc.numUnread);
+   }
 }
+
+/*******************************************************
+ * Helper functions I should have made in the begining *
+ *******************************************************/
+
+function uploadFeeDocument(file, filename, ProposalID, OpportunityID, DocTemplateID)
+{
+        var formData=new FormData();
+        formData.append('filename', file, filename);
+        formData.append('ProposalID', ProposalID);
+        formData.append("OpportunityID", OpportunityID);
+        formData.append("DocTemplateID", DocTemplateID);
+        formData.append('submit', "Lol this needs to be filled");
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST','php/api/proposal/uploadFeeDoc.php', false);
+        xhr.onload = function() {
+            if(xhr.status == 200) {
+                console.log('File uploaded' + xhr.response);
+            } else {
+                alert('Error uploading file:' + xhr.response);
+            }
+        };
+        xhr.send(formData);
+}
+
+function getFeeDocument(ProposalID)
+{
+    response = null;
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET','php/api/proposal/getFeeDoc.php?proposalid='+ProposalID, false);
+    xhr.onload = function() {
+        if(xhr.status == 200) {
+            json = JSON.parse(xhr.response);
+            if(json.doc == null)
+            {
+                console.log("No fee doc found for " + ProposalID);
+                response = false;
+            }
+            else
+            {
+                response = json.doc[0];
+            }
+        } else {
+            alert(xhr.response);
+        }
+    };
+    xhr.send();
+
+    return response;
+}
+
+
+
+function getDocUrlFromID(DocID)
+{
+//{"DocID":"87","DocTitle":"linker.py","Path":"..\/..\/..\/data\/files\/35587_87_linker.py","Blob":null,"Url":"http:\/\/athena.ecs.csus.edu\/~mackeys\/data\/files\/35587_87_linker.py","Description":"linker.py","CreatedDate":"2018-05-06 12:56:02","LastEditDate":"2018-05-06 12:56:02","SortOrder":"0"}
+    var DocURL = null;
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/docs/read.php?DocID='+DocID,false);
+    xhr.onload = function() {
+        if (xhr.status == 200) {
+            DocJson = JSON.parse(xhr.response);
+            if(DocJson.Url == null)
+            {
+                console.log("Error getting doc url");
+                console.log(DocJson);
+                alert("Error getting doc url");
+                return;
+            }       
+
+            DocURL = DocJson.Url.replace("https://athena.ecs.csus.edu/~wildcard/", "");
+
+        }
+        else {
+            alert("Error getting Document URL with ID: " + DocID);
+        }
+    };
+    xhr.send();
+
+    return DocURL;
+}
+
+function updateProposal(ProposalID, proposal_json)
+{
+    success_flag = null;
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'php/api/proposal/update.php', false);
+    xhr.onload = function()
+    {
+        if(xhr.status == 200)
+        {
+            success_flag = true;
+        }
+        else
+        {
+            console.log("Error updating proposal:");
+            console.log(xhr.response);
+            alert("There was an error updating the proposal");
+            success_flag = false;
+        }
+    }
+    xhr.setRequestHeader("Content-type", "application/json");
+    proposal_json.ProposalID = ProposalID;
+    xhr.send(JSON.stringify(proposal_json));
+
+    return success_flag;
+}
+
+/*****************
+ * Table Helpers *
+ *****************/
+
 
 // Removes all elements in tbody, preserving 'thead'
 function removeAllTableElements(table)
@@ -263,11 +519,19 @@ function sortOpportunityDocs(doctemplate)
 {
     console.log(doctemplate)
     function compare_docs(a,b) {
+<<<<<<< HEAD
         if (a.SortOrder < b.SortOrder)
             return -1;
         if (a.SortOrder > b.SortOrder)
             return 1;
         return 0;
+=======
+      if (a.SortOrder < b.SortOrder)
+        return -1;
+      if (a.SortOrder > b.SortOrder)
+        return 1;
+      return 0;
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
     }
 
     if(doctemplate != null)
@@ -279,6 +543,10 @@ function sortOpportunityDocs(doctemplate)
     }
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
 /**************************
  * spa-opportunities-list *
  **************************/
@@ -293,8 +561,12 @@ function activateOpportunitiesList()
 function initializeOpportunitiesList()
 {
     $.ajax({
+<<<<<<< HEAD
         // Easy as fuck, change this to 3
         url: "php/api/opportunity/read.php?status=0",
+=======
+        url: "php/api/opportunity/read.php?status=3", 
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
         success: function(opportunities_json)
         {
             opportunities = opportunities_json["opportunity"];
@@ -303,7 +575,11 @@ function initializeOpportunitiesList()
             // We need to get the category name for each opportunity, via the categoryID
             categories = {}
             $.ajax({
+<<<<<<< HEAD
                 url: "php/api/opportunity/categoryName.php",
+=======
+                url: "php/api/opportunity/categoryName.php", 
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
                 success: function(category_json)
                 {
                     console.log(category_json);
@@ -348,7 +624,7 @@ function populateOpportunitiesList(opportunities_json) {
     for(var i = 0; i < opportunities.length; i++)
     {
         // Skip and do not add any opportunities that don't match our selected category, if we have selected one
-        if((selected_categoryID != undefined && opportunities[i].CategoryID != selected_categoryID ) || opportunities[i].StatusName != "New")
+        if((selected_categoryID != undefined && opportunities[i].CategoryID != selected_categoryID ) || opportunities[i].StatusName != "Published")
         {
             continue;
         }
@@ -449,7 +725,8 @@ function parseOpportunity(opportunity) {
                 // Create Template download anchor
                 anchor = document.createElement("a");
                 if(doc_templates[i].Url != null)
-                    anchor.href = doc_templates[i].Url.replace("https://athena.ecs.csus.edu/~wildcard/", "");
+                    anchor.href = doc_templates[i].Url;
+//                     anchor.href = doc_templates[i].Url.replace("https://athena.ecs.csus.edu/~wildcard/", "");
                 else
                     anchor.href = "google.com";
 
@@ -457,6 +734,11 @@ function parseOpportunity(opportunity) {
                     anchor.appendChild(document.createTextNode(doc_templates[i].DocTitle));
                 else
                     anchor.appendChild(document.createTextNode(doc_templates[i].DisplayTitle));
+<<<<<<< HEAD
+=======
+              
+                anchor.target = "_blank";
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
                 // Attach all elements to the list_item
                 list_item.appendChild(anchor);
                 doc_list.appendChild(list_item);
@@ -485,21 +767,35 @@ function initializeCreateProposal(opportunity_id)
     $("#proposal-save-btn").show();
     // Probably want to make this synchronous, so that we can populate the doc list then do other things
     $.ajax({
+<<<<<<< HEAD
         url: "php/api/opportunity/read.php",
+=======
+        url: "php/api/opportunity/read.php", 
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
         type: "POST",
         data: {"OpportunityID": opportunity_id},
         success: populateOppTitle,
         async: false
     });
     $.ajax({
+<<<<<<< HEAD
         url: "php/api/opportunity/getDocTemplates.php?opportunityid="+opportunity_id,
+=======
+        url: "php/api/opportunity/getDocTemplates.php?opportunityid="+opportunity_id, 
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
         type: "GET",
         success: populateOppDocTemplates,
         async: false
     });
 
+<<<<<<< HEAD
 
 
+=======
+    $("#time-remaining-div").show();
+
+    $("#fee-input").show();
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
     $("#proposal-submit-btn").hide()
 
     $("#proposal-back-list-btn").off();
@@ -508,8 +804,12 @@ function initializeCreateProposal(opportunity_id)
     $("#proposal-back-list-btn").click(function() { router("#spa-opportunities-list"); });
     $("#proposal-save-btn").click(function() { console.log("Pressed proposal-save-btn"); saveNewProposal(opportunity_id); });
 
+    $("#prev-fee-doc").hide();
+
     // Because edit-proposal can change this
-    $("#proposal-instructions-span").text("Please download, fill out, and upload all requested forms. You can come back and edit your documents at any time before the deadline for submissions, just press 'save and come back later");
+    $("#proposal-instructions-span").text('Please download, fill out, and upload all requested forms. You can come back and edit your documents at any time before the deadline for submissions, just press "Save For Later". You may submit your Proposal once you have satsifed all required documents');
+
+    document.getElementById("fee-input").value = "";
 
 
 }
@@ -526,7 +826,8 @@ function saveNewProposal(opportunity_id)
         "ProposalID": proposal_id,
         "OpportunityID": opportunity_id,
         "BidderID": g_bidder_id,
-        "Status": "saved, still open",
+        "Status": "40",
+        "StatusName": "Open",
         "TechnicalScore": -1,
         "FeeScore": -1,
         "FinalTotalScore": -1,
@@ -609,6 +910,18 @@ function saveNewProposal(opportunity_id)
         xhr.send(formData);
     }
 
+    fee_input = document.getElementById("fee-input");
+    current_file = fee_input.files.length > 0 ? fee_input.files[0] : null;
+    if(current_file != null)
+    {
+        uploadFeeDocument(current_file, current_file.name, proposal_id, opportunity_id, 0);
+    }
+    else
+    {
+        console.log("No fee doc to upload");
+    }
+
+
     alert("Your proposal was succesfully saved");
     activateOpportunitiesList();
 }
@@ -638,15 +951,21 @@ function getUniqueProposalID()
     //     async: false
     // });
 
-    return getRandomInt(0,65325).toString();
+    return getRandomInt(1,65325).toString();
 }
 
 
 function populateOppTitle(opportunity)
 {
     g_current_opportunity_json = opportunity;
+<<<<<<< HEAD
     $("#opportunity-title").text("Title: " + opportunity["Name"]);
     $("#opportunity-countdown").text("Closing Date and Time: " + convert_db_date_to_custom(opportunity["ClosingDate"]));
+=======
+    $("#opportunity-title").text(opportunity["Name"]);
+    $("#opportunity-countdown").text(convert_db_date_to_custom(opportunity["ClosingDate"]));
+    document.getElementById("proposal-opportunity-detail").innerHTML = opportunity.Description;
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
 
     // Setup our lovely countdown timer...
     //{"days":597,"hours":15,"minutes":44,"seconds":11}
@@ -711,7 +1030,10 @@ function populateOppDocTemplates(opp_doc_templates)
         // Create Template download anchor
         anchor = document.createElement("a");
         if(doc_templates[i].Url != null)
+        {
             anchor.href = doc_templates[i].Url.replace("https://athena.ecs.csus.edu/~wildcard/", "");
+//             anchor.href = doc_templates[i].Url;
+        }
         else
             anchor.href = "google.com";
 
@@ -726,7 +1048,11 @@ function populateOppDocTemplates(opp_doc_templates)
         file_upload.setAttribute("type", "file");
         file_upload.dataset.parent_list_item_id = list_item.id;
         file_upload.addEventListener("change", allDocsSatisfied);
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
         // Create submit button
         // file_upload_button = document.createElement("a");
         // file_upload_button.classList.add('btn');
@@ -748,8 +1074,15 @@ function populateOppDocTemplates(opp_doc_templates)
 function allDocsSatisfied(current_event)
 {
     console.log("Setting this inputs parent as hasDocPending");
+<<<<<<< HEAD
     console.log(current_event);
     document.getElementById(current_event.target.dataset.parent_list_item_id).dataset.hasDocPending = true;
+=======
+    if(current_event.target.id != "fee-input")
+        document.getElementById(current_event.target.dataset.parent_list_item_id).dataset.hasDocPending = true;
+    else
+        console.log("This is the fee-input event");
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
 
     console.log("Checking if we have all docs potentially satisfied");
     doc_list = document.getElementById("opp-doc-templates-list");
@@ -762,6 +1095,16 @@ function allDocsSatisfied(current_event)
         has_all_docs = has_all_docs & (li.dataset.hasDocUploaded == "true" || li.dataset.hasDocPending == "true");
     }
 
+<<<<<<< HEAD
+=======
+    fee_input = document.getElementById("fee-input");
+    if(fee_input.files.length == 0 && !($("#prev-fee-doc").is(":visible"))) // Hacky piece of shit!
+    {
+
+        has_all_docs = false;
+    }
+
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
     console.log("Has all docs: " + String(has_all_docs));
     if(has_all_docs)
         $("#proposal-submit-btn").show();
@@ -784,7 +1127,11 @@ function initializeProposalsList()
     // Just gets all of the proposals, and then attaches the associated OpportunityName to it
     // Christ, this operates on every single proposal since there is no endpoint to specify bidderID...
     $.ajax({
+<<<<<<< HEAD
         url: "php/api/proposal/read.php",
+=======
+        url: "php/api/proposal/read.php", 
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
         success: function(proposals_json) {
             proposals_json["proposal"] = proposals_json["proposal"].filter(proposal => proposal["BidderID"] == g_bidder_id)
 
@@ -829,11 +1176,19 @@ function initializeProposalsList()
                         sortOpportunityDocs(opp_doc_templates.doctemplate);
                         doc_templates = opp_doc_templates["doctemplate"];
                         proposal_json.NumOpportunityDocs = doc_templates.length;
+<<<<<<< HEAD
 
                         if(num_proposal_callbacks_left == 0)
                         {
                             // Filter down all proposals till we get just ours
                             populateProposalList(proposals_json["proposal"].filter(proposal => proposal["BidderID"] == g_bidder_id));
+=======
+                        
+                        if(num_proposal_callbacks_left == 0)
+                        {
+                            // Filter down all proposals till we get just ours
+                            populateProposalList(proposals_json["proposal"].filter(proposal => proposal["BidderID"] == g_bidder_id)); 
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
                         }
                     }
                 });
@@ -877,17 +1232,23 @@ function populateProposalList(proposals_json)
         status_name = proposals_json[i].StatusName;
         if(status_name == "Evaluation 1 Rejected") { status_name = "Rejected"; }
         else if(status_name == "Evaluation 1 Accepted") { status_name = "Closed for edits, Under Evaluation"; }
-        else if(status_name == "Seeking Clarification 1") { status_name = "clarification requested"; }
-        else if(status_name == "Seeking Clarification 2") { status_name = "clarification requested"; }
-        else if(status_name == "Clarification Received ") { status_name = "Closed for edits, Under Evaluation"; }
-        else if(status_name == "Clarification Received ") { status_name = "Closed for edits, Under Evaluation"; }
+        else if(status_name == "Seeking Clarification 1") { status_name = "Clarification Requested"; }
+        else if(status_name == "Seeking Clarification 2") { status_name = "Clarification Requested"; }
+        else if(status_name == "Clarification Received 1") { status_name = "Clarification Received, Under Evaluation"; }
+        else if(status_name == "Clarification Received 2") { status_name = "Clarification Received, Under Evaluation"; }
         else if(status_name == "Evaluation 2 Rejected") { status_name = "Rejected"; }
         else if(status_name == "Evaluation 2 Accepted") { status_name = "Closed for edits, Under Evaluation"; }
+<<<<<<< HEAD
         else if(status_name == "In Progress" || status_name == "Open")
         {
             status_name = proposals_json[i].NumProposalDocs >= proposals_json[i].NumOpportunityDocs ?
                 "Open For Edits, pending close date" : "Open For Edits, missing documents";
         }
+=======
+        else if(status_name == "In Progress") { status_name = "Submitted, Under Evaluation"; }
+        else if(status_name == "Open") { status_name = "Open"; }
+        else if(status_name == "Expired") { status_name = "Expired"; }
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
         else {status_name = "UNKNOWN STATUS MAPPING: " + status_name; }
 
 
@@ -956,17 +1317,24 @@ function activateEditProposal(proposal_id)
 
                     initializeCreateProposal(proposal_json.OpportunityID);
                     initializeEditProposal(proposal_json);
+<<<<<<< HEAD
                     router("#spa-create-proposal"); // Sneaky!
+=======
+                    router("#spa-create-proposal", true); // Sneaky! 
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
                 }
             });
         }
     });
 }
 
-function initializeEditProposal(proposal_json)
+function shutdownProposal(instructions_text)
 {
-    console.log("In initializeEditProposal");
+    console.log("shutdownProposal called");
+    console.log(instructions_text);
+    $("#proposal-instructions-span").text(instructions_text);
 
+<<<<<<< HEAD
     $("#create-proposal-header").text("Edit proposal");
     $("#proposal-time-last-edit").text("Time last edit: " + convert_db_date_to_custom(proposal_json.LastEditDate));
     $("#proposal-back-list-btn").off();
@@ -978,9 +1346,20 @@ function initializeEditProposal(proposal_json)
 
     $("#proposal-submit-btn").off();
     $("#proposal-submit-btn").click(function() { saveProposal(proposal_json, true); }); // True for this is a final submission
+=======
+    $("#proposal-save-btn").hide();
+    $("#proposal-submit-btn").hide();
+    $("#proposal-time-remaining").hide();
+    $("#fee-input").hide();
+    $("#time-remaining-div").hide();
 
-    if("ClarificationClosingDate" in proposal_json)
+    // Gonna use this to hide all the file inputs, since the proposal is now closed
+    doc_list_children = document.getElementById("opp-doc-templates-list").childNodes;
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
+
+    for(i = 0; i < doc_list_children.length; i++)
     {
+<<<<<<< HEAD
         if(parseCustomDateStringToDate(proposal_json["ClarificationClosingDate"]) > new Date())
         {
             console.log("OK, we found a clarification...");
@@ -1042,6 +1421,87 @@ function initializeEditProposal(proposal_json)
         },
         parseCustomDateStringToDate(g_current_opportunity_json["ClosingDate"])
     );
+=======
+        current_child = doc_list_children[i];
+        current_input = null;
+
+        // Search for just the input in each li via localName=input
+        for(j = 0; j < current_child.children.length; j++)
+        {
+            if(current_child.children[j].localName.toLowerCase() == "input")
+                current_input = current_child.children[j];
+        }
+
+        if(current_input == null)
+            alert("Encountering weirdness with hiding the inputs");
+
+        current_input.style.display = "none";
+    }
+}
+
+function initializeEditProposal(proposal_json)
+{
+    console.log("In initializeEditProposal");
+
+    $("#create-proposal-header").text("Edit Proposal");
+    $("#proposal-time-last-edit").text(convert_db_date_to_custom(proposal_json.LastEditDate));
+    $("#proposal-back-list-btn").off();
+    $("#proposal-save-btn").off();
+    $("#proposal-time-remaining").show();
+
+    $("#proposal-back-list-btn").click(function() { router("#spa-proposals-list"); });
+    $("#proposal-save-btn").click(function() { saveProposal(proposal_json, false); }); // the false is that this is not a final submit
+
+
+    $("#proposal-submit-btn").off();
+    $("#proposal-submit-btn").click(function() { saveProposal(proposal_json, true); }); // True for this is a final submission
+
+
+    timeRemainingCallback.stop(); // Don't want this shit lingering
+
+    // Clarification state
+    console.log("Proposal status: " + proposal_json.StatusName);
+    if(proposal_json.StatusName == "Seeking Clarification 1" || proposal_json.StatusName == "Seeking Clarification 2")
+    {
+        console.log("OK, we found a clarification...");
+        shutdownProposal("There is an open clarification request for this proposal, please respond in 'View Your Messages'");
+    }
+    else if(proposal_json.StatusName == "Expired")
+    {
+        shutdownProposal("Your proposal expired, next time upload all your docs and submit on time");
+    }
+    else if(proposal_json.StatusName == "Open")
+    {
+        // Setup our lovely countdown timer...
+        
+        timeRemainingCallback.start(
+            function(reasonable_time_remaining) {
+                if(isReasonableTimeNegative(reasonable_time_remaining))
+                {
+                    timeRemainingCallback.stop();
+                    console.log("This fuckin guy being called");
+                    shutdownProposal("This opportunity has closed, your proposal will be evaluated soon");
+
+                }
+                else
+                {
+                    time_remaining_text = "";
+                    time_remaining_text += "Days: " + reasonable_time_remaining.days;
+                    time_remaining_text += " Hours: " + reasonable_time_remaining.hours;
+                    time_remaining_text += " Minutes: " + reasonable_time_remaining.minutes;
+                    time_remaining_text += " Seconds: " + reasonable_time_remaining.seconds;
+                    $("#proposal-time-remaining").text(time_remaining_text);
+                }
+            },
+            parseCustomDateStringToDate(g_current_opportunity_json["ClosingDate"])
+        );
+    }
+    else
+    {
+        console.log("proposal-edit: " + proposal_json.StatusName);
+        shutdownProposal("Your Proposal has been submitted and is under evaluation");
+    }
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
 
 
     doc_list = document.getElementById("opp-doc-templates-list");
@@ -1052,6 +1512,20 @@ function initializeEditProposal(proposal_json)
         type: "GET",
         success: function(proposal_docs_json)
         {
+            // Do fee doc first cuz the rest of this shit might error out
+            fee_doc = getFeeDocument(proposal_json.ProposalID);
+            if(fee_doc)
+            {
+                // Set attribute
+                $("#prev-fee-doc").attr("href", fee_doc.Url);
+                $("#prev-fee-doc").show();
+            }
+            else
+            {
+                has_all_docs = false;
+            }
+
+            // Do the fuckin rest
             docs = proposal_docs_json.doc;
             doc_map = {}; // with DocTemplateID as the key
 
@@ -1075,6 +1549,7 @@ function initializeEditProposal(proposal_json)
                     prev_doc_anchor.href = doc_map[child.dataset.DocTemplateID].Url;
                     prev_doc_anchor.appendChild(document.createTextNode("View what you uploaded"));
                     prev_doc_anchor.className += "old_doc_a";
+                    prev_doc_anchor.target = "_blank";
 
                     child.dataset.DocID = doc_map[child.dataset.DocTemplateID].DocID;
                     child.dataset.hasDocUploaded = true;
@@ -1086,6 +1561,7 @@ function initializeEditProposal(proposal_json)
                 {
                     has_all_docs = false;
                 }
+<<<<<<< HEAD
 
             }
 
@@ -1101,6 +1577,24 @@ function initializeEditProposal(proposal_json)
                     console.log("this proposal is expired, not touching submit");
                 }
 
+=======
+
+            }
+
+            // Logic to show submit button
+            if(has_all_docs)
+            {
+                if(proposal_json.StatusName == "Open")
+                {
+                    console.log("This proposal has all docs, showing submit button");
+                    $("#proposal-submit-btn").show();
+                }
+                else
+                {
+                    console.log("this proposal is not open, not touching submit");
+                }
+
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
             }
             else
             {
@@ -1193,7 +1687,29 @@ function saveProposal(proposal_json, is_this_submit)
         xhr.send(formData);
     }
 
-    alert("Your proposal was succesfully saved");
+    fee_input = document.getElementById("fee-input");
+    current_file = fee_input.files.length > 0 ? fee_input.files[0] : null;
+    if(current_file != null)
+    {
+        uploadFeeDocument(current_file, current_file.name, proposal_json.ProposalID, proposal_json.OpportunityID, 0);
+    }
+    else
+    {
+        console.log("No fee doc to upload");
+    }
+
+    if(is_this_submit)
+    {
+        console.log("Setting proposal to In Progress");
+        updateProposal(proposal_json.ProposalID, {"Status":"30"});
+        alert("Your proposal was succesfully submitted");
+    }
+    else
+    {
+       alert("Your proposal was succesfully saved"); 
+    }
+
+
     activateProposalsList();
 }
 
@@ -1251,16 +1767,26 @@ function initializeMessageList()
     removeAllTableElements(document.getElementById("messages-list-table"));
 
     // Force the message center to update
+<<<<<<< HEAD
     mc.updateServer();
 
     mc = new MessageCenter(populateMessageList());
+=======
+    g_mc.updateServer();
+
+    g_mc = new MessageCenter(populateMessageList());
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
 }
 
 
 function populateMessageList(messages_json)
 {
     PREVIEW_LENGTH = 90; // Number of characters in the message preview
+<<<<<<< HEAD
     messages_json = mc.messages;
+=======
+    messages_json = g_mc.messages;
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
     table_array = [];
 
     for(i = 0; i < messages_json.length; i++)
@@ -1278,7 +1804,11 @@ function populateMessageList(messages_json)
             preview_text = messages_json[i].Body.substring(0,PREVIEW_LENGTH)+"...";
         else
             preview_text = messages_json[i].Body;
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
         preview.appendChild(document.createTextNode(preview_text) );
 
 
@@ -1321,6 +1851,7 @@ function activateMessageDetail(message_id)
 {
     initializeMessageDetail(message_id);
 
+<<<<<<< HEAD
     message = mc.messages[parseInt(message_id)];
     if(message.Type == "ClarificationNotification")
         mc.markRead("ClarificationNotification", message.ClarificationID);
@@ -1330,6 +1861,17 @@ function activateMessageDetail(message_id)
         alert("Error marking message as read!");
 
     $("#num-unread-messages").text(mc.numUnread);
+=======
+    message = g_mc.messages[parseInt(message_id)];
+    if(message.Type == "ClarificationNotification")
+        g_mc.markRead("ClarificationNotification", message.ClarificationID);
+    else if(message.Type == "OpportunityNotification")
+        g_mc.markRead("OpportunityNotification", message.OpportunityID);
+    else
+        alert("Error marking message as read!");
+
+    $("#num-unread-messages").text(g_mc.numUnread);
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
 
     router("#spa-message-detail");
 }
@@ -1338,7 +1880,11 @@ function initializeMessageDetail(message_id)
 {
 
     // Ajax to get the specific message
+<<<<<<< HEAD
     populateMessageDetail(mc.messages[parseInt(message_id)]);
+=======
+    populateMessageDetail(g_mc.messages[parseInt(message_id)]);
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
 }
 
 // <h2>Message Type: <span id="message-detail-type">Message type placeholder</span></h2>
@@ -1357,17 +1903,29 @@ function populateMessageDetail(message)
     $("#message-detail-type").text(message.Type);
     $("#message-detail-body").text(message.Body);
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
     // Hide non-essential, leave these to be shown by subroutines
     $("#send-message-btn").hide();
     $("#discard-message-btn").hide();
     $("#message-detail-time-responded-header").hide();
+<<<<<<< HEAD
     $("#message-detail-back-btn").hide();
+=======
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
     $("#send-message-btn").hide();
     $("#discard-message-btn").hide();
     $("#message-detail-response").hide();
     $("#message-detail-due-by-header").hide();
     $("#message-detail-upload").hide();
     $("message-detail-opportunity-name-header").hide();
+<<<<<<< HEAD
+=======
+    $("#message-detail-download-link").hide();
+    $("send-message-div").hide();
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
 
 
     if(message.Type == "ClarificationNotification")
@@ -1376,6 +1934,7 @@ function populateMessageDetail(message)
         populateOpportunityNotificationDetail(message);
     else
         alert("error");
+<<<<<<< HEAD
 
     $("#send-message-btn").off();
     $("#send-message-btn").click(function()
@@ -1398,10 +1957,38 @@ function populateClarificationRequestDetail(message)
 
     if(message.Answer != null)
     {
+=======
+
+    $("#send-message-btn").off();
+    $("#send-message-btn").click(function() 
+    {
+        sendClarificationResponse(message.ProposalID, message.ClarificationID);
+        alert("Response sent successfully");
+        activateMessageList();
+    });
+
+}
+
+
+
+function populateClarificationRequestDetail(message)
+{
+    // Show these always
+    // console.log("Show this shit as: " + message.OpportunityName);
+    $("#message-detail-opportunity-name").text(message.OpportunityName);
+    $("#message-detail-opportunity-name-header").show();
+
+    $("send-message-div").show();
+
+
+    if(message.Answer != null)
+    {
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
         console.log("There is an answer associated with this Clarification");
         // Hide these
         $("#send-message-btn").hide();
         $("#discard-message-btn").hide();
+        $("#message-detail-back-btn").text("Back to Messages");
 
         //Unhide these
         $("#message-detail-time-responded-header").show();
@@ -1413,6 +2000,17 @@ function populateClarificationRequestDetail(message)
         // Set these
         $("#message-response-editor")[0].value = (message.Answer);
         document.getElementById("message-response-editor").readOnly = true;
+<<<<<<< HEAD
+=======
+
+        if(message.DocID != null)
+        {
+            $("#message-detail-download-link").show();
+            $("#message-detail-download-link").attr("href", getDocUrlFromID(message.DocID));
+        }
+
+
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
     }
     else // There is no answer, will need one if closing date has not passed
     {
@@ -1435,8 +2033,13 @@ function populateClarificationRequestDetail(message)
                 return;
             }
         }
+<<<<<<< HEAD
 
 
+=======
+        
+        $("#message-detail-back-btn").text("Discard Message");
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
 
         if(message.ClosingDate != null)
             $("#message-detail-due-by").text(convert_db_date_to_custom(message.ClosingDate));
@@ -1446,19 +2049,77 @@ function populateClarificationRequestDetail(message)
         $("#message-detail-due-by-header").show();
 
         // Have to reset for some reason
+<<<<<<< HEAD
         $("#message-response-editor")[0].value = "";
         clarification_input = document.getElementById("clarification-file-input");
         clarification_input.value = "";
         document.getElementById("message-response-editor").readOnly = false;
+=======
+        $("#message-response-editor")[0].value = ""; 
+        clarification_input = document.getElementById("clarification-file-input");
+        clarification_input.value = "";
+        document.getElementById("message-response-editor").readOnly = false; 
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
 
         // Show these
         $("#send-message-btn").show();
         $("#discard-message-btn").show();
         $("#message-detail-response").show();
         $("#message-detail-upload").show();
+<<<<<<< HEAD
+=======
     }
 }
 
+function populateOpportunityNotificationDetail(message)
+{
+    $("#message-detail-back-btn").text("Back to Messages");
+
+    $("#send-message-btn").hide();
+    $("#discard-message-btn").hide();
+    $("#message-detail-response").hide();
+    $("#message-detail-time-responded-header").hide();
+}
+
+
+
+
+
+function sendClarificationResponse(ProposalID, ClarificationID)
+{
+
+
+    doc_id = -1;
+    clarification_input = document.getElementById("clarification-file-input");
+    if(clarification_input.files.length == 1)
+    {
+        var formData=new FormData();
+        formData.append('filename', clarification_input.files[0], clarification_input.files[0].name);
+        formData.append('ProposalID', ProposalID);
+        formData.append("OpportunityID", "-1");
+        formData.append("DocTemplateID", "-1");
+        formData.append('submit', "Lol this needs to be filled");
+        formData.append('final_submission', false); // Needs something in endpoint
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST','php/api/proposal/uploadDoc.php', false); // We're gonna make this synchronous
+        xhr.onload = function() {
+            if(xhr.status == 200) {
+                console.log('saveProposal: File uploaded' + xhr.response);
+                console.log(JSON.parse(xhr.response));
+                doc_id = JSON.parse(xhr.response).DocID;
+            } else {
+                alert('saveProposal: Error uploading file:' + xhr.response);
+                console.log("saveProposal: There was an error, dumping what was sent:");
+                console.log("saveProposal: " + String(xhr));
+            }
+        };
+        xhr.send(formData);
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
+    }
+}
+
+<<<<<<< HEAD
 function populateOpportunityNotificationDetail(message)
 {
     $("#send-message-btn").hide();
@@ -1527,6 +2188,46 @@ function sendClarificationResponse(ProposalID, ClarificationID)
     xhr.send(JSON.stringify(request_json));
 }
 
+=======
+
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "php/api/proposal/updateClarification.php");
+    xhr.onload = function(response)
+    {
+        if(xhr.status == 200)
+        {
+            console.log("succesfully sent clarification response");
+            console.log(xhr.response);
+        }
+        else
+        {
+            console.log("Error sendClarificationResponse");
+            console.log(xhr.response);
+        }
+    }
+    xhr.setRequestHeader("Content-type", "application/json");
+    answer = $("#message-response-editor")[0].value;
+    request_json = {"ProposalID":ProposalID, "ClarificationID":ClarificationID, "answer":answer, "DocID":String(doc_id)};
+    xhr.send(JSON.stringify(request_json));
+
+    // This is kind of fucked up, but we have to update the proposal based on what phase its in right now
+    proposal = getProposalByID(ProposalID);
+    if(proposal.StatusName == "Seeking Clarification 1")
+    {
+        console.log("We are in Clarification 1 currently, updating to status 50")
+        updateProposal(ProposalID, {"Status":"50"});
+    }
+    else if(proposal.StatusName == "Seeking Clarification 2")
+    {
+        console.log("We are in Clarification 2 currently, updating to status 55");
+        updateProposal(proposalID, {"Status":"55"});
+    }
+
+    
+}
+
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
 /****************************
  * spa-manage-subscriptions *
  ****************************/
@@ -1552,7 +2253,11 @@ function initializeManageSubscriptions()
 
             var subscriptions_xhr = new XMLHttpRequest();
             subscriptions_xhr.open("POST", "php/api/bidder/getSubscriptions.php");
+<<<<<<< HEAD
             subscriptions_xhr.onload = function()
+=======
+            subscriptions_xhr.onload = function() 
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
             {
                 if(subscriptions_xhr.status == 200)
                 {
@@ -1691,6 +2396,39 @@ function isValidJSON(str) {
     return true;
 }
 
+<<<<<<< HEAD
+=======
+function getProposalByID(ProposalID)
+{
+    proposal_json = null;
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "http://athena.ecs.csus.edu/~wildcard/php/api/proposal/read.php?ProposalID="+ProposalID, false);
+    xhr.onload = function(response)
+    {
+        if(xhr.status == 200)
+        {
+            proposal_json = JSON.parse(xhr.response);
+            
+            if(proposal_json.ProposalID == null)
+            {
+                console.log("Error getting proposal by ID");
+                console.log(xhr.response);
+                proposals_json = null;
+            }
+        }
+        else
+        {
+            console.log("Error getting proposal by ID");
+            console.log(xhr.response);
+        }
+    }
+
+    xhr.send();
+
+    return proposal_json;
+}
+
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
 // Messages are not saves on backend, it is the notifications that are saved. Messages are generated on the fly
 DEFAULT_NOTIFICATION_BODY = "There is a new Opportunity available"; // TODO: better
 class MessageCenter
@@ -1819,7 +2557,11 @@ class MessageCenter
 
                 self.internal_json.OpportunityNotifications.push(new_opportunity_notification);
             }
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
         });
     }
 
@@ -1847,7 +2589,11 @@ class MessageCenter
         var self = this; // omfg are you serious, need this for callbacks
 
         $.ajax({
+<<<<<<< HEAD
             url: "php/api/proposal/read.php",
+=======
+            url: "php/api/proposal/read.php", 
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
             success: function(proposals_json) {
                 proposals_json["proposal"] = proposals_json["proposal"].filter(proposal => proposal["BidderID"] == g_bidder_id)
                 var num_proposal_callbacks_left = proposals_json["proposal"].length;
@@ -1856,7 +2602,11 @@ class MessageCenter
                 proposals_json["proposal"].forEach( function (proposal_json)
                 {
                     $.ajax({
+<<<<<<< HEAD
                         url: "php/api/proposal/getClarifications.php?proposalID="+proposal_json.ProposalID,
+=======
+                        url: "php/api/proposal/getClarifications.php?proposalID="+proposal_json.ProposalID, 
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
                         type: "GET",
                         success: function(clarifications_json)
                         {
@@ -1924,15 +2674,23 @@ class MessageCenter
 
         num_callbacks_left++;
         $.ajax({
+<<<<<<< HEAD
             // Easy as fuck, change this to 3
             url: "php/api/opportunity/read.php?status=0",
+=======
+            url: "php/api/opportunity/read.php?status=3", 
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
             success: function(opportunities_json)
             {
                 console.log("MessageCenter: Getting opportunities");
                 // We need to get the category name for each opportunity, via the categoryID
                 var categories = {}
                 $.ajax({
+<<<<<<< HEAD
                     url: "php/api/opportunity/categoryName.php",
+=======
+                    url: "php/api/opportunity/categoryName.php", 
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
                     success: function(category_json)
                     {
                         console.log("MessageCenter: Getting categories");
@@ -1974,14 +2732,22 @@ class MessageCenter
         num_callbacks_left++;
         var subscriptions_xhr = new XMLHttpRequest();
         subscriptions_xhr.open("POST", "php/api/bidder/getSubscriptions.php");
+<<<<<<< HEAD
         subscriptions_xhr.onload = function()
+=======
+        subscriptions_xhr.onload = function() 
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
         {
             console.log("MessageCenter: Subscriptions call has returned");
             if(subscriptions_xhr.status == 200)
             {
                 console.log(subscriptions_xhr.responseText);
                 var subscriptions_json = JSON.parse(subscriptions_xhr.responseText);
+<<<<<<< HEAD
 
+=======
+                
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
                 subscriptions_json.subscription.forEach(function(sub)
                 {
                     internal_subscriptions.push(sub.CategoryID);
@@ -2029,7 +2795,11 @@ class MessageCenter
         self.internal_json.ClarificationNotifications.forEach(function(clarification_notification)
         {
             var new_message = {};
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
 
             console.log(clarification_notification);
 
@@ -2054,9 +2824,21 @@ class MessageCenter
             });
 
             if(clarification == null)
+<<<<<<< HEAD
                 alert("There was an issue matching this message to a clarification");
             if(opportunity == null)
             {
+=======
+            {
+                console.log("Error matching clarification");
+                console.log(self.clarifications);
+                console.log(clarification_notification);
+                alert("There was an issue matching this message to a clarification");
+            }
+            if(opportunity == null)
+            {
+                console.log(clarification_notification);
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
                 console.log(self.all_opportunities);
                 console.log(clarification.OpportunityID);
                 alert("There was an error matching this message to an opportunity");
@@ -2067,7 +2849,18 @@ class MessageCenter
                 console.log(opportunity);
             }
 
+<<<<<<< HEAD
 
+=======
+            var proposal = getProposalByID(clarification.ProposalID);
+            if(proposal == null)
+            {
+                console.log("Proposal was null");
+                alert("Error generating message");
+            }
+
+            
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
             new_message.Type = "ClarificationNotification";
             new_message.TimeReceived = clarification.CreatedDate;
             new_message.Body = clarification.question;
@@ -2078,6 +2871,11 @@ class MessageCenter
             new_message.LastEditDate = clarification.LastEditDate;
             new_message.ClosingDate = clarification.ClosingDate;
             new_message.OpportunityName = opportunity.Name;
+<<<<<<< HEAD
+=======
+            new_message.DocID = clarification.DocID;
+            new_message.Proposal = proposal;
+>>>>>>> c8ecde4793884de43a1268b5eea9b9b689a0ac8e
 
             _messages.push(new_message);
         });

@@ -5,9 +5,9 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Credentials: true");
 header('Content-Type: application/json');
 
-ini_set("log_errors", 1);
-ini_set("error_log", "/tmp/php-error.log");
-error_log( "Hello, errors!" );
+//ini_set("log_errors", 1);
+//ini_set("error_log", "/tmp/php-error.log");
+//error_log( "Hello, errors!" );
 
 include_once '../config/Database.php';
 include_once '../objects/employee.php';
