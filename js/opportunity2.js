@@ -9,8 +9,12 @@ $(document).ready(
         $('#editoppSave').click(function() {
             saveEditOpp($("#editoppNumber").text());
         });
+
         $('#oppReadyButton').click(function() {
            markReadyforReview($('#oppNumber').text());
+           showOppList(0);
+           showOppList(11);
+           makeBreadcrumb();
         });
 
        $('#editOppPanel').hide();
@@ -44,8 +48,14 @@ $(document).ready(
         });
 
         $('#exitNewOpp').click(function () {
+            $('#newOppPanel1').hide();
             $('#newOppForm')[0].reset();
             showOppList(0);
+        });
+
+        $("#exitEdit").click(function() {
+            opId = $('#editoppNumber').text();
+            showOppView(opId);
         });
 
         $('#clearNewOpp').click(function () {
@@ -55,6 +65,7 @@ $(document).ready(
         $('#docTemplatesBody').sortable();
         $('#oppTab').click(function () {
             showOppList(0);
+            showOppList(11);
         });
 
         $('#awTab').click(function () {
@@ -78,16 +89,11 @@ $(document).ready(
             showEditOpp($("#oppNumber").text());
         });
 
-        $('#exitNewOpp').click(function () {
-            $('#newOppPanel1').hide();
-        });
 
         $('#uploadDocTemplates').click(function() {
-            alert("uploading files...");
             opId = $('#oppNumber').text();
             uploadDocTemplates(opId);
             if($("#newcriteriaFile").val()) {
-                console.log("uploading new criteria file");
                 var scoreFile = $('#newcriteriaFile')[0].files[0];
                 if (typeof(scoreFile) != "undefined")
                     uploadScoring(scoreFile,opId);
@@ -148,11 +154,12 @@ function markReadyforReview(opId) {
             if (failed)
                 return;
             else
-                alert("Status changed to 'Ready for Review'");
+                alert("Opportunity " + opId + "is complete and ready for review");
         } else {
             alert('Unable update Opportunity ' + opId);
         }
-        //alert("processed: " + opId);
+        //alert("processed: "+ opId);
+        return;
     }
     xhr.send(JSON.stringify(formData));
 }
@@ -179,45 +186,6 @@ function showEditOpp(opId) {
     makeBreadcrumb(3);
 }
 
-function saveEditOpp(opId) {
-    var sortedIDs = $( "#docTemplatesBody" ).sortable( "toArray");
-    var name = $('#editoppName').text();
-    var desc = $('#editoppDesc').text();
-    var close = $('#editoppDate').text();
-    var jsonRecord =
-        {"OpportunityID": opId,
-            "ClosingDate":close,
-            "Name":name,
-            "Description":desc,
-        };
-
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/update.php', true);
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=utf-8');  //Creates an  error
-    xhr.onload = function () {
-        if (xhr.status == 200) {
-            var retval = xhr.responseText;
-            var failed = retval.includes("failed");
-            if(!failed) {
-                updateDocTemplates(sortedIDs);
-                showEditOpp(opId);
-            }
-            else
-                alert("Failed to edit this opportunity");
-        } else {
-            alert("500: Server error saving edits to this opportunity");
-        }
-    };
-    var jsonString = JSON.stringify(jsonRecord);
-    xhr.send(jsonString);
-    console.log("Wrote Json: " + jsonString);
-
-    alert("Saving changes to opportunity number " + opId);
-};
-
-function updateDocTemplates(sortedIDs) {
-    console.log("Sorted docTemplates: ") + JSON.stringify(sortedIDs);
-}
 
 function showNewOpp() {
     getLeadEvals();
@@ -267,6 +235,51 @@ function showOppList(type) {
 
 }
 
+
+
+function saveEditOpp(opId) {
+    var sortedIDs = $( "#docTemplatesBody" ).sortable( "toArray");
+    var name = $('#editoppName').text();
+    var desc = $('#editoppDesc').text();
+    var close = $('#editoppDate').text();
+    var jsonRecord =
+        {"OpportunityID": opId,
+            "ClosingDate":close,
+            "Name":name,
+            "Description":desc,
+        };
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/update.php', true);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=utf-8');  //Creates an  error
+    xhr.onload = function () {
+        if (xhr.status == 200) {
+            var retval = xhr.responseText;
+            var failed = retval.includes("failed");
+            if(!failed) {
+                updateDocTemplates(sortedIDs);
+                showOppView(opId);
+            }
+            else
+                alert("Failed to edit this opportunity");
+        } else {
+            alert("500: Server error saving edits to this opportunity");
+        }
+        return;
+    };
+    var jsonString = JSON.stringify(jsonRecord);
+    xhr.send(jsonString);
+    console.log("Wrote Json: " + jsonString);
+
+    alert("Saving changes to opportunity number " + opId);
+};
+
+function updateDocTemplates(sortedIDs) {
+    console.log("Sorted docTemplates: ") + JSON.stringify(sortedIDs);
+}
+
+
+
 function getOpportunity(opId) {
 var xhr = new XMLHttpRequest();
     var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php?OpportunityID="+opId;
@@ -277,7 +290,7 @@ var xhr = new XMLHttpRequest();
         var oppArray = JSON.parse(xhr.responseText);
         var catName = categoryArray.Category[oppArray.CategoryID].Name;
         $("#oppNumber").text(oppArray.OpportunityID);
-        $("#oppDate").text(oppArray.ClosingDate);
+        $("#oppDate").text(new Date(oppArray.ClosingDate).toLocaleString());
         $("#oppName").text(oppArray.Name);
         $("#oppType").text(catName);
         $("#oppDesc").html(oppArray.Description);
@@ -286,6 +299,7 @@ var xhr = new XMLHttpRequest();
     }
     var scoreLink = $("#oppScore");
     var scoreFile = getScoringDocLink(opId, scoreLink);
+    return;
 };
 xhr.send();
 }
@@ -318,6 +332,7 @@ function getScoringDocLink(opId,scoreLink){
         //$("#oppScore").html("<a href='" + scoreFile + "'>" +
             scoreLink.html("<a target='_blank' href='" + scoreFile + "'>" +
             scoreText + "</a>");
+            return;
     }
     xhr.send();
 }
@@ -336,7 +351,7 @@ function getOpportunityEdit(opId) {
             savedOpportunity = oppArray;
             var catName = categoryArray.Category[oppArray.CategoryID].Name;
             $("#editoppNumber").text(oppArray.OpportunityID);
-            $("#editoppDate").text(oppArray.ClosingDate);
+            $("#editoppDate").text(new Date(oppArray.ClosingDate).toLocaleString());
             $("#editoppName").text(oppArray.Name);
             $("#editoppType").text(catName);
             $("#editoppDesc").html(oppArray.Description);
@@ -345,6 +360,7 @@ function getOpportunityEdit(opId) {
         } else {
             alert('Unable to locate Opportunity '+ opId);
         }
+        return;
     };
     xhr.send();
 }
@@ -369,6 +385,7 @@ function getDocTemplates(opId) {
                 var title = template.DocTitle;
                 var docid = template.DocTemplateID;
                 var name = template.DocTitle;
+                var date = new Date(template.PostedDate).toLocaleString();
                 //var tempUrl = "https://docs.google.com/viewer?url=http://athena.ecs.csus.edu/~wildcard/data/files/" + template.DocTitle;
                 var tempUrl = template.Url;
                 if (template.Url !== null) {
@@ -377,7 +394,7 @@ function getDocTemplates(opId) {
                     "Delete" + "</td></tr>";
                     */
                 var row = "<tr id='" + template.DocTemplateID + "'><td class='changeable'>" + template.DisplayTitle + "</td><td>" + "<a href ='" + tempUrl + "'target='_blank'>" +
-                template.DocTitle + "</a></td><td>" + template.PostedDate +
+                template.DocTitle + "</a></td><td>" + date +
                     "</td><td>" +
                     "<button onclick=\"deleteDoc(\'"+ opId + "\'," + "\'" + template.DocTemplateID + "\')\"" +
                     " class='btn btn-delete'><span class='glyphicon glyphicon-remove'" +
@@ -392,6 +409,7 @@ function getDocTemplates(opId) {
         } else {
             alert('Error retrieving Document Templates');
         }
+        return;
     };
     xhr.send();
 }
@@ -415,11 +433,12 @@ function getDocTemplatesView(opId) {
                 //var tempUrl = "https://docs.google.com/viewer?url=http://athena.ecs.csus.edu/~wildcard/data/files/" + template.DocTitle;
                 var tempUrl = template.Url;
                 var tempTitle = template.DocTitle;
+                var date = new Date(template.PostedDate).toLocaleString();
                 if (typeof(template.DisplayTitle) != "undefined")
                     tempTitle = template.DisplayTitle;
                 if (template.Url != null) {
                     var row = "<tr><td>" + tempTitle + "</td><td>" + "<a href ='" + tempUrl + "' target='_blank'>" +
-                        template.DocTitle + "</a></td><td>" + template.PostedDate + "</td></tr>";
+                        template.DocTitle + "</a></td><td>" + date + "</td></tr>";
                     $('#docTemplatesBodyView').append(row);
                 }
             }
@@ -429,6 +448,7 @@ function getDocTemplatesView(opId) {
         } else {
             alert('Error retrieving Document Templates');
         }
+        return;
     };
     xhr.send();
 }
@@ -452,6 +472,7 @@ function deleteDoc(opId, templateId) {
         else {
             alert("Failed to delete the document.");
         }
+        return;
     }
     xhr.send(formData);
 
@@ -502,6 +523,7 @@ function getOppList(type) {
         } else {
             alert("Error response");
         }
+        return;
     };
     xhr.send();
 }
@@ -603,6 +625,9 @@ function markPublishOpp(opId) {
         } else {
             alert('Server error on publish Opportunity ' + opId);
         }
+        showOppList(0);
+        showOppList(11);
+        return;
     }
     xhr.send(JSON.stringify(formData));
 }
@@ -621,6 +646,7 @@ function getOppListbyCategory(category) {
         } else {
             alert("Error response");
         }
+        return;
     };
     xhr.send();
 }
@@ -652,6 +678,7 @@ function uploadScoring(file, opId) {
         } else {
             alert('Error uploading scoring file');
         }
+        return;
     };
     xhr.send(formData);
 }
@@ -672,6 +699,7 @@ function updateScoring(file, opId) {
         } else {
             alert('Error uploading new scoring file');
         }
+        return;
     };
     xhr.send(formData);
 }
@@ -700,6 +728,7 @@ function uploadDocTemplates(opId) {
         } else {
         alert('Error uploading file');
         }
+        return;
     };
     xhr.send(formData);
 }
@@ -719,6 +748,7 @@ function getLeadEvals() {
         } else {
             alert("Error response");
         }
+        return;
     };
     xhr.send();
 }
@@ -762,6 +792,7 @@ function saveOpportunity() {
         } else {
             alert("500: Server error saving opportunity");
         }
+        return;
     };
     var jsonString = JSON.stringify(jsonRecord);
     xhr.send(jsonString);
@@ -780,6 +811,7 @@ function getCategories(select){
         } else {
             alert("Error response");
         }
+        return;
     };
     xhr.send();
 }
@@ -799,30 +831,6 @@ function fillCategoryDropdown(catArray, select){
           select.append(option);
     }
 }
-
-function processOpportunity(opId) {
-    var xhr = new XMLHttpRequest();
-    var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/update.php"
-    xhr.open('POST', url);
-    var formData = new FormData();
-    formData.append('OpportunityID', opId);
-    formData.append('StatusID', "7");
-    xhr.onload = function () {
-        if (xhr.status == 200) {
-            var retval = xhr.responseText;
-            var failed = retval.includes('failed');
-            if (failed)
-                return;
-            else
-                alert("Status changed to 'Ready for Review'");
-        } else {
-            alert('Unable update Opportunity ' + opId);
-        }
-        //alert("processed: " + opId);
-    }
-    xhr.send(formData);
-}
-
 
 function makeBreadcrumb(type) {
     $('#breadcrumb').empty();
