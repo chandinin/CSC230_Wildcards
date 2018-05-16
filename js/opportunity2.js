@@ -294,7 +294,7 @@ var xhr = new XMLHttpRequest();
         var oppArray = JSON.parse(xhr.responseText);
         var catName = categoryArray.Category[oppArray.CategoryID].Name;
         $("#oppNumber").text(oppArray.OpportunityID);
-        $("#oppDate").text(oppArray.ClosingDate);
+        $("#oppDate").text(new Date(oppArray.ClosingDate).toLocaleString());
         $("#oppName").text(oppArray.Name);
         $("#oppType").text(catName);
         $("#oppDesc").html(oppArray.Description);
@@ -353,7 +353,7 @@ function getOpportunityEdit(opId) {
             savedOpportunity = oppArray;
             var catName = categoryArray.Category[oppArray.CategoryID].Name;
             $("#editoppNumber").text(oppArray.OpportunityID);
-            $("#editoppDate").text(oppArray.ClosingDate);
+            $("#editoppDate").text(new Date(oppArray.ClosingDate).toLocaleString());
             $("#editoppName").text(oppArray.Name);
             $("#editoppType").text(catName);
             $("#editoppDesc").html(oppArray.Description);
@@ -386,6 +386,7 @@ function getDocTemplates(opId) {
                 var title = template.DocTitle;
                 var docid = template.DocTemplateID;
                 var name = template.DocTitle;
+                var date = new Date(template.PostedDate).toLocaleString();
                 //var tempUrl = "https://docs.google.com/viewer?url=http://athena.ecs.csus.edu/~wildcard/data/files/" + template.DocTitle;
                 var tempUrl = template.Url;
                 if (template.Url !== null) {
@@ -394,7 +395,7 @@ function getDocTemplates(opId) {
                     "Delete" + "</td></tr>";
                     */
                 var row = "<tr id='" + template.DocTemplateID + "'><td class='changeable'>" + template.DisplayTitle + "</td><td>" + "<a href ='" + tempUrl + "'target='_blank'>" +
-                template.DocTitle + "</a></td><td>" + template.PostedDate +
+                template.DocTitle + "</a></td><td>" + date +
                     "</td><td>" +
                     "<button onclick=\"deleteDoc(\'"+ opId + "\'," + "\'" + template.DocTemplateID + "\')\"" +
                     " class='btn btn-delete'><span class='glyphicon glyphicon-remove'" +
@@ -432,11 +433,12 @@ function getDocTemplatesView(opId) {
                 //var tempUrl = "https://docs.google.com/viewer?url=http://athena.ecs.csus.edu/~wildcard/data/files/" + template.DocTitle;
                 var tempUrl = template.Url;
                 var tempTitle = template.DocTitle;
+                var date = new Date(template.PostedDate).toLocaleString();
                 if (typeof(template.DisplayTitle) != "undefined")
                     tempTitle = template.DisplayTitle;
                 if (template.Url != null) {
                     var row = "<tr><td>" + tempTitle + "</td><td>" + "<a href ='" + tempUrl + "' target='_blank'>" +
-                        template.DocTitle + "</a></td><td>" + template.PostedDate + "</td></tr>";
+                        template.DocTitle + "</a></td><td>" + date + "</td></tr>";
                     $('#docTemplatesBodyView').append(row);
                 }
             }
