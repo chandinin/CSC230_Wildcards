@@ -9,6 +9,7 @@ $(document).ready(
         $('#editoppSave').click(function() {
             saveEditOpp($("#editoppNumber").text());
         });
+
         $('#oppReadyButton').click(function() {
            markReadyforReview($('#oppNumber').text());
            showOppList(0);
@@ -65,17 +66,9 @@ $(document).ready(
             showOppList(0);
         });
 
-        $("#exitEditOpp").click(function() {
-            console.log("leaving editopp");
+        $("#exitEdit").click(function() {
             opId = $('#editoppNumber').text();
-            console.log("past showOppView");
-            getOpportunity(opId);
-            getDocTemplatesView(opId);
-            $('#uploadDocTemplates').val(opId);
-
-            $('#editOppPanel2').hide();
-            $('#editOppPanel').show();
-            makeBreadcrumb(2);
+            showOppView(opId);
         });
 
         $('#clearNewOpp').click(function () {
@@ -89,6 +82,7 @@ $(document).ready(
         $('#docTemplatesBody').sortable();
         $('#oppTab').click(function () {
             showOppList(0);
+            showOppList(11);
         });
 
         $('#awTab').click(function () {
@@ -281,7 +275,7 @@ function saveEditOpp(opId) {
             var failed = retval.includes("failed");
             if(!failed) {
                 updateDocTemplates(sortedIDs);
-                showEditOpp(opId);
+                showOppView(opId);
             }
             else
                 alert("Failed to edit this opportunity");
