@@ -555,8 +555,8 @@ function fillOppTable(oppArray,type) {
             } catch (err) {
                 var catName = "None";
             }
-            var tempEDate = new Date(opp.LastEditDate).toDateString();
-            var tempCDate = new Date(opp.ClosingDate).toDateString();
+            var tempEDate = new Date(opp.LastEditDate).toDateString().substring(4);
+            var tempCDate = new Date(opp.ClosingDate).toDateString().substring(4);
             var row;
             switch (type) {
                 case 11:
@@ -658,7 +658,8 @@ function uploadScoring(file, opId) {
     var formData = new FormData();
     formData.append('OpportunityID', opId);
     formData.append('filename', file, file.name);
-    formData.append('submit',1);
+    formData.append('submit',"Upload Image");
+    formData.append('ExpirationDate', '3/29/2020');
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/uploadScoringCriteria.php');
     //xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -745,8 +746,8 @@ function saveOpportunity() {
     var name = $('#formNameInput').val();
     var desc = $('#formDescriptionInput').val();
     var close = $('#close_date').val() + " " + $('#close_time').val();
-    var minscore = $('#close_date').val() + " " + $('#close_time').val();
-    var totpts = $('#close_date').val() + " " + $('#close_time').val();
+    var minscore = $('#formScoreInput').val();
+    var totpts = $('#formTotalPts').val();
     var lead = parseInt($('#selectLead').val());
     var category = $('#selectNewCategory option:selected').attr('id');
     var jsonRecord =
