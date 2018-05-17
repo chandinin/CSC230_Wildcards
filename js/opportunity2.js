@@ -439,6 +439,9 @@ function changeDocTemplateOrder(opId, sortedIDs) {
     j = JSON.stringify(sortedIDs)
     var noquotes = j.replace(/"/g, '');
     var json = {"OpportunityID":opId, "SortOrder": noquotes};
+    json = JSON.stringify(json);
+    json = json.replace("\]\"","\]");
+    json = json.replace("\"\[","\[");
     var xhr = new XMLHttpRequest();
     var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/setDocTemplateOrder.php";
     xhr.open('POST',url);
@@ -449,7 +452,7 @@ function changeDocTemplateOrder(opId, sortedIDs) {
         else
             alert("Failed to change Display Order in Database");
     }
-    xhr.send(JSON.stringify(json));
+    xhr.send(json);
     console.log("Sorted docTemplates: ") + JSON.stringify(sortedIDs);
 }
 
