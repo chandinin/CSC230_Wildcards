@@ -327,6 +327,21 @@ class Proposal
       return false;
   }
 
+  function accept($ProposalID)
+  {
+    $query = "UPDATE Proposal set Status=65 WHERE ProposalID = :ProposalID;";
+    $stmt = $this->conn->prepare( $query );
+
+    // bind parameters
+    $stmt->bindParam(':ProposalID', $ProposalID);
+
+    if($stmt->execute())
+      return true;
+    else
+      return false;
+  }
+
+
   function create()
   {
     $query = "INSERT INTO Proposal (ProposalID, OpportunityID, BidderID, Status, TechnicalScore, FeeScore, FinalTotalScore, ContractAwarded, Fee, CreatedDate, LastEditDate) " .
@@ -770,7 +785,34 @@ class Proposal
     return $Count;
   }
 
-  // Has Opportunity Expired?
+  // Get Proposal Status.
+  function getProposalStatus($ProposalID)
+  {
+    $Status = 0;
+    try
+    {
+      $query = "SELECT Status FROM Proposal WHERE ProposalID = :ProposalID ; ";
+      $stmt = $this->conn->prepare( $query );
+
+      // bind parameters
+      $stmt->bindParam(":ProposalID", $ProposalID);
+
+      if($stmt->execute())
+      {
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $Status = $row['Status'];
+      }
+    }
+    catch (PDOException $e)
+    {
+      echo 'Connection failed: ' . $e->getMessage();
+    }
+
+    return $Status;
+  }
+
+
+  // Set Proposal Status.
   function setProposalStatus($ProposalID, $Status)
   {
     //Status: 70 - (Expired) , 30 - (In Progress)
