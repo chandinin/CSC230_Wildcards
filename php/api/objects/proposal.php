@@ -121,25 +121,6 @@ class Proposal
     return $stmt;
   }
 
-  // select one by ID
-  function AllPropsAcceptRejectByOppID($OpportunityID)
-  {
-    $AllRejectedAccepted = false;
-
-    if($this->AllPropsAcceptRejectByOppIDEval2($OpportunityID))
-    {      
-      $AllRejectedAccepted = true;
-      $this->SetOppStatus(5,$OpportunityID);
-    }
-    else if($this->AllPropsAcceptRejectByOppIDEval1($OpportunityID))
-    {
-      $AllRejectedAccepted = true;
-      $this->SetOppStatus(4,$OpportunityID);
-    }
-
-    return $AllRejectedAccepted;
-  }
-
   function SetOppStatus($Status, $OpportunityID)
   {
     $query = "UPDATE Opportunity set Status=:Status WHERE OpportunityID = :OpportunityID;";

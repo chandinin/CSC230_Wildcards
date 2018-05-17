@@ -5,6 +5,7 @@ $(document).ready(function() {
     });
     $("#saveNewEmp").click(function() {
         saveEmployee();
+        showEmpList();
     });
     $("#exitNewEmp").click(function() {
         showEmpList();
@@ -25,18 +26,19 @@ $(document).ready(function() {
         showEmpList();
     });
 
-/*
-    $('#empTab').click(function() {
-        showEmpList();
-    });
-    */
     $("#selectBidderCategory").change(function () {
         //Storing the dropdown selection in category variable
         category= $('#selectBidderCategory option:selected').attr('id');
         //getOppListbyCategory(id);
     });
 
+    $("#empTab").trigger('click');
+
 });
+
+function initAccountPage() {
+    showEmpList();
+}
 
 function showNewEmp() {
    $('#empNew').show();
@@ -117,11 +119,15 @@ function getEmployeeList() {
             var size = empArray.employee.length;
             for (var i = 0; i < size; i++) {
                 var employee = empArray.employee[i];
+                var roles = employee.Roles;
+                var numroles = roles.length;
+                var rolelist="";
+                for (var x=0; x< numroles; x++) {
+                    rolelist = rolelist + " -" + roles[x].Name;
+                }
                 var editlink = "'editEmployee("+employee.id + ")'";
                 var row = "<tr><td>" + employee.UserName + "</td><td>" + employee.ID + "</td><td>" + employee.FirstName +  "</td><td>" + employee.LastName +
-                    "</td><td>" + employee.Email + "</td><td>" + employee.Phone + "</td><td>" + employee.Address + "</td><td>" +
-                    "<button onclick="+ editlink + " class='btn btn-success btn-lg'><span class='glyphicon glyphicon-pencil'" +
-                    "aria-hidden='true'></span> Edit </button></td></tr>";
+                    "</td><td>" + employee.Email + "</td><td>" + employee.Phone + "</td><td>" + rolelist + "</td></tr>";
                 $('#employeeListTableBody').append(row);
                 $("#employeeListTableBody").trigger("update");
             }
@@ -135,6 +141,7 @@ function getEmployeeList() {
 function saveEmployee() {
     //"Roles":[{"Role":"1"}, {"Role":"2"}, {"Role":"3"},{"Role":"5"}]
     var empId = $('#formEmpIdInput').val();
+    var uname = $('#formEmpUNameInput').val();
     var fname = $('#formEmpFNameInput').val();
     var lname = $('#formEmpLNameInput').val();
     var email = $('#formEmpEmailInput').val();
@@ -142,20 +149,21 @@ function saveEmployee() {
     var phone = $('#formEmpPhoneInput').val();
     var roles = new Array();
     if ($('#Checkbox0').is(":checked"))
-        roles.push({Role:"0"});
+        roles.push({Role:0});
     if ($('#Checkbox1').is(":checked"))
-        roles.push({Role:"1"});
+        roles.push({Role:1});
     if ($('#Checkbox2').is(":checked"))
-        roles.push({Role:"2"});
+        roles.push({Role:2});
     if ($('#Checkbox3').is(":checked"))
-        roles.push({Role:"3"});
+        roles.push({Role:3});
     if ($('#Checkbox4').is(":checked"))
-        roles.push({Role:"4"});
+        roles.push({Role:4});
     if ($('#Checkbox5').is(":checked"))
-        roles.push({Role:"5"});
+        roles.push({Role:5});
     var rolesjson = JSON.parse(JSON.stringify(roles));
     var jsonRecord =
         {"ID": empId,
+            "UserName":uname,
             "FirstName":fname,
             "LastName":lname,
             "Email": email,
@@ -173,6 +181,8 @@ function saveEmployee() {
             if(failed) {
                 alert("Failed to create new employee");
             }
+            else
+                alert("Employee account created!");
         } else {
             alert("500: Server error saving employee");
         }
@@ -181,3 +191,29 @@ function saveEmployee() {
     xhr.send(jsonString);
     console.log("Wrote Json: " + jsonString);
 }
+
+function makeBreadcrumb(type) {
+    $('#breadcrumb').empty();
+    $('#breadcrumb').append(staticBreadcrumb);
+    switch (type) {
+        case 1:
+            $("#breadcrumb").append("<li><a onclick='showEmpList()'>List Employees</a></li>");
+            $("#breadcrumb").append("<li class='active'>Create Employee Account</li>")
+            break;
+        case 2:
+            $("#breadcrumb").append("<li><a onclick='showEmpList()'>List Employees</a></li>");
+            $("#breadcrumb").append("<li class='active'>New Employee</li>")
+            break;
+        case 3:
+            $("#breadcrumb").append("<li><a onclick='showEmpList()'>List Bidders</a></li>");
+
+            break;
+        case 4:
+            break;
+        default:
+            $("#breadcrumb").append("<li class=\"active\">List Opportunities</li>");
+            break;
+    }
+}
+
+var staticBreadcrumb = " <li><a href=\"home_page.html\">Home</a></li>\n";
