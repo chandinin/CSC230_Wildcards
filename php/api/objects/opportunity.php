@@ -100,6 +100,25 @@ class Opportunity
     return $stmt;
   }
 
+  // Search by both Status and Category
+  function selectByStatusIDAndCategoryID($StatusID, $CategoryID)
+  {
+    $query = "select OpportunityID, ClosingDate, LeadEvaluatorID, O.Name, LowestBid, Description, O.Status, OS.Name as StatusName, CategoryID, CreatedDate, LastEditDate, MinimumScore, TotalScore from Opportunity O
+  left join OppStatus OS on OS.StatusID = O.`Status` WHERE `Status` = ? and CategoryID = ? ;";
+    $stmt = $this->conn->prepare( $query );
+
+    //echo "query = " . $query;
+
+    // bind parameters
+    $stmt->bindParam(1, $StatusID);
+    $stmt->bindParam(2, $CategoryID);
+
+    // execute query
+    $stmt->execute();
+
+    return $stmt;
+  }
+
   // select one by ID
   function selectByMultStatusID($Statuses)
   {
