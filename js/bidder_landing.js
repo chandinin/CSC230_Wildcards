@@ -19,9 +19,6 @@ $(document).ready(function(){
     $("#proposals-list-table").tablesorter();
     $("#messages-list-table").tablesorter();
 
-    // Set the tab to active, because I don't know what I'm doing...
-    $('#opportunities-tab').trigger('click');
-
     // init the category picker
     getCategories();
 
@@ -43,6 +40,9 @@ $(document).ready(function(){
 
     // Init the fee doc listener
     document.getElementById("fee-input").addEventListener("change", allDocsSatisfied);
+
+    // Set the tab to active, because I don't know what I'm doing...
+    $('#messages-tab').trigger('click');
 });
 
 class BreadCrumb
@@ -1164,7 +1164,7 @@ function populateProposalList(proposals_json)
         else if(status_name == "Expired") { status_name = "Expired"; }
         else {status_name = "UNKNOWN STATUS MAPPING: " + status_name; }
         
-
+        prop_id = document.createTextNode(proposals_json[i].ProposalID);
         prop_status = document.createTextNode(status_name);
 
         closingDate = document.createTextNode(convert_db_date_to_custom(proposals_json[i].ClosingDate));
@@ -1177,7 +1177,7 @@ function populateProposalList(proposals_json)
             return function() { activateEditProposal(ID); };
         })();
 
-        table_array.push([anchor, closingDate, prop_status]);
+        table_array.push([prop_id, anchor, closingDate, prop_status]);
     }
 
     insertTableRows(table_array, proposals_table);
@@ -1567,11 +1567,16 @@ function fillCategoryDropdown(jsonArray){
 /********************
  * spa-message-list *
  ********************/
- // Caution: Super jank!
 
 function activateMessageList()
 {
     initializeMessageList();
+    var sorting = [[1,1]]; 
+    // sort on the second column 
+    
+    setTimeout(function(){ 
+        $("#messages-list-table").trigger("sorton",[sorting]);
+    }, 500);
     router("#spa-message-list");
 }
 
@@ -1837,7 +1842,7 @@ function populateClarificationRequestDetail(message)
 function populateOpportunityNotificationDetail(message)
 {
     $("#message-detail-back-btn").text("Back to Messages");
-
+    $("#message-detail-opportunity-name").text(message.OpportunityName);
     $("#send-message-btn").hide();
     $("#discard-message-btn").hide();
     $("#message-detail-response").hide();
