@@ -54,12 +54,9 @@
         <!-- MDB core JavaScript -->
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.0/js/mdb.min.js"></script>
 
-
-
-
-		<script type="text/javascript">
-
-        </script>
+        <!-- include summernote css/js -->
+        <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
     </head>
 
 	<body>
@@ -414,6 +411,7 @@ hr {
                                 <table id="proposals-list-table" class="tablesorter table table-bordered table-striped table-hover">
                                   <thead>
                                     <tr>
+                                      <th>Proposal ID</th>
                                       <th>Opportunity Name</th>
                                       <th>Closing Date and Time</th>
                                       <th>Status</th>
@@ -481,13 +479,14 @@ hr {
                                 <br>
                                 <span class="opportunity-property">Message Body</span>
                                 <br>
-                                <span id="message-detail-body">Placeholder message body</span>
+                                <div contenteditable="true" class="opportunity-detail" id="message-detail-body">Message Body</div>
+
                                 <br>
                                 <br>
                                 <div id="message-detail-response" class="form-group">
-                                    <label>Response</label>
-                                    <textarea class="form-control" id="message-response-editor" rows="4"
-                                              placeholder="Enter your response here." required></textarea>
+                                     <span class="opportunity-property">Response</span>
+                                    <div id="summernote">Enter your response here</div>
+                                    <div contenteditable="true" class="opportunity-detail" id="message-response-editor">Message Body</div>
                                 </div>
                                 <div id="message-detail-upload">
                                     <span>Attach supporting document (If requested)</span><INPUT id="clarification-file-input" type="file"></INPUT>
