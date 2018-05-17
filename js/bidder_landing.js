@@ -1688,7 +1688,8 @@ function phony_message()
     demo_message.ClosingDate = "2018-05-20 02:13:49";
     demo_message.TimeReceived = "2018-05-20 02:13:49";
     demo_message.Body  = "Omfg <b>please</b> work";
-    demo_message.Answer = null;
+    demo_message.Answer = "<b>No!</b>";
+    demo_message.DocID  = 139;
 
     populateMessageDetail(demo_message);
     router("#spa-message-detail");
@@ -1768,7 +1769,7 @@ function populateClarificationRequestDetail(message)
         $("#message-response-editor").show();
 
         // Set these
-        $("#message-response-editor")[0].value = (message.Answer);
+        document.getElementById("message-response-editor").innerHTML = (message.Answer);
 
         document.getElementById("message-response-editor").readOnly = true;
 
@@ -1796,7 +1797,7 @@ function populateClarificationRequestDetail(message)
                 document.getElementById("message-detail-due-by").style.color = "red";
                 document.getElementById("message-response-editor").readOnly = true;
                 $("#message-detail-response").show();
-                $("#message-response-editor")[0].value = "THIS CLARIFICATION HAS EXPIRED";
+                document.getElementById("message-response-editor").innerHTML = "THIS CLARIFICATION HAS EXPIRED";
 
                 return;
             }
@@ -1820,7 +1821,7 @@ function populateClarificationRequestDetail(message)
         $("#message-detail-due-by-header").show();
 
         // Have to reset for some reason
-        $("#message-response-editor")[0].value = ""; 
+        document.getElementById("message-response-editor").innerHTML = ""; 
         clarification_input = document.getElementById("clarification-file-input");
         clarification_input.value = "";
         document.getElementById("message-response-editor").readOnly = false; 
