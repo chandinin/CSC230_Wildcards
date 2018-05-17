@@ -257,7 +257,7 @@ function saveEditOpp(opId) {
             var retval = xhr.responseText;
             var failed = retval.includes("failed");
             if(!failed) {
-                updateDocTemplates(sortedIDs);
+                changeDocTemplateOrder(opId, sortedIDs);
                 showOppView(opId);
             }
             else
@@ -274,15 +274,13 @@ function saveEditOpp(opId) {
     alert("Saving changes to opportunity number " + opId);
 };
 
-function updateDocTemplates(sortedIDs) {
-    console.log("Sorted docTemplates: ") + JSON.stringify(sortedIDs);
-}
 
 
 
 function getOpportunity(opId) {
 var xhr = new XMLHttpRequest();
-    var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php?OpportunityID="+opId;
+   // var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php?OpportunityID="+opId;
+    var url= "http://athena.ecs.csus.edu/~mackeys/php/api/opportunity/read.php?OpportunityID="+opId;
     xhr.open('POST', url);
 
     xhr.onload = function () {
@@ -404,7 +402,16 @@ function getDocTemplates(opId) {
             }
             $('#docTemplatesBody').tablesorter();
             $("#docTempatesBody").trigger("update");
-            $(".changeable").editable();
+            $(".changeable").editable({
+                type: 'text',
+                title: 'New Document Title',
+                success: function(response,newValue) {
+                    var newTitle = newValue;
+                    var docId = this.parentElement.id;
+                    changeDocDisplayTitle(docId, newTitle);
+                    alert("Successful Title Change to " + newTitle);
+                }
+            });
 
         } else {
             alert('Error retrieving Document Templates');
@@ -413,6 +420,39 @@ function getDocTemplates(opId) {
     };
     xhr.send();
 }
+
+function changeDocDisplayTitle(docId, newTitle) {
+    var json = {"DocTemplateID":docId, "DisplayTitle": newTitle};
+    var xhr = new XMLHttpRequest();
+    var url= "http://athena.ecs.csus.edu/~wildcard/php/api/doctemplate/update.php";
+    xhr.open('POST',url);
+    xhr.onload = function () {
+        if (xhr.status == 200) {
+            var retval = xhr.responseText;
+        }
+        else
+            alert("Failed to change Display Title in Database");
+    }
+    xhr.send(JSON.stringify(json));
+}
+
+function changeDocTemplateOrder(opId, sortedIDs) {
+    var json = {"OpportunityID":docId, "SortOrder": sortedIDs};
+    var xhr = new XMLHttpRequest();
+    var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/setDocTemplateOrder.php";
+    xhr.open('POST',url);
+    xhr.onload = function () {
+        if (xhr.status == 200) {
+            var retval = xhr.responseText;
+        }
+        else
+            alert("Failed to change Display Order in Database");
+    }
+    xhr.send(JSON.stringify(json));
+    console.log("Sorted docTemplates: ") + JSON.stringify(sortedIDs);
+}
+
+
 
 
 function getDocTemplatesView(opId) {
@@ -487,7 +527,8 @@ function getOppList(type) {
     */
 
     var xhr = new XMLHttpRequest();
-    var url = "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php";
+   // var url = "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php";
+    var url = "http://athena.ecs.csus.edu/~mackeys/php/api/opportunity/read.php";
     switch (type)  {
         case 1:
             $('#oppListTableBody').empty();
