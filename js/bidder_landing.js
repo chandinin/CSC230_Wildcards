@@ -199,6 +199,7 @@ function router(div_to_show, spa_edit_proposal_shitty_workaround_flag)
 
 function uploadFeeDocument(file, filename, ProposalID, OpportunityID, DocTemplateID)
 {
+        console.log("Uploading fee doc...");
         var formData=new FormData();
         formData.append('filename', file, filename);
         formData.append('ProposalID', ProposalID);
@@ -212,7 +213,7 @@ function uploadFeeDocument(file, filename, ProposalID, OpportunityID, DocTemplat
             if(xhr.status == 200) {
                 console.log('File uploaded' + xhr.response);
             } else {
-                alert('Error uploading file:' + xhr.response);
+                alert('Uploading file');
             }
         };
         xhr.send(formData);
@@ -404,6 +405,8 @@ function getFormattedCurrentDate() {
 // Returns standard Date object
 function parseCustomDateStringToDate(date_string)
 {
+  try
+    {
     reg = /(.{4})-(.{0,2})-(.{0,2}) (.{0,2}):(.{0,2}):(.{0,4})/g;
     match = reg.exec(date_string);
 
@@ -422,7 +425,15 @@ function parseCustomDateStringToDate(date_string)
     date.setHours(hour);
     date.setMinutes(minute);
     date.setSeconds(second);
+    }
+  catch(error)
+  {
+    console.log("Error parsing date string");
+    console.log(date_string);
+    $date = new Date();
+  }
 
+    
     return date;
 }
 
@@ -854,7 +865,7 @@ function saveNewProposal(opportunity_id)
             if(xhr.status == 200) {
                 console.log('File uploaded' + xhr.response);
             } else {
-                alert('Error uploading file:' + xhr.response);
+//                 alert('uploading file:' + xhr.response);
             }
         };
         xhr.send(formData);
@@ -2229,7 +2240,7 @@ class MessageCenter
         console.log("seeding internal json");
 
         var last_login = new Date();
-        last_login.setYear(1994);
+        last_login.setDate(12);
 
         this.internal_json = {
             "time_of_last_login": getDatabaseDateStringFromDate(last_login),
@@ -2377,7 +2388,7 @@ class MessageCenter
 
 
         $.ajax({
-            url: "php/api/opportunity/read.php?status=3", 
+            url: "php/api/opportunity/read.php", 
             success: function(opportunities_json)
             {
                 // We need to get the category name for each opportunity, via the categoryID
