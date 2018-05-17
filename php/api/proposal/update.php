@@ -56,32 +56,26 @@ if(json_last_error() === JSON_ERROR_NONE)
       else
         $OpportunityID = $proposal->getOpportunityIDByProposalID($proposal->ProposalID);
 
-      if(isset($proposal->OpportunityID) && isset($proposal->FinalTotalScore))
+      if(isset($proposal->OpportunityID) && isset($proposal->TechnicalScore))
       {
         $MinScore = 0;
         $MinScore = $proposal->getMinumumOppScore($OpportunityID);
         
         if($MinScore > 0)  // Only check if there is a min score.
         {
-          $FinalTotalScore = $proposal->FinalTotalScore;
+          $TechnicalScore = $proposal->TechnicalScore;
 
-          if($FinalTotalScore < $MinScore)
+          if($TechnicalScore < $MinScore)
           {
             //Automatically Reject Proposal
             $proposal->reject($proposal->ProposalID);
-            //echo '{';
-            //echo ' "Action" : "Reject",';
-            //echo ' "MinScore" : "'.$MinScore.'",';
-            //echo ' "FinalTotalScore" : "'.$FinalTotalScore.'"';
-            //echo '}';
           }
           else
           {
-            //echo '{';
-            //echo ' "Action" : "Do Not Reject",';
-            //echo ' "MinScore" : "'.$MinScore.'",';
-            //echo ' "FinalTotalScore" : "'.$FinalTotalScore.'"';
-            //echo '}';
+            if($proposal->Status != 10 && $proposal->Status != 60 && $proposal->Status != 70) 
+            {
+              $proposal->accept($proposal->ProposalID);
+            }
           }
         }
       }
@@ -173,32 +167,25 @@ else
       else
         $OpportunityID = $proposal->getOpportunityIDByProposalID($proposal->ProposalID);
 
-      if(isset($proposal->OpportunityID) && isset($proposal->FinalTotalScore))
+      if(isset($proposal->OpportunityID) && isset($proposal->TechnicalScore))
       {
         $MinScore = 0;
         $MinScore = $proposal->getMinumumOppScore($OpportunityID);
 
         if($MinScore > 0)  // Only check if there is a min score.
         {
-          $FinalTotalScore = $proposal->FinalTotalScore;
-
-          if($FinalTotalScore < $MinScore)
+          $TechnicalScore = $proposal->TechnicalScore;
+          if($TechnicalScore < $MinScore)
           {
             //Automatically Reject Proposal
             $proposal->reject($proposal->ProposalID);
-            //echo '{';
-            //echo ' "Action" : "Reject",';
-            //echo ' "MinScore" : "'.$MinScore.'",';
-            //echo ' "FinalTotalScore" : "'.$FinalTotalScore.'"';
-            //echo '}';
           }
           else
           {
-            //echo '{';
-            //echo ' "Action" : "Do Not Reject",';
-            //echo ' "MinScore" : "'.$MinScore.'",';
-            //echo ' "FinalTotalScore" : "'.$FinalTotalScore.'"';
-            //echo '}';
+            if($proposal->Status != 10 && $proposal->Status != 60 && $proposal->Status != 70) 
+            {
+              $proposal->accept($proposal->ProposalID);
+            }
           }
         }
       }
