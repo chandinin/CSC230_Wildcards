@@ -55,7 +55,6 @@ $(document).ready(
 
         $("#exitEdit").click(function() {
             opId = $('#editoppNumber').text();
-            alert("Changes Discarded");
             showOppView(opId);
         });
 
@@ -280,8 +279,8 @@ function saveEditOpp(opId) {
 
 function getOpportunity(opId) {
 var xhr = new XMLHttpRequest();
-   // var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php?OpportunityID="+opId;
-    var url= "http://athena.ecs.csus.edu/~mackeys/php/api/opportunity/read.php?OpportunityID="+opId;
+    var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php?OpportunityID="+opId;
+    //var url= "http://athena.ecs.csus.edu/~mackeys/php/api/opportunity/read.php?OpportunityID="+opId;
     xhr.open('POST', url);
 
     xhr.onload = function () {
@@ -436,9 +435,10 @@ function changeDocDisplayTitle(docId, newTitle) {
     }
     xhr.send(JSON.stringify(json));
 }
-
 function changeDocTemplateOrder(opId, sortedIDs) {
-    var json = {"OpportunityID":opId, "SortOrder": sortedIDs};
+    j = JSON.stringify(sortedIDs)
+    var noquotes = j.replace(/"/g, '');
+    var json = {"OpportunityID":opId, "SortOrder": noquotes};
     var xhr = new XMLHttpRequest();
     var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/setDocTemplateOrder.php";
     xhr.open('POST',url);
@@ -528,8 +528,8 @@ function getOppList(type) {
     */
 
     var xhr = new XMLHttpRequest();
-   // var url = "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php";
-    var url = "http://athena.ecs.csus.edu/~mackeys/php/api/opportunity/read.php";
+    var url = "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php";
+    //var url = "http://athena.ecs.csus.edu/~mackeys/php/api/opportunity/read.php";
     switch (type)  {
         case 1:
             $('#oppListTableBody').empty();
