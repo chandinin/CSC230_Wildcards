@@ -6,7 +6,6 @@ create table Opportunity
 (
   OpportunityID varchar(255) not null,
   ClosingDate datetime,
-  ScoringCategoryBlob blob,
   LeadEvaluatorID int not null,
   `Name` varchar(255) null,
   LowestBid decimal null,
@@ -79,6 +78,7 @@ INSERT INTO ProposalStatus (StatusID, `Name`) VALUES (50, 'Clarification Receive
 INSERT INTO ProposalStatus (StatusID, `Name`) VALUES (50, 'Clarification Received 2');
 INSERT INTO ProposalStatus (StatusID, `Name`) VALUES (60, 'Evaluation 2 Rejected');
 INSERT INTO ProposalStatus (StatusID, `Name`) VALUES (65, 'Evaluation 2 Accepted');
+INSERT INTO ProposalStatus (StatusID, `Name`) VALUES (70, 'Expired');
 
 create table Roles
 (
@@ -253,18 +253,18 @@ create table Proposal
 (
   ProposalID varchar(255) not null,
   OpportunityID varchar(255) not null,
-  BidderID int not null,
+  BidderID varchar(255) not null,
   Status int null,
-  TechnicalScore decimal,
-  FeeScore decimal,
-  FinalTotalScore decimal,
+  TechnicalScore decimal null,
+  FeeScore decimal null,
+  FinalTotalScore decimal null,
   CreatedDate datetime null,
   LastEditDate datetime null,
   ContractAwarded boolean not null default 0,
+  Fee decimal null,
   PRIMARY KEY (ProposalID)
 );
 
-drop table Clarification;
 create table Clarification
 (
   ClarificationID int not null,
@@ -296,11 +296,11 @@ create table ScoringCriteria
 (
   SCID int not null,
   OpportunityID varchar(255) not null,
-  DocTitle varchar(255),
-  Description varchar(500),
-  `Path` varchar(255),
+  DocTitle varchar(255) null,
+  Description varchar(500) null,
+  `Path` varchar(255) null,
   `Blob` bool,
-  `Url` varchar(255),
+  `Url` varchar(255) null,
   PostedDate datetime null,
   DisplayTitle varchar(255) null,
   CreatedDate datetime null,
@@ -339,6 +339,13 @@ create table Subscription
   PRIMARY KEY (ID,CategoryID)
 );
 
+create table SessionData
+(
+  BidderID varchar(255) not null,
+  ItemIndex int not null,
+  SessionData varchar(65000) not null,
+  PRIMARY KEY (BidderID, ItemIndex)
+);
 
 create user wilddb_user identified by 'wilddb_db';
 
