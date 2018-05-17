@@ -261,7 +261,7 @@ create table Proposal
   CreatedDate datetime null,
   LastEditDate datetime null,
   ContractAwarded boolean not null default 0,
-  Fee decimal null,
+  Fee decimal (10,2) null,
   PRIMARY KEY (ProposalID)
 );
 
