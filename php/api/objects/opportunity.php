@@ -507,7 +507,7 @@ class Opportunity
       $query = $query . "FROM DocTemplate "; 
       $query = $query . "INNER JOIN OppDocTemplate ODT ON ODT.DocTemplateID = DocTemplate.DocTemplateID ";
       $query = $query . "
-WHERE OpportunityID = ? ; ";
+WHERE OpportunityID = ?  Order By SortOrder; ";
 
       $stmt = $this->conn->prepare( $query );
    
