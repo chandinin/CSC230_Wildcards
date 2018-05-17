@@ -1587,8 +1587,9 @@ function initializeMessageList()
     // Force the message center to update
     if(g_mc == null)
     {
-        // g_mc = new MessageCenter(populateMessageList);
+        // g_mc = new MessageCenter();
         g_mc = new MessageCenter(populateMessageList);
+        g_mc.updateServer();
     }
     else
     {
@@ -1601,7 +1602,6 @@ function initializeMessageList()
 function populateMessageList(messages_json)
 {
     $("#num-unread-messages").text(g_mc.numUnread);
-    console.log("Populating message list");
 
     PREVIEW_LENGTH = 90; // Number of characters in the message preview
     messages_json = g_mc.messages;
@@ -1759,16 +1759,16 @@ function populateMessageDetail(message)
 function populateClarificationRequestDetail(message)
 {
     // Show these always
-    // console.log("Show this shit as: " + message.OpportunityName);
     $("#message-detail-opportunity-name").text(message.OpportunityName);
     $("#message-detail-opportunity-name-header").show();
 
     $("send-message-div").show();
 
 
-    if(message.Answer != null)
+    if(message.Answer != null && message.Answer != "")
     {
         console.log("There is an answer associated with this Clarification");
+        console.log(message);
         // Hide these
         $("#send-message-btn").hide();
         $("#discard-message-btn").hide();
@@ -2134,8 +2134,8 @@ class MessageCenter
 
     constructor(done_callback)
     {
+        console.log("MessageCenter: Beginig Construction");
         var self = this;
-        console.log("MessageCenter: constructing");
         this.bidder_id = g_bidder_id;
         this.internal_json = {};
         this.fetchJSON();
@@ -2156,7 +2156,8 @@ class MessageCenter
             num_callbacks_left--;
             if(num_callbacks_left == 0 && done_callback != null)
             {
-                console.log("MessageCenter done constructing");
+                console.log("MessageCenter: Executing done_callback from fetchClarifications");
+                console.log("MessageCenter: " + String(opportunities.length) + " Opportunities");
                 done_callback();
             }
         });
@@ -2169,7 +2170,8 @@ class MessageCenter
 
             num_callbacks_left--;
             if(num_callbacks_left == 0 && done_callback != null){
-                console.log("MessageCenter done constructing");
+                console.log("MessageCenter: Executing done_callback from fetchOpportunities");
+                console.log("MessageCenter: " + String(opportunities.length) + " Opportunities");
                 done_callback();
             }
         });
@@ -2213,7 +2215,7 @@ class MessageCenter
 
         if(self.internal_json == null)
         {
-            console.log("Internal json was null, seeding");
+            console.log("MessageCenter: Internal json was null, seeding");
             self.seedInternalJSON();
         }
         else
@@ -2241,17 +2243,18 @@ class MessageCenter
     // Need to filter based on subscribed categories, attach OpportunityName and CategoryName
     updateNotifications()
     {
-        console.log("MessageCenter: Updating Clarifications");
-
+        console.log("MessageCenter: updateNotifications");
         var self = this;
         console.log("updating notifications");
+        var counter = 0;
         this.opportunities.forEach(function(opportunity)
         {
             var opp_last_edit_date = parseCustomDateStringToDate(opportunity.LastEditDate);
+            counter++;
 
             if(opp_last_edit_date > self.time_of_last_login)
             {
-                console.log("Found a new notification:" + opportunity.Name);
+                console.log("MessageCenter: Found a new notification thanks to time");
                 var new_opportunity_notification = {};
                 new_opportunity_notification.TimeReceived = opportunity.LastEditDate;
                 new_opportunity_notification.Body = "There is a new Opportunity, " + "'" + opportunity.Name + "'" + " in Category: " + opportunity.CategoryName;
@@ -2262,13 +2265,21 @@ class MessageCenter
 
                 self.internal_json.OpportunityNotifications.push(new_opportunity_notification);
             }
+            else
+            {
+                console.log("MessageCenter: Rejected due to time");
+            }
+            console.log("   MessageCenter: Time Opp Edit: " + String(opp_last_edit_date));
+            console.log("   MessageCenter: Time of last login: " + String(self.time_of_last_login));
             
         });
+
+        console.log("MessageCenter: Exiting updateNotifications after processing: " + String(counter));
     }
 
     updateClarifications()
     {
-        console.log("MessageCenter: Updating Clarifications");
+        console.log("MessageCenter: updateClarifications");
         var self = this;
 
         this.clarifications.forEach(function(clarification)
@@ -2288,7 +2299,7 @@ class MessageCenter
 
     fetchClarifications(finished_cb)
     {
-        console.log("MessageCenter: Fetching Clarifications");
+        console.log("MessageCenter: fetchClarifications");
         var self = this; // omfg are you serious, need this for callbacks
 
         $.ajax({
@@ -2337,19 +2348,17 @@ class MessageCenter
     // Also fetch CategoryNames and subscriptions
     fetchOpportunities(finished_cb)
     {
-        console.log("MessageCenter: Fetching Opportunities");
+        console.log("MessageCenter: fetchOpportunities");
         var self = this;
         var internal_opportunities = []; // Push here until we can filter, then push to this.opportunities
         var internal_subscriptions = [];
 
         function filterOpportunities()
         {
-            console.log("MessageCenter: filtering!");
             console.log(internal_subscriptions);
             console.log(internal_opportunities);
             internal_opportunities.forEach(function(opportunity)
             {
-                console.log("MessageCenter: " + opportunity.CategoryID);
 
                 if(internal_subscriptions.includes(opportunity.CategoryID))
                 {
@@ -2363,7 +2372,6 @@ class MessageCenter
         }
 
 
-        console.log("MessageCenter: fetching opportunities");
         var self = this;
         var num_callbacks_left = 2;
 
@@ -2372,14 +2380,12 @@ class MessageCenter
             url: "php/api/opportunity/read.php?status=3", 
             success: function(opportunities_json)
             {
-                console.log("MessageCenter: Getting opportunities");
                 // We need to get the category name for each opportunity, via the categoryID
                 var categories = {}
                 $.ajax({
                     url: "php/api/opportunity/categoryName.php", 
                     success: function(category_json)
                     {
-                        console.log("MessageCenter: Getting categories");
                         console.log(category_json);
                         for (var i = 0; i < category_json.length; i++) {
                             categories[category_json[i].CategoryID] = category_json[i].Name;
@@ -2402,13 +2408,11 @@ class MessageCenter
                         num_callbacks_left--;
                         if(num_callbacks_left == 0)
                         {
-                            console.log("MessageCenter: Finna call filter");
                             filterOpportunities();
                         }
                     },
                     error: function(error)
                     {
-                        console.log("MessageCenter: Error getting categories");
                         console.log(error);
                     }
                 });
@@ -2419,7 +2423,6 @@ class MessageCenter
         subscriptions_xhr.open("POST", "php/api/bidder/getSubscriptions.php");
         subscriptions_xhr.onload = function() 
         {
-            console.log("MessageCenter: Subscriptions call has returned");
             if(subscriptions_xhr.status == 200)
             {
                 console.log(subscriptions_xhr.responseText);
@@ -2434,7 +2437,6 @@ class MessageCenter
             }
             else
             {
-                console.log("MessageCenter: There was an error getting your subscriptions: " + subscriptions_xhr.responseText);
             }
 
             num_callbacks_left--;
@@ -2446,7 +2448,6 @@ class MessageCenter
         }
         subscriptions_xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         subscriptions_xhr.send("bidderid="+g_bidder_id);
-        console.log("MessageCenter: After xhr sent");
     }
 
     get messages()
@@ -2456,7 +2457,6 @@ class MessageCenter
 
         self.internal_json.OpportunityNotifications.forEach(function(opportunity_notification)
         {
-            console.log("Pushing message");
             var new_message = {};
             new_message.Type = "OpportunityNotification";
             new_message.TimeReceived = opportunity_notification.TimeReceived;
@@ -2541,6 +2541,8 @@ class MessageCenter
             _messages.push(new_message);
         });
 
+        console.log("MessageCenter: Returning " + String(_messages.length) + " messages")
+
 
         return _messages;
     }
@@ -2566,11 +2568,11 @@ class MessageCenter
 
     updateServer()
     {
-        console.log("Updating server");
-        console.log(this.internal_json);
+        console.log("MessageCenter: Updating server");
+        console.log("MessageCenter: "  + String(JSON.stringify(this.internal_json)));
 
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "http://athena.ecs.csus.edu/~wildcard/php/api/bidder/createSessionData.php");
+        xhr.open("POST", "http://athena.ecs.csus.edu/~wildcard/php/api/bidder/createSessionData.php", false);
         xhr.onload = function(response)
         {
             if(xhr.status == 200)
@@ -2597,6 +2599,7 @@ class MessageCenter
         var stringified_payload = JSON.stringify(payload);
 
         xhr.send(stringified_payload);
+        console.log("MessageCenter: " + stringified_payload);
     }
 
     // Type being "ClarificationNotification" or "OpportunityNotification"
