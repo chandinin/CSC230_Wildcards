@@ -55,6 +55,7 @@ $(document).ready(
 
         $("#exitEdit").click(function() {
             opId = $('#editoppNumber').text();
+            alert("Changes Discarded");
             showOppView(opId);
         });
 
@@ -437,7 +438,7 @@ function changeDocDisplayTitle(docId, newTitle) {
 }
 
 function changeDocTemplateOrder(opId, sortedIDs) {
-    var json = {"OpportunityID":docId, "SortOrder": sortedIDs};
+    var json = {"OpportunityID":opId, "SortOrder": sortedIDs};
     var xhr = new XMLHttpRequest();
     var url= "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/setDocTemplateOrder.php";
     xhr.open('POST',url);
