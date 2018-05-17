@@ -26,9 +26,9 @@ if(json_last_error() === JSON_ERROR_NONE && ($data !== null))
   $result = '{ "result" : "false" }';
   
   //Search
-  if($proposal->AllPropsAcceptRejectByOppIDEval1($opportunityid))
+  if($proposal->AllPropsAcceptRejectByOppIDEval2($opportunityid))
   {
-    $proposal->SetOppStatus(4,$opportunityid);
+    $proposal->SetOppStatus(5,$opportunityid);
     $result = '{ "result" : "true" }';
   }
 
@@ -48,9 +48,9 @@ else
        $_GET_LowerCase["opportunityid"] : $_POST_LowerCase["opportunityid"];
 
     //Search
-    if($proposal->AllPropsAcceptRejectByOppIDEval1($opportunityid))
+    if($proposal->AllPropsAcceptRejectByOppIDEval2($opportunityid))
     {
-      $proposal->SetOppStatus(4,$opportunityid);
+      $proposal->SetOppStatus(5,$opportunityid);
       $result = '{ "result" : "true" }';
     }
   }

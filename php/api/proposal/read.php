@@ -18,7 +18,7 @@ $db = $database->Connect();
 $proposal = new Proposal($db);
 
 $data = json_decode(file_get_contents("php://input"));
-if(json_last_error() === JSON_ERROR_NONE)
+if(json_last_error() === JSON_ERROR_NONE && $data !== null)
 {
   if(isset($data->Statuses) and !is_null($data->Statuses))
   {
@@ -78,7 +78,13 @@ if(json_last_error() === JSON_ERROR_NONE)
 
     // make it json format
     print_r(trim(json_encode($proposals_arr)));
-  }  
+  } 
+
+  echo '{';
+  echo ' "message" : "Read Succeeded."';
+  echo '}';
+
+ 
 }
 else
 {

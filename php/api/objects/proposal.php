@@ -121,25 +121,6 @@ class Proposal
     return $stmt;
   }
 
-  // select one by ID
-  function AllPropsAcceptRejectByOppID($OpportunityID)
-  {
-    $AllRejectedAccepted = false;
-
-    if($this->AllPropsAcceptRejectByOppIDEval2($OpportunityID))
-    {      
-      $AllRejectedAccepted = true;
-      $this->SetOppStatus(5,$OpportunityID);
-    }
-    else if($this->AllPropsAcceptRejectByOppIDEval1($OpportunityID))
-    {
-      $AllRejectedAccepted = true;
-      $this->SetOppStatus(4,$OpportunityID);
-    }
-
-    return $AllRejectedAccepted;
-  }
-
   function SetOppStatus($Status, $OpportunityID)
   {
     $query = "UPDATE Opportunity set Status=:Status WHERE OpportunityID = :OpportunityID;";
@@ -326,6 +307,21 @@ class Proposal
     else
       return false;
   }
+
+  function accept($ProposalID)
+  {
+    $query = "UPDATE Proposal set Status=65 WHERE ProposalID = :ProposalID;";
+    $stmt = $this->conn->prepare( $query );
+
+    // bind parameters
+    $stmt->bindParam(':ProposalID', $ProposalID);
+
+    if($stmt->execute())
+      return true;
+    else
+      return false;
+  }
+
 
   function create()
   {
@@ -770,7 +766,34 @@ class Proposal
     return $Count;
   }
 
-  // Has Opportunity Expired?
+  // Get Proposal Status.
+  function getProposalStatus($ProposalID)
+  {
+    $Status = 0;
+    try
+    {
+      $query = "SELECT Status FROM Proposal WHERE ProposalID = :ProposalID ; ";
+      $stmt = $this->conn->prepare( $query );
+
+      // bind parameters
+      $stmt->bindParam(":ProposalID", $ProposalID);
+
+      if($stmt->execute())
+      {
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $Status = $row['Status'];
+      }
+    }
+    catch (PDOException $e)
+    {
+      echo 'Connection failed: ' . $e->getMessage();
+    }
+
+    return $Status;
+  }
+
+
+  // Set Proposal Status.
   function setProposalStatus($ProposalID, $Status)
   {
     //Status: 70 - (Expired) , 30 - (In Progress)
