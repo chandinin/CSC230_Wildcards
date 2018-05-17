@@ -34,9 +34,9 @@ $(document).ready(function(){
     activateOpportunitiesList();
 
     // init message center
-    g_mc = new MessageCenter();
-    g_mc.updateServer(); // Will report the messages we generated as well as the login time right
-    $("#num-unread-messages").text(g_mc.numUnread);
+    // g_mc = new MessageCenter();
+    // g_mc.updateServer(); // Will report the messages we generated as well as the login time right
+    // $("#num-unread-messages").text(g_mc.numUnread);
 
     // Init the fee doc listener
     document.getElementById("fee-input").addEventListener("change", allDocsSatisfied);
@@ -1574,9 +1574,9 @@ function activateMessageList()
     var sorting = [[1,1]]; 
     // sort on the second column 
     
-    setTimeout(function(){ 
-        $("#messages-list-table").trigger("sorton",[sorting]);
-    }, 500);
+    // setTimeout(function(){ 
+    //     $("#messages-list-table").trigger("sorton",[sorting]);
+    // }, 500);
     router("#spa-message-list");
 }
 
@@ -1585,14 +1585,24 @@ function initializeMessageList()
     removeAllTableElements(document.getElementById("messages-list-table"));
 
     // Force the message center to update
-    g_mc.updateServer();
-
-    g_mc = new MessageCenter(populateMessageList());
+    if(g_mc == null)
+    {
+        // g_mc = new MessageCenter(populateMessageList);
+        g_mc = new MessageCenter(populateMessageList);
+    }
+    else
+    {
+        g_mc.updateServer();
+        g_mc = new MessageCenter(populateMessageList);
+    }
 }
 
 
 function populateMessageList(messages_json)
 {
+    $("#num-unread-messages").text(g_mc.numUnread);
+    console.log("Populating message list");
+
     PREVIEW_LENGTH = 90; // Number of characters in the message preview
     messages_json = g_mc.messages;
     table_array = [];
@@ -2145,7 +2155,10 @@ class MessageCenter
 
             num_callbacks_left--;
             if(num_callbacks_left == 0 && done_callback != null)
+            {
+                console.log("MessageCenter done constructing");
                 done_callback();
+            }
         });
 
 
@@ -2155,8 +2168,10 @@ class MessageCenter
             self.updateNotifications();
 
             num_callbacks_left--;
-            if(num_callbacks_left == 0 && done_callback != null)
+            if(num_callbacks_left == 0 && done_callback != null){
+                console.log("MessageCenter done constructing");
                 done_callback();
+            }
         });
         // Fetch internal_json from backend
         // using session var for now
@@ -2226,6 +2241,8 @@ class MessageCenter
     // Need to filter based on subscribed categories, attach OpportunityName and CategoryName
     updateNotifications()
     {
+        console.log("MessageCenter: Updating Clarifications");
+
         var self = this;
         console.log("updating notifications");
         this.opportunities.forEach(function(opportunity)
@@ -2251,6 +2268,7 @@ class MessageCenter
 
     updateClarifications()
     {
+        console.log("MessageCenter: Updating Clarifications");
         var self = this;
 
         this.clarifications.forEach(function(clarification)
@@ -2270,6 +2288,7 @@ class MessageCenter
 
     fetchClarifications(finished_cb)
     {
+        console.log("MessageCenter: Fetching Clarifications");
         var self = this; // omfg are you serious, need this for callbacks
 
         $.ajax({
@@ -2318,6 +2337,7 @@ class MessageCenter
     // Also fetch CategoryNames and subscriptions
     fetchOpportunities(finished_cb)
     {
+        console.log("MessageCenter: Fetching Opportunities");
         var self = this;
         var internal_opportunities = []; // Push here until we can filter, then push to this.opportunities
         var internal_subscriptions = [];
@@ -2345,10 +2365,9 @@ class MessageCenter
 
         console.log("MessageCenter: fetching opportunities");
         var self = this;
-        var num_callbacks_left = 0;
+        var num_callbacks_left = 2;
 
 
-        num_callbacks_left++;
         $.ajax({
             url: "php/api/opportunity/read.php?status=3", 
             success: function(opportunities_json)
@@ -2396,7 +2415,6 @@ class MessageCenter
             }
         });
 
-        num_callbacks_left++;
         var subscriptions_xhr = new XMLHttpRequest();
         subscriptions_xhr.open("POST", "php/api/bidder/getSubscriptions.php");
         subscriptions_xhr.onload = function() 
@@ -2438,6 +2456,7 @@ class MessageCenter
 
         self.internal_json.OpportunityNotifications.forEach(function(opportunity_notification)
         {
+            console.log("Pushing message");
             var new_message = {};
             new_message.Type = "OpportunityNotification";
             new_message.TimeReceived = opportunity_notification.TimeReceived;
