@@ -15,7 +15,7 @@ $db = $database->Connect();
 $opportunity = new Opportunity($db);
 
 $data = json_decode(file_get_contents("php://input"));
-if(json_last_error() === JSON_ERROR_NONE)
+if(json_last_error() === JSON_ERROR_NONE  && $data !== null)
 {
   if(isset($data->Statuses) and !is_null($data->Statuses))
   {
