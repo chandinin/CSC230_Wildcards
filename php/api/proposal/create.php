@@ -31,6 +31,8 @@ if(json_last_error() === JSON_ERROR_NONE)
     $proposal->FeeScore = $data->FeeScore;
   if(isset($data->FinalTotalScore) && !is_null($data->FinalTotalScore))
     $proposal->FinalTotalScore = $data->FinalTotalScore;
+  if(isset($data->Fee) && !is_null($data->Fee))
+    $proposal->Fee = $data->Fee;
 
   if($proposal->create())
   {
@@ -96,6 +98,13 @@ else
       $FinalTotalScore = $_POST_LowerCase["finaltotalscore"];
       $FinalTotalScore = htmlspecialchars(strip_tags($FinalTotalScore));
       $proposal->FinalTotalScore =$FinalTotalScore;
+    }
+
+    if(isSet($_POST_LowerCase["fee"]))
+    {
+      $Fee = $_POST_LowerCase["fee"];
+      $Fee = htmlspecialchars(strip_tags($Fee));
+      $proposal->Fee =$Fee;
     }
 
     if($proposal->create())

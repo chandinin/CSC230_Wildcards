@@ -40,6 +40,8 @@ if(json_last_error() === JSON_ERROR_NONE)
     $proposal->FinalTotalScore = $data->FinalTotalScore;
   if(isset($data->ContractAwarded) and !is_null($data->ContractAwarded))
     $proposal->ContractAwarded = $data->ContractAwarded;
+  if(isset($data->Fee) and !is_null($data->Fee))
+    $proposal->Fee = $data->Fee;
 
   $OpportunityID = $proposal->OpportunityID;
   if($proposal->HasOpportunityExpired($OpportunityID))
@@ -149,6 +151,13 @@ else
       $ContractAwarded = $_POST_LowerCase["contractawarded"];
       $ContractAwarded = htmlspecialchars(strip_tags($ContractAwarded));
       $proposal->ContractAwarded =$ContractAwarded;
+    }
+
+    if(isSet($_POST_LowerCase["fee"]))
+    {
+      $Fee = $_POST_LowerCase["fee"];
+      $Fee = htmlspecialchars(strip_tags($Fee));
+      $proposal->Fee =$Fee;
     }
 
     $OpportunityID = $proposal->OpportunityID;

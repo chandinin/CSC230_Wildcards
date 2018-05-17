@@ -21,6 +21,7 @@ class Proposal
   public $CreatedDate;
   public $LastEditDate;
   public $ContractAwarded;
+  public $Fee;
 
   // Constructor
   // Note: Must pass connection as a parameter.
@@ -32,7 +33,7 @@ class Proposal
   // select one by ID
   function selectByID($id)
   {
-    $query = "SELECT ProposalID, OpportunityID, BidderID, Status, ps.Name as StatusName, TechnicalScore, FeeScore, FinalTotalScore, ContractAwarded, CreatedDate, LastEditDate FROM Proposal p LEFT JOIN ProposalStatus ps ON ps.StatusID = p.Status WHERE ProposalID = ? ;";
+    $query = "SELECT ProposalID, OpportunityID, BidderID, Status, ps.Name as StatusName, TechnicalScore, FeeScore, FinalTotalScore, ContractAwarded, Fee, CreatedDate, LastEditDate FROM Proposal p LEFT JOIN ProposalStatus ps ON ps.StatusID = p.Status WHERE ProposalID = ? ;";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
@@ -56,12 +57,13 @@ class Proposal
     $this->CreatedDate = $row['CreatedDate'];
     $this->LastEditDate = $row['LastEditDate'];
     $this->ContractAwarded = $row['ContractAwarded'];
+    $this->Fee = $row['Fee'];
   }
 
   // select one by ID
   function selectByOppID($id)
   {
-    $query = "SELECT ProposalID, OpportunityID, BidderID, Status, ps.Name as StatusName, TechnicalScore, FeeScore, FinalTotalScore, ContractAwarded, CreatedDate, LastEditDate FROM Proposal p LEFT JOIN ProposalStatus ps ON ps.StatusID = p.Status WHERE OpportunityID = ? ;";
+    $query = "SELECT ProposalID, OpportunityID, BidderID, Status, ps.Name as StatusName, TechnicalScore, FeeScore, FinalTotalScore, ContractAwarded, Fee, CreatedDate, LastEditDate FROM Proposal p LEFT JOIN ProposalStatus ps ON ps.StatusID = p.Status WHERE OpportunityID = ? ;";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
@@ -76,7 +78,7 @@ class Proposal
   // select one by ID
   function selectByOppIDStatus($id, $Status)
   {
-    $query = "SELECT ProposalID, OpportunityID, BidderID, Status, ps.Name as StatusName, TechnicalScore, FeeScore, FinalTotalScore, ContractAwarded, CreatedDate, LastEditDate FROM Proposal p LEFT JOIN ProposalStatus ps ON ps.StatusID = p.Status WHERE OpportunityID = :OpportunityID and p.Status = :Status ;";
+    $query = "SELECT ProposalID, OpportunityID, BidderID, Status, ps.Name as StatusName, TechnicalScore, FeeScore, FinalTotalScore, ContractAwarded, Fee, CreatedDate, LastEditDate FROM Proposal p LEFT JOIN ProposalStatus ps ON ps.StatusID = p.Status WHERE OpportunityID = :OpportunityID and p.Status = :Status ;";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
@@ -92,11 +94,26 @@ class Proposal
   // select one by ID
   function selectByStatus($Status)
   {
-    $query = "SELECT ProposalID, OpportunityID, BidderID, Status, ps.Name as StatusName, TechnicalScore, FeeScore, FinalTotalScore, ContractAwarded, CreatedDate, LastEditDate FROM Proposal p INNER JOIN ProposalStatus ps ON ps.StatusID = p.Status WHERE p.Status = ? ;";
+    $query = "SELECT ProposalID, OpportunityID, BidderID, Status, ps.Name as StatusName, TechnicalScore, FeeScore, FinalTotalScore, ContractAwarded, Fee, CreatedDate, LastEditDate FROM Proposal p INNER JOIN ProposalStatus ps ON ps.StatusID = p.Status WHERE p.Status = ? ;";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
     $stmt->bindParam(1, $Status);
+
+    // execute query
+    $stmt->execute();
+
+    return $stmt;
+  }
+
+  // select one by ID
+  function selectByMultStatus($Statuses)
+  {
+    $query = "SELECT ProposalID, OpportunityID, BidderID, Status, ps.Name as StatusName, TechnicalScore, FeeScore, FinalTotalScore, ContractAwarded, Fee, CreatedDate, LastEditDate FROM Proposal p INNER JOIN ProposalStatus ps ON ps.StatusID = p.Status ";
+    $query = $query . "WHERE p.Status in (". $Statuses .") Order By Status, ProposalID;";
+    $stmt = $this->conn->prepare( $query );
+
+    /* echo "query = " . $query; */
 
     // execute query
     $stmt->execute();
@@ -222,7 +239,7 @@ class Proposal
   // select All in the table
   function selectAll()
   {
-    $query = "SELECT ProposalID, OpportunityID, BidderID, Status, ps.Name as StatusName, TechnicalScore, FeeScore, FinalTotalScore, ContractAwarded, CreatedDate, LastEditDate FROM Proposal p LEFT JOIN ProposalStatus ps ON ps.StatusID = p.Status;";
+    $query = "SELECT ProposalID, OpportunityID, BidderID, Status, ps.Name as StatusName, TechnicalScore, FeeScore, FinalTotalScore, ContractAwarded, Fee, CreatedDate, LastEditDate FROM Proposal p LEFT JOIN ProposalStatus ps ON ps.StatusID = p.Status;";
     $stmt = $this->conn->prepare( $query );
 
     // execute query
@@ -260,6 +277,11 @@ class Proposal
     if(isset($this->FeeScore))
     {
       $query = $query . ", FeeScore = " . $this->FeeScore . " ";      
+    }
+
+    if(isset($this->Fee))
+    {
+      $query = $query . ", Fee = " . $this->Fee . " ";      
     }
 
     if(isset($this->FinalTotalScore))
@@ -307,8 +329,8 @@ class Proposal
 
   function create()
   {
-    $query = "INSERT INTO Proposal (ProposalID, OpportunityID, BidderID, Status, TechnicalScore, FeeScore, FinalTotalScore, ContractAwarded, CreatedDate, LastEditDate) " .
-             "VALUES(:ProposalID, :OpportunityID, :BidderID, :Status, :TechnicalScore, :FeeScore, :FinalTotalScore, :ContractAwarded, NOW(), NOW());";
+    $query = "INSERT INTO Proposal (ProposalID, OpportunityID, BidderID, Status, TechnicalScore, FeeScore, FinalTotalScore, ContractAwarded, Fee, CreatedDate, LastEditDate) " .
+             "VALUES(:ProposalID, :OpportunityID, :BidderID, :Status, :TechnicalScore, :FeeScore, :FinalTotalScore, :ContractAwarded, :Fee, NOW(), NOW());";
     $stmt = $this->conn->prepare( $query );
 
     // bind parameters
@@ -329,6 +351,7 @@ class Proposal
     $stmt->bindParam(':FeeScore', $this->FeeScore);
     $stmt->bindParam(':FinalTotalScore', $this->FinalTotalScore);
     $stmt->bindParam(':ContractAwarded', $this->ContractAwarded);
+    $stmt->bindParam(':Fee', $this->Fee);
 
     if($stmt->execute())
       return true;
