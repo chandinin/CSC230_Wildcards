@@ -6,7 +6,7 @@ var g_mc;
 
 $(document).ready(function(){
     // init breadcrumb
-    g_bread = new BreadCrumb("Home", function() {$("#opportunities-tab").trigger("click"); activateOpportunitiesList(); }, "the-breadcrumb");
+    g_bread = new BreadCrumb("Home", function() {window.location = "home_page.html";}, "the-breadcrumb");
 
     $("#show-list-btn").click(function() { router("#spa-opportunities-list"); });
 
@@ -42,7 +42,6 @@ $(document).ready(function(){
     $("#num-unread-messages").text(g_mc.numUnread);
 
     // Init the fee doc listener
-
     document.getElementById("fee-input").addEventListener("change", allDocsSatisfied);
 });
 
@@ -151,7 +150,7 @@ function router(div_to_show, spa_edit_proposal_shitty_workaround_flag)
     }
     else if(div_to_show == "#spa-opportunities-list")
     {
-        // Nothing, this is home
+        g_bread.add("Opportunities List");
     }
     else if(div_to_show == "#spa-opportunity-detail")
     {
@@ -1678,6 +1677,22 @@ function initializeMessageDetail(message_id)
 // <a id="discard-message-btn" class="btn btn-primary  hidden">Discard Message</a>
 // <a id="message-detail-back-btn" class="btn btn-primary hidden" >Back to Messages</a>
 
+function phony_message()
+{
+    demo_message = {};
+    demo_message.Type = "ClarificationNotification";
+    demo_message.ClarificationID = "12345";
+    demo_message.ProposalID = "18650";
+    demo_message.OpportunityName  = "God fucking damnit";
+    demo_message.LastEditDate = "2018-05-16 02:13:49";
+    demo_message.ClosingDate = "2018-05-20 02:13:49";
+    demo_message.TimeReceived = "2018-05-20 02:13:49";
+    demo_message.Body  = "Omfg <b>please</b> work";
+    demo_message.Answer = null;
+
+    populateMessageDetail(demo_message);
+    router("#spa-message-detail");
+}
 
 function populateMessageDetail(message)
 {
@@ -1685,7 +1700,7 @@ function populateMessageDetail(message)
     // Populate all fields
     $("#message-detail-time-received").text(convert_db_date_to_custom(message.TimeReceived));
     $("#message-detail-type").text(message.Type);
-    $("#message-detail-body").text(message.Body);
+    document.getElementById("message-detail-body").innerHTML = message.Body;
 
 
     // Hide non-essential, leave these to be shown by subroutines
@@ -1700,6 +1715,10 @@ function populateMessageDetail(message)
     $("message-detail-opportunity-name-header").hide();
     $("#message-detail-download-link").hide();
     $("send-message-div").hide();
+
+    // Make sure this guys fucking dead
+    $('#summernote').summernote('destroy'); $('#summernote').hide();
+    $("#message-response-editor").hide();
 
 
     if(message.Type == "ClarificationNotification")
@@ -1738,6 +1757,7 @@ function populateClarificationRequestDetail(message)
         $("#send-message-btn").hide();
         $("#discard-message-btn").hide();
         $("#message-detail-back-btn").text("Back to Messages");
+        
 
         //Unhide these
         $("#message-detail-time-responded-header").show();
@@ -1745,9 +1765,11 @@ function populateClarificationRequestDetail(message)
         $("#message-detail-time-responded").text(message.LastEditDate)
         $("#message-detail-back-btn").show();
         $("#message-detail-response").show();
+        $("#message-response-editor").show();
 
         // Set these
         $("#message-response-editor")[0].value = (message.Answer);
+
         document.getElementById("message-response-editor").readOnly = true;
 
         if(message.DocID != null)
@@ -1764,7 +1786,7 @@ function populateClarificationRequestDetail(message)
         if(message.ClosingDate != null)
         {
             closing_date = parseCustomDateStringToDate(message.ClosingDate);
-            if(closing_date < new Date())
+            if(closing_date < new Date()) // Shits expired
             {
                 console.log("This clarification has expired!");
                 $("#send-message-btn").hide();
@@ -1780,13 +1802,21 @@ function populateClarificationRequestDetail(message)
             }
         }
         
+        // Not expired
         $("#message-detail-back-btn").text("Discard Message");
+
+        $('#summernote').show(); $('#summernote').summernote({
+            height: 300,
+            minHeight: 300,
+            maxHeight: null,
+            focus: true
+        });
 
         if(message.ClosingDate != null)
             $("#message-detail-due-by").text(convert_db_date_to_custom(message.ClosingDate));
         else
             $("#message-detail-due-by").text("None");
-        document.getElementById("message-detail-due-by").style.color = "#425b83";
+        document.getElementById("message-detail-due-by").style.color = "rgb(51, 51, 51)";
         $("#message-detail-due-by-header").show();
 
         // Have to reset for some reason
@@ -1867,7 +1897,7 @@ function sendClarificationResponse(ProposalID, ClarificationID)
         }
     }
     xhr.setRequestHeader("Content-type", "application/json");
-    answer = $("#message-response-editor")[0].value;
+    answer = $('#summernote').summernote('code');
     request_json = {"ProposalID":ProposalID, "ClarificationID":ClarificationID, "answer":answer, "DocID":String(doc_id)};
     xhr.send(JSON.stringify(request_json));
 
