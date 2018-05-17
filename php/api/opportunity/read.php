@@ -120,6 +120,55 @@ else
     // make it json format
     print_r(trim(json_encode($opportunity_arr)));
   }
+  else if((isSet($_POST_LowerCase["status"])
+  || isSet($_GET_LowerCase["status"])) 
+  && (isSet($_POST_LowerCase["categoryid"])
+  || isSet($_GET_LowerCase["categoryid"])))
+  {
+    $status = isSet($_GET_LowerCase["status"]) ?
+    $_GET_LowerCase["status"] : $_POST_LowerCase["status"];
+    $categoryid = isSet($_GET_LowerCase["categoryid"]) ?
+     $_GET_LowerCase["categoryid"] : $_POST_LowerCase["categoryid"];
+
+    //Search
+    $stmt = $opportunity->selectByStatusIDAndCategoryID($status, $categoryid);
+    $rowCount = $stmt->rowCount();
+  
+    $opportunities_arr = array();
+    $opportunities_arr["opportunity"] = array();
+
+    if($rowCount > 0)
+    {
+  
+      while($row = $stmt->fetch(PDO::FETCH_ASSOC))
+      {
+        $opportunityID = $row['OpportunityID'];
+        $ProposalCount = $opportunity->getProposalCount($opportunityID);
+
+        $opportunity_arr = array(
+          "OpportunityID" => $row['OpportunityID'],
+          "ClosingDate" => $row['ClosingDate'],
+          "LeadEvaluatorID" => $row['LeadEvaluatorID'],
+          "Name" => $row['Name'],
+          "LowestBid" => $row['LowestBid'],
+          "Description" => $row['Description'],
+          "Status" => $row['Status'],
+          "StatusName" => $row['StatusName'],
+          "CategoryID" => $row['CategoryID'],
+          "CreatedDate" => $row['CreatedDate'],
+          "LastEditDate" => $row['LastEditDate'],
+          "ProposalCount" => $ProposalCount,
+          "MinimumScore" =>  $row['MinimumScore'],
+          "TotalPoints" =>  $row['TotalScore']
+        );
+
+        array_push($opportunities_arr["opportunity"], $opportunity_arr);
+      }
+    }
+  
+    // make it json format
+    print_r(trim(json_encode($opportunities_arr)));
+  }
   else if(isSet($_POST_LowerCase["status"])
   || isSet($_GET_LowerCase["status"]))
   {
@@ -168,7 +217,6 @@ else
   else if(isSet($_POST_LowerCase["categoryid"])
   || isSet($_GET_LowerCase["categoryid"]))
   {
-    //$opportunityID = $_POST_LowerCase["opportunityid"];
     $categoryid = isSet($_GET_LowerCase["categoryid"]) ?
      $_GET_LowerCase["categoryid"] : $_POST_LowerCase["categoryid"];
   
