@@ -8,6 +8,8 @@ var bidderEmail;
 $(document).ready(
     function () {
         getBidderDetails();
+        var oppName = localStorage.getItem("opportunityName");
+        document.getElementById("opportunityName").innerHTML = oppName;
         document.getElementById("bidderName").innerHTML = bidderName;
         document.getElementById("proposalid").innerHTML = proposalID;
         $('#summernote'); $('#summernote').summernote({
@@ -95,4 +97,15 @@ function getBidderDetails() {
         }
     };
     xhr.send();
+}
+
+function SecondarySeekClarification(){
+    var message = $('#summernote').summernote('code');
+    var params = {"ProposalID":proposalID, "question":message};
+    var updateProposalStatus = {"ProposalID":proposalID,"Status":25};
+    var updateClarification = JSON.stringify(params);
+
+    sendInboxNotification(updateClarification);
+    updateProposalStat(updateProposalStatus);
+    sendEmail(message);
 }

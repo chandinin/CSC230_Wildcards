@@ -15,23 +15,25 @@ $(document).ready(
         $('.table').tablesorter();
     });
 
-//Get all opportunity list from server which are closed and ready for evaluators
+//Get all opportunity list from server which are closed and ready for evaluators status 6,4
 function getOppList() {
     $('#oppListTableBody').empty();
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php?Status=6',true);
-    xhr.onload = function() {
-        if (xhr.status == 200) {
-            var jsonArray = JSON.parse(xhr.responseText);
+    var params = {"Statuses":[6,4]};
+    var myJson = JSON.stringify(params);
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php",true);
+    xhttp.onload = function() {
+        if (xhttp.status == 200) {
+            var jsonArray = JSON.parse(xhttp.responseText);
             fillOppTable(jsonArray);
         } else {
             alert("Error response");
         }
     };
-    xhr.send();
+    xhttp.send(myJson);
 }
 
-//Get opportunity list given an categoryid
+//Get opportunity list given an categoryid with ppportunity status 6, 4
 function getOppListbyID(id) {
     $('#oppListTableBody').empty();
     var xhr = new XMLHttpRequest();

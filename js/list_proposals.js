@@ -13,7 +13,7 @@ $(document).ready(
         });
     });
 
-//get proposal list based on opportunity id
+//get proposal list based on opportunity id 10, 15 and 30, 70
 function getProposalList() {
     opportunityID = localStorage.getItem("opportunityID");
     $('#proposalListTableBody').empty();

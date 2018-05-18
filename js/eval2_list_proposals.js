@@ -1,17 +1,21 @@
 //On Start
-var opportunityID = localStorage.getItem("opportunityID");;
+var opportunityID = localStorage.getItem("opportunityID");
+var oppStatus;
 $(document).ready(
     function () {
         var oppName = localStorage.getItem("opportunityName");
         document.getElementById("opportunityName").innerHTML = oppName;
+        $(".table").tablesorter();
         getProposalList();
-        //$('#revealFeeButton').hide();
+/*  todo      if(oppStatus != 5){
+            $('#revealFeeButton').hide();
+        }*/
         $('#proposalListTable tr').click(function() {
             showOpp();
         });
     });
 
-//get proposal list based on opportunity id
+//get proposal list based on opportunity id and proposal status 15, 25, 30, 60, 65
 function getProposalList() {
     $('#proposalListTableBody').empty();
     var xhr = new XMLHttpRequest();
@@ -58,7 +62,7 @@ function fillProposalTable(jsonArray){
                 + proposal.TechnicalScore + "<td>" + new Date(proposal.CreatedDate).toDateString()+ "<td>" + proposal.StatusName + "<td>" +  "<button onclick='showProposalDetails(\"" + proposal.ProposalID + "\")' id='editOppButton' value='\" + proposal.ProposalID + \"' type='button' " +
                 "class='btn btn-primary btn-sm'>" +
                 "View</button></td>";
-
+            $('#proposalListTableBody').tablesorter();
             $('#proposalListTableBody').append(row);
             $("#proposalListTableBody").trigger("update");
         }
@@ -123,6 +127,7 @@ function completeOpportunityEval() {
             if(jsonArray.result){
                 alert("update successful");
                 //Reveal fee after all proposals in the opportunity have been evluated
+                //Todo oppStatus = jsonArray.status
                 $('#revealFeeButton').show();
             }
             else{

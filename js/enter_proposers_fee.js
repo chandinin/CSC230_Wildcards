@@ -3,6 +3,8 @@ var proposalID = localStorage.getItem("proposalID");
 $(document).ready(
     function () {
         document.getElementById("proposal").innerHTML = proposalID;
+        var oppName = localStorage.getItem("opportunityName");
+        document.getElementById("opportunityName").innerHTML = oppName;
         getBidderDetails();
         getScoringCriteria();
     });
@@ -41,8 +43,8 @@ function getScoringCriteria(){
 //Go back to reveal fee
 //TODO get this endpoint to work
 function submit(){
-
-/*    var updateProposerFee = {"ProposalID":proposalID,"ProposerFee":feeProposalScore};
+    var proposersFee = document.getElementById("feeProposal").value;
+    var updateProposerFee = {"ProposalID":proposalID,"Fee":proposersFee};
 
     var updateProposal = JSON.stringify(updateProposerFee);
     var xhttp = new XMLHttpRequest();
@@ -55,7 +57,5 @@ function submit(){
             alert("Error updating fee!")
         }
     }
-    xhttp.send(updateProposal);*/
-
-    window.location.replace("reveal_fee.html")
+    xhttp.send(updateProposal);
 }

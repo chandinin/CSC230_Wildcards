@@ -47,6 +47,10 @@
     <script type="text/javascript" src="js/ept/jquery.cookie.js"></script>
     <script src="js/bidder_login.js"></script>
     <script src="js/seek_clarification.js"></script>
+
+    <!--widgets-->
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
 </head>
 <body>
 <!--Contents of the whole page-->
@@ -152,6 +156,10 @@
                     <div class="col-md-6">
                         <table id="proposalListTable" class="table table-bordered table-striped table-hover">
                             <tr>
+                                <th style="background-color:  #00659e; color: white; width: 200px;">Opportunity:</th>
+                                <td><span id="opportunityName"></span></td>
+                            </tr>
+                            <tr>
                                 <th style="background-color:  #00659e; color: white; width: 200px;">Proposal:</th>
                                 <td><span id="proposalid"></span></td>
                             </tr>
@@ -171,14 +179,13 @@
                 <!--textbox-->
                 <div id="clarificationMessage" class="form-group">
                     <label>Clarification Question</label>
-                    <textarea class="form-control" id="clarificationRequest" rows="6"
-                              placeholder="Enter your clarification question here." required></textarea>
+                    <div id="summernote">Enter your question here</div>
                 </div>
 
                 <!--Buttons for text message-->
                 <div align="left">
 
-                    <button type="button" class="btn btn-accept btn-sm" onclick="SeekClarification()">
+                    <button type="button" class="btn btn-accept btn-sm" onclick="SecondarySeekClarification()">
                         <span class="glyphicon glyphicon-ok-sign"></span> Seek Clarification
                     </button>
 

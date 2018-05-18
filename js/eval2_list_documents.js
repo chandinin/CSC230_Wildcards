@@ -5,12 +5,15 @@ var bidderName;
 //onstart?
 $(document).ready(
     function () {
+        $('.table').tablesorter();
         document.getElementById("proposalid").innerHTML = proposalID;
+        var oppName = localStorage.getItem("opportunityName");
+        document.getElementById("opportunityName").innerHTML = oppName;
         getBidderDetails()
         getDocumentList();
         $('#manageOpp').click(function() {
             getDocumentList();
-            $('.table').tablesorter();
+
             $("#oppsMenu option[id='opplist']").attr("selected", "selected");
         });
     });
@@ -61,6 +64,7 @@ function fillDocumentTable(jsonArray){
             var doc = jsonArray.doc[i];
             var row = "<tr><td>" + doc.DocTitle+ "</td><td><a class='btn btn-primary btn-sm' href='" + doc.Url  +
                 "'><span class='glyphicon glyphicon-circle-arrow-down' aria-hidden='true'></span>Download</a> ";
+            $('#documentsTableBody').tablesorter();
             $('#documentsTableBody').append(row);
             $("#documentsTableBody").trigger("update");
         }
@@ -95,6 +99,7 @@ function UpdateTechnicalscore(){
     xhttp.onload = function () {
         if (xhttp.status == 200) {
             alert(proposalID+" Update successful");
+            document.getElementById("technicalscore").innerHTML = technicalScore;
             //update the proposal status based on min opp score
             updateProposalStatus();
         } else {

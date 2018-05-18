@@ -6,6 +6,8 @@ var bidderID;
 //onstart?
 $(document).ready(
     function () {
+        var oppName = localStorage.getItem("opportunityName");
+        document.getElementById("opportunityName").innerHTML = oppName;
         document.getElementById("proposalid").innerHTML = proposalID;
         getBidderDetails()
         getDocumentList();
@@ -105,6 +107,7 @@ function updateProposalStatus(status) {
     }
     xhttp.send(myJson);
 }
+
 
 //Function to seek clarification
 function SeekClarificationButton() {
