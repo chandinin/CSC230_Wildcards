@@ -1156,6 +1156,7 @@ function populateProposalList(proposals_json)
     {
         // Replace Status name with something appropriate for the frontend
         status_name = proposals_json[i].StatusName;
+        console.log("ProposalList: " + String(proposals_json[i].Status));
         if(status_name == "Evaluation 1 Rejected") { status_name = "Rejected"; }
         else if(status_name == "Evaluation 1 Accepted") { status_name = "Closed for edits, Under Evaluation"; }
         else if(status_name == "Seeking Clarification 1") { status_name = "Clarification Requested"; }
@@ -1627,10 +1628,20 @@ function populateMessageList(messages_json)
         // This will be clipped
         preview = document.createElement("a");
         preview_text = ""
+
+        // Scrub out the html from a message
+        var scrubbed_body = ""
+        {
+            var html = messages_json[i].Body;
+            var div = document.createElement("div");
+            div.innerHTML = html;
+            var scrubbed_body = div.textContent || div.innerText || "";
+        }
+
         if(messages_json[i].Body.length > PREVIEW_LENGTH)
-            preview_text = messages_json[i].Body.substring(0,PREVIEW_LENGTH)+"...";
+            preview_text = scrubbed_body.substring(0,PREVIEW_LENGTH)+"...";
         else
-            preview_text = messages_json[i].Body;
+            preview_text = scrubbed_body;
         
         preview.appendChild(document.createTextNode(preview_text) );
 
@@ -2390,7 +2401,7 @@ class MessageCenter
 
 
         $.ajax({
-            url: "php/api/opportunity/read.php?status=3", 
+            url: "php/api/opportunity/read.php", 
             success: function(opportunities_json)
             {
                 // We need to get the category name for each opportunity, via the categoryID
