@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Opportunities</title>
-    <link rel="stylesheet" href="js/MDB Free/css/bootstrap.css">
-    <link rel="stylesheet" href="js/MDB Free/css/mdb.css">
+<!--    <link rel="stylesheet" href="js/MDB Free/css/bootstrap.css">
+    <link rel="stylesheet" href="js/MDB Free/css/mdb.css">-->
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/bootstrap-datepicker.css">
     <link rel="stylesheet" type="text/css" href="css/tablesorter-style.css">
@@ -29,7 +29,7 @@
 <div class="content">
     <div id="page" class="single">
         <!-- Logo-->
-        <div class="navbar navbar-static-top">
+        <div class="">
             <div class="container relative">
                 <!-- Skip to content link for Screen readers and keyboard users only -->
                 <a href="#main" style="position:absolute; font-size:.8em;" class="sr-only sr-only-focusable"
@@ -162,18 +162,18 @@
                                     </div>
                                 </div>
                                 <br>
-                                <div align="left" class="row">
+
                                     <div class="col-md-12">
-                                        <div class="col-md-9">
                                             <select id="selectFilterCategory" name="category" required style="width: 325px">
                                                 <option id = "id" value="default">Category</option>
                                             </select>
-                                            <button id="showNewOpp" type="button" class="btn btn-accept">
-                                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Create New
-                                            </button>
-                                        </div>
+                                                <button id="showNewOpp" type="button" class="btn btn-accept" style="float: right;">
+                                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Create New
+                                                </button>
+                                        <br>
+                                        <br>
                                     </div>
-                                </div>
+
                                 <div class="col-md-12">
                                     <table id="oppListTable" class="table table-responsive table-bordered table-striped table-hover tablesorter">
                                         <thead class="">

@@ -5,6 +5,7 @@ $(document).ready(
     function () {
         document.getElementById("employeeName").innerHTML = employeeName;
         getOppList();
+        $(".table").tablesorter();
         getCategories();
         $('#manageOpp').click(function() {
             getOppList();
@@ -123,6 +124,7 @@ $(document).ready(function () {
         //Storing the dropdown selection in category variable
         var category= $('#selectCategory option:selected').attr('id');
         getOppListbyID(category);
+
     });
 });
 
