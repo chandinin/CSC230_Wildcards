@@ -100,6 +100,41 @@ class Opportunity
     return $stmt;
   }
 
+  // Search by both Status and Category
+  function selectByStatusIDAndCategoryID($StatusID, $CategoryID)
+  {
+    $query = "select OpportunityID, ClosingDate, LeadEvaluatorID, O.Name, LowestBid, Description, O.Status, OS.Name as StatusName, CategoryID, CreatedDate, LastEditDate, MinimumScore, TotalScore from Opportunity O
+  left join OppStatus OS on OS.StatusID = O.`Status` WHERE `Status` = ? and CategoryID = ? ;";
+    $stmt = $this->conn->prepare( $query );
+
+    //echo "query = " . $query;
+
+    // bind parameters
+    $stmt->bindParam(1, $StatusID);
+    $stmt->bindParam(2, $CategoryID);
+
+    // execute query
+    $stmt->execute();
+
+    return $stmt;
+  }
+
+  // select one by ID
+  function selectByMultStatusID($Statuses)
+  {
+    $query = "select OpportunityID, ClosingDate, LeadEvaluatorID, O.Name, LowestBid, Description, O.Status, OS.Name as StatusName, CategoryID, CreatedDate, LastEditDate, MinimumScore, TotalScore from Opportunity O
+  left join OppStatus OS on OS.StatusID = O.`Status` ";
+    $query = $query . "WHERE `Status` in (". $Statuses .") Order By `Status`, OpportunityID;";
+    $stmt = $this->conn->prepare( $query );
+
+    /* echo "query = " . $query; */
+
+    // execute query
+    $stmt->execute();
+
+    return $stmt;
+  }
+
   // select All in the table
   function selectAll()
   {
@@ -472,7 +507,7 @@ class Opportunity
       $query = $query . "FROM DocTemplate "; 
       $query = $query . "INNER JOIN OppDocTemplate ODT ON ODT.DocTemplateID = DocTemplate.DocTemplateID ";
       $query = $query . "
-WHERE OpportunityID = ? ; ";
+WHERE OpportunityID = ?  Order By SortOrder; ";
 
       $stmt = $this->conn->prepare( $query );
    
