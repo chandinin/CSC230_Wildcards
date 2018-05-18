@@ -5,6 +5,14 @@ var g_mc;
 
 
 $(document).ready(function(){
+    // TODO: Figure out a good way to pass bidder ID around the site
+    g_bidder_id = localStorage.getItem("BidderID");
+    if(g_bidder_id == null)
+    { // Our default test case
+        alert("Using Test ID, 0_AGID_BDR");
+        g_bidder_id = "0_AGID_BDR";
+    }
+
     // init breadcrumb
     g_bread = new BreadCrumb("Home", function() {window.location = "home_page.html";}, "the-breadcrumb");
 
@@ -27,10 +35,7 @@ $(document).ready(function(){
     // Init the save category subscriptions button
     $("#subscriptions-save-btn").click(function() { saveCategorySubscriptions(); });
 
-    // TODO: Figure out a good way to pass bidder ID around the site
-    g_bidder_id = localStorage.getItem("bidderId");
-    if(g_bidder_id == null) // Our default test case
-        g_bidder_id = "1337";
+
     activateOpportunitiesList();
 
     // init message center
@@ -199,7 +204,6 @@ function router(div_to_show, spa_edit_proposal_shitty_workaround_flag)
 
 function uploadFeeDocument(file, filename, ProposalID, OpportunityID, DocTemplateID)
 {
-        console.log("Uploading fee doc...");
         var formData=new FormData();
         formData.append('filename', file, filename);
         formData.append('ProposalID', ProposalID);
@@ -213,7 +217,7 @@ function uploadFeeDocument(file, filename, ProposalID, OpportunityID, DocTemplat
             if(xhr.status == 200) {
                 console.log('File uploaded' + xhr.response);
             } else {
-                alert('Uploading file');
+                alert('Error uploading file:' + xhr.response);
             }
         };
         xhr.send(formData);
@@ -405,8 +409,6 @@ function getFormattedCurrentDate() {
 // Returns standard Date object
 function parseCustomDateStringToDate(date_string)
 {
-  try
-    {
     reg = /(.{4})-(.{0,2})-(.{0,2}) (.{0,2}):(.{0,2}):(.{0,4})/g;
     match = reg.exec(date_string);
 
@@ -425,15 +427,7 @@ function parseCustomDateStringToDate(date_string)
     date.setHours(hour);
     date.setMinutes(minute);
     date.setSeconds(second);
-    }
-  catch(error)
-  {
-    console.log("Error parsing date string");
-    console.log(date_string);
-    $date = new Date();
-  }
 
-    
     return date;
 }
 
@@ -865,7 +859,7 @@ function saveNewProposal(opportunity_id)
             if(xhr.status == 200) {
                 console.log('File uploaded' + xhr.response);
             } else {
-//                 alert('uploading file:' + xhr.response);
+                alert('Error uploading file:' + xhr.response);
             }
         };
         xhr.send(formData);
@@ -2240,7 +2234,7 @@ class MessageCenter
         console.log("seeding internal json");
 
         var last_login = new Date();
-        last_login.setDate(12);
+        last_login.setYear(1994);
 
         this.internal_json = {
             "time_of_last_login": getDatabaseDateStringFromDate(last_login),
@@ -2388,7 +2382,7 @@ class MessageCenter
 
 
         $.ajax({
-            url: "php/api/opportunity/read.php", 
+            url: "php/api/opportunity/read.php?status=3", 
             success: function(opportunities_json)
             {
                 // We need to get the category name for each opportunity, via the categoryID
