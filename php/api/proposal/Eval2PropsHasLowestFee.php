@@ -21,23 +21,21 @@ $proposal = new Proposal($db);
 $data = json_decode(file_get_contents("php://input"));
 if(json_last_error() === JSON_ERROR_NONE && ($data !== null))
 {
-  $opportunityid = $data->OpportunityID;
-
-  $result = '{ "result" : "false" }';
-  
-  //Search
-  if($proposal->AllPropsAcceptRejectByOppIDEval1($opportunityid))
+  $result = -1;
+  if(isset($data->OpportunityID) and !is_null($data->OpportunityID))
   {
-    $proposal->SetOppStatus(4,$opportunityid);
-    $result = '{ "result" : "true" }';
+    $opportunityid = $data->OpportunityID;
+  
+    //Search
+    $result = $proposal->AllPropsEval2HasFeeEntered($opportunityid);
   }
 
-  // make it json format
+  // return decimal
   echo $result;
 }
 else
 {
-  $result = '{ "result" : "false" }';
+  $result = -1;
 
   $_GET_LowerCase = array_change_key_case($_GET, CASE_LOWER);
   $_POST_LowerCase = array_change_key_case($_POST, CASE_LOWER);
@@ -48,14 +46,9 @@ else
        $_GET_LowerCase["opportunityid"] : $_POST_LowerCase["opportunityid"];
 
     //Search
-    if($proposal->AllPropsAcceptRejectByOppIDEval1($opportunityid))
-    {
-      $proposal->SetOppStatus(4,$opportunityid);
-      $result = '{ "result" : "true" }';
-    }
+    $result = $proposal->AllPropsEval2HasFeeEntered($opportunityid);
   }
-
-  // make it json format
+  // return decimal
   echo $result;
 }
 ?>

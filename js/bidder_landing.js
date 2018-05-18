@@ -1,10 +1,12 @@
 // TODO: Figure out a good way to pass bidder ID around the site
 var g_bidder_id;
 var g_bread;
+var g_mc;
+
 
 $(document).ready(function(){
     // init breadcrumb
-    g_bread = new BreadCrumb("Home", function() {$("#opportunities-tab").trigger("click"); activateOpportunitiesList(); }, "the-breadcrumb");
+    g_bread = new BreadCrumb("Home", function() {window.location = "home_page.html";}, "the-breadcrumb");
 
     $("#show-list-btn").click(function() { router("#spa-opportunities-list"); });
 
@@ -16,9 +18,6 @@ $(document).ready(function(){
     $("#opportunities-list-table").tablesorter();
     $("#proposals-list-table").tablesorter();
     $("#messages-list-table").tablesorter();
-
-    // Set the tab to active, because I don't know what I'm doing...
-    $('#opportunities-tab').trigger('click');
 
     // init the category picker
     getCategories();
@@ -35,11 +34,15 @@ $(document).ready(function(){
     activateOpportunitiesList();
 
     // init message center
-    mc = new MessageCenter();
-    mc.updateServer(); // Will report the messages we generated as well as the login time right
-    $("#num-unread-messages").text(mc.numUnread);
+    // g_mc = new MessageCenter();
+    // g_mc.updateServer(); // Will report the messages we generated as well as the login time right
+    // $("#num-unread-messages").text(g_mc.numUnread);
 
+    // Init the fee doc listener
+    document.getElementById("fee-input").addEventListener("change", allDocsSatisfied);
 
+    // Set the tab to active, because I don't know what I'm doing...
+    $('#messages-tab').trigger('click');
 });
 
 class BreadCrumb
@@ -147,7 +150,7 @@ function router(div_to_show, spa_edit_proposal_shitty_workaround_flag)
     }
     else if(div_to_show == "#spa-opportunities-list")
     {
-        // Nothing, this is home
+        g_bread.add("Opportunities List");
     }
     else if(div_to_show == "#spa-opportunity-detail")
     {
@@ -181,7 +184,128 @@ function router(div_to_show, spa_edit_proposal_shitty_workaround_flag)
 
     // Done building, now render
     g_bread.render();
+
+    // Update our messages...
+    if(g_mc != null)
+    {
+        g_mc.updateServer(); // Will report the messages we generated as well as the login time right
+        $("#num-unread-messages").text(g_mc.numUnread);
+   }
 }
+
+/*******************************************************
+ * Helper functions I should have made in the begining *
+ *******************************************************/
+
+function uploadFeeDocument(file, filename, ProposalID, OpportunityID, DocTemplateID)
+{
+        console.log("Uploading fee doc...");
+        var formData=new FormData();
+        formData.append('filename', file, filename);
+        formData.append('ProposalID', ProposalID);
+        formData.append("OpportunityID", OpportunityID);
+        formData.append("DocTemplateID", DocTemplateID);
+        formData.append('submit', "Lol this needs to be filled");
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST','php/api/proposal/uploadFeeDoc.php', false);
+        xhr.onload = function() {
+            if(xhr.status == 200) {
+                console.log('File uploaded' + xhr.response);
+            } else {
+                alert('Uploading file');
+            }
+        };
+        xhr.send(formData);
+}
+
+function getFeeDocument(ProposalID)
+{
+    response = null;
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET','php/api/proposal/getFeeDoc.php?proposalid='+ProposalID, false);
+    xhr.onload = function() {
+        if(xhr.status == 200) {
+            json = JSON.parse(xhr.response);
+            if(json.doc == null)
+            {
+                console.log("No fee doc found for " + ProposalID);
+                response = false;
+            }
+            else
+            {
+                response = json.doc[0];
+            }
+        } else {
+            alert(xhr.response);
+        }
+    };
+    xhr.send();
+
+    return response;
+}
+
+
+
+function getDocUrlFromID(DocID)
+{
+//{"DocID":"87","DocTitle":"linker.py","Path":"..\/..\/..\/data\/files\/35587_87_linker.py","Blob":null,"Url":"http:\/\/athena.ecs.csus.edu\/~mackeys\/data\/files\/35587_87_linker.py","Description":"linker.py","CreatedDate":"2018-05-06 12:56:02","LastEditDate":"2018-05-06 12:56:02","SortOrder":"0"}
+    var DocURL = null;
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/docs/read.php?DocID='+DocID,false);
+    xhr.onload = function() {
+        if (xhr.status == 200) {
+            DocJson = JSON.parse(xhr.response);
+            if(DocJson.Url == null)
+            {
+                console.log("Error getting doc url");
+                console.log(DocJson);
+                alert("Error getting doc url");
+                return;
+            }       
+
+            DocURL = DocJson.Url.replace("https://athena.ecs.csus.edu/~wildcard/", "");
+
+        }
+        else {
+            alert("Error getting Document URL with ID: " + DocID);
+        }
+    };
+    xhr.send();
+
+    return DocURL;
+}
+
+function updateProposal(ProposalID, proposal_json)
+{
+    success_flag = null;
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'php/api/proposal/update.php', false);
+    xhr.onload = function()
+    {
+        if(xhr.status == 200)
+        {
+            success_flag = true;
+        }
+        else
+        {
+            console.log("Error updating proposal:");
+            console.log(xhr.response);
+            alert("There was an error updating the proposal");
+            success_flag = false;
+        }
+    }
+    xhr.setRequestHeader("Content-type", "application/json");
+    proposal_json.ProposalID = ProposalID;
+    xhr.send(JSON.stringify(proposal_json));
+
+    return success_flag;
+}
+
+/*****************
+ * Table Helpers *
+ *****************/
+
 
 // Removes all elements in tbody, preserving 'thead'
 function removeAllTableElements(table)
@@ -281,6 +405,8 @@ function getFormattedCurrentDate() {
 // Returns standard Date object
 function parseCustomDateStringToDate(date_string)
 {
+  try
+    {
     reg = /(.{4})-(.{0,2})-(.{0,2}) (.{0,2}):(.{0,2}):(.{0,4})/g;
     match = reg.exec(date_string);
 
@@ -299,7 +425,15 @@ function parseCustomDateStringToDate(date_string)
     date.setHours(hour);
     date.setMinutes(minute);
     date.setSeconds(second);
+    }
+  catch(error)
+  {
+    console.log("Error parsing date string");
+    console.log(date_string);
+    $date = new Date();
+  }
 
+    
     return date;
 }
 
@@ -399,8 +533,6 @@ function sortOpportunityDocs(doctemplate)
 }
 
 
-getDocUrlFromID
-
 /**************************
  * spa-opportunities-list *
  **************************/
@@ -415,8 +547,7 @@ function activateOpportunitiesList()
 function initializeOpportunitiesList()
 {
     $.ajax({
-        // Easy as fuck, change this to 3
-        url: "php/api/opportunity/read.php?status=0", 
+        url: "php/api/opportunity/read.php?status=3", 
         success: function(opportunities_json)
         {
             opportunities = opportunities_json["opportunity"];
@@ -470,7 +601,7 @@ function populateOpportunitiesList(opportunities_json) {
     for(var i = 0; i < opportunities.length; i++)
     {
         // Skip and do not add any opportunities that don't match our selected category, if we have selected one
-        if((selected_categoryID != undefined && opportunities[i].CategoryID != selected_categoryID ) || opportunities[i].StatusName != "New")
+        if((selected_categoryID != undefined && opportunities[i].CategoryID != selected_categoryID ) || opportunities[i].StatusName != "Published")
         {
             continue;
         }
@@ -571,7 +702,8 @@ function parseOpportunity(opportunity) {
                 // Create Template download anchor
                 anchor = document.createElement("a");
                 if(doc_templates[i].Url != null)
-                    anchor.href = doc_templates[i].Url.replace("https://athena.ecs.csus.edu/~wildcard/", "");
+                    anchor.href = doc_templates[i].Url;
+//                     anchor.href = doc_templates[i].Url.replace("https://athena.ecs.csus.edu/~wildcard/", "");
                 else
                     anchor.href = "google.com";
 
@@ -579,6 +711,8 @@ function parseOpportunity(opportunity) {
                     anchor.appendChild(document.createTextNode(doc_templates[i].DocTitle));
                 else
                     anchor.appendChild(document.createTextNode(doc_templates[i].DisplayTitle));
+              
+                anchor.target = "_blank";
                 // Attach all elements to the list_item
                 list_item.appendChild(anchor);
                 doc_list.appendChild(list_item);
@@ -620,8 +754,9 @@ function initializeCreateProposal(opportunity_id)
         async: false
     });
 
+    $("#time-remaining-div").show();
 
-
+    $("#fee-input").show();
     $("#proposal-submit-btn").hide()
 
     $("#proposal-back-list-btn").off();
@@ -630,8 +765,12 @@ function initializeCreateProposal(opportunity_id)
     $("#proposal-back-list-btn").click(function() { router("#spa-opportunities-list"); });
     $("#proposal-save-btn").click(function() { console.log("Pressed proposal-save-btn"); saveNewProposal(opportunity_id); });
 
+    $("#prev-fee-doc").hide();
+
     // Because edit-proposal can change this
-    $("#proposal-instructions-span").text("Please download, fill out, and upload all requested forms. You can come back and edit your documents at any time before the deadline for submissions, just press 'save and come back later");
+    $("#proposal-instructions-span").text('Please download, fill out, and upload all requested forms. You can come back and edit your documents at any time before the deadline for submissions, just press "Save For Later". You may submit your Proposal once you have satsifed all required documents');
+
+    document.getElementById("fee-input").value = "";
 
 
 }
@@ -648,7 +787,8 @@ function saveNewProposal(opportunity_id)
         "ProposalID": proposal_id,
         "OpportunityID": opportunity_id,
         "BidderID": g_bidder_id,
-        "Status": "saved, still open",
+        "Status": "40",
+        "StatusName": "Open",
         "TechnicalScore": -1,
         "FeeScore": -1,
         "FinalTotalScore": -1,
@@ -725,11 +865,23 @@ function saveNewProposal(opportunity_id)
             if(xhr.status == 200) {
                 console.log('File uploaded' + xhr.response);
             } else {
-                alert('Error uploading file:' + xhr.response);
+//                 alert('uploading file:' + xhr.response);
             }
         };
         xhr.send(formData);
     }
+
+    fee_input = document.getElementById("fee-input");
+    current_file = fee_input.files.length > 0 ? fee_input.files[0] : null;
+    if(current_file != null)
+    {
+        uploadFeeDocument(current_file, current_file.name, proposal_id, opportunity_id, 0);
+    }
+    else
+    {
+        console.log("No fee doc to upload");
+    }
+
 
     alert("Your proposal was succesfully saved");
     activateOpportunitiesList();
@@ -760,15 +912,16 @@ function getUniqueProposalID()
     //     async: false
     // });
 
-    return getRandomInt(0,65325).toString();
+    return getRandomInt(1,65325).toString();
 }
 
 
 function populateOppTitle(opportunity)
 {
     g_current_opportunity_json = opportunity;
-    $("#opportunity-title").text("Title: " + opportunity["Name"]);
-    $("#opportunity-countdown").text("Closing Date and Time: " + convert_db_date_to_custom(opportunity["ClosingDate"]));
+    $("#opportunity-title").text(opportunity["Name"]);
+    $("#opportunity-countdown").text(convert_db_date_to_custom(opportunity["ClosingDate"]));
+    document.getElementById("proposal-opportunity-detail").innerHTML = opportunity.Description;
 
     // Setup our lovely countdown timer...
     //{"days":597,"hours":15,"minutes":44,"seconds":11}
@@ -833,7 +986,10 @@ function populateOppDocTemplates(opp_doc_templates)
         // Create Template download anchor
         anchor = document.createElement("a");
         if(doc_templates[i].Url != null)
+        {
             anchor.href = doc_templates[i].Url.replace("https://athena.ecs.csus.edu/~wildcard/", "");
+//             anchor.href = doc_templates[i].Url;
+        }
         else
             anchor.href = "google.com";
 
@@ -870,8 +1026,10 @@ function populateOppDocTemplates(opp_doc_templates)
 function allDocsSatisfied(current_event)
 {
     console.log("Setting this inputs parent as hasDocPending");
-    console.log(current_event);
-    document.getElementById(current_event.target.dataset.parent_list_item_id).dataset.hasDocPending = true;
+    if(current_event.target.id != "fee-input")
+        document.getElementById(current_event.target.dataset.parent_list_item_id).dataset.hasDocPending = true;
+    else
+        console.log("This is the fee-input event");
 
     console.log("Checking if we have all docs potentially satisfied");
     doc_list = document.getElementById("opp-doc-templates-list");
@@ -882,6 +1040,13 @@ function allDocsSatisfied(current_event)
     {
         li = doc_list.children[i];
         has_all_docs = has_all_docs & (li.dataset.hasDocUploaded == "true" || li.dataset.hasDocPending == "true");
+    }
+
+    fee_input = document.getElementById("fee-input");
+    if(fee_input.files.length == 0 && !($("#prev-fee-doc").is(":visible"))) // Hacky piece of shit!
+    {
+
+        has_all_docs = false;
     }
 
     console.log("Has all docs: " + String(has_all_docs));
@@ -1010,7 +1175,7 @@ function populateProposalList(proposals_json)
         else if(status_name == "Expired") { status_name = "Expired"; }
         else {status_name = "UNKNOWN STATUS MAPPING: " + status_name; }
         
-
+        prop_id = document.createTextNode(proposals_json[i].ProposalID);
         prop_status = document.createTextNode(status_name);
 
         closingDate = document.createTextNode(convert_db_date_to_custom(proposals_json[i].ClosingDate));
@@ -1023,7 +1188,7 @@ function populateProposalList(proposals_json)
             return function() { activateEditProposal(ID); };
         })();
 
-        table_array.push([anchor, closingDate, prop_status]);
+        table_array.push([prop_id, anchor, closingDate, prop_status]);
     }
 
     insertTableRows(table_array, proposals_table);
@@ -1092,6 +1257,8 @@ function shutdownProposal(instructions_text)
     $("#proposal-save-btn").hide();
     $("#proposal-submit-btn").hide();
     $("#proposal-time-remaining").hide();
+    $("#fee-input").hide();
+    $("#time-remaining-div").hide();
 
     // Gonna use this to hide all the file inputs, since the proposal is now closed
     doc_list_children = document.getElementById("opp-doc-templates-list").childNodes;
@@ -1119,8 +1286,8 @@ function initializeEditProposal(proposal_json)
 {
     console.log("In initializeEditProposal");
 
-    $("#create-proposal-header").text("Edit proposal");
-    $("#proposal-time-last-edit").text("Time last edit: " + convert_db_date_to_custom(proposal_json.LastEditDate));
+    $("#create-proposal-header").text("Edit Proposal");
+    $("#proposal-time-last-edit").text(convert_db_date_to_custom(proposal_json.LastEditDate));
     $("#proposal-back-list-btn").off();
     $("#proposal-save-btn").off();
     $("#proposal-time-remaining").show();
@@ -1161,8 +1328,8 @@ function initializeEditProposal(proposal_json)
                 }
                 else
                 {
-                    time_remaining_text = "Time remaining on this opportunity: ";
-                    time_remaining_text += " Days: " + reasonable_time_remaining.days;
+                    time_remaining_text = "";
+                    time_remaining_text += "Days: " + reasonable_time_remaining.days;
                     time_remaining_text += " Hours: " + reasonable_time_remaining.hours;
                     time_remaining_text += " Minutes: " + reasonable_time_remaining.minutes;
                     time_remaining_text += " Seconds: " + reasonable_time_remaining.seconds;
@@ -1174,6 +1341,7 @@ function initializeEditProposal(proposal_json)
     }
     else
     {
+        console.log("proposal-edit: " + proposal_json.StatusName);
         shutdownProposal("Your Proposal has been submitted and is under evaluation");
     }
 
@@ -1186,6 +1354,20 @@ function initializeEditProposal(proposal_json)
         type: "GET",
         success: function(proposal_docs_json)
         {
+            // Do fee doc first cuz the rest of this shit might error out
+            fee_doc = getFeeDocument(proposal_json.ProposalID);
+            if(fee_doc)
+            {
+                // Set attribute
+                $("#prev-fee-doc").attr("href", fee_doc.Url);
+                $("#prev-fee-doc").show();
+            }
+            else
+            {
+                has_all_docs = false;
+            }
+
+            // Do the fuckin rest
             docs = proposal_docs_json.doc;
             doc_map = {}; // with DocTemplateID as the key
 
@@ -1209,6 +1391,7 @@ function initializeEditProposal(proposal_json)
                     prev_doc_anchor.href = doc_map[child.dataset.DocTemplateID].Url;
                     prev_doc_anchor.appendChild(document.createTextNode("View what you uploaded"));
                     prev_doc_anchor.className += "old_doc_a";
+                    prev_doc_anchor.target = "_blank";
 
                     child.dataset.DocID = doc_map[child.dataset.DocTemplateID].DocID;
                     child.dataset.hasDocUploaded = true;
@@ -1223,6 +1406,7 @@ function initializeEditProposal(proposal_json)
 
             }
 
+            // Logic to show submit button
             if(has_all_docs)
             {
                 if(proposal_json.StatusName == "Open")
@@ -1327,7 +1511,18 @@ function saveProposal(proposal_json, is_this_submit)
         xhr.send(formData);
     }
 
-    if(final_submission)
+    fee_input = document.getElementById("fee-input");
+    current_file = fee_input.files.length > 0 ? fee_input.files[0] : null;
+    if(current_file != null)
+    {
+        uploadFeeDocument(current_file, current_file.name, proposal_json.ProposalID, proposal_json.OpportunityID, 0);
+    }
+    else
+    {
+        console.log("No fee doc to upload");
+    }
+
+    if(is_this_submit)
     {
         console.log("Setting proposal to In Progress");
         updateProposal(proposal_json.ProposalID, {"Status":"30"});
@@ -1383,11 +1578,16 @@ function fillCategoryDropdown(jsonArray){
 /********************
  * spa-message-list *
  ********************/
- // Caution: Super jank!
 
 function activateMessageList()
 {
     initializeMessageList();
+    var sorting = [[1,1]]; 
+    // sort on the second column 
+    
+    // setTimeout(function(){ 
+    //     $("#messages-list-table").trigger("sorton",[sorting]);
+    // }, 500);
     router("#spa-message-list");
 }
 
@@ -1396,16 +1596,26 @@ function initializeMessageList()
     removeAllTableElements(document.getElementById("messages-list-table"));
 
     // Force the message center to update
-    mc.updateServer();
-
-    mc = new MessageCenter(populateMessageList());
+    if(g_mc == null)
+    {
+        // g_mc = new MessageCenter();
+        g_mc = new MessageCenter(populateMessageList);
+        g_mc.updateServer();
+    }
+    else
+    {
+        g_mc.updateServer();
+        g_mc = new MessageCenter(populateMessageList);
+    }
 }
 
 
 function populateMessageList(messages_json)
 {
+    $("#num-unread-messages").text(g_mc.numUnread);
+
     PREVIEW_LENGTH = 90; // Number of characters in the message preview
-    messages_json = mc.messages;
+    messages_json = g_mc.messages;
     table_array = [];
 
     for(i = 0; i < messages_json.length; i++)
@@ -1466,15 +1676,15 @@ function activateMessageDetail(message_id)
 {
     initializeMessageDetail(message_id);
 
-    message = mc.messages[parseInt(message_id)];
+    message = g_mc.messages[parseInt(message_id)];
     if(message.Type == "ClarificationNotification")
-        mc.markRead("ClarificationNotification", message.ClarificationID);
+        g_mc.markRead("ClarificationNotification", message.ClarificationID);
     else if(message.Type == "OpportunityNotification")
-        mc.markRead("OpportunityNotification", message.OpportunityID);
+        g_mc.markRead("OpportunityNotification", message.OpportunityID);
     else
         alert("Error marking message as read!");
 
-    $("#num-unread-messages").text(mc.numUnread);
+    $("#num-unread-messages").text(g_mc.numUnread);
 
     router("#spa-message-detail");
 }
@@ -1483,7 +1693,7 @@ function initializeMessageDetail(message_id)
 {
 
     // Ajax to get the specific message
-    populateMessageDetail(mc.messages[parseInt(message_id)]);
+    populateMessageDetail(g_mc.messages[parseInt(message_id)]);
 }
 
 // <h2>Message Type: <span id="message-detail-type">Message type placeholder</span></h2>
@@ -1493,6 +1703,23 @@ function initializeMessageDetail(message_id)
 // <a id="discard-message-btn" class="btn btn-primary  hidden">Discard Message</a>
 // <a id="message-detail-back-btn" class="btn btn-primary hidden" >Back to Messages</a>
 
+function phony_message()
+{
+    demo_message = {};
+    demo_message.Type = "ClarificationNotification";
+    demo_message.ClarificationID = "12345";
+    demo_message.ProposalID = "18650";
+    demo_message.OpportunityName  = "God fucking damnit";
+    demo_message.LastEditDate = "2018-05-16 02:13:49";
+    demo_message.ClosingDate = "2018-05-20 02:13:49";
+    demo_message.TimeReceived = "2018-05-20 02:13:49";
+    demo_message.Body  = "Omfg <b>please</b> work";
+    demo_message.Answer = "<b>No!</b>";
+    demo_message.DocID  = 139;
+
+    populateMessageDetail(demo_message);
+    router("#spa-message-detail");
+}
 
 function populateMessageDetail(message)
 {
@@ -1500,13 +1727,13 @@ function populateMessageDetail(message)
     // Populate all fields
     $("#message-detail-time-received").text(convert_db_date_to_custom(message.TimeReceived));
     $("#message-detail-type").text(message.Type);
-    $("#message-detail-body").text(message.Body);
+    document.getElementById("message-detail-body").innerHTML = message.Body;
+
 
     // Hide non-essential, leave these to be shown by subroutines
     $("#send-message-btn").hide();
     $("#discard-message-btn").hide();
     $("#message-detail-time-responded-header").hide();
-    $("#message-detail-back-btn").hide();
     $("#send-message-btn").hide();
     $("#discard-message-btn").hide();
     $("#message-detail-response").hide();
@@ -1514,6 +1741,11 @@ function populateMessageDetail(message)
     $("#message-detail-upload").hide();
     $("message-detail-opportunity-name-header").hide();
     $("#message-detail-download-link").hide();
+    $("send-message-div").hide();
+
+    // Make sure this guys fucking dead
+    $('#summernote').summernote('destroy'); $('#summernote').hide();
+    $("#message-response-editor").hide();
 
 
     if(message.Type == "ClarificationNotification")
@@ -1538,16 +1770,21 @@ function populateMessageDetail(message)
 function populateClarificationRequestDetail(message)
 {
     // Show these always
-    // console.log("Show this shit as: " + message.OpportunityName);
     $("#message-detail-opportunity-name").text(message.OpportunityName);
     $("#message-detail-opportunity-name-header").show();
 
-    if(message.Answer != null)
+    $("send-message-div").show();
+
+
+    if(message.Answer != null && message.Answer != "")
     {
         console.log("There is an answer associated with this Clarification");
+        console.log(message);
         // Hide these
         $("#send-message-btn").hide();
         $("#discard-message-btn").hide();
+        $("#message-detail-back-btn").text("Back to Messages");
+        
 
         //Unhide these
         $("#message-detail-time-responded-header").show();
@@ -1555,9 +1792,11 @@ function populateClarificationRequestDetail(message)
         $("#message-detail-time-responded").text(message.LastEditDate)
         $("#message-detail-back-btn").show();
         $("#message-detail-response").show();
+        $("#message-response-editor").show();
 
         // Set these
-        $("#message-response-editor")[0].value = (message.Answer);
+        document.getElementById("message-response-editor").innerHTML = (message.Answer);
+
         document.getElementById("message-response-editor").readOnly = true;
 
         if(message.DocID != null)
@@ -1574,7 +1813,7 @@ function populateClarificationRequestDetail(message)
         if(message.ClosingDate != null)
         {
             closing_date = parseCustomDateStringToDate(message.ClosingDate);
-            if(closing_date < new Date())
+            if(closing_date < new Date()) // Shits expired
             {
                 console.log("This clarification has expired!");
                 $("#send-message-btn").hide();
@@ -1584,23 +1823,31 @@ function populateClarificationRequestDetail(message)
                 document.getElementById("message-detail-due-by").style.color = "red";
                 document.getElementById("message-response-editor").readOnly = true;
                 $("#message-detail-response").show();
-                $("#message-response-editor")[0].value = "THIS CLARIFICATION HAS EXPIRED";
+                document.getElementById("message-response-editor").innerHTML = "THIS CLARIFICATION HAS EXPIRED";
 
                 return;
             }
         }
         
+        // Not expired
+        $("#message-detail-back-btn").text("Discard Message");
 
+        $('#summernote').show(); $('#summernote').summernote({
+            height: 300,
+            minHeight: 300,
+            maxHeight: null,
+            focus: true
+        });
 
         if(message.ClosingDate != null)
             $("#message-detail-due-by").text(convert_db_date_to_custom(message.ClosingDate));
         else
             $("#message-detail-due-by").text("None");
-        document.getElementById("message-detail-due-by").style.color = "#425b83";
+        document.getElementById("message-detail-due-by").style.color = "rgb(51, 51, 51)";
         $("#message-detail-due-by-header").show();
 
         // Have to reset for some reason
-        $("#message-response-editor")[0].value = ""; 
+        document.getElementById("message-response-editor").innerHTML = ""; 
         clarification_input = document.getElementById("clarification-file-input");
         clarification_input.value = "";
         document.getElementById("message-response-editor").readOnly = false; 
@@ -1615,66 +1862,17 @@ function populateClarificationRequestDetail(message)
 
 function populateOpportunityNotificationDetail(message)
 {
+    $("#message-detail-back-btn").text("Back to Messages");
+    $("#message-detail-opportunity-name").text(message.OpportunityName);
     $("#send-message-btn").hide();
     $("#discard-message-btn").hide();
     $("#message-detail-response").hide();
     $("#message-detail-time-responded-header").hide();
 }
 
-function getDocUrlFromID(DocID)
-{
-//{"DocID":"87","DocTitle":"linker.py","Path":"..\/..\/..\/data\/files\/35587_87_linker.py","Blob":null,"Url":"http:\/\/athena.ecs.csus.edu\/~mackeys\/data\/files\/35587_87_linker.py","Description":"linker.py","CreatedDate":"2018-05-06 12:56:02","LastEditDate":"2018-05-06 12:56:02","SortOrder":"0"}
-    var DocURL = null;
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/docs/read.php?DocID='+DocID,false);
-    xhr.onload = function() {
-        if (xhr.status == 200) {
-            DocJson = JSON.parse(xhr.response);
-            if(DocJson.Url == null)
-            {
-                console.log("Error getting doc url");
-                console.log(DocJson);
-                alert("Error getting doc url");
-                return;
-            }       
 
-            DocURL = DocJson.Url.replace("https://athena.ecs.csus.edu/~wildcard/", "");
 
-        }
-        else {
-            alert("Error getting Document URL with ID: " + DocID);
-        }
-    };
-    xhr.send();
 
-    return DocURL;
-}
-
-function updateProposal(ProposalID, proposal_json)
-{
-    success_flag = null;
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'php/api/proposal/update.php', false);
-    xhr.onload = function()
-    {
-        if(xhr.status == 200)
-        {
-            success_flag = true;
-        }
-        else
-        {
-            console.log("Error updating proposal:");
-            console.log(xhr.response);
-            alert("There was an error updating the proposal");
-            success_flag = false;
-        }
-    }
-    xhr.setRequestHeader("Content-type", "application/json");
-    proposal_json.ProposalID = ProposalID;
-    xhr.send(JSON.stringify(proposal_json));
-
-    return success_flag;
-}
 
 function sendClarificationResponse(ProposalID, ClarificationID)
 {
@@ -1726,7 +1924,7 @@ function sendClarificationResponse(ProposalID, ClarificationID)
         }
     }
     xhr.setRequestHeader("Content-type", "application/json");
-    answer = $("#message-response-editor")[0].value;
+    answer = $('#summernote').summernote('code');
     request_json = {"ProposalID":ProposalID, "ClarificationID":ClarificationID, "answer":answer, "DocID":String(doc_id)};
     xhr.send(JSON.stringify(request_json));
 
@@ -1947,8 +2145,8 @@ class MessageCenter
 
     constructor(done_callback)
     {
+        console.log("MessageCenter: Beginig Construction");
         var self = this;
-        console.log("MessageCenter: constructing");
         this.bidder_id = g_bidder_id;
         this.internal_json = {};
         this.fetchJSON();
@@ -1968,7 +2166,11 @@ class MessageCenter
 
             num_callbacks_left--;
             if(num_callbacks_left == 0 && done_callback != null)
+            {
+                console.log("MessageCenter: Executing done_callback from fetchClarifications");
+                console.log("MessageCenter: " + String(opportunities.length) + " Opportunities");
                 done_callback();
+            }
         });
 
 
@@ -1978,8 +2180,11 @@ class MessageCenter
             self.updateNotifications();
 
             num_callbacks_left--;
-            if(num_callbacks_left == 0 && done_callback != null)
+            if(num_callbacks_left == 0 && done_callback != null){
+                console.log("MessageCenter: Executing done_callback from fetchOpportunities");
+                console.log("MessageCenter: " + String(opportunities.length) + " Opportunities");
                 done_callback();
+            }
         });
         // Fetch internal_json from backend
         // using session var for now
@@ -2021,7 +2226,7 @@ class MessageCenter
 
         if(self.internal_json == null)
         {
-            console.log("Internal json was null, seeding");
+            console.log("MessageCenter: Internal json was null, seeding");
             self.seedInternalJSON();
         }
         else
@@ -2035,7 +2240,7 @@ class MessageCenter
         console.log("seeding internal json");
 
         var last_login = new Date();
-        last_login.setYear(1994);
+        last_login.setDate(12);
 
         this.internal_json = {
             "time_of_last_login": getDatabaseDateStringFromDate(last_login),
@@ -2049,15 +2254,18 @@ class MessageCenter
     // Need to filter based on subscribed categories, attach OpportunityName and CategoryName
     updateNotifications()
     {
+        console.log("MessageCenter: updateNotifications");
         var self = this;
         console.log("updating notifications");
+        var counter = 0;
         this.opportunities.forEach(function(opportunity)
         {
             var opp_last_edit_date = parseCustomDateStringToDate(opportunity.LastEditDate);
+            counter++;
 
             if(opp_last_edit_date > self.time_of_last_login)
             {
-                console.log("Found a new notification:" + opportunity.Name);
+                console.log("MessageCenter: Found a new notification thanks to time");
                 var new_opportunity_notification = {};
                 new_opportunity_notification.TimeReceived = opportunity.LastEditDate;
                 new_opportunity_notification.Body = "There is a new Opportunity, " + "'" + opportunity.Name + "'" + " in Category: " + opportunity.CategoryName;
@@ -2068,12 +2276,21 @@ class MessageCenter
 
                 self.internal_json.OpportunityNotifications.push(new_opportunity_notification);
             }
+            else
+            {
+                console.log("MessageCenter: Rejected due to time");
+            }
+            console.log("   MessageCenter: Time Opp Edit: " + String(opp_last_edit_date));
+            console.log("   MessageCenter: Time of last login: " + String(self.time_of_last_login));
             
         });
+
+        console.log("MessageCenter: Exiting updateNotifications after processing: " + String(counter));
     }
 
     updateClarifications()
     {
+        console.log("MessageCenter: updateClarifications");
         var self = this;
 
         this.clarifications.forEach(function(clarification)
@@ -2093,6 +2310,7 @@ class MessageCenter
 
     fetchClarifications(finished_cb)
     {
+        console.log("MessageCenter: fetchClarifications");
         var self = this; // omfg are you serious, need this for callbacks
 
         $.ajax({
@@ -2141,18 +2359,17 @@ class MessageCenter
     // Also fetch CategoryNames and subscriptions
     fetchOpportunities(finished_cb)
     {
+        console.log("MessageCenter: fetchOpportunities");
         var self = this;
         var internal_opportunities = []; // Push here until we can filter, then push to this.opportunities
         var internal_subscriptions = [];
 
         function filterOpportunities()
         {
-            console.log("MessageCenter: filtering!");
             console.log(internal_subscriptions);
             console.log(internal_opportunities);
             internal_opportunities.forEach(function(opportunity)
             {
-                console.log("MessageCenter: " + opportunity.CategoryID);
 
                 if(internal_subscriptions.includes(opportunity.CategoryID))
                 {
@@ -2166,25 +2383,20 @@ class MessageCenter
         }
 
 
-        console.log("MessageCenter: fetching opportunities");
         var self = this;
-        var num_callbacks_left = 0;
+        var num_callbacks_left = 2;
 
 
-        num_callbacks_left++;
         $.ajax({
-            // Easy as fuck, change this to 3
-            url: "php/api/opportunity/read.php?status=0", 
+            url: "php/api/opportunity/read.php", 
             success: function(opportunities_json)
             {
-                console.log("MessageCenter: Getting opportunities");
                 // We need to get the category name for each opportunity, via the categoryID
                 var categories = {}
                 $.ajax({
                     url: "php/api/opportunity/categoryName.php", 
                     success: function(category_json)
                     {
-                        console.log("MessageCenter: Getting categories");
                         console.log(category_json);
                         for (var i = 0; i < category_json.length; i++) {
                             categories[category_json[i].CategoryID] = category_json[i].Name;
@@ -2207,25 +2419,21 @@ class MessageCenter
                         num_callbacks_left--;
                         if(num_callbacks_left == 0)
                         {
-                            console.log("MessageCenter: Finna call filter");
                             filterOpportunities();
                         }
                     },
                     error: function(error)
                     {
-                        console.log("MessageCenter: Error getting categories");
                         console.log(error);
                     }
                 });
             }
         });
 
-        num_callbacks_left++;
         var subscriptions_xhr = new XMLHttpRequest();
         subscriptions_xhr.open("POST", "php/api/bidder/getSubscriptions.php");
         subscriptions_xhr.onload = function() 
         {
-            console.log("MessageCenter: Subscriptions call has returned");
             if(subscriptions_xhr.status == 200)
             {
                 console.log(subscriptions_xhr.responseText);
@@ -2240,7 +2448,6 @@ class MessageCenter
             }
             else
             {
-                console.log("MessageCenter: There was an error getting your subscriptions: " + subscriptions_xhr.responseText);
             }
 
             num_callbacks_left--;
@@ -2252,7 +2459,6 @@ class MessageCenter
         }
         subscriptions_xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         subscriptions_xhr.send("bidderid="+g_bidder_id);
-        console.log("MessageCenter: After xhr sent");
     }
 
     get messages()
@@ -2311,6 +2517,7 @@ class MessageCenter
             }
             if(opportunity == null)
             {
+                console.log(clarification_notification);
                 console.log(self.all_opportunities);
                 console.log(clarification.OpportunityID);
                 alert("There was an error matching this message to an opportunity");
@@ -2345,6 +2552,8 @@ class MessageCenter
             _messages.push(new_message);
         });
 
+        console.log("MessageCenter: Returning " + String(_messages.length) + " messages")
+
 
         return _messages;
     }
@@ -2370,11 +2579,11 @@ class MessageCenter
 
     updateServer()
     {
-        console.log("Updating server");
-        console.log(this.internal_json);
+        console.log("MessageCenter: Updating server");
+        console.log("MessageCenter: "  + String(JSON.stringify(this.internal_json)));
 
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "http://athena.ecs.csus.edu/~wildcard/php/api/bidder/createSessionData.php");
+        xhr.open("POST", "http://athena.ecs.csus.edu/~wildcard/php/api/bidder/createSessionData.php", false);
         xhr.onload = function(response)
         {
             if(xhr.status == 200)
@@ -2401,6 +2610,7 @@ class MessageCenter
         var stringified_payload = JSON.stringify(payload);
 
         xhr.send(stringified_payload);
+        console.log("MessageCenter: " + stringified_payload);
     }
 
     // Type being "ClarificationNotification" or "OpportunityNotification"

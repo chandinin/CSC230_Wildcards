@@ -126,9 +126,6 @@
                     <li class=""><a href="employee_login.html"><span class="glyphicon glyphicon-log-out hidden-xs"
                                                                      aria-hidden="true"> </span> Logout</a>
                 </ul>
-
-                <!--Heading-->
-                <p style="color: #eee; font-size: x-large"  align="center">SEEK CLARIFICATION</p>
             </div>
         </div>
     </div>
@@ -142,23 +139,40 @@
             <li><a href="list_documents.html">Documents</a></li>
             <li class="active">Clarification</li>
         </ul>
+        <!--Heading-->
+        <h3 align="left">
+            <b>Seek Clarification</b>
+        </h3>
+    </div>
+
+    <!--Proposal, bidder-->
+    <div class="container navbar-right">
+        <div class="tab-content vertical">
+            <div class="row ">
+                <div class="col-md-6">
+                    <table id="proposalListTable" class="table table-bordered table-striped table-hover">
+                        <tr>
+                            <th style="background-color:  #00659e; color: white; width: 200px;">Proposal:</th>
+                            <td><span id="proposalid"></span></td>
+                        </tr>
+                        <tr>
+                            <th style="background-color:  #00659e; color: white">Bidder:</th>
+                            <td ><span id="bidderName"></span></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Proposal id bidder name-->
     <div class="container navbar-right">
-        <div align="left">
-        <h2>Proposal: <span id="proposalid"></span></h2>
-        <h2>Bidder: <span id="bidderName"></span></h2>
-        <br>
-        <br>
-
-        <!--textbox-->
+            <!--textbox-->
         <div id="clarificationMessage" class="form-group">
             <label>Clarification Question</label>
             <textarea class="form-control" id="clarificationRequest" rows="6"
                       placeholder="Enter your clarification question here." required></textarea>
         </div>
-
         <!--Buttons for text message-->
         <div align="left">
 
@@ -171,6 +185,7 @@
             </button>
         </div>
         </div>
+
     </div>
 </div>
 </div>

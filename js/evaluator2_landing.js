@@ -5,6 +5,7 @@ $(document).ready(
     function () {
         document.getElementById("employeeName").innerHTML = employeeName;
         getOppList();
+        $(".table").tablesorter();
         getCategories();
         $('#manageOpp').click(function() {
             getOppList();
@@ -17,8 +18,7 @@ $(document).ready(
 function getOppList() {
     $('#oppListTableBody').empty();
     var xhr = new XMLHttpRequest();
-    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php',true);
-    //xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php?Status=4',true);
+    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php?Status=4',true);
     xhr.onload = function() {
         if (xhr.status == 200) {
             var jsonArray = JSON.parse(xhr.responseText);
@@ -124,6 +124,7 @@ $(document).ready(function () {
         //Storing the dropdown selection in category variable
         var category= $('#selectCategory option:selected').attr('id');
         getOppListbyID(category);
+
     });
 });
 

@@ -29,8 +29,10 @@
     <script src="js/iframe-custom.js?ver=1.11"></script>
     <script src="js/back-to-top.js"></script>
     <script src="js/widgets.js?ver=1.9"></script>
+    <script src="js/widgets.js"></script>
     <script src="js/jquery.validate.js"></script>
     <script src="js/youtube.js?ver=1.9"></script>
+    <script src="js/jquery.tablesorter.js"></script>
     <script src="http://malsup.github.com/jquery.form.js"></script>
 
     <!--For breadcrumb-->
@@ -39,14 +41,14 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <!--For table sorter-->
-    <script type="text/javascript" src="/path/to/jquery-latest.js"></script>
-    <script type="text/javascript" src="/path/to/jquery.tablesorter.js"></script>
+    <script src="js/jquery.tablesorter.js"></script>
 
     <!-- Page Specific JS/CSS -->
     <link rel="stylesheet" type="text/css" href="css/ept/login.css"/>
     <script type="text/javascript" src="js/ept/jquery.cookie.js"></script>
     <script src="js/bidder_login.js"></script>
     <script src="js/evaluator2_landing.js"></script>
+    <link rel="stylesheet" href="css/tablesorter-style.css">
 </head>
 <body>
 
@@ -129,9 +131,6 @@
                                                                          aria-hidden="true"> </span> Logout</a>
                     </ul>
 
-                    <!--Heading-->
-                    <p style="color: #eee; font-size: x-large"  align="center">OPPORTUNITIES</p>
-
                 </div>
             </div>
         </div>
@@ -142,6 +141,10 @@
                 <li><a href="home_page.html">Home</a></li>
                 <li class="active">Secondary Evaluation</li>
             </ul>
+
+            <h3 align="left">
+                <b>Opportunities</b>
+            </h3>
             <!--Greetings-->
             <div  style="color: #000000;" align="center">
                 <h2>Hi <span id="employeeName"></span>!</h2>
@@ -163,7 +166,7 @@
             <div id="listOppPanel" class="tab-content vertical">
                 <div class="row ">
                     <div class="col-md-20">
-                        <table id="oppListTable" class="table table-bordered table-striped table-hover">
+                        <table id="oppListTable" class="table table-responsive table-bordered table-striped table-hover tablesorter">
                             <thead>
                             <th>OpportunityID</th>
                             <th>Opportunity</th>
@@ -196,6 +199,5 @@
     <span>Powered by WildCards</span>
 
 </div>
-</body>
 </body>
 </html>
