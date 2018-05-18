@@ -47,6 +47,10 @@
     <script type="text/javascript" src="js/ept/jquery.cookie.js"></script>
     <script src="js/bidder_login.js"></script>
     <script src="js/eval2_list_documents.js"></script>
+
+    <!--For table sorter-->
+    <script src="js/jquery.tablesorter.js"></script>
+    <link rel="stylesheet" href="css/tablesorter-style.css">
 </head>
 <body>
 <!--Contents of the whole page-->
@@ -150,12 +154,20 @@
                     <div class="col-md-6">
                         <table class="table table-bordered table-striped table-hover">
                             <tr>
+                                <th style="background-color:  #00659e; color: white; width: 200px;">Opportunity:</th>
+                                <td><span id="opportunityName"></span></td>
+                            </tr>
+                            <tr>
                                 <th style="background-color:  #00659e; color: white;">Proposal:</th>
                                 <td><span id="proposalid"></span></td>
                             </tr>
                             <tr>
                                 <th style="background-color:  #00659e; color: white;">Bidder:</th>
                                 <td><span id="bidderName"></span></td>
+                            </tr>
+                            <tr>
+                                <th style="background-color:  #00659e; color: white;">Scoring Criteria:</th>
+                                <td><span id="scoringCriteria">score.doc</span></td>
                             </tr>
                             <tr>
                                 <th style="background-color:  #00659e; color: white;">Technical Score:</th>
@@ -186,7 +198,7 @@
             <div id="listOppPanel" class="tab-content vertical">
                 <div class="row ">
                     <div class="col-md-20">
-                        <table id="documentsTable" class="table table-bordered table-striped table-hover">
+                        <table id="documentsTable" class="table table-bordered table-striped table-hover tablesorter">
                             <thead>
                             <th>Document title</th>
                             <th>Download</th>

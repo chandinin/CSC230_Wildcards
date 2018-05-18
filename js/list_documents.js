@@ -1,16 +1,19 @@
 //proposal id passes from the previous page where a specific proposal is selected
 var proposalID = localStorage.getItem("proposalId");
 var bidderName;
+var bidderID;
 
 //onstart?
 $(document).ready(
     function () {
+        var oppName = localStorage.getItem("opportunityName");
+        document.getElementById("opportunityName").innerHTML = oppName;
         document.getElementById("proposalid").innerHTML = proposalID;
         getBidderDetails()
         getDocumentList();
+        $('.table').tablesorter();
         $('#manageOpp').click(function() {
             getDocumentList();
-            $('.table').tablesorter();
             $("#oppsMenu option[id='opplist']").attr("selected", "selected");
         });
     });
@@ -39,6 +42,7 @@ function getBidderDetails() {
         if (xhr.status == 200) {
             var bidderDetails = JSON.parse(xhr.responseText);
             bidderName = bidderDetails.first_name +" " + bidderDetails.last_name;
+            bidderID = bidderDetails.id;
             document.getElementById("bidderName").innerHTML = bidderName;
         } else {
             alert("Error response");
@@ -60,6 +64,7 @@ function fillDocumentTable(jsonArray){
             var doc = jsonArray.doc[i];
             var row = "<tr><td>" + doc.DocTitle+ "</td><td><a class='btn btn-primary btn-sm' href='" + doc.Url  +
                 "'><span class='glyphicon glyphicon-circle-arrow-down' aria-hidden='true'></span>Download</a> ";
+            $('#documentsTableBody').tablesorter();
             $('#documentsTableBody').append(row);
             $("#documentsTableBody").trigger("update");
         }
@@ -86,7 +91,6 @@ function fillDocumentTable(jsonArray){
 }
 
 //Function to update proposal status
-//TODO get the right endpoint to use
 function updateProposalStatus(status) {
     //status is passed and proposal id is a global variable
     var params = {"ProposalID":proposalID,
@@ -104,10 +108,11 @@ function updateProposalStatus(status) {
     xhttp.send(myJson);
 }
 
+
 //Function to seek clarification
-//TODO get the right endpoint to use
 function SeekClarificationButton() {
     localStorage.setItem("bidderName",bidderName);
+    localStorage.setItem("bidderID",bidderID);
     localStorage.setItem("proposalId",proposalID);
     window.location.replace("seek_clarification.html")
 }

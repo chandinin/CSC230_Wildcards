@@ -9,28 +9,30 @@ $(document).ready(
         getCategories();
         $('#manageOpp').click(function() {
             getOppList();
-            $('.table').tablesorter();
             $("#oppsMenu option[id='opplist']").attr("selected", "selected");
         });
     });
 
-//Get all opportunity list from server
+//Get all opportunity list from server with status 4, 5
 function getOppList() {
     $('#oppListTableBody').empty();
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET','http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php?Status=4',true);
-    xhr.onload = function() {
-        if (xhr.status == 200) {
-            var jsonArray = JSON.parse(xhr.responseText);
+    var params = {"Statuses":[4,5]};
+    var myJson = JSON.stringify(params);
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "http://athena.ecs.csus.edu/~wildcard/php/api/opportunity/read.php",true);
+    xhttp.onload = function() {
+        if (xhttp.status == 200) {
+            var jsonArray = JSON.parse(xhttp.responseText);
             fillOppTable(jsonArray);
         } else {
             alert("Error response");
         }
     };
-    xhr.send();
+    xhttp.send(myJson);
 }
 
-//Get opportunity list given an categoryid
+
+//Get opportunity list given an categoryid with opportunity id and status 4,5
 function getOppListbyID(id) {
     $('#oppListTableBody').empty();
     var xhr = new XMLHttpRequest();
@@ -45,6 +47,8 @@ function getOppListbyID(id) {
     };
     xhr.send();
 }
+
+
 
 //Logic for pagination & fill table
 function fillOppTable(jsonArray){
@@ -64,6 +68,7 @@ function fillOppTable(jsonArray){
                 opp.OpportunityID + '","'+ opp.Name+ "\")' id='editOppButton' value='\" + opp.OpportunityID + \"' type='button' " +
                 "class='btn btn-primary btn-sm'>" +
                 "View</button></td>";
+            $('#oppListTableBody').tablesorter();
             $('#oppListTableBody').append(row);
             $("#oppListTableBody").trigger("update");
         }

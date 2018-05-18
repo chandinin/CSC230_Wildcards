@@ -1,9 +1,11 @@
 //On Start
 var opportunityID;
+var bidderID;
 $(document).ready(
     function () {
         var oppName = localStorage.getItem("opportunityName");
         document.getElementById("opportunityName").innerHTML = oppName;
+        $(".table").tablesorter();
         getProposalList();
         $('#listOppPanel').show();
         $('#proposalListTable tr').click(function() {
@@ -11,7 +13,7 @@ $(document).ready(
         });
     });
 
-//get proposal list based on opportunity id
+//get proposal list based on opportunity id 10, 15 and 30, 70
 function getProposalList() {
     opportunityID = localStorage.getItem("opportunityID");
     $('#proposalListTableBody').empty();
@@ -43,7 +45,8 @@ function fillProposalTable(jsonArray){
                 + new Date(proposal.CreatedDate).toDateString()+ "<td>" + proposal.StatusName + "<td>" +  "<button onclick='showProposalDetails(\"" + proposal.ProposalID + "\")' id='editOppButton' value='\" + proposal.ProposalID + \"' type='button' " +
                 "class='btn btn-primary btn-sm'>" +
                 "View</button></td>";
-
+            bidderID = proposal.BidderID;
+            $('#proposalListTableBody').tablesorter();
             $('#proposalListTableBody').append(row);
             $("#proposalListTableBody").trigger("update");
         }
@@ -70,6 +73,7 @@ function fillProposalTable(jsonArray){
 //Store proposal id to pass to next screen to get a list of documents
 function showProposalDetails(id) {
     localStorage.setItem("proposalId",id);
+    localStorage.setItem("bidderID",bidderID);
     window.location.replace("list_documents.html");
 }
 
