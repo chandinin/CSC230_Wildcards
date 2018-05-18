@@ -41,6 +41,7 @@ function initAccountPage() {
 }
 
 function showNewEmp() {
+    $('#newEmpForm')[0].reset();
    $('#empNew').show();
    $('#empList').hide();
    makeEmpBreadcrumb(2);
