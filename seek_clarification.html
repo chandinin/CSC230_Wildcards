@@ -47,6 +47,9 @@
     <script type="text/javascript" src="js/ept/jquery.cookie.js"></script>
     <script src="js/bidder_login.js"></script>
     <script src="js/seek_clarification.js"></script>
+    <script src="js/bootstrap3-wysihtml5.all.min.js"></script>
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
 </head>
 <body>
 <!--Contents of the whole page-->
@@ -168,11 +171,11 @@
     <!-- Proposal id bidder name-->
     <div class="container navbar-right">
             <!--textbox-->
-        <div id="clarificationMessage" class="form-group">
-            <label>Clarification Question</label>
-            <textarea class="form-control" id="clarificationRequest" rows="6"
-                      placeholder="Enter your clarification question here." required></textarea>
-        </div>
+            <div id="clarificationMessage" class="form-group">
+                <label>Clarification Question</label>
+                <div id="summernote">Enter your question here</div>
+            </div>
+
         <!--Buttons for text message-->
         <div align="left">
 

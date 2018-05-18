@@ -8,12 +8,18 @@ $(document).ready(
     function () {
         document.getElementById("bidderName").innerHTML = bidderName;
         document.getElementById("proposalid").innerHTML = proposalID;
+        $('#summernote'); $('#summernote').summernote({
+            height: 300,
+            minHeight: 300,
+            maxHeight: null,
+            focus: true
+        });
     });
 
 document.getElementById("proposalid").value= "New text!";
 
 function SeekClarification() {
-    var message = document.getElementById("clarificationRequest").value;
+    var message = $('#summernote').summernote('code');
     var params = {"ProposalID":proposalID,
         "question":message};
     var updateProposalStatus = {"ProposalID":proposalID,"Status":20};
@@ -48,4 +54,3 @@ function DiscardMessage(){
     var textarea = document.getElementById("clarificationRequest");
     textarea.value = "";
 }
-
