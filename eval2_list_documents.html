@@ -125,9 +125,6 @@
                         <li class=""><a href="employee_login.html"><span class="glyphicon glyphicon-log-out hidden-xs"
                                                                          aria-hidden="true"> </span> Logout</a>
                     </ul>
-
-                    <!--Heading-->
-                    <p style="color: #eee; font-size: x-large"  align="center">DOCUMENTS</p>
                 </div>
             </div>
         </div>
@@ -140,15 +137,33 @@
                 <li><a href="eval2_list_proposals.html">Proposals</a></li>
                 <li class="active">Documents</li>
             </ul>
+            <!--Heading-->
+            <h3 align="left">
+                <b>Documents</b>
+            </h3>
         </div>
 
-        <!--Proposalid and bidder name-->
+        <!--Proposal, bidder tech score-->
         <div class="container navbar-right">
-            <div align="left">
-                <h2>Proposal: <span id="proposalid"></span></h2>
-                <h2>Bidder: <span id="bidderName"></span></h2>
-                <br>
-                <br>
+            <div class="tab-content vertical">
+                <div class="row ">
+                    <div class="col-md-6">
+                        <table class="table table-bordered table-striped table-hover">
+                            <tr>
+                                <th style="background-color:  #00659e; color: white;">Proposal:</th>
+                                <td><span id="proposalid"></span></td>
+                            </tr>
+                            <tr>
+                                <th style="background-color:  #00659e; color: white;">Bidder:</th>
+                                <td><span id="bidderName"></span></td>
+                            </tr>
+                            <tr>
+                                <th style="background-color:  #00659e; color: white;">Technical Score:</th>
+                                <td><span id="technicalscore"></span></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
 

@@ -116,9 +116,6 @@
                         <li class=""><a href="employee_login.html"><span class="glyphicon glyphicon-log-out hidden-xs"
                                                                          aria-hidden="true"> </span> Logout</a>
                     </ul>
-
-                    <!--Heading-->
-                    <p style="color: #eee; font-size: x-large"  align="center">PROPOSALS</p>
                 </div>
             </div>
         </div>
@@ -131,13 +128,27 @@
                 <li><a href="eval2_list_proposals.html">Proposals</a></li>
                 <li class="active">Reveal Fee</li>
             </ul>
+
+            <!--Heading-->
+            <h3 align="left">
+                <b>Reveal Fee</b>
+            </h3>
         </div>
 
         <!-- Opportunity Name bidder name-->
         <div class="container navbar-right">
-        <div align="left">
-            <h2>Opportunity: <span id="oppName"></span></h2>
-        </div>
+            <div class="tab-content vertical">
+                <div class="row ">
+                    <div class="col-md-6">
+                        <table id="proposalListTable" class="table table-bordered table-striped table-hover">
+                            <tr>
+                                <th style="background-color:  #00659e; color: white; width: 200px;">Opportunity:</th>
+                                <td><span id="oppName"></span></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Table and contents-->

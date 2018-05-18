@@ -126,8 +126,6 @@
                                                                      aria-hidden="true"> </span> Logout</a>
                 </ul>
 
-                <!--Heading-->
-                <p style="color: #eee; font-size: x-large"  align="center">DOCUMENTS</p>
             </div>
         </div>
     </div>
@@ -140,16 +138,29 @@
             <li><a href="list_proposals.html">Proposals</a></li>
             <li class="active">Documents</li>
         </ul>
+
+        <h3 align="left">
+            <b>Documents</b>
+        </h3>
     </div>
 
     <!--Proposalid and bidder name-->
     <div class="container navbar-right">
-        <div align="left">
-        <h2>Proposal: <span id="proposalid"></span></h2>
-        <h2>Bidder: <span id="bidderName"></span></h2>
-        <h2>Technical Score: <span id="technicalScore"></span></h2>
-            <br>
-            <br>
+        <div class="tab-content vertical">
+            <div class="row ">
+                <div class="col-md-6">
+                    <table id="proposalListTable" class="table table-bordered table-striped table-hover">
+                        <tr>
+                            <th style="background-color:  #00659e; color: white; width: 200px;">Proposal:</th>
+                            <td><span id="proposalid"></span></td>
+                        </tr>
+                        <tr>
+                            <th style="background-color:  #00659e; color: white">Bidder:</th>
+                            <td ><span id="bidderName"></span></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
