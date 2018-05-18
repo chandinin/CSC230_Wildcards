@@ -1164,7 +1164,7 @@ function populateProposalList(proposals_json)
         else if(status_name == "Clarification Received 2") { status_name = "Clarification Received, Under Evaluation"; }
         else if(status_name == "Evaluation 2 Rejected") { status_name = "Rejected"; }
         else if(status_name == "Evaluation 2 Accepted") { status_name = "Closed for edits, Under Evaluation"; }
-        else if(status_name == "In Progress") { status_name = "Submitted, Under Evaluation"; }
+        else if(status_name == "In Progress") { status_name = "Closed for edits, Under Evaluation"; }
         else if(status_name == "Open") { status_name = "Open"; }
         else if(status_name == "Expired") { status_name = "Expired"; }
         else {status_name = "UNKNOWN STATUS MAPPING: " + status_name; }
