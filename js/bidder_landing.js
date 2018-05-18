@@ -217,7 +217,7 @@ function uploadFeeDocument(file, filename, ProposalID, OpportunityID, DocTemplat
             if(xhr.status == 200) {
                 console.log('File uploaded' + xhr.response);
             } else {
-                alert('Error uploading file:' + xhr.response);
+                alert('Error uploading file:' + xhr.response + ":" + String(xhr.status));
             }
         };
         xhr.send(formData);
@@ -1303,6 +1303,10 @@ function initializeEditProposal(proposal_json)
         console.log("OK, we found a clarification...");
         shutdownProposal("There is an open clarification request for this proposal, please respond in 'View Your Messages'");
     }
+    // else if(proposals_json.StatusName == "Evaluation 1 Rejected" || proposals_json.StatusName == "Evaluation 1 Rejected")
+    // {
+    //     shutdownProposal("Your proposal was rejected, please contact CalPers for")
+    // }
     else if(proposal_json.StatusName == "Expired")
     {
         shutdownProposal("Your proposal expired, next time upload all your docs and submit on time");
@@ -2170,7 +2174,7 @@ class MessageCenter
 
         this.fetchOpportunities(function()
         {
-            console.log("Opportunities fetch done");
+            console.log("MessageCenter: Opportunities fetch done");
             self.updateNotifications();
 
             num_callbacks_left--;
@@ -2252,6 +2256,10 @@ class MessageCenter
         var self = this;
         console.log("updating notifications");
         var counter = 0;
+
+        console.log("MessageCenter: At this point have " + String(this.opportunities.length) + " opportunities");
+        console.log("MessageCenter: At this point have " + String(this.all_opportunities.length) + " all_opportunities");
+
         this.opportunities.forEach(function(opportunity)
         {
             var opp_last_edit_date = parseCustomDateStringToDate(opportunity.LastEditDate);
