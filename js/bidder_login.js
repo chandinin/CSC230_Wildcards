@@ -17,7 +17,7 @@ function BidderLoginAction() {
         var myJSON = JSON.stringify(params);
         var xhttp = new XMLHttpRequest();
 
-        xhttp.open("POST", "http://athena.ecs.csus.edu/~mackeys/php/api/bidder/authentication.php", true);
+        xhttp.open("POST", "http://athena.ecs.csus.edu/~wildcard/php/api/bidder/authentication.php", true);
         //Async call
 
         xhttp.onload = function () {

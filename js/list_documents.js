@@ -1,6 +1,7 @@
 //proposal id passes from the previous page where a specific proposal is selected
 var proposalID = localStorage.getItem("proposalId");
 var bidderName;
+var bidderID;
 
 //onstart?
 $(document).ready(
@@ -39,6 +40,7 @@ function getBidderDetails() {
         if (xhr.status == 200) {
             var bidderDetails = JSON.parse(xhr.responseText);
             bidderName = bidderDetails.first_name +" " + bidderDetails.last_name;
+            bidderID = bidderDetails.id;
             document.getElementById("bidderName").innerHTML = bidderName;
         } else {
             alert("Error response");
@@ -108,6 +110,7 @@ function updateProposalStatus(status) {
 //TODO get the right endpoint to use
 function SeekClarificationButton() {
     localStorage.setItem("bidderName",bidderName);
+    localStorage.setItem("bidderID",bidderID);
     localStorage.setItem("proposalId",proposalID);
     window.location.replace("seek_clarification.html")
 }

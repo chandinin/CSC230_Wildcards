@@ -1,5 +1,6 @@
 //On Start
 var opportunityID;
+var bidderID;
 $(document).ready(
     function () {
         var oppName = localStorage.getItem("opportunityName");
@@ -43,7 +44,7 @@ function fillProposalTable(jsonArray){
                 + new Date(proposal.CreatedDate).toDateString()+ "<td>" + proposal.StatusName + "<td>" +  "<button onclick='showProposalDetails(\"" + proposal.ProposalID + "\")' id='editOppButton' value='\" + proposal.ProposalID + \"' type='button' " +
                 "class='btn btn-primary btn-sm'>" +
                 "View</button></td>";
-
+            bidderID = proposal.BidderID;
             $('#proposalListTableBody').append(row);
             $("#proposalListTableBody").trigger("update");
         }
@@ -70,6 +71,7 @@ function fillProposalTable(jsonArray){
 //Store proposal id to pass to next screen to get a list of documents
 function showProposalDetails(id) {
     localStorage.setItem("proposalId",id);
+    localStorage.setItem("bidderID",bidderID);
     window.location.replace("list_documents.html");
 }
 
