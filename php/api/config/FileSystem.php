@@ -10,8 +10,7 @@ class FileSystem
 {
   public $conn;
   public $base_dir = "../../../data/files/";
-  //public $base_url = "https://athena.ecs.csus.edu/~wildcard/data/files/";
+  public $base_url = "https://athena.ecs.csus.edu/~wildcard/data/files/";
   //public $base_url = "https://athena.ecs.csus.edu/~jewd/data/files/";
-  public $base_url = "http://localhost/data/files/";
 }
 ?>

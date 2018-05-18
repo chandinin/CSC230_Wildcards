@@ -1718,12 +1718,12 @@ function phony_message()
     demo_message.Type = "ClarificationNotification";
     demo_message.ClarificationID = "12345";
     demo_message.ProposalID = "18650";
-    demo_message.OpportunityName  = "God fucking damnit";
+    demo_message.OpportunityName  = "Dummy Opportunity";
     demo_message.LastEditDate = "2018-05-16 02:13:49";
     demo_message.ClosingDate = "2018-05-20 02:13:49";
     demo_message.TimeReceived = "2018-05-20 02:13:49";
-    demo_message.Body  = "Omfg <b>please</b> work";
-    demo_message.Answer = "<b>No!</b>";
+    demo_message.Body  = "This is a phony question";
+    demo_message.Answer = "<b>This is a proposal answer</b>";
     demo_message.DocID  = 139;
 
     populateMessageDetail(demo_message);
@@ -1941,13 +1941,13 @@ function sendClarificationResponse(ProposalID, ClarificationID)
     proposal = getProposalByID(ProposalID);
     if(proposal.StatusName == "Seeking Clarification 1")
     {
-        console.log("We are in Clarification 1 currently, updating to status 50")
-        updateProposal(ProposalID, {"Status":"50"});
+        console.log("We are in Clarification 1 currently, updating to status 30")
+        updateProposal(ProposalID, {"Status":"30"});
     }
     else if(proposal.StatusName == "Seeking Clarification 2")
     {
-        console.log("We are in Clarification 2 currently, updating to status 55");
-        updateProposal(proposalID, {"Status":"55"});
+        console.log("We are in Clarification 2 currently, updating to status 30");
+        updateProposal(proposalID, {"Status":"30"});
     }
 
     
