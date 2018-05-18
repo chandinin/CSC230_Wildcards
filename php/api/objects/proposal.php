@@ -190,6 +190,97 @@ class Proposal
       return true;
   }
 
+  //Check If all proposals are Eval 2 and Has Fees.
+  function AllPropsEval2HasFeeEntered($OpportunityID)
+  {
+    $LowestFee = -1;
+    if($this->PropsHasEval2($OpportunityID))
+    {
+      if($this->AllPropsEval2HasFee($OpportunityID))
+      {
+        $LowestFee = $this->GetLowestEval2PropFee($OpportunityID);
+      }
+    }
+
+    return $LowestFee;
+  }
+
+  function GetLowestEval2PropFee($OpportunityID)
+  {
+    $LowestFee = -1;
+    $query = "select min(Fee) as LowestFee from Proposal where `Status` = 65 and OpportunityID = :OpportunityID ;";
+    $stmt = $this->conn->prepare( $query );
+
+    // bind parameters
+    $stmt->bindParam(':OpportunityID', $OpportunityID);
+
+    // execute query
+    $stmt->execute();
+
+    // get retrieved row
+    $rowCount = $stmt->rowCount();
+    if($rowCount > 0)
+    {
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+      $LowestFee = $row['LowestFee'];
+    }
+
+    return $LowestFee;    
+  }
+
+
+  function AllPropsEval2HasFee($OpportunityID)
+  {
+    $query = "select count(*) as total from Proposal where ((Fee is null) or (Fee = 0)) and Status = 65 and OpportunityID = :OpportunityID ;";
+    $stmt = $this->conn->prepare( $query );
+
+    // bind parameters
+    $stmt->bindParam(':OpportunityID', $OpportunityID);
+
+    // execute query
+    $stmt->execute();
+
+    // get retrieved row
+    $rowCount = $stmt->rowCount();
+    $proposalCount = 0;
+    if($rowCount > 0)
+    {
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+      $proposalCount = $row['total'];
+    }
+
+    if($proposalCount > 0)
+      return false;
+    else
+      return true;    
+  }
+
+  function PropsHasEval2($OpportunityID)
+  {
+    $query = "select count(*) as total from Proposal where Status = 65 and OpportunityID = :OpportunityID ;";
+    $stmt = $this->conn->prepare( $query );
+
+    // bind parameters
+    $stmt->bindParam(':OpportunityID', $OpportunityID);
+
+    // execute query
+    $stmt->execute();
+
+    // get retrieved row
+    $rowCount = $stmt->rowCount();
+    $proposalCount = 0;
+    if($rowCount > 0)
+    {
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+      $proposalCount = $row['total'];
+    }
+
+    if($proposalCount > 0)
+      return true;
+    else
+      return false;    
+  }
+
   // Check technical score
   function Check($id)
   {
