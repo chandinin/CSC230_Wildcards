@@ -5,10 +5,10 @@ $(document).ready(
     function () {
         document.getElementById("employeeName").innerHTML = employeeName;
         getOppList();
+        $(".table").tablesorter();
         getCategories();
         $('#manageOpp').click(function() {
             getOppList();
-            $('.table').tablesorter();
             $("#oppsMenu option[id='opplist']").attr("selected", "selected");
         });
 
@@ -65,6 +65,7 @@ function fillOppTable(jsonArray){
                 opp.OpportunityID + '","'+ opp.Name+ "\")' id='editOppButton' value='\" + opp.OpportunityID + \"' type='button' " +
                 "class='btn btn-primary btn-sm'>" +
                 "View</button></td>";
+            $('#oppListTableBody').tablesorter();
             $('#oppListTableBody').append(row);
             $("#oppListTableBody").trigger("update");
         }

@@ -5,6 +5,7 @@ $(document).ready(
     function () {
         var oppName = localStorage.getItem("opportunityName");
         document.getElementById("opportunityName").innerHTML = oppName;
+        $(".table").tablesorter();
         getProposalList();
         $('#listOppPanel').show();
         $('#proposalListTable tr').click(function() {
@@ -45,6 +46,7 @@ function fillProposalTable(jsonArray){
                 "class='btn btn-primary btn-sm'>" +
                 "View</button></td>";
             bidderID = proposal.BidderID;
+            $('#proposalListTableBody').tablesorter();
             $('#proposalListTableBody').append(row);
             $("#proposalListTableBody").trigger("update");
         }

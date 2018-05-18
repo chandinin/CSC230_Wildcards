@@ -47,6 +47,10 @@
     <script type="text/javascript" src="js/ept/jquery.cookie.js"></script>
     <script src="js/bidder_login.js"></script>
     <script src="js/list_documents.js"></script>
+
+    <!--table sorter-->
+    <link rel="stylesheet" href="css/tablesorter-style.css">
+    <script src="js/jquery.tablesorter.js"></script>
 </head>
 <body>
 <!--Contents of the whole page-->
@@ -149,7 +153,7 @@
         <div class="tab-content vertical">
             <div class="row ">
                 <div class="col-md-6">
-                    <table id="proposalListTable" class="table table-bordered table-striped table-hover">
+                    <table id="proposalListTable" class="table table-bordered table-striped table-hover tablesorter">
                         <tr>
                             <th style="background-color:  #00659e; color: white; width: 200px;">Proposal:</th>
                             <td><span id="proposalid"></span></td>
@@ -169,7 +173,7 @@
         <div id="listOppPanel" class="tab-content vertical">
             <div class="row ">
                 <div class="col-md-20">
-                    <table id="documentsTable" class="table table-bordered table-striped table-hover">
+                    <table id="documentsTable" class="table table-bordered table-striped table-hover tablesorter">
                         <thead>
                         <th>Document title</th>
                         <th>Download</th>
